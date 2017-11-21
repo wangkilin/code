@@ -1,0 +1,208 @@
+<?php
+/**
++-------------------------------------------+
+|   iCodeBang CMS [#RELEASE_VERSION#]       |
+|   by iCodeBang.com Team                   |
+|   © iCodeBang.com. All Rights Reserved    |
+|   ------------------------------------    |
+|   Support: icodebang@126.com              |
+|   WebSite: http://www.icodebang.com       |
++-------------------------------------------+
+*/
+
+defined('iCodeBang_Com') OR die('Access denied!');
+
+define('IN_MOBILE', true);
+
+class english extends BaseController
+{
+	public function get_access_rule()
+	{
+		// 全部允许进入
+		$rule_action['rule_type'] = 'black';
+		$rule_action['actions'] = array();
+
+		return $rule_action;
+	}
+
+	public function setup()
+	{
+		View::import_clean();
+
+		View::import_css(array(
+			'mobile/css/english_mobile.css'
+		));
+
+		View::import_js(array(
+			'js/jquery.2.js',
+			'js/jquery.form.js',
+			'mobile/js/framework.js',
+			'mobile/js/icb-mobile.js',
+            'mobile/js/app.js',
+            'js/global.js',
+			'mobile/js/icb-mobile-template.js',
+			'js/icb_template.js',
+		));
+
+		if (in_weixin())
+		{
+			$noncestr = mt_rand(1000000000, 9999999999);
+
+			View::assign('weixin_noncestr', $noncestr);
+
+			$jsapi_ticket = $this->model('openid_weixin_weixin')->get_jsapi_ticket($this->model('openid_weixin_weixin')->get_access_token(get_setting('weixin_app_id'), get_setting('weixin_app_secret')));
+
+			$url = ($_SERVER['HTTPS'] AND !in_array(strtolower($_SERVER['HTTPS']), array('off', 'no'))) ? 'https' : 'http';
+
+			$url .= '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+			View::assign('weixin_signature', $this->model('openid_weixin_weixin')->generate_jsapi_ticket_signature(
+				$jsapi_ticket,
+				$noncestr,
+				TIMESTAMP,
+				$url
+			));
+		}
+	}
+	/**
+	 * 课程分类
+	 */
+	public function category_action()
+	{
+		$this->crumb(Application::lang()->_t('教程'), '/m/english/');
+
+		View::assign('categoryList', $this->model('category')->getCategoryList(null, null, PHP_INT_MAX));
+
+		//View::assign('content_nav_menu', $this->model('menu')->getMenuListWithModuleInLink('course'));
+
+		View::output('m/english/category.php');
+	}
+	/**
+	 * 我的页面主页
+	 */
+	public function home_action()
+	{
+		if (!$this->user_id)
+		{
+			HTTP::redirect('/m/');
+		}
+
+		$this->crumb(Application::lang()->_t('我的'), '/m/english/home/');
+
+		View::output('m/english/home');
+	}
+
+	/**
+	 * 交作业
+	 */
+	public function homework_action()
+	{
+		$this->crumb(Application::lang()->_t('交作业'), '/m/english/homeworks/');
+
+
+		$this->display('m/english/homework.php');
+	}
+	/**
+	 * 作业列表
+	 */
+	public function homeworks_action ()
+	{
+		$this->display('m/english/homeworks.php');
+	}
+	/**
+	 * 学习报告
+	 */
+	public function report_action ()
+	{
+		$this->display('m/english/report.php');
+	}
+	/**
+	 * 课程分类
+	 */
+	public function index_action ()
+	{
+		$where = 'is_recommend = 1';
+		$todayCourses = $this->model('course')->getCourseList($where);
+		View::assign('courseList', (array) $todayCourses);
+
+		View::output('m/english/index.php');
+	}
+	/**
+	 * 课程列表
+	 */
+	public function list_action ()
+	{
+		$where = null;
+		if (isset($_GET['category'])) {
+			$where = 'parent_id = ' . intval($_GET['category']);
+		}
+		$courseList = $this->model('course')->getCourseList($where, null, 20);
+		$this->assign('list', $courseList);
+
+		$this->display('m/english/list.php');
+	}
+	/**
+	 * 课程详情
+	 */
+	public function show_action()
+	{
+	    if (! $_GET['id']) {
+			HTTP::redirect('/m/english/');
+		}
+		View::import_css('js/jPlayer-2.9.2/dist/skin/blue.monday/css/jplayer.blue.monday.min.css');
+		View::import_js(array('js/jPlayer-2.9.2/dist/jplayer/jquery.jplayer.min.js'));
+
+		$this->crumb(Application::lang()->_t('课程详情'));
+
+		$course = $this->model('course')->getById($_GET['id']);
+
+		// 指定文章没有找到
+		if (! $course) {
+		    HTTP::error_404();
+		}
+
+		$this->model('course')->addViews($_GET['id']);
+		$historyInfo = $this->model('userReadHistory')
+		                    ->getByUidAndItemId($this->user_id, $_GET['id'], 'course');
+
+		// 文章内容做bbc转换
+		//$course['content'] = FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($course['content'])));
+		$course['content'] = FORMAT::parse_attachs(FORMAT::parse_bbcode($course['content']));
+
+		$this->assign('item', $course);
+        $this->assign('historyInfo', $historyInfo);
+		$this->display('m/english/show.php');
+	}
+	/**
+	 * 成为付费会员
+	 */
+	public function pay_action ()
+	{
+		$this->crumb(Application::lang()->_t('付费会员'));
+		$this->display('m/english/pay.php');
+	}
+
+	public function setCourseRead_action ()
+	{
+	    if (! $_GET['id'] || !($course = $this->model('course')->getById($_GET['id']))) {
+	        return;
+	    }
+	    HTTP::setHeaderNoCache();
+	    $historyInfo = $this->model('userReadHistory')
+	                        ->getByUidAndItemId($this->user_id, $_GET['id'], 'course');
+
+	    $data = array('page_position' => $_POST['page_position'],
+	                  'uid'           => $this->user_id,
+	                  'item_id'       => $_GET['id'],
+	                  'item_type'     => 'course'
+	    );
+	    if ($historyInfo) {
+	        $this->model('userReadHistory')
+	             ->update ($historyInfo['id'], $data, array('page_position'=>true));
+	    } else {
+	        $this->model('userReadHistory')->add ($data);
+	    }
+
+	}
+
+}
