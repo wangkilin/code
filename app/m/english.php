@@ -160,8 +160,9 @@ class english extends BaseController
 		if (! $course) {
 		    HTTP::error_404();
 		}
-
+		// 更细阅读数 + 1
 		$this->model('course')->addViews($_GET['id']);
+		$this->model('category')->addViews($course['parent_id']);
 		$historyInfo = $this->model('userReadHistory')
 		                    ->getByUidAndItemId($this->user_id, $_GET['id'], 'course');
 

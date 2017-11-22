@@ -151,7 +151,7 @@ class courseModel extends Model
 
 		if (! Application::cache()->get($cacheKey) ) {
 		    Application::cache()->set($cacheKey, time(), 60);
-		    $this->increase('course', 'views', 'id = ' . $id);
+		    $this->increase('course', 'views', 'id = ' . $id, FALSE);
 		}
 
 		return true;

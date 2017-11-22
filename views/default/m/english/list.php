@@ -3,6 +3,13 @@
 	<?php if ($this->list) { ?>
 	<!-- 分类 -->
 	<div class="container">
+	    <div class="search_wrap">
+	      <form class="navbar-search" action="list/" id="course_search_form" method="post">
+              <input class="form-control search-query" type="text" placeholder="<?php _e('搜索问题、话题或人'); ?>" autocomplete="off" name="q" id="icb-search-query" data-dropdown-type="tip"/>
+              <span title="<?php _e('搜索'); ?>" id="global_search_btns" onClick="$('#global_search_form').submit();"><i class="icon icon-search"></i></span>
+
+	      </form>
+	    </div>
 		<ul>
 		  <?php foreach ($this->list as $val) {?>
 			<?php if ($val['title']) { ?>
