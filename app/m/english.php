@@ -132,11 +132,16 @@ class english extends BaseController
 	 */
 	public function list_action ()
 	{
-		$where = null;
+		$where = array();
 		if (isset($_GET['category'])) {
-			$where = 'parent_id = ' . intval($_GET['category']);
+		    $_GET['category'] = intval($_GET['category']);
+		    $where[] = 'parent_id = ' . $_GET['category'];
 		}
-		$courseList = $this->model('course')->getCourseList($where, null, 20);
+		if (isset($_POST['q'])) {
+		    $where [] = '(title like "%' . $this->model('course')->quote($_POST['q']) .'%"
+                       OR content like "%' . $this->model('course')->quote($_POST['q']) .'%")';
+		}
+		$courseList = $this->model('course')->getCourseList(join(' AND ', $where), null, 20);
 		$this->assign('list', $courseList);
 
 		$this->display('m/english/list.php');
