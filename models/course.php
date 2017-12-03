@@ -224,6 +224,9 @@ class courseModel extends Model
 		if (isset($data['title'])) {
 			$set['title'] = htmlspecialchars(str_replace(array('-', '/'), '_', $data['title']));
 		}
+		if (isset($data['title2'])) {
+		    $set['title2'] = htmlspecialchars(str_replace(array('-', '/'), '_', $data['title2']));
+		}
 		if (isset($data['url_token'])) {
 			$set['url_token'] = str_replace(array('-', '/'), '_', $data['url_token']);
 		}

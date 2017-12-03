@@ -97,7 +97,18 @@ class english extends BaseController
 	 */
 	public function homework_action()
 	{
+	    if (! $_GET['id']) {
+	        HTTP::redirect('/m/english/');
+	    }
+	    $course = $this->model('course')->getById($_GET['id']);
+
+	    // 指定文章没有找到
+	    if (! $course) {
+	        HTTP::error_404();
+	    }
 		$this->crumb(Application::lang()->_t('交作业'), '/m/english/homeworks/');
+
+		View::assign('item', $course);
 
 
 		$this->display('m/english/homework.php');
