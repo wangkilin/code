@@ -4,17 +4,15 @@
 <div class="icb-content-wrap">
     <div class="tab-content mod-content">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-8">
                 <form action="admin/ajax/save_nav_menu/" method="post" id="nav_menu_list" onsubmit="return false">
                     <div class="mod icb-message-box ">
                     <div class="mod-set-head">
-                        <a class="btn btn-primary btn-xs pull-right" onclick="AWS.ajax_post($('#nav_menu_list'));"><?php _e('保存设置'); ?></a>
+                        <a class="btn btn-primary btn-xs pull-right" onclick="ICB.ajax.postForm($('#nav_menu_list'));"><?php _e('保存设置'); ?></a>
+                        <a class="btn btn-primary btn-xs pull-right" onclick="addHomeworkItem();"><?php _e('添加作业'); ?></a>
                         <h3>
                             <?php _e('课后作业'); ?>
                             <span><?php echo $this->item['title']; ?></span>
-                        </h3>
-                        <h3>
-                            <span><?php _e('拖动菜单可调整导航菜单排序'); ?></span>
                         </h3>
                     </div>
                     <div class="mod-set-body">
@@ -28,9 +26,9 @@
                         <li data-sort="<?php echo $val['id']; ?>" data-cursor="pointer">
                             <div class="mod-set-head <?php echo $val['parent_id'] ? 'item-intent' : 'item-no-intent' ?>">
                                 <span class="pull-right">
-                                  <a href="javascript:;" onclick="ICB.modal.confirm('<?php _e('确认删除?'); ?>', function(){ICB.ajax.request(G_BASE_URL + '/admin/ajax/remove_nav_menu/', 'id=<?php echo $val['id']; ?>');}); return false;"><?php _e('删除'); ?></a>
+                                  <a href="javascript:;" onclick="ICB.modal.confirm('<?php _e('确认删除?'); ?>', function(){ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/remove_homework_question/', 'id=<?php echo $val['id']; ?>');}); event ? event.stopPropagation():null;return false;"><?php _e('删除'); ?></a>
                                 </span>
-                                <h4><?php echo $val['title']; ?></h4>
+                                <h4><?php _e('课后作业习题') ?></h4>
                             </div>
                             <div class="mod-set-body clearfix">
                                 <div class="icb-item-info-tag clearfix">
@@ -41,47 +39,7 @@
                                         <a id="icb-item-info-img-upload-<?php echo $val['id']; ?>" class="js-upload">
                                         <input name="homework[<?php echo $val['id']; ?>][attach_id]" type="hidden" value="<?php echo $val['attach_id']; ?>"/>
                                         <img src="<?php
-                                        if ($val['icon']) {
-                                           echo get_setting('upload_url');?>/nav_menu/<?php echo $val['icon'];
-                                        } else {
-                                           echo G_STATIC_URL; ?>/css/default/img/default_class_imgs.png<?php
-                                        } ?>" alt="" id="icb-item-info-img-<?php echo $val['id']; ?>" class="js-show"/>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div class="icb-item-info-descrip">
-                                    <label class="pull-left">
-                                        <?php _e('文字'); ?><br />
-                                    </label>
-                                    <textarea class="form-control col-sm-12" type="text" name="homework[<?php echo $val['id']; ?>][content]" ><?php echo $val['content']; ?></textarea>
-                                    <input name="homework[<?php echo $val['id']; ?>][id]" type="hidden" value="<?php echo $val['id']; ?>"/>
-                                </div>
-                            </div>
-                        </li>
-
-
-                        <li data-sort="<?php echo $val['id']; ?>" data-cursor="pointer">
-                            <div class="mod-set-head <?php echo $val['parent_id'] ? 'item-intent' : 'item-no-intent' ?>">
-                                <span class="pull-right">
-                                  <a href="javascript:;" onclick="ICB.modal.dialog('confirm', {'message': '<?php _e('确认删除?'); ?>'}, function(){ICB.ajax.request(G_BASE_URL + '/admin/ajax/remove_nav_menu/', 'id=<?php echo $val['id']; ?>');}); return false;"><?php _e('删除'); ?></a>
-                                </span>
-                                <h4><?php echo $val['title']; ?></h4>
-                            </div>
-                            <div class="mod-set-body clearfix">
-                                <div class="icb-item-info-tag clearfix">
-                                    <label class="pull-left">
-                                        <?php _e('语音'); ?><br />
-                                    </label>
-                                    <div class="pull-left icb-item-info-img">
-                                        <a id="icb-item-info-img-upload-<?php echo $val['id']; ?>" class="js-upload">
-                                        <input name="homework[<?php echo $val['id']; ?>][attach_id]" type="hidden" value="<?php echo $val['attach_id']; ?>"/>
-                                        <img src="<?php
-                                        if ($val['icon']) {
-                                           echo get_setting('upload_url');?>/nav_menu/<?php echo $val['icon'];
-                                        } else {
-                                           echo G_STATIC_URL; ?>/css/default/img/default_class_imgs.png<?php
-                                        } ?>" alt="" id="icb-item-info-img-<?php echo $val['id']; ?>" class="js-show"/>
+                                        echo G_STATIC_URL; ?>/css/default/img/default_class_imgs.png" alt="" id="icb-item-info-img-<?php echo $val['id']; ?>" class="js-show"/>
                                         </a>
                                     </div>
                                 </div>
@@ -105,9 +63,24 @@
                 </form>
 
         </div>
+
+       <div class="col-md-4">
+            <div class="mod">
+                <div class="icb-message-box topic">
+                    <div class="mod-set-head">
+                        <h3><?php _e('操作小贴士'); ?></h3>
+                    </div>
+                    <div class="mod-set-body">
+
+                        <h3><?php _e('拖动可调整排序； 点击展开详细内容'); ?>
+                        </h3>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
+      </div>
+   </div>
+</div>
 
 <script type="text/javascript">
 $(document).ready(function () {
@@ -130,6 +103,14 @@ $(document).ready(function () {
             'class' : '_item_container'
         });
         $(this.element).parent().hide().after($domContainer.append($domAudio).append($domHidden));
+    }
+
+    function addHomeworkItem () {
+        var itemHtml = Hogan.compile(ICB.template.homeworkItemBox).render({
+            'message' : message
+        });
+
+        $(".icb-item-info").find('ul:first').append(itemHtml);
     }
 
     $('#homework_question_list li').each (function () {
