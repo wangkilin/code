@@ -173,7 +173,7 @@ class ajax extends AdminController
         $_POST['uid'] = $this->user_id;
 
         if ($_POST['id']) {
-        	$articleId = $_POST['id'];
+           	$articleId = $_POST['id'];
             $articleInfo = $this->model('course')->getById($articleId);
             if (! $articleInfo) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('文章不存在！')));
