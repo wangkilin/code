@@ -5,7 +5,7 @@
     <div class="tab-content mod-content">
         <div class="row">
             <div class="col-md-8">
-                <form action="admin/ajax/save_homework_question/id-<?php echo $this->item['id']; ?>" method="post" id="item_list_form" onsubmit="return false">
+                <form action="admin/ajax/homework_save/id-<?php echo $this->item['id']; ?>" method="post" id="item_list_form" onsubmit="return false">
                     <div class="mod icb-message-box ">
                     <div class="mod-set-head">
                         <a class="btn btn-primary btn-xs pull-right" onclick="ICB.ajax.postForm($('#item_list_form'));"><?php _e('保存设置'); ?></a>
@@ -84,7 +84,7 @@
  */
 function addHomeworkItem () {
     var indexMax = 0;
-    $(".icb-item-info ul:first li.js-new-homework").each(function(){
+    $(".icb-item-info ul:first li.js-homework").each(function(){
         indexMax = indexMax > +$(this).attr('data-index') ? indexMax : +$(this).attr('data-index');
     });
     var itemHtml = Hogan.compile(ICB.template.homeworkItemBox).render({

@@ -141,9 +141,15 @@ class Model
 	 * @param	string
 	 * @return	string
 	 */
-	public function get_table($name)
+	public function get_table($name='', $withPrefix=true)
 	{
-		return $this->get_prefix() . $name;
+	    if (! $name && $this->table) {
+	        $name = $this->table;
+	    }
+
+	    $table = $withPrefix ? $this->get_prefix() . $name : $name;
+
+	    return $table;
 	}
 
 	/**
