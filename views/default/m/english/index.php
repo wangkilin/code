@@ -7,10 +7,12 @@
 		<!-- 今日课程 -->
 		<?php foreach ($this->courseList as $_item) {;?>
 			<div class="mod-body">
-			  <a href="m/english/show/id-<?php echo $_item['id'];?>">
-				<div><?php echo $_item['title']?></div>
-				<div><img src="<?php echo getMudulePicUrlBySize('course', null, $_item['pic']);?>"/></div>
-			  </a>
+			  	<a href="m/english/show/id-<?php echo $_item['id'];?>">
+					<div><?php echo $_item['title']?></div>
+					<div>
+						<img src="<?php echo getMudulePicUrlBySize('course', null, $_item['pic']);?>"/>
+					</div>
+			  	</a>
 			</div>
 		<?php } ?>
 		<!-- end 热门话题 -->
