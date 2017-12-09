@@ -6,6 +6,7 @@
         <div class="row">
             <div class="col-md-8">
                 <form action="admin/ajax/homework_save/id-<?php echo $this->item['id']; ?>" method="post" id="item_list_form" onsubmit="return false">
+                    <input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
                     <div class="mod icb-message-box ">
                     <div class="mod-set-head">
                         <a class="btn btn-primary btn-xs pull-right" onclick="ICB.ajax.postForm($('#item_list_form'));"><?php _e('保存设置'); ?></a>
@@ -30,6 +31,9 @@
                                 <h4><?php _e('课后作业习题') ?></h4>
                             </div>
                             <div class="mod-set-body clearfix">
+                               <?php if ($val['file_location']) {?>
+                                <audio src="<?php echo getMuduleUploadedFileUrl('homework', $val['file_location'], $val['file_time'])?>" controls="controls" attach-id="<?php echo $val['attach_id']?>"></audio>
+                               <?php } else {?>
                                 <div class="icb-item-info-tag clearfix">
                                     <label class="pull-left">
                                         <?php _e('语音'); ?><br />
@@ -42,6 +46,7 @@
                                         </a>
                                     </div>
                                 </div>
+                               <?php }?>
 
                                 <div class="icb-item-info-descrip">
                                     <label class="pull-left">

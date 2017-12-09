@@ -132,6 +132,21 @@ function parse_attachs_callback($matches)
 
 /**
  * 获取模块图片指定尺寸的完整url地址
+ * @param  string $module     模块名称
+ * @param  string $filename   文件名
+ * @return int    $addedTime  图片上传的时间
+ */
+function getMuduleUploadedFileUrl($module, $filename, $addedTime=null)
+{
+    if ($addedTime) {
+        $filename = gmdate('Ymd/', $addedTime) . $filename;
+    }
+
+    return get_setting('upload_url') . '/'.$module.'/' . $filename;
+}
+
+/**
+ * 获取模块图片指定尺寸的完整url地址
  * @param  string $size
  * @param  string $pic_file 某一尺寸的图片文件名
  * @return string           取出主题图片或主题默认图片的完整url地址

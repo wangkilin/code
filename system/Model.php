@@ -522,7 +522,7 @@ class Model
 	 * @param	integer[optional]
 	 * @return	array
 	 */
-	public function fetch_all($table, $where = null, $order = null, $limit = null, $offset = 0)
+	public function fetch_all($table='', $where = null, $order = null, $limit = null, $offset = 0)
 	{
 		$this->slave();
 
@@ -933,7 +933,7 @@ class Model
 	 * @param	string
 	 * @return	mixed
 	 */
-	public function fetch_one($table, $column, $where = null, $order = null)
+	public function fetch_one($table='', $column='*', $where = null, $order = null)
 	{
 		$this->slave();
 

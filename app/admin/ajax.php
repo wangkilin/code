@@ -298,7 +298,8 @@ class ajax extends AdminController
                     array('content'    => $_content['content'],
                           'attach_id'  => $_content['attach_id'],
                           'course_id'  => $_GET['id'],
-                          'uid'        => $this->user_id
+                          'uid'        => $this->user_id,
+                          'batchKey'  => $_POST['batchKey']
                     )
                  );
         }

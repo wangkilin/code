@@ -16,7 +16,17 @@ class homeworkModel extends Model
 {
     protected $table = 'course_homework';
 
-	static public $courses = array();
+    public function getByCourseId ($courseId)
+    {
+        $sql = 'SELECT h.*, a.file_location, a.add_time file_time
+                FROM ' . $this->get_table() . ' h
+                LEFT JOIN ' . $this->model('attach')->get_table() . ' a
+                  ON h.attach_id = a.id
+                WHERE h.course_id = ' . intval($courseId) . '
+                ORDER BY sort';
+
+        return $this->query_all($sql);
+    }
 
 	/**
 	 * 根据ids删除
@@ -51,7 +61,6 @@ class homeworkModel extends Model
 
 		    // 设置了附件， 绑定附件和文章关系
 		    if ($set['attach_id']) {
-		        $data['batchKey'] = '';
 		        $this->model('attach')->bindAttachAndItem('homework', $id, $data['batchKey']);
 		    }
 		}
@@ -100,7 +109,6 @@ class homeworkModel extends Model
 
 			// 设置了附件， 绑定附件和文章关系
 			if ($set['attach_id']) {
-			    $data['batchKey'] = '';
 				$this->model('attach')->bindAttachAndItem('homework', $id, $data['batchKey']);
 			}
 		}

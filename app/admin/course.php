@@ -168,12 +168,21 @@ class course extends AdminController
 		View::output('admin/course/course');
 	}
 
+	/**
+	 * 编辑课后作业
+	 */
 	public function homework_action ()
 	{
 	    if (! $_GET['id'] || ! ($itemInfo = $this->model('course')->getById($_GET['id']) ) ) {
 	        H::redirect_msg(Application::lang()->_t('指定教程不存在'), '/admin/course/list/');
 	    }
 
+	    $model = $this->model('homework');
+
+	    $itemList = $model->getByCourseId($_GET['id']);
+
+	    $this->assign('itemList', $itemList);
+	    $this->assign('batchKey', $this->getBatchUploadAccessKey());
 	    $this->assign('item', $itemInfo);
 	    $this->crumb(Application::lang()->_t('课后作业'), 'admin/course/homework/');
 	    View::import_js('js/fileupload.js');

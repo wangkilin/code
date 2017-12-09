@@ -258,8 +258,7 @@ class BaseController extends Controller
     {
     	static $key = null;
     	if (! $key) {
-    		$time = time();
-    		$key = substr(md5($this->user_id . $time), 0, -12) . date('ymdHis', $time);
+    	    $key = substr(md5($this->user_id . APP_START_TIME), 0, -12) . date('ymdHis', APP_START_TIME);
     	}
 
     	return $key;
