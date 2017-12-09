@@ -151,7 +151,7 @@ class courseModel extends Model
 
 		if (! Application::cache()->get($cacheKey) ) {
 		    Application::cache()->set($cacheKey, time(), 60);
-		    $this->increase('course', 'views', 'id = ' . $id);
+		    $this->increase('course', 'views', 'id = ' . $id, FALSE);
 		}
 
 		return true;
@@ -223,6 +223,9 @@ class courseModel extends Model
 		$set = array();
 		if (isset($data['title'])) {
 			$set['title'] = htmlspecialchars(str_replace(array('-', '/'), '_', $data['title']));
+		}
+		if (isset($data['title2'])) {
+		    $set['title2'] = htmlspecialchars(str_replace(array('-', '/'), '_', $data['title2']));
 		}
 		if (isset($data['url_token'])) {
 			$set['url_token'] = str_replace(array('-', '/'), '_', $data['url_token']);

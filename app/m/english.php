@@ -97,7 +97,18 @@ class english extends BaseController
 	 */
 	public function homework_action()
 	{
+	    if (! $_GET['id']) {
+	        HTTP::redirect('/m/english/');
+	    }
+	    $course = $this->model('course')->getById($_GET['id']);
+
+	    // 指定文章没有找到
+	    if (! $course) {
+	        HTTP::error_404();
+	    }
 		$this->crumb(Application::lang()->_t('交作业'), '/m/english/homeworks/');
+
+		View::assign('item', $course);
 
 
 		$this->display('m/english/homework.php');
@@ -132,11 +143,16 @@ class english extends BaseController
 	 */
 	public function list_action ()
 	{
-		$where = null;
+		$where = array();
 		if (isset($_GET['category'])) {
-			$where = 'parent_id = ' . intval($_GET['category']);
+		    $_GET['category'] = intval($_GET['category']);
+		    $where[] = 'parent_id = ' . $_GET['category'];
 		}
-		$courseList = $this->model('course')->getCourseList($where, null, 20);
+		if (isset($_POST['q'])) {
+		    $where [] = '(title like "%' . $this->model('course')->quote($_POST['q']) .'%"
+                       OR content like "%' . $this->model('course')->quote($_POST['q']) .'%")';
+		}
+		$courseList = $this->model('course')->getCourseList(join(' AND ', $where), null, 20);
 		$this->assign('list', $courseList);
 
 		$this->display('m/english/list.php');
@@ -160,8 +176,9 @@ class english extends BaseController
 		if (! $course) {
 		    HTTP::error_404();
 		}
-
+		// 更细阅读数 + 1
 		$this->model('course')->addViews($_GET['id']);
+		$this->model('category')->addViews($course['parent_id']);
 		$historyInfo = $this->model('userReadHistory')
 		                    ->getByUidAndItemId($this->user_id, $_GET['id'], 'course');
 

@@ -173,7 +173,7 @@ class ajax extends AdminController
         $_POST['uid'] = $this->user_id;
 
         if ($_POST['id']) {
-        	$articleId = $_POST['id'];
+           	$articleId = $_POST['id'];
             $articleInfo = $this->model('course')->getById($articleId);
             if (! $articleInfo) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('文章不存在！')));
@@ -240,6 +240,72 @@ class ajax extends AdminController
         $this->model('course')->setRecommendById($_GET['id'], intval($_GET['recommend']==1));
 
         H::ajax_json_output(Application::RSM(null, 1, null));
+    }
+
+    /**
+     * 删除课后作业数据
+     */
+    public function homework_remove_action()
+    {
+        $this->checkPermission(self::IS_ROLE_ADMIN);
+        if (empty($_GET['id'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择课后作业进行操作')));
+        }
+        $this->model('homework')->deleteByIds($_GET['id']);
+
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
+
+    /**
+     * 保存课后作业内容
+     */
+    public function homework_save_action()
+    {
+        $this->checkPermission(self::IS_ROLE_ADMIN);
+
+        if (!$_GET['id'] || !($itemInfo=$this->model('course')->getById($_GET['id'])) ) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择课程后再填写课后作业')));
+        }
+
+        if (! $_POST['homework']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入课后作业内容')));
+        }
+
+        $itemList = $this->model('homework')->fetch_all(
+                $this->model('homework')->get_table('', false),
+                'course_id = ' . $this->model('homework')->quote($_GET['id'])
+                );
+        $_removeIds = array();
+        foreach ($itemList as $_item ) {
+            if (isset($_POST['homework'], $_POST['homework'][$_item['id']])) {
+                if ($_item['attach_id'] != $_POST['homework'][$_item['id']]['attach_id']
+                  || $_item['content'] != $_POST['homework'][$_item['id']]['content']) {
+                      $this->model('homework')->modify($_item['id'], $_POST['homework'][$_item['id']]);
+                }
+                unset($_POST['homework'][$_item['id']]);
+            } else {
+                $_removeIds[] = $_item['id'];
+            }
+        }
+        // 删除多余的
+        if ($_removeIds) {
+            $this->model('homework')->deleteByIds($_removeIds);
+        }
+        // 添加新的课后作业
+
+        foreach ($_POST['homework'] as $_key => $_content) {
+            $this->model('homework')->add(
+                    array('content'    => $_content['content'],
+                          'attach_id'  => $_content['attach_id'],
+                          'course_id'  => $_GET['id'],
+                          'uid'        => $this->user_id
+                    )
+                 );
+        }
+
+        H::ajax_json_output(Application::RSM(array(
+                        'url' => get_js_url('/admin/course/list/')
+        ), 1, null));
     }
 
     public function login_process_action()

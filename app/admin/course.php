@@ -170,6 +170,14 @@ class course extends AdminController
 
 	public function homework_action ()
 	{
+	    if (! $_GET['id'] || ! ($itemInfo = $this->model('course')->getById($_GET['id']) ) ) {
+	        H::redirect_msg(Application::lang()->_t('指定教程不存在'), '/admin/course/list/');
+	    }
+
+	    $this->assign('item', $itemInfo);
+	    $this->crumb(Application::lang()->_t('课后作业'), 'admin/course/homework/');
+	    View::import_js('js/fileupload.js');
+
 	    View::output('admin/course/homework');
 	}
 }

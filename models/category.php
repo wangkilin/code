@@ -237,6 +237,24 @@ class categoryModel extends Model
 		return $set;
 	}
 
+	/**
+	 * 分类阅读加1
+	 * @param int $id
+	 * @return boolean
+	 */
+	public function addViews ($id)
+	{
+	    settype($id, 'int');
+	    $cacheKey = 'updateCategoryView_' . md5(session_id()) . '_' . $id;
+
+	    if (! Application::cache()->get($cacheKey) ) {
+	        Application::cache()->set($cacheKey, time(), 60);
+	        $this->increase('category', 'views', 'id = ' . $id, false);
+	    }
+
+	    return true;
+	}
+
 
 }
 

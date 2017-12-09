@@ -68,15 +68,18 @@ class HTTP
 
 	/**
 	 * 显示404页面不存在错误
+	 * @param string $tplPath 模板文件路劲
 	 */
-	public static function error_404()
+	public static function error_404($tplPath='')
 	{
 		if ($_POST['_post_type'] == 'ajax') {
 			H::ajax_json_output(Application::RSM(null, -1, 'HTTP/1.1 404 Not Found'));
 		} else {
 			header('HTTP/1.1 404 Not Found');
 
-			View::output('global/error_404');
+			$tplPath = $tplPath ? $tplPath : 'global/error_404';
+
+			View::output($tplPath);
 			exit;
 		}
 	}

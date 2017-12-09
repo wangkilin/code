@@ -48,6 +48,12 @@
 								<?php } ?>
 							</div>
 							<!-- end 文章标题 -->
+							<!-- 文章副标题 -->
+							<h3 class="icb-label"><?php _e('副标题'); ?>:</h3>
+							<div class="icb-item-title">
+								<input type="text" name="title2" value="<?php echo $this->article_info['title2']; ?>" class="form-control" />
+							</div>
+							<!-- end 文章副标题 -->
 							<!-- 文章别名 -->
 							<h3 class="icb-label"><?php _e('别名'); ?>:</h3>
 							<div class="icb-item-title">
