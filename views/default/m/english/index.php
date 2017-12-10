@@ -2,13 +2,12 @@
 
 	<!-- 内容 -->
 	<div class="container">
-	    <div class="index-intro-img">
-	    </div>
+	    <!--<div class="index-intro-img"></div>-->
 		<!-- 今日课程 -->
 		<?php foreach ($this->courseList as $_item) {;?>
-			<div class="mod-body">
+			<div class="mod-body" >
 			  	<a href="m/english/show/id-<?php echo $_item['id'];?>">
-					<div><?php echo $_item['title']?></div>
+					<div class="mod-body-box"><?php echo $_item['title']?></div>
 					<div>
 						<img src="<?php echo getMudulePicUrlBySize('course', null, $_item['pic']);?>"/>
 					</div>
