@@ -23,9 +23,10 @@
 		  <?php foreach ($this->categoryList as $val) {?>
 			<?php if ($val['title']) { ?>
 			<li class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-				<a href="m/english/list/category-<?php echo $val['id'];?>">
-				  <span><?php echo $val['title']; ?></span>
-				  <span><?php echo _t('收听人数'), ':', $val['views'];?></span>
+				<a class="curriculum-box" href="m/english/list/category-<?php echo $val['id'];?>">
+
+				    <span class="listener"><?php echo _t('收听人数'), ':', $val['views'];?></span>
+				    <span class="curriculum-title"><?php echo $val['title']; ?></span>
 				  <img src="<?php echo getMudulePicUrlBySize('category', 'max', $val['pic']);?>"/>
 				</a>
 			</li>
