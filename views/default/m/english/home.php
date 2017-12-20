@@ -52,4 +52,4 @@
 
 
     </div>
-<?php View::output('m/english/footer.php'); ?>
+<?php View::output('m/english/foot_nav.php'); ?>
