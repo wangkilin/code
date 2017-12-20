@@ -49,7 +49,7 @@ class english extends BaseController
 			$noncestr = mt_rand(1000000000, 9999999999);
 
 			View::assign('weixin_noncestr', $noncestr);
-
+			echo get_setting('weixin_app_id'), get_setting('weixin_app_secret');
 			$jsapi_ticket = $this->model('openid_weixin_weixin')->get_jsapi_ticket($this->model('openid_weixin_weixin')->get_access_token(get_setting('weixin_app_id'), get_setting('weixin_app_secret')));
 
 			$url = ($_SERVER['HTTPS'] AND !in_array(strtolower($_SERVER['HTTPS']), array('off', 'no'))) ? 'https' : 'http';
@@ -88,6 +88,7 @@ class english extends BaseController
 		}
 
 		$this->crumb(Application::lang()->_t('我的'), '/m/english/home/');
+		View::assign('body_class', 'homeBody');
 
 		View::output('m/english/home');
 	}
@@ -106,10 +107,18 @@ class english extends BaseController
 	    if (! $course) {
 	        HTTP::error_404();
 	    }
+	    View::import_css('js/jPlayer-2.9.2/dist/skin/blue.monday/css/jplayer.blue.monday.min.css');
+	    View::import_js(array(
+	                    'js/jPlayer-2.9.2/dist/jplayer/jquery.jplayer.min.js',
+	                    'http://res.wx.qq.com/open/js/jweixin-1.2.0.js'
+	    ));
+
+	    $homeworks = $this->model('homework')->getByCourseId($_GET['id']);
 		$this->crumb(Application::lang()->_t('交作业'), '/m/english/homeworks/');
 
 		View::assign('item', $course);
-
+		View::assign('itemList', $homeworks);
+		View::assign('body_class', 'homeworkBody');
 
 		$this->display('m/english/homework.php');
 	}
@@ -118,6 +127,7 @@ class english extends BaseController
 	 */
 	public function homeworks_action ()
 	{
+	    View::assign('body_class', 'homeworksBody');
 		$this->display('m/english/homeworks.php');
 	}
 	/**
@@ -125,6 +135,7 @@ class english extends BaseController
 	 */
 	public function report_action ()
 	{
+	    View::assign('body_class', 'reportBody');
 		$this->display('m/english/report.php');
 	}
 	/**
@@ -135,6 +146,7 @@ class english extends BaseController
 		$where = 'is_recommend = 1';
 		$todayCourses = $this->model('course')->getCourseList($where);
 		View::assign('courseList', (array) $todayCourses);
+		View::assign('body_class', 'indexBody');
 
 		View::output('m/english/index.php');
 	}
@@ -154,6 +166,7 @@ class english extends BaseController
 		}
 		$courseList = $this->model('course')->getCourseList(join(' AND ', $where), null, 20);
 		$this->assign('list', $courseList);
+		View::assign('body_class', 'listBody');
 
 		$this->display('m/english/list.php');
 	}
@@ -187,7 +200,8 @@ class english extends BaseController
 		$course['content'] = FORMAT::parse_attachs(FORMAT::parse_bbcode($course['content']));
 
 		$this->assign('item', $course);
-        $this->assign('historyInfo', $historyInfo);
+		$this->assign('historyInfo', $historyInfo);
+		View::assign('body_class', 'showBody');
 		$this->display('m/english/show.php');
 	}
 	/**
