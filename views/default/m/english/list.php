@@ -15,7 +15,7 @@
 			<li class="col-sm-12">
 				<a href="m/english/show/<?php echo $val['id'];?>">
 				  <span><?php echo $val['title']; ?></span>
-				  <img src="<?php echo getMudulePicUrlBySize('category', 'max', $val['pic']);?>"/>
+				  <img src="<?php echo getMudulePicUrlBySize('course', null, $val['pic']);?>"/>
 				</a>
 				<div class="list-info">
                     <div class="list-info-left">
