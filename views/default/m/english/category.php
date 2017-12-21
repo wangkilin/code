@@ -19,7 +19,7 @@
 	<?php if ($this->categoryList) { ?>
 	<!-- 分类 -->
 	<div class="container">
-		<ul>
+		<ul class="curriculum">
 		  <?php foreach ($this->categoryList as $val) {?>
 			<?php if ($val['title']) { ?>
 			<li class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
