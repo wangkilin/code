@@ -1,20 +1,21 @@
 <?php View::output('m/english/header.php'); ?>
 
-	<?php if ($this->item) { ?>
-	<div>
-	  <img src="<?php echo getMudulePicUrlBySize('course', null, $this->item['pic']);?>"/>
-	</div>
-	<div id="itemContent">
-	  <?php echo $this->item['content']; ?>
-	</div>
-	<div id="fix-bottom-right">
-	  <a href="m/english/homework/<?php echo $this->item['id'];?>"><?php echo _t('交作业');?></a>
-	  <a href="m/english/share/<?php echo $this->item['id'];?>"><?php echo _t('分享');?></a>
-	</div>
-	<?php
-	//var_dump($this->historyInfo);
-    } ?>
-
+    <div class="container">
+        <?php if ($this->item) { ?>
+        <div>
+          <img src="<?php echo getMudulePicUrlBySize('course', null, $this->item['pic']);?>"/>
+        </div>
+        <div id="itemContent">
+          <?php echo $this->item['content']; ?>
+        </div>
+        <div id="fix-bottom-right">
+          <a href="m/english/homework/<?php echo $this->item['id'];?>"><?php echo _t('交作业');?></a>
+          <a href="m/english/share/<?php echo $this->item['id'];?>"><?php echo _t('分享');?></a>
+        </div>
+        <?php
+        //var_dump($this->historyInfo);
+        } ?>
+    </div>
 
 <script type="text/javascript">
 $(document).ready(function(){
