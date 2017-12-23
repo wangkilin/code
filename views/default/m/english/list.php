@@ -13,9 +13,11 @@
 		  <?php foreach ($this->list as $val) {?>
 			<?php if ($val['title']) { ?>
 			<li class="col-sm-12">
-				<a href="m/english/show/<?php echo $val['id'];?>">
-				  <span><?php echo $val['title']; ?></span>
-				  <img src="<?php echo getMudulePicUrlBySize('course', null, $val['pic']);?>"/>
+				<a class="list-box" href="m/english/show/<?php echo $val['id'];?>">
+				  <div class="list-box-text"><?php echo $val['title']; ?></div>
+				  <div>
+				    <img src="<?php echo getMudulePicUrlBySize('course', null, $val['pic']);?>"/>
+				  </div>
 				</a>
 				<div class="list-info">
                     <div class="list-info-left">
@@ -29,7 +31,6 @@
                             </span>
                             <span class="course_time"><?php echo date('Y/m/d', $val['add_time']);?></span>
                         </p>
-
                     </div>
 				</div>
 			</li>

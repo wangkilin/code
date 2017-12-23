@@ -1,32 +1,67 @@
 <?php View::output('m/english/header.php'); ?>
 	<div class="container">
-		<span>已经连续坚持xx天按时交作业，获得xxx积分,继续加油！</span>
-	</div>
-	<div>
-	  <img src="<?php echo getMudulePicUrlBySize('course', null, $this->item['pic']);?>"/>
-	</div>
-	<div class="container" id="itemContent">
+		<div class="report-title">
+		    已经连续坚持<span>2</span><span>7</span>天按时交作业,获得了<span>3</span><span>1</span><span>7</span>积分!继续加油!
+        </div>
+		<!--背景图-->
+		<div class="report-img">
+        	<img src="<?php echo getMudulePicUrlBySize('course', null, $this->item['pic']);?>"/>
+        <!-- <a href="m/english/show/<?php echo $_GET['id'];?>">重听课程</a>
+
 		<div><?php echo $this->item['title']; ?></div>
 		<div><?php echo $this->item['title2']; ?></div>
-		<div><a href="m/english/show/<?php echo $_GET['id'];?>">重听课程</a></div>
-		<?php if ($this->itemList) {?>
-		<?php foreach($this->itemList as $_val) {?>
+        -->
+        </div>
+        <!--问题-->
+        <div class="report-question"  id="itemContent">
+            <ul class="report-box">
+                <li>
+                    <div class="report-item">
+                        <p class="q-tit">问题<span><i>Q</i>UESTION</span></p>
+                    </div>
+                </li>
+                <?php if ($this->itemList) {
+		         $index = 1;?>
+		<?php foreach($this->itemList as $_val) {
+		    ?>
 		<?php if ($_val['file_location']) { ?>
-		<div><audio src="<?php echo getMuduleUploadedFileUrl('homework', $_val['file_location'], $_val['file_time'])?>" controls="controls" attach-id="<?php echo $_val['attach_id']?>"></audio></div>
-		<?php }?>
-		<div><?php echo $_val['content'];?></div>
-		<div class="jsToRecord">
-		    <button>回答问题</button>
-		</div>
+                <li>
+                    <div class="report-item q-sound clearfix">
+                        <div class="s-left-img"></div>
+                        <div class="s-right">
+                            <i class="iconfont icon-maikefeng"></i>
+                            <audio src="<?php echo getMuduleUploadedFileUrl('homework', $_val['file_location'], $_val['file_time'])?>" controls="controls" attach-id="<?php echo $_val['attach_id']?>"></audio>
+                        </div>
+                    </div>
+                </li>
+                <?php }?>
+                <li>
+                    <div class="report-item q-text clearfix">
+                        <div class="q-text-l "><?php echo sprintf('%02d', $index++);?></div>
+                         <div class="q-text-r">
+                             <p><?php echo $_val['content'];?></p>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="report-item q-answer clearfix">
+                        <p class="fl-r jsToRecord">
+                            <i class="iconfont icon-maikefeng"></i>
+                            <span>回答问题</span>
+                        </p>
+                    </div>
+                </li>
+
 		<?php } // end foreach ?>
 		<?php } // end if ?>
-		ll
-<?php echo $this->weixin_signature;?>
+            </ul>
+        </div>
+
 	</div>
 	<div class="container">
 		<span>保存学习报告！</span>
 	</div>
-
+<?php echo $this->weixin_signature;?>
 <script type="text/javascript">
 
 $('#itemContent audio').each(function (index, dom) {

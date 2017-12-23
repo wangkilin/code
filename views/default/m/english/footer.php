@@ -25,7 +25,14 @@ wx.config({
 		'onMenuShareTimeline',
 		'onMenuShareAppMessage',
 		'onMenuShareQQ',
-		'onMenuShareWeibo'
+		'onMenuShareWeibo',
+		"startRecord",
+		"stopRecord",
+		"onVoiceRecordEnd",
+		"playVoice",
+		"pauseVoice",
+		"stopVoice",
+		"onVoicePlayEnd"
 		]
 });
 
@@ -41,8 +48,21 @@ else
 }
 
 wx.ready(function () {
+    console.info('herer hello');
 	wx.checkJsApi({
-		jsApiList: ["onMenuShareTimeline", "onMenuShareAppMessage", "onMenuShareQQ", "onMenuShareWeibo"],
+		jsApiList: [
+			"onMenuShareTimeline",
+			"onMenuShareAppMessage",
+			"onMenuShareQQ",
+			"onMenuShareWeibo",
+			"startRecord",
+			"stopRecord",
+			"onVoiceRecordEnd",
+			"playVoice",
+			"pauseVoice",
+			"stopVoice",
+			"onVoicePlayEnd"
+		],
 		success: function() {
 			// 朋友圈
 			wx.onMenuShareTimeline({

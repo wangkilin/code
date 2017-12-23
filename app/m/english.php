@@ -84,7 +84,7 @@ class english extends BaseController
 	{
 		if (!$this->user_id)
 		{
-			HTTP::redirect('/m/');
+			//HTTP::redirect('/m/');
 		}
 
 		$this->crumb(Application::lang()->_t('我的'), '/m/english/home/');
