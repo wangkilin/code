@@ -29,7 +29,7 @@
                     <div class="report-item q-sound clearfix">
                         <div class="s-left-img"></div>
                         <div class="s-right">
-                            <i class="iconfont icon-maikefeng"></i>
+                            <i class="iconfont icon icon-volume-high"></i>
                             <audio src="<?php echo getMuduleUploadedFileUrl('homework', $_val['file_location'], $_val['file_time'])?>" controls="controls" attach-id="<?php echo $_val['attach_id']?>"></audio>
                         </div>
                     </div>
@@ -44,9 +44,9 @@
                     </div>
                 </li>
                 <li>
-                    <div class="report-item q-answer clearfix">
-                        <p class="fl-r jsToRecord">
-                            <i class="iconfont icon-maikefeng"></i>
+                    <div class="report-item q-answer jsAnswerWrap clearfix">
+                        <p class="fl-r jsStartRecord">
+                            <i class="iconfont icon icon-mic"></i>
                             <span>回答问题</span>
                         </p>
                     </div>
@@ -105,21 +105,45 @@ $('#itemContent audio').each(function (index, dom) {
 	});
 });
 $(function () {
-    $('.container').on('click', '.jsToRecord button', function () {
+    $('.container').on('click', '.jsStartRecord', function () {
         console.info('clicking button');
-        $(this).removeClass('jsRoRecord');
+        $(this).removeClass('jsStartRecord');
         wx.startRecord();
-        $(this).addClass('jsRecording');
+        $(this).addClass('jsStopRecord');
+    });
+    $('.container').on('click', '.jsPlayVoice', function () {
+        var voiceId = $(this).closest('.jsAnswerWrap').data('voiceId');
+        console.info(voiceId);
+        $(this).removeClass('jsPlayVoice');
+        wx.playVoice({
+            localId: voiceId // 需要播放的音频的本地ID，由stopRecord接口获得
+        });
+        $(this).addClass('jsStopVoice');
+    });
+    $('.container').on('click', '.jsStopVoice', function () {
+        var voiceId = $(this).closest('.jsAnswerWrap').data('voiceId');
+        $(this).removeClass('jsStopVoice').addClass('jsPlayVoice');
+        console.info(voiceId);
+        wx.stopVoice({
+            localId: voiceId // 需要播放的音频的本地ID，由stopRecord接口获得
+        });
+        $(this).addClass('jsPlayVoice');
     });
 
-    $('.container').on('click', '.jsRecording button', function () {
+    $('.container').on('click', '.jsStopRecord', function () {
+        var $this = $(this);
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
+                $this.closest('.jsAnswerWrap').data('voiceId', res.localId);
+                $this.closest('.jsAnswerWrap').find('.jsStopVoice, .jsPlayVoice').remove();
+                $this.closest('.jsAnswerWrap').prepend(
+                        '<p class="fl-r jsPlayVoice"><i class="icon icon-volume-high"></i></p>'
+                        );
             }
         });
-        $(this).removeClass('jsRecording');
-        $(this).addClass('jsRoRecord');
+        $(this).removeClass('jsStopRecord');
+        $(this).addClass('jsStartRecord');
     });
 
     //监听录音自动停止接口
