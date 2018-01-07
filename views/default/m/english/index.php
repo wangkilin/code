@@ -9,7 +9,7 @@
 			  	<a href="m/english/show/id-<?php echo $_item['id'];?>">
 					<div class="mod-body-box"><?php echo $_item['title']?></div>
 					<div>
-						<img src="<?php echo getMudulePicUrlBySize('course', null, $_item['pic']);?>"/>
+						<img src="<?php echo getModulePicUrlBySize('course', null, $_item['pic']);?>"/>
 					</div>
 			  	</a>
 			</div>

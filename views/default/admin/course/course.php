@@ -31,7 +31,7 @@
 							<!-- 缩略图 -->
 							<h3 class="icb-label"><?php _e('广告图'); ?>:</h3>
 							<div class="icb-item-title">
-								<a id="thumb_pic_uploader"><img src="<?php echo getMudulePicUrlBySize('course', null, $this->article_info['pic']); ?>" alt="" id="thumb_pic" class="img-polaroid" name="thumb_pic" /></a>
+								<a id="thumb_pic_uploader"><img src="<?php echo getModulePicUrlBySize('course', null, $this->article_info['pic']); ?>" alt="" id="thumb_pic" class="img-polaroid" name="thumb_pic" /></a>
 							</div>
 							<!-- end 文章别名 -->
 							<!-- 文章标题 -->

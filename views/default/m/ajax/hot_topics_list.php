@@ -2,7 +2,7 @@
 <li>
 	<div class="mod-head clearfix">
 		<a href="m/topic/<?php echo $val['url_token']; ?>"  class="img">
-			<img src="<?php echo getMudulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" width="50" />
+			<img src="<?php echo getModulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" width="50" />
 		</a>
 		<div class="content">
 			<span class="article-tag clearfix">

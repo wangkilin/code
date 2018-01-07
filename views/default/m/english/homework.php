@@ -5,7 +5,7 @@
         </div>
 		<!--背景图-->
 		<div class="report-img">
-        	<img src="<?php echo getMudulePicUrlBySize('course', null, $this->item['pic']);?>"/>
+        	<img src="<?php echo getModulePicUrlBySize('course', null, $this->item['pic']);?>"/>
         <!-- <a href="m/english/show/<?php echo $_GET['id'];?>">重听课程</a>
 
 		<div><?php echo $this->item['title']; ?></div>
@@ -13,53 +13,56 @@
         -->
         </div>
         <!--问题-->
-        <div class="report-question"  id="itemContent">
-            <ul class="report-box">
-                <li>
-                    <div class="report-item">
-                        <p class="q-tit">问题<span><i>Q</i>UESTION</span></p>
-                    </div>
-                </li>
-                <?php if ($this->itemList) {
-		         $index = 1;?>
-		<?php foreach($this->itemList as $_val) {
-		    ?>
-		<?php if ($_val['file_location']) { ?>
-                <li>
-                    <div class="report-item q-sound clearfix">
-                        <div class="s-left-img"></div>
-                        <div class="s-right">
-                            <i class="iconfont icon icon-volume-high"></i>
-                            <audio src="<?php echo getMuduleUploadedFileUrl('homework', $_val['file_location'], $_val['file_time'])?>" controls="controls" attach-id="<?php echo $_val['attach_id']?>"></audio>
+        <form action="m/english/ajax_save_answer/<?php echo $_GET['id'];?>" method="post" id="answer_question_form">
+            <div class="report-question"  id="itemContent">
+                <ul class="report-box">
+                    <li>
+                        <div class="report-item">
+                            <p class="q-tit">问题<span><i>Q</i>UESTION</span></p>
                         </div>
-                    </div>
-                </li>
-                <?php }?>
-                <li>
-                    <div class="report-item q-text clearfix">
-                        <div class="q-text-l "><?php echo sprintf('%02d', $index++);?></div>
-                         <div class="q-text-r">
-                             <p><?php echo $_val['content'];?></p>
+                    </li>
+                    <?php if ($this->itemList) {
+    		         $index = 1;?>
+    		<?php foreach($this->itemList as $_val) {
+    		    ?>
+    		<?php if ($_val['file_location']) { ?>
+                    <li>
+                        <div class="report-item q-sound clearfix">
+                            <div class="s-left-img"></div>
+                            <div class="s-right">
+                                <i class="iconfont icon icon-volume-high"></i>
+                                <audio src="<?php echo getModuleUploadedFileUrl('homework', $_val['file_location'], $_val['file_time'])?>" controls="controls" attach-id="<?php echo $_val['attach_id']?>"></audio>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="report-item q-answer jsAnswerWrap clearfix">
-                        <p class="fl-r jsStartRecord">
-                            <i class="iconfont icon icon-mic"></i>
-                            <span>回答问题</span>
-                        </p>
-                    </div>
-                </li>
+                    </li>
+                    <?php }?>
+                    <li>
+                        <div class="report-item q-text clearfix">
+                            <div class="q-text-l "><?php echo sprintf('%02d', $index++);?></div>
+                             <div class="q-text-r">
+                                 <p><?php echo $_val['content'];?></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="report-item q-answer jsAnswerWrap clearfix">
+                            <input type="hidden" class="js-answer-item" name="homework_answer[<?php echo $_val['id'];?>]" value="" />
+                            <p class="fl-r jsStartRecord">
+                                <i class="iconfont icon icon-mic"></i>
+                                <span>回答问题</span>
+                            </p>
+                        </div>
+                    </li>
 
-		<?php } // end foreach ?>
-		<?php } // end if ?>
-            </ul>
-        </div>
+    		<?php } // end foreach ?>
+    		<?php } // end if ?>
+                </ul>
+            </div>
+	</form>
 
 	</div>
 	<div class="container">
-		<span>保存学习报告！</span>
+		<span id="save_study_report">保存学习报告！</span>
 	</div>
 <?php echo $this->weixin_signature;?>
 <script type="text/javascript">
@@ -105,12 +108,32 @@ $('#itemContent audio').each(function (index, dom) {
 	});
 });
 $(function () {
+    $('#save_study_report').click (function () {
+        var $answers = $('.container').find('.jsUploadVoice');
+        for(var i =0; i <$answers.length; i++) {
+            $answers.eq(i).trigger('click');
+        }
+
+        ICB.ajax.postForm($('#answer_question_form'));
+
+        return false;
+    });
+    // 录音
     $('.container').on('click', '.jsStartRecord', function () {
         console.info('clicking button');
         $(this).removeClass('jsStartRecord');
-        wx.startRecord();
+        $(this).closest('.jsAnswerWrap').find('.jsUploadVoice, .jsPlayVoice').remove();
+
+        wx.startRecord({
+            /**
+             * 用户拒绝录音授权
+             */
+            concel : function () {
+            }
+        });
         $(this).addClass('jsStopRecord');
     });
+    // 播放录音
     $('.container').on('click', '.jsPlayVoice', function () {
         var voiceId = $(this).closest('.jsAnswerWrap').data('voiceId');
         console.info(voiceId);
@@ -120,6 +143,7 @@ $(function () {
         });
         $(this).addClass('jsStopVoice');
     });
+    // 停止播放录音
     $('.container').on('click', '.jsStopVoice', function () {
         var voiceId = $(this).closest('.jsAnswerWrap').data('voiceId');
         $(this).removeClass('jsStopVoice').addClass('jsPlayVoice');
@@ -129,17 +153,46 @@ $(function () {
         });
         $(this).addClass('jsPlayVoice');
     });
+    // 上传录音
+    $('.container').on('click', '.jsUploadVoice', function () {
+        var $this = $(this);
+        var voiceId = $(this).closest('.jsAnswerWrap').data('voiceId');
+        wx.uploadVoice({
+            localId: voiceId, // 需要上传的音频的本地ID，由stopRecord接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+            		var serverId = res.serverId; // 返回音频的服务器端ID
 
+                $this.closest('.jsAnswerWrap').find('.js-answer-item').val(res.serverId);
+            }
+        });
+    });
+	// 停止录音
     $('.container').on('click', '.jsStopRecord', function () {
         var $this = $(this);
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
-                $this.closest('.jsAnswerWrap').data('voiceId', res.localId);
-                $this.closest('.jsAnswerWrap').find('.jsStopVoice, .jsPlayVoice').remove();
-                $this.closest('.jsAnswerWrap').prepend(
-                        '<p class="fl-r jsPlayVoice"><i class="icon icon-volume-high"></i></p>'
-                        );
+
+                wx.uploadVoice({
+                    localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+                    isShowProgressTips: 1, // 默认为1，显示进度提示
+                    success: function (res) {
+                    		var serverId = res.serverId; // 返回音频的服务器端ID
+
+                        $this.closest('.jsAnswerWrap').find('.js-answer-item').val(res.serverId);
+
+
+                        $this.closest('.jsAnswerWrap').data('voiceId', res.localId);
+                        $this.closest('.jsAnswerWrap').find('.jsUploadVoice, .jsPlayVoice').remove();
+                        $this.closest('.jsAnswerWrap').append(
+                               // '<p class="fl-r jsUploadVoice"><i class="icon icon-insert"></i></p>' +
+                                '<p class="fl-r jsPlayVoice"><i class="icon icon-volume-high"></i></p>'
+                                );
+                    },
+                    fail : function () {
+                    }
+                });
             }
         });
         $(this).removeClass('jsStopRecord');
@@ -149,37 +202,56 @@ $(function () {
     //监听录音自动停止接口
 
     wx.onVoiceRecordEnd({
-    // 录音时间超过一分钟没有停止的时候会执行 complete 回调
-    complete: function (res) {
-    var localId = res.localId;
-    }
+        // 录音时间超过一分钟没有停止的时候会执行 complete 回调
+        complete: function (res) {
+        		var localId = res.localId;
+        }
     });
 
     //播放语音接口
 
     wx.playVoice({
-    localId: '' // 需要播放的音频的本地ID，由stopRecord接口获得
+    		localId: '' // 需要播放的音频的本地ID，由stopRecord接口获得
     });
 
     //暂停播放接口
 
     wx.pauseVoice({
-    localId: '' // 需要暂停的音频的本地ID，由stopRecord接口获得
+    		localId: '' // 需要暂停的音频的本地ID，由stopRecord接口获得
     });
 
     //停止播放接口
 
     wx.stopVoice({
-    localId: '' // 需要停止的音频的本地ID，由stopRecord接口获得
+    		localId: '' // 需要停止的音频的本地ID，由stopRecord接口获得
     });
 
     //监听语音播放完毕接口
 
     wx.onVoicePlayEnd({
-    success: function (res) {
-    var localId = res.localId; // 返回音频的本地ID
-    }
+        success: function (res) {
+        		var localId = res.localId; // 返回音频的本地ID
+        }
     });
+
+    // 上传语音接口
+    wx.uploadVoice({
+        localId: '', // 需要上传的音频的本地ID，由stopRecord接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function (res) {
+        var serverId = res.serverId; // 返回音频的服务器端ID
+        }
+    });
+
+    //识别音频并返回识别结果接口
+    wx.translateVoice({
+        localId: '', // 需要识别的音频的本地Id，由录音相关接口获得
+        isShowProgressTips: 1, // 默认为1，显示进度提示
+        success: function (res) {
+        		alert(res.translateResult); // 语音识别的结果
+        }
+    });
+
 });
 </script>
 <?php View::output('m/english/footer.php'); ?>

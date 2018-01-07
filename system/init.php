@@ -36,6 +36,10 @@ if (! defined('INC_PATH'))
 	define('INC_PATH', dirname(__FILE__) . '/');
 }
 
+if (! defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+
 if (defined('SAE_TMP_PATH'))
 {
 	define('IN_SAE', true);

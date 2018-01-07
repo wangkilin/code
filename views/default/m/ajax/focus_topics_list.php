@@ -2,7 +2,7 @@
 <?php foreach ($this->topics_list AS $key => $val) { ?>
 <li>
 	<div class="mod-head clearfix">
-		<a class="img" href="topic/<?php echo $val['url_token']; ?>"><img src="<?php echo getMudulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" width="50" /></a>
+		<a class="img" href="topic/<?php echo $val['url_token']; ?>"><img src="<?php echo getModulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" width="50" /></a>
 		<div class="content">
 			<span class="article-tag clearfix">
 				<a href="topic/<?php echo $val['url_token']; ?>" class="text"><?php echo $val['topic_title']; ?></a>

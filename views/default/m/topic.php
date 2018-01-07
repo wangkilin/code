@@ -11,7 +11,7 @@
 	<!-- 话题信息 -->
 	<div class="icb-topic-detail">
 		<div class="mod-head clearfix">
-			<a class="img"><img width="50" src="<?php echo getMudulePicUrlBySize('topic', 'max', $this->topic_info['topic_pic']); ?>" alt="" /></a>
+			<a class="img"><img width="50" src="<?php echo getModulePicUrlBySize('topic', 'max', $this->topic_info['topic_pic']); ?>" alt="" /></a>
 			<div class="title clearfix">
 				<h1 class="pull-left"><?php echo $this->topic_info['topic_title']; ?></h1>
 				<?php if ($this->user_id) { ?>

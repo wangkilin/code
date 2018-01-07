@@ -25,7 +25,7 @@
 						<div class="form-group">
 							<span class="col-sm-4 col-xs-3 control-label"><?php _e('缩略图'); ?>:</span>
 							<div class="col-sm-5 col-xs-8">
-								<a id="topic_pic_uploader"><img src="<?php echo getMudulePicUrlBySize('topic', 'mid', $this->tagInfo['topic_pic']); ?>" alt="" id="topic_pic" class="img-polaroid" name="topic_pic" /></a>
+								<a id="topic_pic_uploader"><img src="<?php echo getModulePicUrlBySize('topic', 'mid', $this->tagInfo['topic_pic']); ?>" alt="" id="topic_pic" class="img-polaroid" name="topic_pic" /></a>
 							</div>
 						</div>
 					</td>

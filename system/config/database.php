@@ -8,7 +8,7 @@ $config['master'] = array (
   'host' => 'localhost',
   'username' => 'root',
   'password' => '4728999',
-  'dbname' => 'wecenter',
+  'dbname' => 'WeCenter',
   'port' => 3306,
 );
 $config['slave'] = false;

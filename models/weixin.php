@@ -547,7 +547,7 @@ class weixinModel extends Model
                     $response_message[] = array(
                         'title' => $topic_info['topic_title'],
                         'link' => get_js_url('/m/topic/' . $topic_info['url_token']),
-                        'image_file' => getMudulePicUrlBySize('topic', '', $topic_info['topic_pic'])
+                        'image_file' => getModulePicUrlBySize('topic', '', $topic_info['topic_pic'])
                     );
 
                     if ($topic_posts = $this->model('posts')->get_posts_list(null, $param, 4, 'new', array($topic_info['topic_id'])))

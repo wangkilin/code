@@ -26,7 +26,7 @@
 				<a href="m/english/list/category-<?php echo $val['id'];?>">
 				  <span><?php echo $val['title']; ?></span>
 				  <span><?php echo _t('收听人数'), ':', $val['views'];?></span>
-				  <img src="<?php echo getMudulePicUrlBySize('category', 'max', $val['pic']);?>"/>
+				  <img src="<?php echo getModulePicUrlBySize('category', 'max', $val['pic']);?>"/>
 				</a>
 			</li>
 			<?php } ?>

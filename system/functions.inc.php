@@ -531,6 +531,36 @@ function & loadClass($class, $params=null)
 	return $_classes[$class];
 }
 
+if (! function_exists('importClass')) {
+    function importClass ($class, $inDir = '')
+    {
+        if (class_exists($class, false)) {
+            return;
+        }
+
+        if (!is_string($inDir) || ''==$inDir) {
+            $inDir = INC_PATH;
+        } else {
+            $inDir = rtrim($inDir, DS) . DS;
+        }
+
+        $classFile = $inDir . preg_replace('/_+/', DS, $class);
+        $filesList = array($classFile . '.php', $classFile . '.class.php');
+        $isLoaded = false;
+        foreach ($filesList as $_file) {
+            if (file_exists($_file)) {
+                require_once($_file);
+                $isLoaded = true;
+                break;
+            }
+        }
+
+        if (! $isLoaded) {
+            echo "<br/>file not exist:" . $classFile;
+        }
+    }
+}
+
 function _show_error($exception_message)
 {
 	$name = strtoupper($_SERVER['HTTP_HOST']);

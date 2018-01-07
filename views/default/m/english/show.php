@@ -3,7 +3,7 @@
     <div class="container">
         <?php if ($this->item) { ?>
         <div>
-          <img src="<?php echo getMudulePicUrlBySize('course', null, $this->item['pic']);?>"/>
+          <img src="<?php echo getModulePicUrlBySize('course', null, $this->item['pic']);?>"/>
         </div>
         <div id="itemContent">
           <?php echo $this->item['content']; ?>

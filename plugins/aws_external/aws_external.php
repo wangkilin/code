@@ -95,7 +95,7 @@ class aws_externalModel extends Model
 			foreach ($data AS $key => $val)
 			{
 				/***
-					话题图片调用：getMudulePicUrlBySize('topic', $val['uid'], $val['topic_pic'])
+					话题图片调用：getModulePicUrlBySize('topic', $val['uid'], $val['topic_pic'])
 
 					$val['topic_description'] - 话题简介
 					$val['discuss_count'] - 讨论数量

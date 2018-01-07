@@ -12,7 +12,7 @@
 					</div>
 					<div class="icb-mod icb-mod-topic-edit-box">
 						<div class="mod-head clearfix">
-							<a href="javascript:;" class="img" style="background:url('<?php echo getMudulePicUrlBySize('topic', 'mid', $this->topic_info['topic_pic']); ?>') no-repeat;" <?php if ($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator'] OR ($this->topic_info['topic_lock'] == 0 && $this->user_info['permission']['edit_topic'])) { ?> id="topic_pic_uploader"<?php } ?>>
+							<a href="javascript:;" class="img" style="background:url('<?php echo getModulePicUrlBySize('topic', 'mid', $this->topic_info['topic_pic']); ?>') no-repeat;" <?php if ($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator'] OR ($this->topic_info['topic_lock'] == 0 && $this->user_info['permission']['edit_topic'])) { ?> id="topic_pic_uploader"<?php } ?>>
 								<span class="mask"></span>
 								<b>修改</b>
 							</a>

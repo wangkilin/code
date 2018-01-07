@@ -122,6 +122,55 @@ class english extends BaseController
 
 		$this->display('m/english/homework.php');
 	}
+
+	/**
+	 * 保存答案
+	 */
+	public function ajax_save_answer_action ()
+	{
+	    if (! $_GET['id']) {
+	        HTTP::redirect('/m/english/');
+	    }
+	    $course = $this->model('course')->getById($_GET['id']);
+
+	    // 指定文章没有找到
+	    if (! $course) {
+	        HTTP::error_404();
+	    }
+
+	    importClass('ConvertFormat', INC_PATH . 'Wechat/');
+	    importClass('Request', INC_PATH . 'Wechat/');
+	    importClass('WechatListener', INC_PATH . 'Wechat/');
+	    importClass('MyWechatHandler', INC_PATH . 'Wechat/');
+
+	    $options = array('decodeResponseMode' => \Request::DECODE_MODE_ARRAY,
+	                     'logger'             => 'trace',
+	    );
+	    $this->wechatRequest =  $this->getWechatRequester()
+	                                 ->setOptions($options)
+	                                 ;
+	    error_log(print_r($_POST, true), 3, '/tmp/log.log');
+	    // 添加新的课后作业
+	    foreach ($_POST['homework_answer'] as $_homeworkId => $_weixinVoiceId) {
+	        $mediaId = 'UPihgxtuvMp-ey3dQYzA-EPHt9fJnDUTeM4lUonCV-Lt-tXFQA8Z3hrLKcE7WU2f';
+	        $decodeResponseMode = $this->wechatRequest->decodeResponseMode;
+	        $this->wechatRequest->decodeResponseMode = Request::DECODE_MODE_TEXT;
+	        $result = $this->wechatRequest->getTmpMediaById($mediaId);
+	        $this->wechatRequest->decodeResponseMode = $decodeResponseMode;
+	        $this->model('homeworkAnswer')->add(
+	                array(
+	                    'homework_id'      => $_homeworkId,
+	                    'wechat_media_id'  => $_weixinVoiceId,
+                        'uid'              => $this->user_id,
+	                )
+	         );
+	    }
+
+	    H::ajax_json_output(Application::RSM(array(
+	                    'url' => get_js_url('/')
+	    ), 1, null));
+	}
+
 	/**
 	 * 作业列表
 	 */

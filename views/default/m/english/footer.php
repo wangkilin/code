@@ -14,26 +14,27 @@ $(document).ready(function() {
 	$('.header').hide();
 });
 
+var wxJsApiList = [
+	"onMenuShareTimeline",
+	"onMenuShareAppMessage",
+	"onMenuShareQQ",
+	"onMenuShareWeibo",
+	"startRecord",
+	"stopRecord",
+	"onVoiceRecordEnd",
+	"playVoice",
+	"pauseVoice",
+	"stopVoice",
+	"onVoicePlayEnd",
+	"uploadVoice"
+];
 wx.config({
 	debug: false,
 	appId: '<?php echo get_setting("weixin_app_id"); ?>',
 	timestamp: '<?php echo TIMESTAMP; ?>',
 	nonceStr: '<?php echo $this->weixin_noncestr; ?>',
 	signature: '<?php echo $this->weixin_signature; ?>',
-	jsApiList: [
-		'checkJsApi',
-		'onMenuShareTimeline',
-		'onMenuShareAppMessage',
-		'onMenuShareQQ',
-		'onMenuShareWeibo',
-		"startRecord",
-		"stopRecord",
-		"onVoiceRecordEnd",
-		"playVoice",
-		"pauseVoice",
-		"stopVoice",
-		"onVoicePlayEnd"
-		]
+	jsApiList: wxJsApiList
 });
 
 var WEIXIN_IMG_COVER;
@@ -50,19 +51,7 @@ else
 wx.ready(function () {
     console.info('herer hello');
 	wx.checkJsApi({
-		jsApiList: [
-			"onMenuShareTimeline",
-			"onMenuShareAppMessage",
-			"onMenuShareQQ",
-			"onMenuShareWeibo",
-			"startRecord",
-			"stopRecord",
-			"onVoiceRecordEnd",
-			"playVoice",
-			"pauseVoice",
-			"stopVoice",
-			"onVoicePlayEnd"
-		],
+		jsApiList: wxJsApiList,
 		success: function() {
 			// 朋友圈
 			wx.onMenuShareTimeline({

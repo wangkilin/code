@@ -90,7 +90,7 @@ class ajax extends BaseController
 			$topic_info['focus'] = $this->model('topic')->isTopicFollowed($this->user_id, $topic_info['topic_id']);
 		}
 
-		$topic_info['topic_pic'] = getMudulePicUrlBySize('topic', 'mid', $topic_info['topic_pic']);
+		$topic_info['topic_pic'] = getModulePicUrlBySize('topic', 'mid', $topic_info['topic_pic']);
 		$topic_info['url'] = get_js_url('/topic/' . $topic_info['url_token']);
 
 		H::ajax_json_output($topic_info);

@@ -8,7 +8,7 @@
 		<?php foreach($this->sidebar_hot_topics AS $key => $val) {?>
 			<dl>
 				<dt class="pull-left icb-border-radius-5">
-					<a href="topic/<?php echo $val['topic_title'];?>"><img alt="" src="<?php echo getMudulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" /></a>
+					<a href="topic/<?php echo $val['topic_title'];?>"><img alt="" src="<?php echo getModulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" /></a>
 				</dt>
 				<dd class="pull-left">
 					<p class="clearfix">

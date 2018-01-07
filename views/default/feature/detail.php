@@ -82,7 +82,7 @@
 							<?php foreach($this->sidebar_hot_topics AS $key => $val) {?>
 							<dl>
 								<dt class="pull-left icb-border-radius-5">
-									<a href="topic/<?php echo $val['url_token']; ?>"><img alt="" src="<?php echo getMudulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" /></a>
+									<a href="topic/<?php echo $val['url_token']; ?>"><img alt="" src="<?php echo getModulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" /></a>
 								</dt>
 								<dd class="pull-left">
 									<a href="topic/<?php echo $val['url_token']; ?>" class="icb-topic-name" data-id="<?php echo $val['topic_id']; ?>"><span><?php echo $val['topic_title']; ?></span></a>

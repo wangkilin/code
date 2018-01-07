@@ -176,7 +176,7 @@ class searchModel extends Model
 			$name = $result_info['topic_title'];
 
 			$detail = array(
-				'topic_pic'=> getMudulePicUrlBySize('topic', 'mid', $result_info['topic_pic']),
+				'topic_pic'=> getModulePicUrlBySize('topic', 'mid', $result_info['topic_pic']),
 				'topic_id' => $result_info['topic_id'],	// 话题 ID
 				'focus_count' => $result_info['focus_count'],
 				'discuss_count' => $result_info['discuss_count'],	// 讨论数量

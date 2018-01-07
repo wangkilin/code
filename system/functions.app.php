@@ -136,7 +136,7 @@ function parse_attachs_callback($matches)
  * @param  string $filename   文件名
  * @return int    $addedTime  图片上传的时间
  */
-function getMuduleUploadedFileUrl($module, $filename, $addedTime=null)
+function getModuleUploadedFileUrl($module, $filename, $addedTime=null)
 {
     if ($addedTime) {
         $filename = gmdate('Ymd/', $addedTime) . $filename;
@@ -151,7 +151,7 @@ function getMuduleUploadedFileUrl($module, $filename, $addedTime=null)
  * @param  string $pic_file 某一尺寸的图片文件名
  * @return string           取出主题图片或主题默认图片的完整url地址
  */
-function getMudulePicUrlBySize($module, $size = null, $pic_file = null)
+function getModulePicUrlBySize($module, $size = null, $pic_file = null)
 {
 	if ($pic_file && ($sized_file = getUploadedModulePicNameBySize($module, $pic_file, $size))) {
 		return get_setting('upload_url') . '/'.$module.'/' . $sized_file;

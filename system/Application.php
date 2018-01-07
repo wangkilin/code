@@ -65,6 +65,9 @@ class Application
 		define('MODULE',     basename(rtrim(loadClass('core_uri')->app_dir, '\\/')));
 		define('CONTROLLER', loadClass('core_uri')->controller);
 		define('ACTION',     loadClass('core_uri')->action);
+		if (method_exists($handle_controller, 'beforeAction') ){
+		    $handle_controller->beforeAction();
+		}
 		// 执行
         if (empty($_GET['id']) AND method_exists($handle_controller, loadClass('core_uri')->action . '_square_action')) {
             $action_method = loadClass('core_uri')->action . '_square_action';

@@ -23,7 +23,7 @@
 				<div class="col-sm-12 col-md-9 icb-main-content">
 					<div class="icb-mod icb-topic-detail-title">
 						<div class="mod-body clearfix">
-							<img src="<?php echo getMudulePicUrlBySize('topic', 'mid', $this->topic_info['topic_pic']); ?>" alt="<?php echo $this->topic_info['topic_title']; ?>" />
+							<img src="<?php echo getModulePicUrlBySize('topic', 'mid', $this->topic_info['topic_pic']); ?>" alt="<?php echo $this->topic_info['topic_title']; ?>" />
 							<h2 class="pull-left"><?php echo $this->topic_info['topic_title']; ?> <?php if ($this->topic_info['topic_lock']) { ?><i class="icb-icon i-lock" title="<?php _e('已锁定'); ?>"></i><?php } ?></h2>
 
 							<div class="icb-topic-operate">

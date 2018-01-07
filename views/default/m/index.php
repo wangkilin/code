@@ -85,7 +85,7 @@
 				<ul>
 					<?php foreach($this->sidebar_hot_topics AS $key => $val) {?>
 					<li>
-						<a class="pull-left" href="m/topic/<?php echo $val['topic_title'];?>"><img src="<?php echo getMudulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" width="50" /></a>
+						<a class="pull-left" href="m/topic/<?php echo $val['topic_title'];?>"><img src="<?php echo getModulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" width="50" /></a>
 						<div class="content pull-left">
 							<span class="article-tag clearfix">
 								<a class="text" href="m/topic/<?php echo $val['topic_title'];?>"><?php echo $val['topic_title'];?></a>

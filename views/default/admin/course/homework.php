@@ -32,7 +32,7 @@
                             </div>
                             <div class="mod-set-body clearfix">
                                <?php if ($val['file_location']) {?>
-                                <audio src="<?php echo getMuduleUploadedFileUrl('homework', $val['file_location'], $val['file_time'])?>" controls="controls" attach-id="<?php echo $val['attach_id']?>"></audio>
+                                <audio src="<?php echo getModuleUploadedFileUrl('homework', $val['file_location'], $val['file_time'])?>" controls="controls" attach-id="<?php echo $val['attach_id']?>"></audio>
                                <?php } else {?>
                                 <div class="icb-item-info-tag clearfix">
                                     <label class="pull-left">

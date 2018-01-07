@@ -16,7 +16,7 @@
 				<a class="list-box" href="m/english/show/<?php echo $val['id'];?>">
 				  <div class="list-box-text"><?php echo $val['title']; ?></div>
 				  <div>
-				    <img src="<?php echo getMudulePicUrlBySize('course', null, $val['pic']);?>"/>
+				    <img src="<?php echo getModulePicUrlBySize('course', null, $val['pic']);?>"/>
 				  </div>
 				</a>
 				<div class="list-info">

@@ -3,7 +3,7 @@
 <div class="icb-item">
     <!-- 话题图片 -->
     <a class="img icb-border-radius-5" href="topic/<?php echo $val['url_token']; ?>" data-id="<?php echo $val['topic_id']; ?>">
-        <img src="<?php echo getMudulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" />
+        <img src="<?php echo getModulePicUrlBySize('topic', 'mid', $val['topic_pic']); ?>" alt="" />
     </a>
     <!-- end 话题图片 -->
     <p class="clearfix">
