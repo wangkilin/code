@@ -8,12 +8,12 @@
 <!-- / DO NOT REMOVE -->
 
 <?php if (in_weixin()) { ?>
+aaaa
 <script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('.header').hide();
 });
-
 var wxJsApiList = [
 	"onMenuShareTimeline",
 	"onMenuShareAppMessage",
@@ -37,6 +37,7 @@ wx.config({
 	jsApiList: wxJsApiList
 });
 
+alert('bbb');
 var WEIXIN_IMG_COVER;
 
 if ($('.icb-question-detail .markitup-box img').length)
@@ -49,10 +50,15 @@ else
 }
 
 wx.ready(function () {
-    console.info('herer hello');
+    //console.info('herer hello');
+    alert('aaa');
 	wx.checkJsApi({
 		jsApiList: wxJsApiList,
-		success: function() {
+		success: function(res) {
+			for(var i in res.checkResult) {
+				$('body').append(i + ':' + res.checkResult[i] + '<br/>');
+			}
+			//alert(res.checkResult.playVoice);
 			// 朋友圈
 			wx.onMenuShareTimeline({
 				title: document.title,
@@ -84,6 +90,9 @@ wx.ready(function () {
 				link: location.href,
 				imgUrl: WEIXIN_IMG_COVER
 			});
+		},
+		fail : function (res) {
+			alert(res);
 		}
 	})
 });

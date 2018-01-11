@@ -49,7 +49,7 @@ class english extends BaseController
 			$noncestr = mt_rand(1000000000, 9999999999);
 
 			View::assign('weixin_noncestr', $noncestr);
-			echo get_setting('weixin_app_id'), get_setting('weixin_app_secret');
+			//echo get_setting('weixin_app_id'), get_setting('weixin_app_secret');
 			$jsapi_ticket = $this->model('openid_weixin_weixin')->get_jsapi_ticket($this->model('openid_weixin_weixin')->get_access_token(get_setting('weixin_app_id'), get_setting('weixin_app_secret')));
 
 			$url = ($_SERVER['HTTPS'] AND !in_array(strtolower($_SERVER['HTTPS']), array('off', 'no'))) ? 'https' : 'http';
@@ -123,6 +123,21 @@ class english extends BaseController
 		$this->display('m/english/homework.php');
 	}
 
+
+	/**
+	 * 获取wechat请求实例
+	 * @return \WechatRequester
+	 */
+	protected function getWechatRequester ()
+	{
+	    $appId     = get_setting("weixin_app_id");
+	    $appSecret = get_setting("weixin_app_secret");
+	    $token     = get_setting("weixin_mp_token");
+	    $requesterClient = new \Request($appId, $appSecret, $token);
+
+	    return $requesterClient;
+	}
+
 	/**
 	 * 保存答案
 	 */
@@ -152,16 +167,38 @@ class english extends BaseController
 	    error_log(print_r($_POST, true), 3, '/tmp/log.log');
 	    // 添加新的课后作业
 	    foreach ($_POST['homework_answer'] as $_homeworkId => $_weixinVoiceId) {
-	        $mediaId = 'UPihgxtuvMp-ey3dQYzA-EPHt9fJnDUTeM4lUonCV-Lt-tXFQA8Z3hrLKcE7WU2f';
 	        $decodeResponseMode = $this->wechatRequest->decodeResponseMode;
 	        $this->wechatRequest->decodeResponseMode = Request::DECODE_MODE_TEXT;
-	        $result = $this->wechatRequest->getTmpMediaById($mediaId);
+	        $voiceContent = $this->wechatRequest->getTmpMediaById($_weixinVoiceId);
 	        $this->wechatRequest->decodeResponseMode = $decodeResponseMode;
+
+
+	        $dir = '/english_answer/' . gmdate('Ymd', APP_START_TIME);
+
+	        Application::upload()->initialize(array(
+	                        'allowed_types' => '*',
+	                        'upload_path'   => get_setting('upload_dir') . $dir,
+	                        'is_image'      => TRUE,
+	                        'max_size'      => get_setting('upload_avatar_size_limit'),
+	                        'file_name'      => $_homeworkId.'.amr'
+	        ))->do_upload('upload_file', $voiceContent);
+	        // 检查上传结果
+	        $this->checkUploadFileResult();
+	        $uploadData = Application::upload()->data();
+	        $filePath = $dir . '/' . $uploadData['file_name'];
+
+	        echo htmlspecialchars(json_encode(array(
+	                        'success' => true,
+	                        'thumb'   => get_setting('upload_url') . $filePath,
+	                        'file'    => $filePath,
+	        )), ENT_NOQUOTES);
+
 	        $this->model('homeworkAnswer')->add(
 	                array(
 	                    'homework_id'      => $_homeworkId,
 	                    'wechat_media_id'  => $_weixinVoiceId,
                         'uid'              => $this->user_id,
+                        'file'             => $filePath,
 	                )
 	         );
 	    }
