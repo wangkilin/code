@@ -39,6 +39,7 @@ class core_upload {
     public $xss_clean               = FALSE;
     public $temp_prefix             = "temp_file_";
     public $client_name             = '';
+    public $keep_ext                = FALSE;
 
     protected $_file_name_override  = '';
 
@@ -77,7 +78,8 @@ class core_upload {
             'remove_spaces'     => TRUE,
             'xss_clean'         => TRUE,
             'temp_prefix'       => "temp_file_",
-            'client_name'       => ''
+            'client_name'       => '',
+            'keep_ext'          => FALSE,
         );
 
 
@@ -158,6 +160,7 @@ class core_upload {
 
             $this->file_ext  = $this->get_extension($this->file_name);
             $this->client_name = $this->file_name;
+
         }
         else
         {
@@ -440,7 +443,7 @@ class core_upload {
         {
             $filename = md5(rand(1, 99999999) . microtime());
 
-            if ( $this->is_image() || $this->file_type=='audio/mpeg' )
+            if ($this->keep_ext || $this->is_image() || $this->file_type=='audio/mpeg' )
             {
                 $filename .= $this->file_ext;
             }

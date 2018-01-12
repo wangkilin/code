@@ -180,8 +180,8 @@ class english extends BaseController
 	                        'upload_path'   => get_setting('upload_dir') . $dir,
 	                        'is_image'      => TRUE,
 	                        'max_size'      => get_setting('upload_avatar_size_limit'),
-	                        'file_name'      => $_homeworkId.'.amr'
-	        ))->do_upload('upload_file', $voiceContent);
+	                        'keep_ext'      => TRUE,
+	        ))->do_upload('upload_file.amr', $voiceContent);
 	        // 检查上传结果
 	        $this->checkUploadFileResult();
 	        $uploadData = Application::upload()->data();
