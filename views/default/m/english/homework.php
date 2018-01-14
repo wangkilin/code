@@ -1,7 +1,7 @@
 <?php View::output('m/english/header.php'); ?>
 	<div class="container">
 		<div class="report-title">
-		    已经连续坚持<span>2</span><span>7</span>天按时交作业,获得了<span>3</span><span>1</span><span>7</span>积分!继续加油!
+		    已经连续坚持<span><?php echo $this->homeworkRecord['keep_days'];?></span>天按时交作业,获得了<span><?php echo $this->homeworkRecord['keep_days'];?></span>积分!继续加油!
         </div>
 		<!--背景图-->
 		<div class="report-img">
@@ -173,6 +173,7 @@ $(function () {
         wx.stopRecord({
             success: function (res) {
                 var localId = res.localId;
+                $this.closest('.jsAnswerWrap').data('voiceId', res.localId);
 
                 wx.uploadVoice({
                     localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得

@@ -114,10 +114,15 @@ class english extends BaseController
 	    ));
 
 	    $homeworks = $this->model('homework')->getByCourseId($_GET['id']);
+	    $homeworkRecord = $this->model('homeworkRecord')->getByUid($this->user_id);
+	    if (! $homeworkRecord) {
+	        $homeworkRecord = array('keep_days'=>0);
+	    }
 		$this->crumb(Application::lang()->_t('交作业'), '/m/english/homeworks/');
 
 		View::assign('item', $course);
 		View::assign('itemList', $homeworks);
+		View::assign('homeworkRecord', $homeworkRecord);
 		View::assign('body_class', 'homeworkBody');
 
 		$this->display('m/english/homework.php');
@@ -164,7 +169,7 @@ class english extends BaseController
 	    $this->wechatRequest =  $this->getWechatRequester()
 	                                 ->setOptions($options)
 	                                 ;
-	    error_log(print_r($_POST, true), 3, '/tmp/log.log');
+	    //error_log(print_r($_POST, true), 3, '/tmp/log.log');
 	    // 添加新的课后作业
 	    foreach ($_POST['homework_answer'] as $_homeworkId => $_weixinVoiceId) {
 	        $decodeResponseMode = $this->wechatRequest->decodeResponseMode;
@@ -187,12 +192,6 @@ class english extends BaseController
 	        $uploadData = Application::upload()->data();
 	        $filePath = $dir . '/' . $uploadData['file_name'];
 
-	        echo htmlspecialchars(json_encode(array(
-	                        'success' => true,
-	                        'thumb'   => get_setting('upload_url') . $filePath,
-	                        'file'    => $filePath,
-	        )), ENT_NOQUOTES);
-
 	        $this->model('homeworkAnswer')->add(
 	                array(
 	                    'homework_id'      => $_homeworkId,
@@ -202,6 +201,7 @@ class english extends BaseController
 	                )
 	         );
 	    }
+	    $this->model('homeworkRecord')->setHomeworkRecord($uid, $_GET['id']);
 
 	    H::ajax_json_output(Application::RSM(array(
 	                    'url' => get_js_url('/')
