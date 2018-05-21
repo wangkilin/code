@@ -118,6 +118,19 @@ $(function () {
 
         return false;
     });
+
+    wx.startRecord(); // 防止第一次弹框 TODO
+      setTimeout(function(){
+        wx.stopRecord({
+            fail:function(res){
+                //alert("停止失败");
+            },
+            success: function (res) {}
+        });
+    },800); // 这里的 800 是血的教训，开始为了快写了10，
+     //坑爹的发现 ios会失败，而安卓正常，最后发现是stop本身异步，太快调用fail都不会执行，坑点之一
+
+
     // 录音
     $('.container').on('click', '.jsStartRecord', function () {
         console.info('clicking button');
