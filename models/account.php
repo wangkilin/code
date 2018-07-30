@@ -17,7 +17,7 @@ class accountModel extends Model
      */
     public function check_username($user_name)
     {
-    	$user_name = trim($user_name);
+        $user_name = trim($user_name);
 
         return $this->fetch_one('users', 'uid', "user_name = '" . $this->quote($user_name) . "' OR url_token = '" . $this->quote($user_name) . "'");
     }
@@ -246,15 +246,15 @@ class accountModel extends Model
      */
     public function getUserById($uid, $attrib = false, $cache_result = true)
     {
-    	$userInfo = false;
-    	if ($uid) {
-	    	$usersInfo = $this->getUsersByIds(array($uid), $attrib, true);
-	    	if (is_array($usersInfo)) {
-	    		$userInfo = end($usersInfo);
-	    	}
-    	}
+        $userInfo = false;
+        if ($uid) {
+            $usersInfo = $this->getUsersByIds(array($uid), $attrib, true);
+            if (is_array($usersInfo)) {
+                $userInfo = end($usersInfo);
+            }
+        }
 
-    	return $userInfo;
+        return $userInfo;
 
         if (! $uid) {
             return false;
@@ -282,11 +282,11 @@ class accountModel extends Model
         }
 
         if ($attrib) {
-	        if ($user_attrib = $this->fetch_row('users_attrib', 'uid = ' . intval($uid))) {
-		        foreach ($user_attrib AS $key => $val) {
-			        $user_info[$key] = $val;
-		        }
-	        }
+            if ($user_attrib = $this->fetch_row('users_attrib', 'uid = ' . intval($uid))) {
+                foreach ($user_attrib AS $key => $val) {
+                    $user_info[$key] = $val;
+                }
+            }
         }
 
         if (!$user_info['url_token'] AND $user_info['user_name']) {
@@ -378,7 +378,7 @@ class accountModel extends Model
             }
 
             if (in_array(-1, $uids)) {
-            	$data['-1']= array(
+                $data['-1']= array(
                         'uid' => -1,
                         'user_name' => Application::lang()->_t('[已注销]'),
                     );
@@ -822,7 +822,7 @@ class accountModel extends Model
         {
             foreach ($result AS $key => $val)
             {
-            	unset($val['password'], $val['salt']);
+                unset($val['password'], $val['salt']);
 
                 $data[$val['uid']] = $val;
 
@@ -1279,12 +1279,12 @@ class accountModel extends Model
 
         return true;
     }
-	/**
-	 * 记录用户最近使用的话题标题
-	 * @param int $uid  用户id
-	 * @param string $topic_title 话题标题
-	 * @return boolean|number
-	 */
+    /**
+     * 记录用户最近使用的话题标题
+     * @param int $uid  用户id
+     * @param string $topic_title 话题标题
+     * @return boolean|number
+     */
     public function markRecentTopicTitles($uid, $topic_title)
     {
         if (!$user_info = $this->getUserById($uid)) {

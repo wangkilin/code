@@ -7,10 +7,10 @@ defined('iCodeBang_Com') OR die('Access denied!');
  */
 class page extends AdminController
 {
-	/**
-	 * 控制器 初始化
-	 * @see Controller::setup()
-	 */
+    /**
+     * 控制器 初始化
+     * @see Controller::setup()
+     */
     public function setup()
     {
         $this->checkPermission(AdminController::IS_ROLE_ADMIN);
@@ -44,9 +44,9 @@ class page extends AdminController
         $this->crumb(Application::lang()->_t('添加页面'), "admin/page/add/");
 
         View::import_js('js/fileupload.js');
-		if (get_setting('advanced_editor_enable') == 'Y') {
-			import_editor_static_files();
-		}
+        if (get_setting('advanced_editor_enable') == 'Y') {
+            import_editor_static_files();
+        }
 
         View::output('admin/page/publish');
     }
@@ -66,7 +66,7 @@ class page extends AdminController
 
         View::import_js('js/fileupload.js');
         if (get_setting('advanced_editor_enable') == 'Y') {
-        	import_editor_static_files();
+            import_editor_static_files();
         }
 
         View::output('admin/page/publish');

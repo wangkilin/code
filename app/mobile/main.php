@@ -15,26 +15,26 @@
 
 if (!defined('iCodeBang_Com'))
 {
-	die;
+    die;
 }
 
 class main extends Controller
 {
-	public function get_access_rule()
-	{
-		$rule_action['rule_type'] = 'black';
-		$rule_action['actions'] = array();
+    public function get_access_rule()
+    {
+        $rule_action['rule_type'] = 'black';
+        $rule_action['actions'] = array();
 
-		return $rule_action;
-	}
+        return $rule_action;
+    }
 
-	public function setup()
-	{
-		HTTP::redirect('/m/');
-	}
+    public function setup()
+    {
+        HTTP::redirect('/m/');
+    }
 
-	public function index_action()
-	{
-		HTTP::redirect('/m/');
-	}
+    public function index_action()
+    {
+        HTTP::redirect('/m/');
+    }
 }

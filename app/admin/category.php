@@ -52,6 +52,6 @@ class category extends AdminController
 
     public function module_action ()
     {
-    	View::output('admin/category/module');
+        View::output('admin/category/module');
     }
 }

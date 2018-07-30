@@ -22,7 +22,7 @@
 	<?php } ?>
 	<ul>
 		<li>
-			<b><?php _e('PHP 版本'); ?></b><span><?php echo PHP_VERSION; ?></span><?php if (!$this->system_require['php']) { ?><span class="red">× <?php _e('WeCenter 需要最低 %s 版本的 PHP, 并且运行于非安全模式下, 我们推荐使用 PHP 5.3', ENVIRONMENT_PHP_VERSION); ?></span><?php } else { ?><span class="green">√</span><?php } ?>
+			<b><?php _e('PHP 版本'); ?></b><span><?php echo PHP_VERSION; ?></span><?php if (!$this->system_require['php']) { ?><span class="red">× <?php _e('WeCenter 需要最低 %s 版本的 PHP, 并且运行于非安全模式下, 我们推荐使用 PHP 5.3', LOWEST_PHP_VERSION); ?></span><?php } else { ?><span class="green">√</span><?php } ?>
 		</li>
 		<li>
 			<b><?php _e('数据库模块'); ?></b><span><?php echo $this->system_require['db']; ?></span><?php if (!$this->system_require['db']) { ?><span class="red">× <?php _e('WeCenter 支持 MySQLi 与 PDO_MYSQL 两种数据库模块, 您的服务器两种都不支持'); ?></span><?php } else { ?><span class="green">√</span><?php } ?>	

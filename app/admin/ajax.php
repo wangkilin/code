@@ -25,7 +25,7 @@ class ajax extends AdminController
      */
     public function tag_manage_action()
     {
-    	$this->checkPermission(self::IS_ROLE_ADMIN);
+        $this->checkPermission(self::IS_ROLE_ADMIN);
 
         if (empty($_POST['ids'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择标签进行操作')));
@@ -53,13 +53,13 @@ class ajax extends AdminController
     public function tag_save_action()
     {
         $data = array('title'       => $_POST['tag_title'],
-        		      'url_token'   => $_POST['url_token'],
-        		      'description' => $_POST['description']
-        		);
+                      'url_token'   => $_POST['url_token'],
+                      'description' => $_POST['description']
+                );
         if (isset($_POST['category_ids'])) {
-        	$data['category_ids'] = $_POST['category_ids'];
+            $data['category_ids'] = $_POST['category_ids'];
         }
-    	// 更新
+        // 更新
         if ($_POST['id']) {
             if (! $tagInfo = $this->model('tag')->getTagById($_POST['id'])) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('标签不存在')));
@@ -109,7 +109,7 @@ class ajax extends AdminController
             }
 
             if (($category = $this->model('tag')->getTagCategoryByToken($_POST['url_token']))
-            		AND $category['id'] != $_POST['id']) {
+                    AND $category['id'] != $_POST['id']) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名已经被占用请更换一个')));
             }
             $set['url_token'] = $_POST['url_token'];
@@ -138,7 +138,7 @@ class ajax extends AdminController
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
         if (empty($_POST['ids'])) {
-        	H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
         }
         $this->model('tag')->removeTagCategoryByIds($_POST['ids']);
 
@@ -166,25 +166,25 @@ class ajax extends AdminController
             }
 
             if (($articleInfo = $this->model('course')->fetch_row('course', "url_token='".$this->model()->quote($_POST['url_token'])."'"))
-            		AND $articleInfo['id'] != $_POST['id']) {
+                    AND $articleInfo['id'] != $_POST['id']) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('别名已经被占用请更换一个')));
             }
         }
         $_POST['uid'] = $this->user_id;
 
         if ($_POST['id']) {
-           	$articleId = $_POST['id'];
+               $articleId = $_POST['id'];
             $articleInfo = $this->model('course')->getById($articleId);
             if (! $articleInfo) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('文章不存在！')));
             }
             $this->model('course')->updateCourse($articleId, $_POST);
             if (isset($_POST['banner_path'])) {
-            	$dir = gmdate('Ymd', APP_START_TIME) ;
-            	$baseDir = get_setting('upload_dir').'/course/';
+                $dir = gmdate('Ymd', APP_START_TIME) ;
+                $baseDir = get_setting('upload_dir').'/course/';
                 $file = $dir . '/' . basename($_POST['banner_path']);
-            	make_dir($baseDir . $dir);
-            	rename(get_setting('upload_dir').$_POST['banner_path'], $baseDir . $file);
+                make_dir($baseDir . $dir);
+                rename(get_setting('upload_dir').$_POST['banner_path'], $baseDir . $file);
                 @unlink(get_setting('upload_dir').$_POST['banner_path']);
                 if ($articleInfo['pic']) {
                     @unlink($baseDir . $articleInfo['pic']);
@@ -196,11 +196,11 @@ class ajax extends AdminController
         } else {
             $articleId  = $this->model('course')->add($_POST);
             if (isset($_POST['banner_path'])) {
-            	$dir = gmdate('Ymd', APP_START_TIME) ;
-            	$baseDir = get_setting('upload_dir').'/course/';
+                $dir = gmdate('Ymd', APP_START_TIME) ;
+                $baseDir = get_setting('upload_dir').'/course/';
                 $file = $dir . '/' . basename($_POST['banner_path']);
-            	make_dir($baseDir . $dir);
-            	rename(get_setting('upload_dir').$_POST['banner_path'], $baseDir . $file);
+                make_dir($baseDir . $dir);
+                rename(get_setting('upload_dir').$_POST['banner_path'], $baseDir . $file);
                 @unlink(get_setting('upload_dir').$_POST['banner_path']);
                 //$this->model('tempUpload')->deleteByIds($_POST['banner_id']);
                 $this->model('course')->updateCourse($articleId, array('pic'=>$file));
@@ -208,7 +208,7 @@ class ajax extends AdminController
         }
         /*
         if (isset($_POST['item_banner_id'])) {
-        	$this->model('attach')->bindAttachAndItem('course_banner', $articleId, $_POST['batchKey']);
+            $this->model('attach')->bindAttachAndItem('course_banner', $articleId, $_POST['batchKey']);
         }
         */
 
@@ -224,7 +224,7 @@ class ajax extends AdminController
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
         if (empty($_POST['ids'])) {
-        	H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
         }
         $this->model('course')->deleteByIds($_POST['ids'], 'course');
 
@@ -641,7 +641,7 @@ class ajax extends AdminController
 
         if ($_POST['category_id'] AND $_POST['parent_id'] AND $category_list = $this->model('system')->fetch_category('question', $_POST['category_id']))
         {
-        	$this->jsonErrExit(_t('系统允许最多二级分类, 当前分类下有子分类, 不能移动到其它分类'));
+            $this->jsonErrExit(_t('系统允许最多二级分类, 当前分类下有子分类, 不能移动到其它分类'));
         }
 
         if (trim($_POST['title']) == ''){
@@ -926,7 +926,7 @@ class ajax extends AdminController
 
         H::ajax_json_output(Application::RSM(array(
             'url' => get_js_url('/admin/feature/list/')
-		), 1, null));
+        ), 1, null));
     }
 
     public function remove_feature_action()
@@ -977,18 +977,18 @@ class ajax extends AdminController
         }
 
         if ($_POST['nav_menu']) {
-        	$_nowParent = 0; // 当前父级id
-        	$_index = 0;
+            $_nowParent = 0; // 当前父级id
+            $_index = 0;
 
             foreach($_POST['nav_menu'] as $key => $val) {
-            	// 如果不是第一个元素， 并且设置了父级
-            	if ($_index++>0 && $val['is_child']) {
-            		$val['parent_id'] = $_nowParent;
-            	} else {
-            		$val['parent_id'] = 0;
-            		$_nowParent = $key; // 记录下一个元素可能的父级
-            	}
-            	unset($val['is_child']);
+                // 如果不是第一个元素， 并且设置了父级
+                if ($_index++>0 && $val['is_child']) {
+                    $val['parent_id'] = $_nowParent;
+                } else {
+                    $val['parent_id'] = 0;
+                    $_nowParent = $key; // 记录下一个元素可能的父级
+                }
+                unset($val['is_child']);
                 $this->model('menu')->update_nav_menu($key, $val);
             }
         }
@@ -1016,7 +1016,7 @@ class ajax extends AdminController
                 $type_id  = intval($_POST['type_id']);
                 $typeInfo = $this->model('topic')->getTopicById($type_id);
                 $title    = $typeInfo['topic_title'];
-            	break;
+                break;
 
             case 'custom' :
                 $title = trim($_POST['title']);
@@ -1078,27 +1078,27 @@ class ajax extends AdminController
         $itemInfo = array();
         if ($_POST['item_sort'] && ($menu_ids = explode(',', $_POST['item_sort'])) ) {
             foreach($menu_ids as $key => $val) {
-            	$itemInfo[$val] = array('sort' => $key);
+                $itemInfo[$val] = array('sort' => $key);
             }
         }
 
         if ($_POST['nav_menu']) {
-        	$_nowParent = 0; // 当前父级id
-        	$_index = 0;
+            $_nowParent = 0; // 当前父级id
+            $_index = 0;
 
             foreach($_POST['nav_menu'] as $key => $val) {
-            	if (!isset($itemInfo[$key])) {
-            		$itemInfo[$key] = array();
-            	}
-            	// 如果不是第一个元素， 并且设置了父级
-            	if ($_index++>0 && $val['is_child']) {
-            		$val['parent_id'] = $_nowParent;
-            	} else {
-            		$val['parent_id'] = 0;
-            		$_nowParent = $key; // 记录下一个元素可能的父级
-            	}
-            	unset($val['is_child']);
-            	$itemInfo[$key] += $val;
+                if (!isset($itemInfo[$key])) {
+                    $itemInfo[$key] = array();
+                }
+                // 如果不是第一个元素， 并且设置了父级
+                if ($_index++>0 && $val['is_child']) {
+                    $val['parent_id'] = $_nowParent;
+                } else {
+                    $val['parent_id'] = 0;
+                    $_nowParent = $key; // 记录下一个元素可能的父级
+                }
+                unset($val['is_child']);
+                $itemInfo[$key] += $val;
             }
         }
 
@@ -1124,32 +1124,32 @@ class ajax extends AdminController
         $itemInfo = array();
         if ($_POST['item_sort'] && ($itemIds = explode(',', $_POST['item_sort'])) ) {
             foreach($itemIds as $key => $val) {
-            	$itemInfo[$val] = array('sort' => $key);
+                $itemInfo[$val] = array('sort' => $key);
             }
         }
 
         if ($_POST['item']) {
-        	$_nowParent = 0; // 当前父级id
-        	$_index = 0;
+            $_nowParent = 0; // 当前父级id
+            $_index = 0;
 
             foreach($_POST['item'] as $key => $val) {
-            	if (!isset($itemInfo[$key])) {
-            		$itemInfo[$key] = array();
-            	}
-            	if ('chapter'==$val['from_type']) {
-            		// 如果当前是目录分章， 设定当前为-1. 这样保证下一个条目的父级是0
-            		$_index = -1;
-            		unset($val['from_type']); // 类型不做修改
-            	}
-            	// 如果不是第一个元素， 并且设置了父级
-            	if ($_index++>0 && $val['is_child']) {
-            		$val['parent_id'] = $_nowParent;
-            	} else {
-            		$val['parent_id'] = 0;
-            		$_nowParent = $key; // 记录下一个元素可能的父级
-            	}
-            	unset($val['is_child']);
-            	$itemInfo[$key] += $val;
+                if (!isset($itemInfo[$key])) {
+                    $itemInfo[$key] = array();
+                }
+                if ('chapter'==$val['from_type']) {
+                    // 如果当前是目录分章， 设定当前为-1. 这样保证下一个条目的父级是0
+                    $_index = -1;
+                    unset($val['from_type']); // 类型不做修改
+                }
+                // 如果不是第一个元素， 并且设置了父级
+                if ($_index++>0 && $val['is_child']) {
+                    $val['parent_id'] = $_nowParent;
+                } else {
+                    $val['parent_id'] = 0;
+                    $_nowParent = $key; // 记录下一个元素可能的父级
+                }
+                unset($val['is_child']);
+                $itemInfo[$key] += $val;
             }
         }
 
@@ -1173,14 +1173,14 @@ class ajax extends AdminController
                 $category = $this->model('system')->get_category_info($type_id);
                 $title    = $category['title'];
                 $type     = $_POST['type'];
-            	break;
+                break;
 
             case 'topic' : // 将话题加入到导航
                 $type_id  = intval($_POST['type_id']);
                 $typeInfo = $this->model('topic')->getTopicById($type_id);
                 $title    = $typeInfo['topic_title'];
                 $type     = $_POST['type'];
-            	break;
+                break;
 
             case 'custom' : // 自定义链接
                 $title       = trim($_POST['title']);
@@ -1188,10 +1188,10 @@ class ajax extends AdminController
                 $link        = trim($_POST['link']);
                 $type_id     = 0;
                 $type        = 'custom';
-            	break;
+                break;
 
             default:
-            	break;
+                break;
         }
 
         if (! $title) {
@@ -1449,13 +1449,13 @@ class ajax extends AdminController
     public function save_topic_action()
     {
         $data = array(
-            		'title'       => $_POST['topic_title'],
-            		'description' => $_POST['topic_description'],
-            		'lock'        => $_POST['lock'],
-            		'is_parent'   => $_POST['is_parent'],
-            		//'parent_id'   => $_POST['parent_id'],
-            		'parent_ids'  => $_POST['parent_ids'],
-            		'url_token'   => $_POST['url_token'],
+                    'title'       => $_POST['topic_title'],
+                    'description' => $_POST['topic_description'],
+                    'lock'        => $_POST['lock'],
+                    'is_parent'   => $_POST['is_parent'],
+                    //'parent_id'   => $_POST['parent_id'],
+                    'parent_ids'  => $_POST['parent_ids'],
+                    'url_token'   => $_POST['url_token'],
 
         );
         if ($_POST['topic_id']) {
@@ -2175,22 +2175,22 @@ class ajax extends AdminController
 
     public function topic_statistic_action()
     {
-    	$topic_statistic = array();
+        $topic_statistic = array();
 
-    	if ($topic_list = $this->model('topic')->get_hot_topics(null, $_GET['limit'], $_GET['tag']))
-    	{
-	    	foreach ($topic_list AS $key => $val)
-	    	{
-		    	$topic_statistic[] = array(
-		    		'title' => $val['topic_title'],
-		    		'week' => $val['discuss_count_last_week'],
-		    		'month' => $val['discuss_count_last_month'],
-		    		'all' => $val['discuss_count']
-		    	);
-	    	}
-    	}
+        if ($topic_list = $this->model('topic')->get_hot_topics(null, $_GET['limit'], $_GET['tag']))
+        {
+            foreach ($topic_list AS $key => $val)
+            {
+                $topic_statistic[] = array(
+                    'title' => $val['topic_title'],
+                    'week' => $val['discuss_count_last_week'],
+                    'month' => $val['discuss_count_last_month'],
+                    'all' => $val['discuss_count']
+                );
+            }
+        }
 
-	    echo json_encode($topic_statistic);
+        echo json_encode($topic_statistic);
     }
 
     public function statistic_action()
@@ -2653,35 +2653,35 @@ class ajax extends AdminController
      */
     public function upload_category_pic_action()
     {
-    	if (! $this->hasRolePermission(self::IS_ROLE_ADMIN | self::IS_ROLE_MODERATOR)) {
-    	    $this->jsonErrExit(_t('你没有权限进行此操作'));
-    	}
+        if (! $this->hasRolePermission(self::IS_ROLE_ADMIN | self::IS_ROLE_MODERATOR)) {
+            $this->jsonErrExit(_t('你没有权限进行此操作'));
+        }
 
-    	if (! $categoryInfo = $this->model('category')->getCategoryById($_GET['id'])) {
-    		$this->jsonErrExit( _t('分类不存在') );
-    	}
+        if (! $categoryInfo = $this->model('category')->getCategoryById($_GET['id'])) {
+            $this->jsonErrExit( _t('分类不存在') );
+        }
 
-    	Application::upload()->initialize(array(
-    			'allowed_types' => 'jpg,jpeg,png,gif',
-    			'upload_path'   => get_setting('upload_dir') . '/category/' . gmdate('Ymd', APP_START_TIME),
-    			'is_image'      => TRUE,
-    			'max_size'      => get_setting('upload_avatar_size_limit')
-    	))->do_upload('upload_file');
-    	// 检查上传结果
-    	$this->checkUploadFileResult();
-    	// 生成不同尺寸图片
-    	$uploadData = Application::upload()->data();
-    	if ($uploadData['is_image'] == 1) {
-    		$picList = $this->resizeUploadedModulePic('category', $categoryInfo['pic']);
-    	}
+        Application::upload()->initialize(array(
+                'allowed_types' => 'jpg,jpeg,png,gif',
+                'upload_path'   => get_setting('upload_dir') . '/category/' . gmdate('Ymd', APP_START_TIME),
+                'is_image'      => TRUE,
+                'max_size'      => get_setting('upload_avatar_size_limit')
+        ))->do_upload('upload_file');
+        // 检查上传结果
+        $this->checkUploadFileResult();
+        // 生成不同尺寸图片
+        $uploadData = Application::upload()->data();
+        if ($uploadData['is_image'] == 1) {
+            $picList = $this->resizeUploadedModulePic('category', $categoryInfo['pic']);
+        }
 
-    	$data = array('pic'=>gmdate('Ymd', APP_START_TIME) . '/' . basename($picList['min']));
-    	$this->model('category')->updateCategory($_GET['id'], $data);
+        $data = array('pic'=>gmdate('Ymd', APP_START_TIME) . '/' . basename($picList['min']));
+        $this->model('category')->updateCategory($_GET['id'], $data);
 
-    	echo htmlspecialchars(json_encode(array(
-    			'success' => true,
-    			'thumb' => get_setting('upload_url') . '/category/' . gmdate('Ymd', APP_START_TIME) . '/' . basename($picList['mid'])
-    	)), ENT_NOQUOTES);
+        echo htmlspecialchars(json_encode(array(
+                'success' => true,
+                'thumb' => get_setting('upload_url') . '/category/' . gmdate('Ymd', APP_START_TIME) . '/' . basename($picList['mid'])
+        )), ENT_NOQUOTES);
     }
 
 
@@ -2690,58 +2690,58 @@ class ajax extends AdminController
      */
     public function upload_temp_action()
     {
-    	if (! $this->hasRolePermission(self::IS_ROLE_ADMIN | self::IS_ROLE_MODERATOR)) {
-    	    $this->jsonErrExit(_t('你没有权限进行此操作'));
-    	}
+        if (! $this->hasRolePermission(self::IS_ROLE_ADMIN | self::IS_ROLE_MODERATOR)) {
+            $this->jsonErrExit(_t('你没有权限进行此操作'));
+        }
 
-    	if (! $_GET['module']) {
-    		$this->jsonErrExit( _t('上传参数错误') );
-    	}
+        if (! $_GET['module']) {
+            $this->jsonErrExit( _t('上传参数错误') );
+        }
 
-    	$dir = '/temp/' . gmdate('Ymd', APP_START_TIME);
+        $dir = '/temp/' . gmdate('Ymd', APP_START_TIME);
 
-    	Application::upload()->initialize(array(
-    	                'allowed_types' => 'jpg,jpeg,png,gif',
-    	                'upload_path'   => get_setting('upload_dir') . $dir,
-    	                'is_image'      => TRUE,
-    	                'max_size'      => get_setting('upload_avatar_size_limit')
-    	))->do_upload('upload_file');
-    	// 检查上传结果
-    	$this->checkUploadFileResult();
-    	$uploadData = Application::upload()->data();
-    	$filePath = $dir . '/' . $uploadData['file_name'];
+        Application::upload()->initialize(array(
+                        'allowed_types' => 'jpg,jpeg,png,gif',
+                        'upload_path'   => get_setting('upload_dir') . $dir,
+                        'is_image'      => TRUE,
+                        'max_size'      => get_setting('upload_avatar_size_limit')
+        ))->do_upload('upload_file');
+        // 检查上传结果
+        $this->checkUploadFileResult();
+        $uploadData = Application::upload()->data();
+        $filePath = $dir . '/' . $uploadData['file_name'];
 
-    	echo htmlspecialchars(json_encode(array(
-    	                'success' => true,
-    	                'thumb'   => get_setting('upload_url') . $filePath,
-    	                'file'    => $filePath,
-    	)), ENT_NOQUOTES);
+        echo htmlspecialchars(json_encode(array(
+                        'success' => true,
+                        'thumb'   => get_setting('upload_url') . $filePath,
+                        'file'    => $filePath,
+        )), ENT_NOQUOTES);
 
-    	/**
+        /**
 
-    	Application::upload()->initialize(array(
-    			'allowed_types' => 'jpg,jpeg,png,gif',
-    			'upload_path'   => get_setting('upload_dir') . '/'.$_GET['module'].'/' . gmdate('Ymd', APP_START_TIME),
-    			'is_image'      => TRUE,
-    			'max_size'      => get_setting('upload_avatar_size_limit')
-    	))->do_upload('upload_file');
-    	// 检查上传结果
-    	$this->checkUploadFileResult();
-    	$uploadData = Application::upload()->data();
-    	$filePath = gmdate('Ymd', APP_START_TIME) . '/' . $uploadData['file_name'];
+        Application::upload()->initialize(array(
+                'allowed_types' => 'jpg,jpeg,png,gif',
+                'upload_path'   => get_setting('upload_dir') . '/'.$_GET['module'].'/' . gmdate('Ymd', APP_START_TIME),
+                'is_image'      => TRUE,
+                'max_size'      => get_setting('upload_avatar_size_limit')
+        ))->do_upload('upload_file');
+        // 检查上传结果
+        $this->checkUploadFileResult();
+        $uploadData = Application::upload()->data();
+        $filePath = gmdate('Ymd', APP_START_TIME) . '/' . $uploadData['file_name'];
 
-    	$data = array('file_location'  => $filePath,
-    			      'item_type'      => $_GET['module'],
-    	              'file_name'      => $uploadData['file_name']
-    	);
-    	$tempUploadId = $this->model('tempUpload')->add($data);
+        $data = array('file_location'  => $filePath,
+                      'item_type'      => $_GET['module'],
+                      'file_name'      => $uploadData['file_name']
+        );
+        $tempUploadId = $this->model('tempUpload')->add($data);
 
-    	echo htmlspecialchars(json_encode(array(
-    			'success' => true,
-    			'thumb'   => get_setting('upload_url') . '/'.$_GET['module'].'/' . $filePath,
-    			'file'    => $filePath,
-    			'temp_id' => $tempUploadId
-    	)), ENT_NOQUOTES);
-    	*/
+        echo htmlspecialchars(json_encode(array(
+                'success' => true,
+                'thumb'   => get_setting('upload_url') . '/'.$_GET['module'].'/' . $filePath,
+                'file'    => $filePath,
+                'temp_id' => $tempUploadId
+        )), ENT_NOQUOTES);
+        */
     }
 }

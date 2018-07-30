@@ -28,87 +28,87 @@ class homeworkAnswerModel extends Model
         return $this->query_all($sql);
     }
 
-	/**
-	 * 根据ids删除
-	 * @param array | int $ids 数据条目id列表
-	 * @return boolean
-	 */
-	public function removeById ($id)
-	{
-		return $this->removeByIds($ids);
-	}
-	/**
-	 * 根据ids删除
-	 * @param array | int $ids 数据条目id列表
-	 * @return boolean
-	 */
-	public function removeByIds ($ids)
-	{
-		return $this->deleteByIds($ids, $this->table);
-	}
+    /**
+     * 根据ids删除
+     * @param array | int $ids 数据条目id列表
+     * @return boolean
+     */
+    public function removeById ($id)
+    {
+        return $this->removeByIds($ids);
+    }
+    /**
+     * 根据ids删除
+     * @param array | int $ids 数据条目id列表
+     * @return boolean
+     */
+    public function removeByIds ($ids)
+    {
+        return $this->deleteByIds($ids, $this->table);
+    }
 
-	/**
-	 * 更新文章
-	 * @param int $id 文章id
-	 * @param array $data 文章信息
-	 * @return bool
-	 */
-	public function modify ($id, $data)
-	{
-		$result = false;
-		if ($set = $this->processData($data)) {
-		    $this->update($this->table, $set, 'id = ' . intval($id));
+    /**
+     * 更新文章
+     * @param int $id 文章id
+     * @param array $data 文章信息
+     * @return bool
+     */
+    public function modify ($id, $data)
+    {
+        $result = false;
+        if ($set = $this->processData($data)) {
+            $this->update($this->table, $set, 'id = ' . intval($id));
 
-		    // 设置了附件， 绑定附件和文章关系
-		    if ($set['attach_id']) {
-		        $this->model('attach')->bindAttachAndItem('homework', $id, $data['batchKey']);
-		    }
-		}
+            // 设置了附件， 绑定附件和文章关系
+            if ($set['attach_id']) {
+                $this->model('attach')->bindAttachAndItem('homework', $id, $data['batchKey']);
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	/**
-	 * 处理标签数据， 供更新和添加使用
-	 * @param array $data
-	 * @return multitype:string NULL
-	 */
-	protected function processData ($data)
-	{
-		$set = array();
-		if (isset($data['content'])) {
-			$set['content'] = $data['content'];
-		}
-		if (isset($data['homework_id'])) {
-			$set['homework_id'] = intval($data['homework_id']);
-		}
-		if (isset($data['file'])) {
-		    $set['file'] = $data['file'];
-		}
-		if (isset($data['wechat_media_id'])) {
-		    $set['wechat_media_id'] = $data['wechat_media_id'];
-		}
-		if (isset($data['uid'])) {
-			$set['uid']  = $data['uid'];
-		}
+    /**
+     * 处理标签数据， 供更新和添加使用
+     * @param array $data
+     * @return multitype:string NULL
+     */
+    protected function processData ($data)
+    {
+        $set = array();
+        if (isset($data['content'])) {
+            $set['content'] = $data['content'];
+        }
+        if (isset($data['homework_id'])) {
+            $set['homework_id'] = intval($data['homework_id']);
+        }
+        if (isset($data['file'])) {
+            $set['file'] = $data['file'];
+        }
+        if (isset($data['wechat_media_id'])) {
+            $set['wechat_media_id'] = $data['wechat_media_id'];
+        }
+        if (isset($data['uid'])) {
+            $set['uid']  = $data['uid'];
+        }
 
-		return $set;
-	}
+        return $set;
+    }
 
-	/**
-	 * 添加新教程
-	 * @param array $data 教程信息数组
-	 * @return number
-	 */
-	public function add ($data)
-	{
-		$id = 0;
-		if ($set = $this->processData($data)) {
-			$set['add_time'] = time();
-			$id = $this->insert($this->table, $set);
-		}
+    /**
+     * 添加新教程
+     * @param array $data 教程信息数组
+     * @return number
+     */
+    public function add ($data)
+    {
+        $id = 0;
+        if ($set = $this->processData($data)) {
+            $set['add_time'] = time();
+            $id = $this->insert($this->table, $set);
+        }
 
-		return $id;
-	}
+        return $id;
+    }
 }
 /* EOF */

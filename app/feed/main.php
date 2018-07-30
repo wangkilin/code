@@ -15,31 +15,31 @@
 
 if (!defined('iCodeBang_Com'))
 {
-	die;
+    die;
 }
 
 class main extends Controller
 {
 
-	function get_access_rule()
-	{
-		$rule_action['rule_type'] = 'black';
-		$rule_action['actions'] = array();
+    function get_access_rule()
+    {
+        $rule_action['rule_type'] = 'black';
+        $rule_action['actions'] = array();
 
-		return $rule_action;
-	}
+        return $rule_action;
+    }
 
-	public function setup()
-	{
-		header('Content-type: text/xml; charset=UTF-8');
+    public function setup()
+    {
+        header('Content-type: text/xml; charset=UTF-8');
 
-		date_default_timezone_set('UTC');
-	}
+        date_default_timezone_set('UTC');
+    }
 
-	public function index_action()
-	{
-		View::assign('list', $this->model('posts')->get_posts_list('question', 1, 20, 'new', explode(',', $_GET['topic']), $_GET['category']));
+    public function index_action()
+    {
+        View::assign('list', $this->model('posts')->get_posts_list('question', 1, 20, 'new', explode(',', $_GET['topic']), $_GET['category']));
 
-		View::output('global/feed');
-	}
+        View::output('global/feed');
+    }
 }

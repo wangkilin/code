@@ -17,128 +17,128 @@ define('IN_AJAX', TRUE);
 
 if (!defined('iCodeBang_Com'))
 {
-	die;
+    die;
 }
 
 class ajax extends Controller
 {
-	var $per_page = 10;
+    var $per_page = 10;
 
-	public function setup()
-	{
-		HTTP::setHeaderNoCache();
-	}
+    public function setup()
+    {
+        HTTP::setHeaderNoCache();
+    }
 
-	public function invitation_list_action()
-	{
-		$limit = intval($_GET['page']) * $this->per_page . ', ' . $this->per_page;
+    public function invitation_list_action()
+    {
+        $limit = intval($_GET['page']) * $this->per_page . ', ' . $this->per_page;
 
-		if ($invitation_list = $this->model('invitation')->get_invitation_list($this->user_id, $limit))
-		{
-			foreach ($invitation_list as $key => $val)
-			{
-				if ($val['active_status'] == 1)
-				{
-					$uids[$val['active_uid']] = $val['active_uid'];
-				}
-			}
+        if ($invitation_list = $this->model('invitation')->get_invitation_list($this->user_id, $limit))
+        {
+            foreach ($invitation_list as $key => $val)
+            {
+                if ($val['active_status'] == 1)
+                {
+                    $uids[$val['active_uid']] = $val['active_uid'];
+                }
+            }
 
-			if ($uids)
-			{
-				if ($user_infos = $this->model('account')->getUsersByIds($uids))
-				{
-					foreach ($invitation_list as $key => $val)
-					{
-						if ($val['active_status'] == '1')
-						{
-							$invitation_list[$key]['user_info'] = $user_infos[$val['active_uid']];
-						}
-					}
-				}
-			}
-		}
+            if ($uids)
+            {
+                if ($user_infos = $this->model('account')->getUsersByIds($uids))
+                {
+                    foreach ($invitation_list as $key => $val)
+                    {
+                        if ($val['active_status'] == '1')
+                        {
+                            $invitation_list[$key]['user_info'] = $user_infos[$val['active_uid']];
+                        }
+                    }
+                }
+            }
+        }
 
-		View::assign('invitation_list', $invitation_list);
+        View::assign('invitation_list', $invitation_list);
 
-		View::output('invitation/ajax/invitation_list');
-	}
+        View::output('invitation/ajax/invitation_list');
+    }
 
-	public function invite_action()
-	{
-		if (!$this->user_info['email'])
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('当前帐号没有提供 Email, 此功能不可用')));
-		}
+    public function invite_action()
+    {
+        if (!$this->user_info['email'])
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('当前帐号没有提供 Email, 此功能不可用')));
+        }
 
-		if (! H::valid_email($_POST['email']))
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请填写正确的邮箱')));
-		}
+        if (! H::valid_email($_POST['email']))
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请填写正确的邮箱')));
+        }
 
-		if ($this->user_info['invitation_available'] < 1)
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已经没有可使用的邀请名额')));
-		}
+        if ($this->user_info['invitation_available'] < 1)
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已经没有可使用的邀请名额')));
+        }
 
-		if ($uid = $this->model('account')->check_email($_POST['email']))
-		{
-			if ($uid == $this->user_id)
-			{
-				H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你不能邀请自己')));
-			}
+        if ($uid = $this->model('account')->check_email($_POST['email']))
+        {
+            if ($uid == $this->user_id)
+            {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你不能邀请自己')));
+            }
 
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('此邮箱已在本站注册帐号')));
-		}
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('此邮箱已在本站注册帐号')));
+        }
 
-		// 若再次填入已邀请过的邮箱，则再发送一次邀请邮件
-		if ($invitation_info = $this->model('invitation')->get_active_invitation_by_email($_POST['email']))
-		{
-			if ($invitation_info['active_status'] == 0)
-			{
-				if ($invitation_info['uid'] == $this->user_id)
-				{
-					$this->model('invitation')->send_invitation_email($invitation_info['invitation_id']);
+        // 若再次填入已邀请过的邮箱，则再发送一次邀请邮件
+        if ($invitation_info = $this->model('invitation')->get_active_invitation_by_email($_POST['email']))
+        {
+            if ($invitation_info['active_status'] == 0)
+            {
+                if ($invitation_info['uid'] == $this->user_id)
+                {
+                    $this->model('invitation')->send_invitation_email($invitation_info['invitation_id']);
 
-					H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('重发邀请成功')));
-				}
-				else
-				{
-					H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('此邮箱已接收过本站发出的邀请')));
-				}
-			}
-		}
+                    H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('重发邀请成功')));
+                }
+                else
+                {
+                    H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('此邮箱已接收过本站发出的邀请')));
+                }
+            }
+        }
 
-		$invitation_code = $this->model('invitation')->get_unique_invitation_code();
+        $invitation_code = $this->model('invitation')->get_unique_invitation_code();
 
-		if ($invitation_id = $this->model('invitation')->add_invitation($this->user_id, $invitation_code, $_POST['email'], time(), ip2long($_SERVER['REMOTE_ADDR'])))
-		{
-			$this->model('invitation')->send_invitation_email($invitation_id);
+        if ($invitation_id = $this->model('invitation')->add_invitation($this->user_id, $invitation_code, $_POST['email'], time(), ip2long($_SERVER['REMOTE_ADDR'])))
+        {
+            $this->model('invitation')->send_invitation_email($invitation_id);
 
-			H::ajax_json_output(Application::RSM(null, 1, null));
-		}
-	}
+            H::ajax_json_output(Application::RSM(null, 1, null));
+        }
+    }
 
-	public function invite_resend_action()
-	{
-		$this->model('invitation')->send_invitation_email($_GET['invitation_id']);
+    public function invite_resend_action()
+    {
+        $this->model('invitation')->send_invitation_email($_GET['invitation_id']);
 
-		H::ajax_json_output(Application::RSM(null, 1, null));
-	}
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
 
-	public function invite_cancel_action()
-	{
-		if (! $_GET['invitation_id'])
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('邀请记录不存在')));
-		}
+    public function invite_cancel_action()
+    {
+        if (! $_GET['invitation_id'])
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('邀请记录不存在')));
+        }
 
-		if (! $this->model('invitation')->get_invitation_by_id($_GET['invitation_id']))
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('邀请记录不存在')));
-		}
+        if (! $this->model('invitation')->get_invitation_by_id($_GET['invitation_id']))
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('邀请记录不存在')));
+        }
 
-		$this->model('invitation')->cancel_invitation_by_id($_GET['invitation_id']);
+        $this->model('invitation')->cancel_invitation_by_id($_GET['invitation_id']);
 
-		H::ajax_json_output(Application::RSM(null, 1, null));
-	}
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
 }

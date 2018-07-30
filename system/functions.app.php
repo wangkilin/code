@@ -4,22 +4,22 @@
  *
  * An open source application development framework for PHP 5.2.2 or newer
  *
- * @package		WeCenter Framework
- * @author		WeCenter Dev Team
- * @copyright	Copyright (c) 2011 - 2014, WeCenter, Inc.
- * @license		http://www.wecenter.com/license/
- * @link		http://www.wecenter.com/
- * @since		Version 1.0
+ * @package    WeCenter Framework
+ * @author        WeCenter Dev Team
+ * @copyright    Copyright (c) 2011 - 2014, WeCenter, Inc.
+ * @license        http://www.wecenter.com/license/
+ * @link        http://www.wecenter.com/
+ * @since        Version 1.0
  * @filesource
  */
 
 /**
  * WeCenter APP 函数类
  *
- * @package		WeCenter
- * @subpackage	App
- * @category	Libraries
- * @author		WeCenter Dev Team
+ * @package        WeCenter
+ * @subpackage    App
+ * @category    Libraries
+ * @author        WeCenter Dev Team
  */
 
 
@@ -34,33 +34,33 @@
  */
 function get_avatar_url($uid, $size = 'min')
 {
-	$uid = intval($uid);
+    $uid = intval($uid);
 
-	if (!$uid)
-	{
-		return G_STATIC_URL . '/common/avatar-' . $size . '-img.png';
-	}
+    if (!$uid)
+    {
+        return G_STATIC_URL . '/common/avatar-' . $size . '-img.png';
+    }
 
-	foreach (Application::config()->get('image')->avatar_thumbnail as $key => $val)
-	{
-		$all_size[] = $key;
-	}
+    foreach (Application::config()->get('image')->avatar_thumbnail as $key => $val)
+    {
+        $all_size[] = $key;
+    }
 
-	$size = in_array($size, $all_size) ? $size : $all_size[0];
+    $size = in_array($size, $all_size) ? $size : $all_size[0];
 
-	$uid = sprintf("%09d", $uid);
-	$dir1 = substr($uid, 0, 3);
-	$dir2 = substr($uid, 3, 2);
-	$dir3 = substr($uid, 5, 2);
+    $uid = sprintf("%09d", $uid);
+    $dir1 = substr($uid, 0, 3);
+    $dir2 = substr($uid, 3, 2);
+    $dir3 = substr($uid, 5, 2);
 
-	if (file_exists(get_setting('upload_dir') . '/avatar/' . $dir1 . '/' . $dir2 . '/' . $dir3 . '/' . substr($uid, - 2) . '_avatar_' . $size . '.jpg'))
-	{
-		return get_setting('upload_url') . '/avatar/' . $dir1 . '/' . $dir2 . '/' . $dir3 . '/' . substr($uid, - 2) . '_avatar_' . $size . '.jpg';
-	}
-	else
-	{
-		return G_STATIC_URL . '/common/avatar-' . $size . '-img.png';
-	}
+    if (file_exists(get_setting('upload_dir') . '/avatar/' . $dir1 . '/' . $dir2 . '/' . $dir3 . '/' . substr($uid, - 2) . '_avatar_' . $size . '.jpg'))
+    {
+        return get_setting('upload_url') . '/avatar/' . $dir1 . '/' . $dir2 . '/' . $dir3 . '/' . substr($uid, - 2) . '_avatar_' . $size . '.jpg';
+    }
+    else
+    {
+        return G_STATIC_URL . '/common/avatar-' . $size . '-img.png';
+    }
 }
 
 /**
@@ -71,48 +71,48 @@ function get_avatar_url($uid, $size = 'min')
  */
 function download_url($file_name, $url)
 {
-	return get_js_url('/file/download/file_name-' . base64_encode($file_name) . '__url-' . base64_encode($url));
+    return get_js_url('/file/download/file_name-' . base64_encode($file_name) . '__url-' . base64_encode($url));
 }
 
 // 检测当前操作是否需要验证码
 function human_valid($permission_tag)
 {
-	if (! is_array(Application::session()->human_valid))
-	{
-		return FALSE;
-	}
+    if (! is_array(Application::session()->human_valid))
+    {
+        return FALSE;
+    }
 
-	if (! Application::session()->human_valid[$permission_tag] or ! Application::session()->permission[$permission_tag])
-	{
-		return FALSE;
-	}
+    if (! Application::session()->human_valid[$permission_tag] or ! Application::session()->permission[$permission_tag])
+    {
+        return FALSE;
+    }
 
-	foreach (Application::session()->human_valid[$permission_tag] as $time => $val)
-	{
-		if (date('H', $time) != date('H', time()))
-		{
-			unset(Application::session()->human_valid[$permission_tag][$time]);
-		}
-	}
+    foreach (Application::session()->human_valid[$permission_tag] as $time => $val)
+    {
+        if (date('H', $time) != date('H', time()))
+        {
+            unset(Application::session()->human_valid[$permission_tag][$time]);
+        }
+    }
 
-	if (sizeof(Application::session()->human_valid[$permission_tag]) >= Application::session()->permission[$permission_tag])
-	{
-		return TRUE;
-	}
+    if (sizeof(Application::session()->human_valid[$permission_tag]) >= Application::session()->permission[$permission_tag])
+    {
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
 function set_human_valid($permission_tag)
 {
-	if (! is_array(Application::session()->human_valid))
-	{
-		return FALSE;
-	}
+    if (! is_array(Application::session()->human_valid))
+    {
+        return FALSE;
+    }
 
-	Application::session()->human_valid[$permission_tag][time()] = TRUE;
+    Application::session()->human_valid[$permission_tag][time()] = TRUE;
 
-	return count(Application::session()->human_valid[$permission_tag]);
+    return count(Application::session()->human_valid[$permission_tag]);
 }
 
 /**
@@ -122,12 +122,12 @@ function set_human_valid($permission_tag)
  */
 function parse_attachs_callback($matches)
 {
-	if ($attach = Application::model('publish')->getAttachById($matches[1]))
-	{
-		View::assign('attach', $attach);
+    if ($attach = Application::model('publish')->getAttachById($matches[1]))
+    {
+        View::assign('attach', $attach);
 
-		return View::output('question/ajax/load_attach', false);
-	}
+        return View::output('question/ajax/load_attach', false);
+    }
 }
 
 /**
@@ -153,15 +153,15 @@ function getModuleUploadedFileUrl($module, $filename, $addedTime=null)
  */
 function getModulePicUrlBySize($module, $size = null, $pic_file = null)
 {
-	if ($pic_file && ($sized_file = getUploadedModulePicNameBySize($module, $pic_file, $size))) {
-		return get_setting('upload_url') . '/'.$module.'/' . $sized_file;
-	}
+    if ($pic_file && ($sized_file = getUploadedModulePicNameBySize($module, $pic_file, $size))) {
+        return get_setting('upload_url') . '/'.$module.'/' . $sized_file;
+    }
 
-	if (! $size || ! $pic_file) {
-		$size = 'mid';
-	}
+    if (! $size || ! $pic_file) {
+        $size = 'mid';
+    }
 
-	return G_STATIC_URL . '/common/'.$module.'-' . $size . '-img.png';
+    return G_STATIC_URL . '/common/'.$module.'-' . $size . '-img.png';
 }
 
 /**
@@ -172,19 +172,19 @@ function getModulePicUrlBySize($module, $size = null, $pic_file = null)
  */
 function get_feature_pic_url($size = null, $pic_file = null)
 {
-	if (! $pic_file)
-	{
-		return false;
-	}
-	else
-	{
-		if ($size)
-		{
-			$pic_file = str_replace(Application::config()->get('image')->feature_thumbnail['min']['w'] . '_' . Application::config()->get('image')->feature_thumbnail['min']['h'], Application::config()->get('image')->feature_thumbnail[$size]['w'] . '_' . Application::config()->get('image')->feature_thumbnail[$size]['h'], $pic_file);
-		}
-	}
+    if (! $pic_file)
+    {
+        return false;
+    }
+    else
+    {
+        if ($size)
+        {
+            $pic_file = str_replace(Application::config()->get('image')->feature_thumbnail['min']['w'] . '_' . Application::config()->get('image')->feature_thumbnail['min']['h'], Application::config()->get('image')->feature_thumbnail[$size]['w'] . '_' . Application::config()->get('image')->feature_thumbnail[$size]['h'], $pic_file);
+        }
+    }
 
-	return get_setting('upload_url') . '/feature/' . $pic_file;
+    return get_setting('upload_url') . '/feature/' . $pic_file;
 }
 
 
@@ -211,124 +211,124 @@ function getUploadedModulePicNameBySize($moduleName, $picNameInDb, $size = null)
 
 function get_host_top_domain()
 {
-	$host = strtolower($_SERVER['HTTP_HOST']);
+    $host = strtolower($_SERVER['HTTP_HOST']);
 
-	if (strpos($host, '/') !== false)
-	{
-		$parse = @parse_url($host);
-		$host = $parse['host'];
-	}
+    if (strpos($host, '/') !== false)
+    {
+        $parse = @parse_url($host);
+        $host = $parse['host'];
+    }
 
-	$top_level_domain_db = array('com', 'edu', 'gov', 'int', 'mil', 'net', 'org', 'biz', 'info', 'pro', 'name', 'coop', 'aero', 'xxx', 'idv', 'mobi', 'cc', 'me', 'jp', 'uk', 'ws', 'eu', 'pw', 'kr', 'io', 'us', 'cn');
+    $top_level_domain_db = array('com', 'edu', 'gov', 'int', 'mil', 'net', 'org', 'biz', 'info', 'pro', 'name', 'coop', 'aero', 'xxx', 'idv', 'mobi', 'cc', 'me', 'jp', 'uk', 'ws', 'eu', 'pw', 'kr', 'io', 'us', 'cn');
 
-	foreach ($top_level_domain_db as $v)
-	{
-		$str .= ($str ? '|' : '') . $v;
-	}
+    foreach ($top_level_domain_db as $v)
+    {
+        $str .= ($str ? '|' : '') . $v;
+    }
 
-	$matchstr = "[^\.]+\.(?:(" . $str . ")|\w{2}|((" . $str . ")\.\w{2}))$";
+    $matchstr = "[^\.]+\.(?:(" . $str . ")|\w{2}|((" . $str . ")\.\w{2}))$";
 
-	if (preg_match('/' . $matchstr . '/ies', $host, $matchs))
-	{
-		$domain = $matchs['0'];
-	}
-	else
-	{
-		$domain = $host;
-	}
+    if (preg_match('/' . $matchstr . '/ies', $host, $matchs))
+    {
+        $domain = $matchs['0'];
+    }
+    else
+    {
+        $domain = $host;
+    }
 
-	return $domain;
+    return $domain;
 }
 
 function parse_link_callback($matches)
 {
-	if (preg_match('/^(?!http).*/i', $matches[1]))
-	{
-		$url = 'http://' . $matches[1];
-	}
-	else
-	{
-		$url = $matches[1];
-	}
+    if (preg_match('/^(?!http).*/i', $matches[1]))
+    {
+        $url = 'http://' . $matches[1];
+    }
+    else
+    {
+        $url = $matches[1];
+    }
 
-	if (is_inside_url($url))
-	{
-		return '<a href="' . $url . '">' . FORMAT::sub_url($matches[1], 50) . '</a>';
-	}
-	else
-	{
-		return '<a href="' . $url . '" rel="nofollow" target="_blank">' . FORMAT::sub_url($matches[1], 50) . '</a>';
-	}
+    if (is_inside_url($url))
+    {
+        return '<a href="' . $url . '">' . FORMAT::sub_url($matches[1], 50) . '</a>';
+    }
+    else
+    {
+        return '<a href="' . $url . '" rel="nofollow" target="_blank">' . FORMAT::sub_url($matches[1], 50) . '</a>';
+    }
 }
 
 function is_inside_url($url)
 {
-	if (!$url)
-	{
-		return false;
-	}
+    if (!$url)
+    {
+        return false;
+    }
 
-	if (preg_match('/^(?!http).*/i', $url))
-	{
-		$url = 'http://' . $url;
-	}
+    if (preg_match('/^(?!http).*/i', $url))
+    {
+        $url = 'http://' . $url;
+    }
 
-	$domain = get_host_top_domain();
+    $domain = get_host_top_domain();
 
-	if (preg_match('/^http[s]?:\/\/([-_a-zA-Z0-9]+[\.])*?' . $domain . '(?!\.)[-a-zA-Z0-9@:;%_\+.~#?&\/\/=]*$/i', $url))
-	{
-		return true;
-	}
+    if (preg_match('/^http[s]?:\/\/([-_a-zA-Z0-9]+[\.])*?' . $domain . '(?!\.)[-a-zA-Z0-9@:;%_\+.~#?&\/\/=]*$/i', $url))
+    {
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 function get_weixin_rule_image($image_file, $size = '')
 {
-	return Application::model('weixin')->get_weixin_rule_image($image_file, $size);
+    return Application::model('weixin')->get_weixin_rule_image($image_file, $size);
 }
 
 function import_editor_static_files()
 {
-	View::import_js('js/editor/ckeditor/ckeditor.js');
-	View::import_js('js/editor/ckeditor/adapters/jquery.js');
+    View::import_js('js/editor/ckeditor/ckeditor.js');
+    View::import_js('js/editor/ckeditor/adapters/jquery.js');
 }
 
 function get_chapter_icon_url($id, $size = 'max', $default = true)
 {
-	if (file_exists(get_setting('upload_dir') . '/chapter/' . $id . '-' . $size . '.jpg'))
-	{
-		return get_setting('upload_url') . '/chapter/' . $id . '-' . $size . '.jpg';
-	}
-	else if ($default)
-	{
-		return G_STATIC_URL . '/common/help-chapter-' . $size . '-img.png';
-	}
+    if (file_exists(get_setting('upload_dir') . '/chapter/' . $id . '-' . $size . '.jpg'))
+    {
+        return get_setting('upload_url') . '/chapter/' . $id . '-' . $size . '.jpg';
+    }
+    else if ($default)
+    {
+        return G_STATIC_URL . '/common/help-chapter-' . $size . '-img.png';
+    }
 
-	return false;
+    return false;
 }
 
 function base64_url_encode($parm)
 {
-	if (!is_array($parm))
-	{
-		return false;
-	}
+    if (!is_array($parm))
+    {
+        return false;
+    }
 
-	return strtr(base64_encode(json_encode($parm)), '+/=', '-_,');
+    return strtr(base64_encode(json_encode($parm)), '+/=', '-_,');
 }
 
 function base64_url_decode($parm)
 {
-	return json_decode(base64_decode(strtr($parm, '-_,', '+/=')), true);
+    return json_decode(base64_decode(strtr($parm, '-_,', '+/=')), true);
 }
 
 function remove_assoc($from, $type, $id)
 {
-	if (!$from OR !$type OR !is_digits($id))
-	{
-		return false;
-	}
+    if (!$from OR !$type OR !is_digits($id))
+    {
+        return false;
+    }
 
-	return $this->query('UPDATE ' . $this->get_table($from) . ' SET `' . $type . '_id` = NULL WHERE `' . $type . '_id` = ' . $id);
+    return $this->query('UPDATE ' . $this->get_table($from) . ' SET `' . $type . '_id` = NULL WHERE `' . $type . '_id` = ' . $id);
 }

@@ -15,43 +15,43 @@
 
 if (!defined('iCodeBang_Com'))
 {
-	die;
+    die;
 }
 
 class main extends Controller
 {
-	public function get_access_rule()
-	{
-		$rule_action['rule_type'] = 'black';
-		$rule_action['actions'] = array();
+    public function get_access_rule()
+    {
+        $rule_action['rule_type'] = 'black';
+        $rule_action['actions'] = array();
 
-		return $rule_action;
-	}
+        return $rule_action;
+    }
 
-	public function index_action()
-	{
-		if (!$page_info = $this->model('page')->getPageByToken($_GET['id']) OR $page_info['enabled'] == 0)
-		{
-			HTTP::error_404();
-		}
+    public function index_action()
+    {
+        if (!$page_info = $this->model('page')->getPageByToken($_GET['id']) OR $page_info['enabled'] == 0)
+        {
+            HTTP::error_404();
+        }
 
-		if ($page_info['title'])
-		{
-			View::assign('page_title', $page_info['title']);
-		}
+        if ($page_info['title'])
+        {
+            View::assign('page_title', $page_info['title']);
+        }
 
-		if ($page_info['keywords'])
-		{
-			View::set_meta('keywords', $page_info['keywords']);
-		}
+        if ($page_info['keywords'])
+        {
+            View::set_meta('keywords', $page_info['keywords']);
+        }
 
-		if ($page_info['description'])
-		{
-			View::set_meta('description', $page_info['description']);
-		}
+        if ($page_info['description'])
+        {
+            View::set_meta('description', $page_info['description']);
+        }
 
-		View::assign('page_info', $page_info);
+        View::assign('page_info', $page_info);
 
-		View::output('page/index');
-	}
+        View::output('page/index');
+    }
 }

@@ -16,219 +16,219 @@ define('IN_AJAX', TRUE);
 
 if (!defined('iCodeBang_Com'))
 {
-	die;
+    die;
 }
 
 class ajax extends Controller
 {
-	public function get_access_rule()
-	{
-		$rule_action['rule_type'] = 'white';
-
-		$rule_action['actions'] = array(
-			'list'
-		);
-
-		return $rule_action;
-	}
-
-	public function setup()
-	{
-		HTTP::setHeaderNoCache();
-	}
-
-	/**
-	 * 获取文章附件
-	 */
-    public function article_attach_edit_list_action()
+    public function get_access_rule()
     {
-    	$this->getAttachListByItemTypeAndId('article', $_POST['article_id']);
+        $rule_action['rule_type'] = 'white';
+
+        $rule_action['actions'] = array(
+            'list'
+        );
+
+        return $rule_action;
     }
 
-	public function save_comment_action()
-	{
-		if (!$article_info = $this->model('article')->get_article_info_by_id($_POST['article_id']))
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('指定文章不存在')));
-		}
+    public function setup()
+    {
+        HTTP::setHeaderNoCache();
+    }
 
-		if ($article_info['lock'] AND !($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']))
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('已经锁定的文章不能回复')));
-		}
+    /**
+     * 获取文章附件
+     */
+    public function article_attach_edit_list_action()
+    {
+        $this->getAttachListByItemTypeAndId('article', $_POST['article_id']);
+    }
 
-		$message = trim($_POST['message'], "\r\n\t");
+    public function save_comment_action()
+    {
+        if (!$article_info = $this->model('article')->get_article_info_by_id($_POST['article_id']))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('指定文章不存在')));
+        }
 
-		if (! $message)
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请输入回复内容')));
-		}
+        if ($article_info['lock'] AND !($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('已经锁定的文章不能回复')));
+        }
 
-		if (strlen($message) < get_setting('answer_length_lower'))
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('回复内容字数不得少于 %s 字节', get_setting('answer_length_lower'))));
-		}
+        $message = trim($_POST['message'], "\r\n\t");
 
-		if (! $this->user_info['permission']['publish_url'] AND FORMAT::outside_url_exists($message))
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('你所在的用户组不允许发布站外链接')));
-		}
+        if (! $message)
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请输入回复内容')));
+        }
 
-		if (human_valid('answer_valid_hour') and ! Application::captcha()->is_validate($_POST['seccode_verify']))
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请填写正确的验证码')));
-		}
+        if (strlen($message) < get_setting('answer_length_lower'))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('回复内容字数不得少于 %s 字节', get_setting('answer_length_lower'))));
+        }
 
-		// !注: 来路检测后面不能再放报错提示
-		if (! valid_post_hash($_POST['post_hash']))
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('页面停留时间过长,或内容已提交,请刷新页面')));
-		}
+        if (! $this->user_info['permission']['publish_url'] AND FORMAT::outside_url_exists($message))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('你所在的用户组不允许发布站外链接')));
+        }
 
-		if ($this->publish_approval_valid($message))
-		{
-			$this->model('publish')->publish_approval('article_comment', array(
-				'article_id' => intval($_POST['article_id']),
-				'message' => $message,
-				'at_uid' => intval($_POST['at_uid'])
-			), $this->user_id);
+        if (human_valid('answer_valid_hour') and ! Application::captcha()->is_validate($_POST['seccode_verify']))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请填写正确的验证码')));
+        }
 
-			H::ajax_json_output(Application::RSM(array(
-				'url' => get_js_url('/publish/wait_approval/article_id-' . intval($_POST['article_id']) . '__is_mobile-' . $_POST['_is_mobile'])
-			), 1, null));
-		}
-		else
-		{
-			$comment_id = $this->model('publish')->publish_article_comment($_POST['article_id'], $message, $this->user_id, $_POST['at_uid']);
+        // !注: 来路检测后面不能再放报错提示
+        if (! valid_post_hash($_POST['post_hash']))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('页面停留时间过长,或内容已提交,请刷新页面')));
+        }
 
-			//$url = get_js_url('/article/' . intval($_POST['article_id']) . '?item_id=' . $comment_id);
+        if ($this->publish_approval_valid($message))
+        {
+            $this->model('publish')->publish_approval('article_comment', array(
+                'article_id' => intval($_POST['article_id']),
+                'message' => $message,
+                'at_uid' => intval($_POST['at_uid'])
+            ), $this->user_id);
 
-			$comment_info = $this->model('article')->get_comment_by_id($comment_id);
+            H::ajax_json_output(Application::RSM(array(
+                'url' => get_js_url('/publish/wait_approval/article_id-' . intval($_POST['article_id']) . '__is_mobile-' . $_POST['_is_mobile'])
+            ), 1, null));
+        }
+        else
+        {
+            $comment_id = $this->model('publish')->publish_article_comment($_POST['article_id'], $message, $this->user_id, $_POST['at_uid']);
 
-			$comment_info['message'] = $this->model('question')->parse_at_user($comment_info['message']);
+            //$url = get_js_url('/article/' . intval($_POST['article_id']) . '?item_id=' . $comment_id);
 
-			View::assign('comment_info', $comment_info);
+            $comment_info = $this->model('article')->get_comment_by_id($comment_id);
 
-			if (is_mobile())
-			{
-				H::ajax_json_output(Application::RSM(array(
-					'ajax_html' => View::output('m/ajax/article_answer', false)
-				), 1, null));
-			}
-			else
-			{
-				H::ajax_json_output(Application::RSM(array(
-					'ajax_html' => View::output('article/ajax/comment', false)
-				), 1, null));
-			}
-		}
-	}
+            $comment_info['message'] = $this->model('question')->parse_at_user($comment_info['message']);
 
-	public function lock_action()
-	{
-		if (!$this->user_info['permission']['is_moderator'] AND !$this->user_info['permission']['is_administortar'])
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有权限进行此操作')));
-		}
+            View::assign('comment_info', $comment_info);
 
-		if (! $article_info = $this->model('article')->get_article_info_by_id($_POST['article_id']))
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('文章不存在')));
-		}
+            if (is_mobile())
+            {
+                H::ajax_json_output(Application::RSM(array(
+                    'ajax_html' => View::output('m/ajax/article_answer', false)
+                ), 1, null));
+            }
+            else
+            {
+                H::ajax_json_output(Application::RSM(array(
+                    'ajax_html' => View::output('article/ajax/comment', false)
+                ), 1, null));
+            }
+        }
+    }
 
-		$this->model('article')->lock_article($_POST['article_id'], !$article_info['lock']);
+    public function lock_action()
+    {
+        if (!$this->user_info['permission']['is_moderator'] AND !$this->user_info['permission']['is_administortar'])
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有权限进行此操作')));
+        }
 
-		H::ajax_json_output(Application::RSM(null, 1, null));
-	}
+        if (! $article_info = $this->model('article')->get_article_info_by_id($_POST['article_id']))
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('文章不存在')));
+        }
 
-	public function remove_article_action()
-	{
-		if (!$this->user_info['permission']['is_administortar'] AND !$this->user_info['permission']['is_moderator'])
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('对不起, 你没有删除文章的权限')));
-		}
+        $this->model('article')->lock_article($_POST['article_id'], !$article_info['lock']);
 
-		if ($article_info = $this->model('article')->get_article_info_by_id($_POST['article_id']))
-		{
-			if ($this->user_id != $article_info['uid'])
-			{
-				$this->model('account')->send_delete_message($article_info['uid'], $article_info['title'], $article_info['message']);
-			}
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
 
-			$this->model('article')->remove_article($article_info['id']);
-		}
+    public function remove_article_action()
+    {
+        if (!$this->user_info['permission']['is_administortar'] AND !$this->user_info['permission']['is_moderator'])
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('对不起, 你没有删除文章的权限')));
+        }
 
-		H::ajax_json_output(Application::RSM(array(
-			'url' => get_js_url('/')
-		), 1, null));
-	}
+        if ($article_info = $this->model('article')->get_article_info_by_id($_POST['article_id']))
+        {
+            if ($this->user_id != $article_info['uid'])
+            {
+                $this->model('account')->send_delete_message($article_info['uid'], $article_info['title'], $article_info['message']);
+            }
 
-	public function remove_comment_action()
-	{
-		if (!$this->user_info['permission']['is_administortar'] AND !$this->user_info['permission']['is_moderator'])
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('对不起, 你没有删除评论的权限')));
-		}
+            $this->model('article')->remove_article($article_info['id']);
+        }
 
-		if ($comment_info = $this->model('article')->get_comment_by_id($_POST['comment_id']))
-		{
-			$this->model('article')->remove_comment($comment_info['id']);
-		}
+        H::ajax_json_output(Application::RSM(array(
+            'url' => get_js_url('/')
+        ), 1, null));
+    }
 
-		H::ajax_json_output(Application::RSM(array(
-			'url' => get_js_url('/article/' . $comment_info['article_id'])
-		), 1, null));
-	}
+    public function remove_comment_action()
+    {
+        if (!$this->user_info['permission']['is_administortar'] AND !$this->user_info['permission']['is_moderator'])
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('对不起, 你没有删除评论的权限')));
+        }
 
-	public function article_vote_action()
-	{
-		switch ($_POST['type'])
-		{
-			case 'article':
-				$item_info = $this->model('article')->get_article_info_by_id($_POST['item_id']);
-			break;
+        if ($comment_info = $this->model('article')->get_comment_by_id($_POST['comment_id']))
+        {
+            $this->model('article')->remove_comment($comment_info['id']);
+        }
 
-			case 'comment':
-				$item_info = $this->model('article')->get_comment_by_id($_POST['item_id']);
-			break;
+        H::ajax_json_output(Application::RSM(array(
+            'url' => get_js_url('/article/' . $comment_info['article_id'])
+        ), 1, null));
+    }
 
-		}
+    public function article_vote_action()
+    {
+        switch ($_POST['type'])
+        {
+            case 'article':
+                $item_info = $this->model('article')->get_article_info_by_id($_POST['item_id']);
+            break;
 
-		if (!$item_info)
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('内容不存在')));
-		}
+            case 'comment':
+                $item_info = $this->model('article')->get_comment_by_id($_POST['item_id']);
+            break;
 
-		if ($item_info['uid'] == $this->user_id)
-		{
-			H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('不能对自己发表的内容进行投票')));
-		}
+        }
 
-		$reputation_factor = $this->model('account')->get_user_group_by_id($this->user_info['reputation_group'], 'reputation_factor');
+        if (!$item_info)
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('内容不存在')));
+        }
 
-		$this->model('article')->article_vote($_POST['type'], $_POST['item_id'], $_POST['rating'], $this->user_id, $reputation_factor, $item_info['uid']);
+        if ($item_info['uid'] == $this->user_id)
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('不能对自己发表的内容进行投票')));
+        }
 
-		H::ajax_json_output(Application::RSM(null, 1, null));
-	}
+        $reputation_factor = $this->model('account')->get_user_group_by_id($this->user_info['reputation_group'], 'reputation_factor');
 
-	public function set_recommend_action()
-	{
-		if (!$this->user_info['permission']['is_administortar'] AND !$this->user_info['permission']['is_moderator'])
-		{
-			H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('对不起, 你没有设置推荐的权限')));
-		}
+        $this->model('article')->article_vote($_POST['type'], $_POST['item_id'], $_POST['rating'], $this->user_id, $reputation_factor, $item_info['uid']);
 
-		switch ($_POST['action'])
-		{
-			case 'set':
-				$this->model('article')->set_recommend($_POST['article_id']);
-			break;
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
 
-			case 'unset':
-				$this->model('article')->unset_recommend($_POST['article_id']);
-			break;
-		}
+    public function set_recommend_action()
+    {
+        if (!$this->user_info['permission']['is_administortar'] AND !$this->user_info['permission']['is_moderator'])
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('对不起, 你没有设置推荐的权限')));
+        }
 
-		H::ajax_json_output(Application::RSM(null, 1, null));
-	}
+        switch ($_POST['action'])
+        {
+            case 'set':
+                $this->model('article')->set_recommend($_POST['article_id']);
+            break;
+
+            case 'unset':
+                $this->model('article')->unset_recommend($_POST['article_id']);
+            break;
+        }
+
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
 }

@@ -5,46 +5,46 @@ class adminModel extends Model
 {
     public function fetch_menu_list($select_id=null)
     {
-    	$_select_id = $select_id;
-    	if (null===$select_id) {
-    		$controller = loadClass('core_uri')->controller;
-    		$action     = loadClass('core_uri')->action;
-    		$_select_id = $controller . '/' .$action;
-    	}
+        $_select_id = $select_id;
+        if (null===$select_id) {
+            $controller = loadClass('core_uri')->controller;
+            $action     = loadClass('core_uri')->action;
+            $_select_id = $controller . '/' .$action;
+        }
         $admin_menu = (array)Application::config()->get('admin_menu');
         $isFound = false;
         $tmpList = array();
 
         foreach($admin_menu as $m_id => $menu) {
             if (! $menu['children']) {
-            	continue;
+                continue;
             }
             foreach($menu['children'] as $c_id => $c_menu) {
-            	if ($_select_id == $c_menu['id']) {
+                if ($_select_id == $c_menu['id']) {
                     $admin_menu[$m_id]['children'][$c_id]['select'] = true;
                     $admin_menu[$m_id]['select'] = true;
                     $isFound = true;
 
                     break 2;
                 }
-            	if (null===$select_id) {
-            	// 没有传递固定菜单id， 根据controller 和action来定位选中项
-            		$parseInfo = explode('/', $c_menu['id'], 2);
-            		isset($tmpList[$parseInfo[0]]) OR $tmpList[$parseInfo[0]]=array();
-            		isset($parseInfo[1]) OR $parseInfo[1] = 0;
-            		$tmpList[$parseInfo[0]][$parseInfo[1]] = array($m_id, $c_id);
-            	}
+                if (null===$select_id) {
+                // 没有传递固定菜单id， 根据controller 和action来定位选中项
+                    $parseInfo = explode('/', $c_menu['id'], 2);
+                    isset($tmpList[$parseInfo[0]]) OR $tmpList[$parseInfo[0]]=array();
+                    isset($parseInfo[1]) OR $parseInfo[1] = 0;
+                    $tmpList[$parseInfo[0]][$parseInfo[1]] = array($m_id, $c_id);
+                }
             }
         }
 
         // 没有找到对应选中菜单， 查看是否有对应控制器的菜单
         if (! $isFound && isset($controller, $tmpList[$controller])) {
-        	if (isset($tmpList[$controller][0])) {
-        		$m_id = $tmpList[$controller][0][0];
-        		$c_id = $tmpList[$controller][0][1];
+            if (isset($tmpList[$controller][0])) {
+                $m_id = $tmpList[$controller][0][0];
+                $c_id = $tmpList[$controller][0][1];
                 $admin_menu[$m_id]['children'][$c_id]['select'] = true;
                 $admin_menu[$m_id]['select'] = true;
-        	}
+            }
         }
 
         return $admin_menu;

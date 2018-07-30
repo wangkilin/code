@@ -47,14 +47,14 @@ class ajax extends BaseController
                 break;
 
             default:
-            	$dirName = str_replace(array('/', '\\'), '', $_GET['id']);
-            	if (is_dir(loadClass('core_uri')->app_dir . '/../' . $dirName)) {
-            		$item_type = $dirName;
-            	} else {
+                $dirName = str_replace(array('/', '\\'), '', $_GET['id']);
+                if (is_dir(loadClass('core_uri')->app_dir . '/../' . $dirName)) {
+                    $item_type = $dirName;
+                } else {
                     $_GET['id'] = 'answer';
 
                     $item_type = 'answer';
-            	}
+                }
 
                 break;
         }
@@ -343,10 +343,10 @@ class ajax extends BaseController
         $question_info['type_id'] = $tagOrCategoryInfo[1];
         $this->model('question')
              ->update_question($question_info['question_id'], $_POST['question_content'],
-             		           $_POST['question_detail'], $this->user_id, $IS_MODIFY_VERIFIED,
-             		           $_POST['modify_reason'], $question_info['anonymous'],
-             		           $question_info['category_id'], $question_info['tag_id']
-             		);
+                                $_POST['question_detail'], $this->user_id, $IS_MODIFY_VERIFIED,
+                                $_POST['modify_reason'], $question_info['anonymous'],
+                                $question_info['category_id'], $question_info['tag_id']
+                     );
 
         if ($this->user_id != $question_info['published_uid'])
         {

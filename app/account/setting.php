@@ -15,137 +15,137 @@
 
 if (!defined('iCodeBang_Com'))
 {
-	die;
+    die;
 }
 
 class setting extends Controller
 {
-	public function get_access_rule()
-	{
-		$rule_action['rule_type'] = 'white'; //黑名单,黑名单中的检查  'white'白名单,白名单以外的检查
-		$rule_action['actions'] = array();
+    public function get_access_rule()
+    {
+        $rule_action['rule_type'] = 'white'; //黑名单,黑名单中的检查  'white'白名单,白名单以外的检查
+        $rule_action['actions'] = array();
 
-		return $rule_action;
-	}
+        return $rule_action;
+    }
 
-	public function setup()
-	{
-		$this->crumb(Application::lang()->_t('设置'), '/account/setting/');
+    public function setup()
+    {
+        $this->crumb(Application::lang()->_t('设置'), '/account/setting/');
 
-		View::import_css('css/user-setting.css');
-	}
+        View::import_css('css/user-setting.css');
+    }
 
-	public function index_action()
-	{
-		HTTP::redirect('/account/setting/profile/');
-	}
+    public function index_action()
+    {
+        HTTP::redirect('/account/setting/profile/');
+    }
 
-	public function profile_action()
-	{
-		$this->crumb(Application::lang()->_t('基本资料'), '/account/setting/profile/');
+    public function profile_action()
+    {
+        $this->crumb(Application::lang()->_t('基本资料'), '/account/setting/profile/');
 
-		for ($i = date('Y'); $i > 1900; $i--)
-		{
-			$birthday_y[$i] = $i;
-		}
+        for ($i = date('Y'); $i > 1900; $i--)
+        {
+            $birthday_y[$i] = $i;
+        }
 
-		View::assign('birthday_y', $birthday_y);
+        View::assign('birthday_y', $birthday_y);
 
-		for ($tmp_i = 1; $tmp_i <= 31; $tmp_i ++)
-		{
-			$birthday_d[$tmp_i] = $tmp_i;
-		}
+        for ($tmp_i = 1; $tmp_i <= 31; $tmp_i ++)
+        {
+            $birthday_d[$tmp_i] = $tmp_i;
+        }
 
-		View::assign('birthday_d', $birthday_d);
+        View::assign('birthday_d', $birthday_d);
 
-		View::assign('job_list', $this->model('work')->get_jobs_list());
+        View::assign('job_list', $this->model('work')->get_jobs_list());
 
-		View::assign('education_experience_list', $this->model('education')->get_education_experience_list($this->user_id));
+        View::assign('education_experience_list', $this->model('education')->get_education_experience_list($this->user_id));
 
-		$jobs_list = $this->model('work')->get_jobs_list();
+        $jobs_list = $this->model('work')->get_jobs_list();
 
-		if ($work_experience_list = $this->model('work')->get_work_experience_list($this->user_id))
-		{
-			foreach ($work_experience_list as $key => $val)
-			{
-				$work_experience_list[$key]['job_name'] = $jobs_list[$val['job_id']];
-			}
-		}
+        if ($work_experience_list = $this->model('work')->get_work_experience_list($this->user_id))
+        {
+            foreach ($work_experience_list as $key => $val)
+            {
+                $work_experience_list[$key]['job_name'] = $jobs_list[$val['job_id']];
+            }
+        }
 
-		View::assign('work_experience_list', $work_experience_list);
+        View::assign('work_experience_list', $work_experience_list);
 
-		View::import_js('js/fileupload.js');
+        View::import_js('js/fileupload.js');
 
-		View::output('account/setting/profile');
-	}
+        View::output('account/setting/profile');
+    }
 
-	public function privacy_action()
-	{
-		$this->crumb(Application::lang()->_t('隐私/提醒'), '/account/setting/privacy');
+    public function privacy_action()
+    {
+        $this->crumb(Application::lang()->_t('隐私/提醒'), '/account/setting/privacy');
 
-		View::assign('notification_settings', $this->model('account')->get_notification_setting_by_uid($this->user_id));
-		View::assign('notify_actions', $this->model('notify')->notify_action_details);
+        View::assign('notification_settings', $this->model('account')->get_notification_setting_by_uid($this->user_id));
+        View::assign('notify_actions', $this->model('notify')->notify_action_details);
 
-		View::output('account/setting/privacy');
-	}
+        View::output('account/setting/privacy');
+    }
 
-	public function openid_action()
-	{
-		$this->crumb(Application::lang()->_t('账号绑定'), '/account/setting/openid/');
+    public function openid_action()
+    {
+        $this->crumb(Application::lang()->_t('账号绑定'), '/account/setting/openid/');
 
-		if (get_setting('qq_login_enabled') == 'Y')
-		{
-			View::assign('qq', $this->model('openid_qq')->get_qq_user_by_uid($this->user_id));
-		}
+        if (get_setting('qq_login_enabled') == 'Y')
+        {
+            View::assign('qq', $this->model('openid_qq')->get_qq_user_by_uid($this->user_id));
+        }
 
-		if (get_setting('sina_weibo_enabled') == 'Y')
-		{
-			View::assign('sina_weibo', $this->model('openid_weibo_oauth')->get_weibo_user_by_uid($this->user_id));
-		}
+        if (get_setting('sina_weibo_enabled') == 'Y')
+        {
+            View::assign('sina_weibo', $this->model('openid_weibo_oauth')->get_weibo_user_by_uid($this->user_id));
+        }
 
-		if (get_setting('weixin_app_id'))
-		{
-			View::assign('weixin', $this->model('openid_weixin_weixin')->getUserById($this->user_id));
-		}
+        if (get_setting('weixin_app_id'))
+        {
+            View::assign('weixin', $this->model('openid_weixin_weixin')->getUserById($this->user_id));
+        }
 
-		if (get_setting('google_login_enabled') == 'Y')
-		{
-			View::assign('google', $this->model('openid_google')->get_google_user_by_uid($this->user_id));
-		}
+        if (get_setting('google_login_enabled') == 'Y')
+        {
+            View::assign('google', $this->model('openid_google')->get_google_user_by_uid($this->user_id));
+        }
 
-		if (get_setting('facebook_login_enabled') == 'Y')
-		{
-			View::assign('facebook', $this->model('openid_facebook')->get_facebook_user_by_uid($this->user_id));
-		}
+        if (get_setting('facebook_login_enabled') == 'Y')
+        {
+            View::assign('facebook', $this->model('openid_facebook')->get_facebook_user_by_uid($this->user_id));
+        }
 
-		if (get_setting('twitter_login_enabled') == 'Y')
-		{
-			View::assign('twitter', $this->model('openid_twitter')->get_twitter_user_by_uid($this->user_id));
-		}
+        if (get_setting('twitter_login_enabled') == 'Y')
+        {
+            View::assign('twitter', $this->model('openid_twitter')->get_twitter_user_by_uid($this->user_id));
+        }
 
-		View::output('account/setting/openid');
-	}
+        View::output('account/setting/openid');
+    }
 
-	public function integral_action()
-	{
-		$this->crumb(Application::lang()->_t('我的积分'), '/account/setting/integral/');
+    public function integral_action()
+    {
+        $this->crumb(Application::lang()->_t('我的积分'), '/account/setting/integral/');
 
-		View::output('account/setting/integral');
-	}
+        View::output('account/setting/integral');
+    }
 
-	public function security_action()
-	{
-		$this->crumb(Application::lang()->_t('安全设置'), '/account/setting/security/');
+    public function security_action()
+    {
+        $this->crumb(Application::lang()->_t('安全设置'), '/account/setting/security/');
 
-		View::output('account/setting/security');
-	}
+        View::output('account/setting/security');
+    }
 
-	public function verify_action()
-	{
-		$this->crumb(Application::lang()->_t('申请认证'), '/account/setting/verify/');
+    public function verify_action()
+    {
+        $this->crumb(Application::lang()->_t('申请认证'), '/account/setting/verify/');
 
-		View::assign('verify_apply', $this->model('verify')->fetch_apply($this->user_id));
+        View::assign('verify_apply', $this->model('verify')->fetch_apply($this->user_id));
 
-		View::output('account/setting/verify');
-	}
+        View::output('account/setting/verify');
+    }
 }

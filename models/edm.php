@@ -511,19 +511,19 @@ class edmModel extends Model
         }
     }
 
-	public function is_unsubscription($email)
-	{
-		return $this->fetch_one('edm_unsubscription', 'id', "`email` = '" . $this->quote($email) . "'");
-	}
+    public function is_unsubscription($email)
+    {
+        return $this->fetch_one('edm_unsubscription', 'id', "`email` = '" . $this->quote($email) . "'");
+    }
 
-	public function unsubscription_user($email)
-	{
-		$this->delete('edm_taskdata', "`email` = '" . $this->quote($email) . "'");
-		$this->delete('edm_userdata', "`email` = '" . $this->quote($email) . "'");
+    public function unsubscription_user($email)
+    {
+        $this->delete('edm_taskdata', "`email` = '" . $this->quote($email) . "'");
+        $this->delete('edm_userdata', "`email` = '" . $this->quote($email) . "'");
 
-		$this->insert('edm_unsubscription', array(
-			'email' => $email,
-			'time' => time()
-		));
-	}
+        $this->insert('edm_unsubscription', array(
+            'email' => $email,
+            'time' => time()
+        ));
+    }
 }
