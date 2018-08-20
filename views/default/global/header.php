@@ -21,10 +21,10 @@
 				  <ul class="nav navbar-nav">
 					<li><a href="<?php echo base_url(); ?>" class="<?php if (!$_GET['app'] OR $_GET['app'] == 'index') { ?>active<?php } ?>"><i class="icon icon-home"></i><?php _e('首页'); ?></a></li>
                     <li><a href="course/" class="<?php if ($_GET['app'] == 'course') { ?>active<?php } ?>"><?php _e('教程'); ?></a></li>
-                    <li><a href="course/" class="<?php if ($_GET['app'] == 'course') { ?>active<?php } ?>"><?php _e('面试题'); ?></a></li>
+                    <li><a href="asked/" class="<?php if ($_GET['app'] == 'asked') { ?>active<?php } ?>"><?php _e('面试题'); ?></a></li>
                     <li><a href="manual/" class="<?php if ($_GET['app'] == 'manual') { ?>active<?php } ?>"><?php _e('手册'); ?></a></li>
                     <li><a href="job/" class="<?php if ($_GET['app'] == 'job') { ?>active<?php } ?>"><?php _e('工作'); ?></a></li>
-                    <li><a href="project/" class="<?php if ($_GET['app'] == 'project') { ?>active<?php } ?>"><?php _e('项目'); ?></a></li>
+                    <!-- <li><a href="project/" class="<?php if ($_GET['app'] == 'project') { ?>active<?php } ?>"><?php _e('项目'); ?></a></li> -->
 
                     <?php if ($this->user_id) { ?>
 					<li><a href="home/"<?php if ($_GET['app'] == 'home') { ?> class="active"<?php } ?>><?php _e('动态'); ?></a></li>
@@ -50,14 +50,16 @@
 					</li>
 					<?php } ?>
 					<?php if (check_extension_package('ticket') && get_setting('ticket_enabled') == 'Y' && ($this->user_info['permission']['publish_ticket'] || $this->user_info['permission']['is_administortar'] || $this->user_info['permission']['is_service'])) { ?>
-                    <li><a href="ticket/"<?php if ($_GET['app'] == 'ticket') { ?> class="active"<?php } ?><?php _e('工单'); ?></a></li>
+                    <!-- <li><a href="ticket/"<?php if ($_GET['app'] == 'ticket') { ?> class="active"<?php } ?><?php _e('工单'); ?></a></li>-->
                     <?php } ?>
                     <?php if (check_extension_package('project') && get_setting('project_enabled') == 'Y') { ?>
                     <li><a href="project/"<?php if ($_GET['app'] == 'project') { ?> class="active"<?php } ?><?php _e('活动'); ?></a></li>
                     <?php } ?>
 
-					<?php if (get_setting('enable_help_center') == 'Y') { ?><li><a href="help/"<?php if ($_GET['app'] == 'help') { ?> class="active"<?php } ?>><i class="icon icon-bulb"></i> <?php _e('帮助'); ?></a></li><?php } ?>
-				  </ul>
+					<?php if (get_setting('enable_help_center') == 'Y') { ?><!--<li><a href="help/"<?php if ($_GET['app'] == 'help') { ?> class="active"<?php } ?>><i class="icon icon-bulb"></i> <?php _e('帮助'); ?></a></li>--><?php } ?>
+
+                    <li><a href="test/" class="<?php if ($_GET['app'] == 'test') { ?>active<?php } ?>"><?php _e('测试'); ?></a></li>
+                  </ul>
 				</nav>
 			</div>
 			<!-- end 导航 -->

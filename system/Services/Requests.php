@@ -7,6 +7,7 @@
  * Based on concepts from SimplePie_File, RequestCore and WP_Http.
  *
  * @package Requests
+ * https://github.com/rmccue/Requests
  */
 
 /**
