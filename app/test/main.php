@@ -120,16 +120,7 @@ class main extends BaseController
     {
 
         View::assign('article_list', $article_list);
-        View::assign('article_topics', $article_topics);
 
-        View::assign('hot_articles', $this->model('article')->get_articles_list(null, 1, 10, 'votes DESC', 30));
-
-        View::assign('pagination', Application::pagination()->initialize(array(
-            'base_url' => get_js_url('/course/category_id-' . $_GET['category_id'] . '__feature_id-' . $_GET['feature_id']),
-            'total_rows' => $article_list_total,
-            'per_page' => get_setting('contents_per_page')
-        ))->create_links());
-
-        View::output('course/square');
+        View::output('test/square');
     }
 }
