@@ -13,6 +13,8 @@ abstract class BaseClass
      */
     protected $error = array();
 
+    protected $hooks = array();
+
     /**
      * 用于记录日志的回调信息
      * @var object
@@ -112,6 +114,69 @@ abstract class BaseClass
     {
         $this->$key = $value;
         return $this;
+    }
+
+    /**
+     * 设置回掉钩子
+     * @param string $name 钩子名称
+     * @param callback $callbackName 回掉函数／方法
+     * @param int  $priority 设置回调优先级
+     */
+    public function setHook ($name, $callbackName, $priority=null)
+    {   
+        if (is_callable($callbackName)) { // 确认回调是可被调用的
+            isset($this->hooks) OR $this->hooks[$name] = []; // 回调数组设置
+            isset($priority) OR $priority = count($this->hooks[$name]); // 默认把回调放到最后位置
+            isset($this->hooks[$name][$priority]) OR $this->hooks[$name][$priority] = [];
+
+            $this->hooks[$name][$priority] [] = $callbackName;
+        }
+
+        return $this;
+    }
+
+    /**
+     * 获取回掉钩子
+     * @param string $name 钩子名称
+     * @param int  $priority 对应回调优先级
+     */
+    public function getHook ($name, $priority=null)
+    {
+        $hook = null;
+
+        if (isset($this->hooks[$name])) {
+            if (isset($priority) ) {
+                if (isset($this->hooks[$name][$priority]) ) {
+                    $hook = $this->hooks[$name][$priority];
+                }
+            } else {
+                $hook = $this->hooks[$name];
+            }
+        }
+        if (is_array($hook) && 1==count($hook)) {
+            $hook = array_pop($hook);
+        }
+
+        return $hook;
+    }
+
+    public function sequenceCall ($callbackList, $value)
+    {
+        if (is_string($callbackList)) {
+            $callbackList = explode(',', $callbackList);
+        }
+        if (is_array) {
+            foreach ($callbackList as $_callback) {
+                if (is_string($_callback)) {
+                    $_callback = trim($_callback);
+                }
+                if (is_callable($_callback)) {
+                    $value = call_user_func($_callback, $value);
+                }
+            }
+        }
+
+        return $value;
     }
 
 }

@@ -18,6 +18,7 @@ class ApiCurlRequest extends BaseClass
      */
     const DECODE_MODE_OBJECT = 3;
 
+
     /**
      * API 请求URL公共前缀
      */
@@ -43,20 +44,6 @@ class ApiCurlRequest extends BaseClass
         // 设置菜单
         'SetMenu' => 'cgi-bin/menu/create?access_token=%s',
     );
-
-    /**
-     * 构造函数
-     * @param array $options
-     */
-    public function __construct ($appId, $appSecret, $token, $options=array() )
-    {
-        $this->appId     = $appId;
-        $this->appSecret = $appSecret;
-        $this->token     = $token;
-
-        // set options
-        $this->setOptions($options);
-    }
 
     /**
      * 使用get方式发送数据
@@ -181,6 +168,12 @@ class ApiCurlRequest extends BaseClass
         if ($files) {
             $this->log($files);
         }
+
+        if (stripos($url, 'http://')!==0 && stripos($url, 'https://')!==0) {
+
+            $url = rtrim($this->baseUrl, '/') . '/'  . ltrim($url, '/');
+        }
+
         $curlHandler = curl_init();
         if(stripos($url,"https://")!==false){
             curl_setopt($curlHandler, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -209,7 +202,12 @@ class ApiCurlRequest extends BaseClass
     		    curl_setopt($curlHandler, CURLOPT_POSTFIELDS, $rawData);
         }
 
-		$response = curl_exec($curlHandler);
+        $callback = $this->getHook('ApiCurlRequest.request.before');
+
+        $response = curl_exec($curlHandler);
+
+        $callback = $this->getHook('ApiCurlRequest.request.after');
+
 		$this->log($response);
 		$curlInfo = curl_getinfo($curlHandler);
 		if (intval($curlInfo["http_code"])!=200) {
