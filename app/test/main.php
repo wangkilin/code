@@ -118,7 +118,9 @@ class main extends BaseController
 
     public function index_square_action()
     {
-
+        if ($_FILES) {
+            var_dump($_FILES);
+        }
         View::assign('article_list', $article_list);
 
         View::output('test/square');

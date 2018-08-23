@@ -6,15 +6,12 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
     /**
      * API 请求URL公共前缀
      */
-    public $baseUrl = '';
-
+    public $baseUrl = 'https://ocrapi-advanced.taobao.com/';
+    
 
     protected $apiUriList = array(
-        // 获取access_token
-        'GetAccessToken' => 'cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s',
-        /******* 自定义菜单 *******/
-        // 设置菜单
-        'SetMenu' => 'cgi-bin/menu/create?access_token=%s',
+        // 通用文字识别－高精版
+        'OcrAdvanced' => 'ocrservice/advanced',
     );
 
     /**
@@ -29,6 +26,11 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
 
         // set options
         $this->setOptions($options);
+    }
+
+    public function ocrAdcanced ($filepath, $prob=false, $charInfo=false, $rotate=false, $table=false)
+    {
+
     }
 
 
