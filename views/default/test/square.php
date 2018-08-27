@@ -5,7 +5,7 @@
 
 	<div class="container">
 		<div class="row">
-		<form id="verify_form" method="post" action="test/square/" enctype="multipart/form-data" class="form-horizontal">
+		<form id="verify_form" method="post" action="test/index-square/" enctype="multipart/form-data" class="form-horizontal">
 			<dl class="verify-attach">
 				<dt><?php _e('附件'); ?>:</dt>
 				<dd>
