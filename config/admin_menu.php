@@ -188,7 +188,7 @@ $config[] = array(
 
         array(
             'id' => 'topic/list',
-            'title' => _t('话题管理'),
+            'title' => _t('话题(标签)管理'),
             'url' => 'admin/topic/list/'
         ),
 

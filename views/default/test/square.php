@@ -5,12 +5,11 @@
 
 	<div class="container">
 		<div class="row">
-		<form id="verify_form" method="post" action="test/square/" enctype="multipart/form-data" class="form-horizontal">
+		<form id="verify_form" method="post" action="test/index-square/" enctype="multipart/form-data" class="form-horizontal">
 			<dl class="verify-attach">
-				<dt><?php _e('附件'); ?>:</dt>
+				<dt><?php _e('请选择PDF文件上传'); ?>:</dt>
 				<dd>
-					<input type="file" name="attach" />
-					<p>请提交对应的身份证或者组织机构代码证件扫描</p>
+					<input type="file" class="" name="attach" />
 				</dd>
 			</dl>
 			<dl>
