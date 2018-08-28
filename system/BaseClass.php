@@ -123,7 +123,7 @@ abstract class BaseClass
      * @param int  $priority 设置回调优先级
      */
     public function setHook ($name, $callbackName, $priority=null)
-    {   
+    {
         if (is_callable($callbackName)) { // 确认回调是可被调用的
             isset($this->hooks) OR $this->hooks[$name] = []; // 回调数组设置
             isset($priority) OR $priority = count($this->hooks[$name]); // 默认把回调放到最后位置
@@ -160,12 +160,19 @@ abstract class BaseClass
         return $hook;
     }
 
+    /**
+     * 序列调用方法/函数。
+     * @param string $callbackList 逗号分隔的回调函数/方法列表
+     * @param mixed  $value 参数
+     *
+     * @return mixed
+     */
     public function sequenceCall ($callbackList, $value)
     {
         if (is_string($callbackList)) {
-            $callbackList = explode(',', $callbackList);
+            $callbackList = explode('|', $callbackList);
         }
-        if (is_array) {
+        if (is_array($callbackList)) {
             foreach ($callbackList as $_callback) {
                 if (is_string($_callback)) {
                     $_callback = trim($_callback);
@@ -177,6 +184,18 @@ abstract class BaseClass
         }
 
         return $value;
+    }
+
+    /**
+     * 序列调用方法/函数。
+     * @param string $callbackList 逗号分隔的回调函数/方法列表
+     * @param mixed  $value 参数
+     *
+     * @return mixed
+     */
+    public function doCall ($callbackList, $value)
+    {
+        return $this->sequenceCall($callbackList, $value);
     }
 
 }

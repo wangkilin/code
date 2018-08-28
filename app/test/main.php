@@ -118,8 +118,12 @@ class main extends BaseController
 
     public function index_square_action()
     {
-        if ($_FILES) {
-            var_dump($_FILES);
+        if (isset($_FILES, $_FILES['attach'], $_FILES['attach']['tmp_name'])
+           && is_file($_FILES['attach']['tmp_name']) ) {
+            $appKey    = Application::config()->get('aliyun')->appKey;
+            $appSecret = Application::config()->get('aliyun')->appSecret;
+            $aliyunRequester = & loadClass('Aliyun_ApiCurlRequest', [$appKey, $appSecret]);
+            var_dump($_FILES, $aliyunRequester);
         }
         View::assign('article_list', $article_list);
 

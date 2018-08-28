@@ -522,7 +522,14 @@ function & loadClass($class, $params=null)
         require_once $file;
     }
 
-    if (isset($params)) {
+    $argsNum = func_num_args();
+
+    if ($argsNum > 2) {
+        $argsList = func_get_args();
+        array_shift($argsList);
+        $reflectionClass = new ReflectionClass($class);
+        $_classes[$class] = $reflectionClass->newInstanceArgs($argsList);
+    } else if (isset($params)) {
         $_classes[$class] = new $class($params);
     } else {
         $_classes[$class] = new $class();
