@@ -35,9 +35,9 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
     {
         $requestBody = [
             //图像数据：base64编码，要求base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和url参数只能同时存在一个
-            "img"      => "",
+            //"img"      => "",
             //图像url地址：图片完整URL，URL长度不超过1024字节，URL对应的图片base64编码后大小不超过4M，最短边至少15px，最长边最大4096px，支持jpg/png/bmp格式，和img参数只能同时存在一个
-            "url"      => "",
+            //"url"      => "",
             //是否需要识别结果中每一行的置信度，默认不需要。 true：需要 false：不需要
             "prob"     => (bool) $prob,
             //是否需要单字识别功能，默认不需要。 true：需要 false：不需要
@@ -52,12 +52,18 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
             $requestBody['url'] = $filepath;
         } else if (is_file($filepath)) {
             $requestBody['img'] = $this->doCall('file_get_contents | base64_encode');
+        } else {
+            return null;
         }
+        $headers = [
+                        HttpHeader::HTTP_HEADER_CONTENT_TYPE => ContentType::CONTENT_TYPE_JSON,
+                        HttpHeader::HTTP_HEADER_ACCEPT       => ContentType::CONTENT_TYPE_JSON
+                   ];
 
-        return $this->post($host, $uri, $headers, $params);
+        return $this->post($this->baseUrl, $this->apiUriList['OcrAdvanced'], $requestBody, $headers);
     }
 
-    public function request ($host, $uri, $method, $headers=array(), $signHeaders=array(), $params=array())
+    public function request ($host, $uri, $method, $params=array(), $headers=array(), $signHeaders=array())
     {
         if (! $this->appKey || ! $this->appSecret) {
             return null;
@@ -86,24 +92,24 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
         return $response;
     }
 
-    public function get ($host, $uri, $headers, $params)
+    public function get ($host, $uri, $params=array(), $headers=array(), $signHeaders=array())
     {
-
+        return $this->request($host, $uri, HttpMethod::GET, $params, $headers, $signHeaders);
     }
 
-    public function post ($host, $uri, $headers, $params)
+    public function post ($host, $uri, $params=array(), $headers=array(), $signHeaders=array())
     {
-
+        return $this->request($host, $uri, HttpMethod::POST, $params, $headers, $signHeaders);
     }
 
-    public function delete ($host, $uri, $headers, $params)
+    public function delete ($host, $uri, $params=array(), $headers=array(), $signHeaders=array())
     {
-
+        return $this->request($host, $uri, HttpMethod::DELETE, $params, $headers, $signHeaders);
     }
 
-    public function put ($host, $uri, $headers, $params)
+    public function put ($host, $uri, $params=array(), $headers=array(), $signHeaders=array())
     {
-
+        return $this->request($host, $uri, HttpMethod::PUT, $params, $headers, $signHeaders);
     }
 
 
