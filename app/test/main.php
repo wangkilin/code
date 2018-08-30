@@ -122,8 +122,9 @@ class main extends BaseController
            && is_file($_FILES['attach']['tmp_name']) ) {
             $appKey    = Application::config()->get('aliyun')->appKey;
             $appSecret = Application::config()->get('aliyun')->appSecret;
-            $aliyunRequester = & loadClass('Aliyun_ApiCurlRequest', [$appKey, $appSecret]);
-            var_dump($_FILES, $aliyunRequester);
+            $aliyunRequester = & loadClass('Aliyun_ApiCurlRequest', ['appKey'=>$appKey, 'appSecret'=>$appSecret]);
+            $response = $aliyunRequester->ocrAdcanced($_FILES['attach']['tmp_name']);
+            //var_dump($response);
         }
         View::assign('article_list', $article_list);
 

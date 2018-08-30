@@ -6,11 +6,11 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
     /**
      * API 请求URL公共前缀
      */
-    public $baseUrl = 'https://ocrapi-advanced.taobao.com/';
+    public $baseUrl = 'https://ocrapi-advanced.taobao.com';
 
     protected $apiUriList = array(
         // 通用文字识别－高精版
-        'OcrAdvanced' => 'ocrservice/advanced',
+        'OcrAdvanced' => '/ocrservice/advanced',
     );
 
     protected $appKey = null;
@@ -23,7 +23,7 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
     public function __construct (array $authInfos, $options=array() )
     {
         if (isset($authInfos['appKey'], $authInfos['appSecret'])) {
-            $this->appKey = $authInfos['appKey'];
+            $this->appKey    = $authInfos['appKey'];
             $this->appSecret = $authInfos['appSecret'];
         }
 
@@ -51,13 +51,17 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
         if (stripos($filepath, 'http://') || stripos($filepath, 'https://')) {
             $requestBody['url'] = $filepath;
         } else if (is_file($filepath)) {
-            $requestBody['img'] = $this->doCall('file_get_contents | base64_encode');
+            $requestBody['img'] = $this->doCall('file_get_contents | base64_encode', $filepath);
         } else {
             return null;
         }
+
+        $requestBody = json_encode($requestBody);
+
         $headers = [
                         HttpHeader::HTTP_HEADER_CONTENT_TYPE => ContentType::CONTENT_TYPE_JSON,
-                        HttpHeader::HTTP_HEADER_ACCEPT       => ContentType::CONTENT_TYPE_JSON
+                        HttpHeader::HTTP_HEADER_ACCEPT       => ContentType::CONTENT_TYPE_JSON,
+                        HttpHeader::HTTP_HEADER_CONTENT_MD5  => base64_encode(md5($requestBody, true))
                    ];
 
         return $this->post($this->baseUrl, $this->apiUriList['OcrAdvanced'], $requestBody, $headers);
@@ -76,9 +80,18 @@ class Aliyun_ApiCurlRequest extends ApiCurlRequest
             $request->setHeader($_key, $_value);
         }
 
-        foreach ($params as $_key => $_value) {
-            //注意：业务query部分，如果没有则无此行；请不要、不要、不要做UrlEncode处理
-            $request->setQuery($_key, $_value);
+        if (is_array($params)) {
+            foreach ($params as $_key => $_value) {
+                //注意：业务query部分，如果没有则无此行；请不要、不要、不要做UrlEncode处理
+                $request->setQuery($_key, $_value);
+            }
+        } else if (isset($header[HttpHeader::HTTP_HEADER_CONTENT_TYPE])
+            && $header[HttpHeader::HTTP_HEADER_CONTENT_TYPE] == ContentType::CONTENT_TYPE_STREAM ) {
+
+            $request->setBodyStream($params);
+        } else {
+
+            $request->setBodyString($params);
         }
 
         in_array(SystemHeader::X_CA_TIMESTAMP, $signHeaders) OR array_unshift($signHeaders, SystemHeader::X_CA_TIMESTAMP);
