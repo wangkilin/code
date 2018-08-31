@@ -10,8 +10,8 @@ class main extends AdminController
         if (!defined('IN_SAE'))
         {
             $writable_check = array(
-                'cache' => is_really_writable(ROOT_PATH . 'cache/'),
-                'tmp' => is_really_writable(ROOT_PATH . './tmp/'),
+                'cache' => is_really_writable(CACHE_PATH),
+                'tmp' => is_really_writable(TEMP_PATH),
                 get_setting('upload_dir') => is_really_writable(get_setting('upload_dir'))
             );
 

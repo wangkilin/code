@@ -119,12 +119,24 @@ class main extends BaseController
     public function index_square_action()
     {
         if (isset($_FILES, $_FILES['attach'], $_FILES['attach']['tmp_name'])
-           && is_file($_FILES['attach']['tmp_name']) ) {
+           && is_file($_FILES['attach']['tmp_name']) && $_FILES['attach']['type']=='application/pdf' ) {
+            //var_dump($_FILES['attach']);
+            $tmpDir = TEMP_PATH . 'ocr/' . uniqid(date('Ymd-').rand(1, 100000));
+            mkdir($tmpDir, 0777, true);
+            $destination = $tmpDir . '/' .basename($_FILES['attach']['tmp_name']) . '.pdf';
+            move_uploaded_file($_FILES['attach']['tmp_name'], $destination);
+            //echo system('pdf2image');
+            $command = sprintf(Application::config()->get('aliyun')->commandConvertPdfToPng, $destination);
+            exec($command, $output, $return);
+            $images = glob(realpath($tmpDir) . '/*.png');
+            //var_dump($images);
             $appKey    = Application::config()->get('aliyun')->appKey;
             $appSecret = Application::config()->get('aliyun')->appSecret;
             $aliyunRequester = & loadClass('Aliyun_ApiCurlRequest', ['appKey'=>$appKey, 'appSecret'=>$appSecret]);
-            $response = $aliyunRequester->ocrAdcanced($_FILES['attach']['tmp_name']);
-            //var_dump($response);
+            foreach ($images as $_imageFile) {
+                $response = $aliyunRequester->ocrAdcanced($_imageFile);
+                var_dump($response);
+            }
         }
         View::assign('article_list', $article_list);
 
