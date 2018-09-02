@@ -23,19 +23,16 @@ if (substr(PHP_VERSION, -4) == 'hhvm') { // HHVM版本不支持
 define('START_TIME', microtime(true));
 define('TIMESTAMP', time());
 
-if (! defined('ROOT_PATH')) {
-    define('ROOT_PATH', dirname(dirname(__FILE__)) . '/');
-}
-if (! defined('INC_PATH')) {
-    define('INC_PATH', dirname(__FILE__) . '/');
-}
+defined('DS') OR define('DS', DIRECTORY_SEPARATOR);
+
+defined('ROOT_PATH') OR define('ROOT_PATH', dirname(dirname(__FILE__)) . DS);
+defined('INC_PATH')  OR define('INC_PATH', dirname(__FILE__) . DS);
+defined('CONF_PATH') OR define('CONF_PATH', ROOT_PATH . 'config' . DS);
+
 if (function_exists('memory_get_usage')) {
     define('MEMORY_USAGE_START', memory_get_usage());
 }
 
-if (! defined('DS')) {
-    define('DS', DIRECTORY_SEPARATOR);
-}
 
 if (defined('SAE_TMP_PATH')) {
     define('IN_SAE', true);
@@ -49,12 +46,9 @@ if (defined('IN_SAE')) {
     define('TEMP_PATH', rtrim(SAE_TMP_PATH, '/') . '/');
 
 } else {
-    if (version_compare(PHP_VERSION, '5.4', '>='))
-    {
+    if (version_compare(PHP_VERSION, '5.4', '>=')) {
         error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_WARNING & ~E_DEPRECATED);
-    }
-    else
-    {
+    }else {
         error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
     }
 
@@ -79,6 +73,10 @@ if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc()) { // GPC
     array_walk_recursive($_POST, 'stripslashes_gpc');
     array_walk_recursive($_COOKIE, 'stripslashes_gpc');
     array_walk_recursive($_REQUEST, 'stripslashes_gpc');
+}
+
+if (file_exists(CONF_PATH . 'environment.inc.php')) {// 包含环境参数
+    include_once(CONF_PATH . 'environment.inc.php');
 }
 
 require_once(ROOT_PATH . 'version.php');

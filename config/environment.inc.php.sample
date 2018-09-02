@@ -1,0 +1,6 @@
+<?php
+defined('ENV') OR define('ENV', 'prod'); // 工作环境。 根据环境不同， 配置不同
+defined('ENV') OR define('ENV', 'test'); // 工作环境。 根据环境不同， 配置不同
+defined('ENV') OR define('ENV', 'home'); // 工作环境。 根据环境不同， 配置不同
+
+/* EOF */

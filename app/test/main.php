@@ -7,6 +7,7 @@ class main extends BaseController
 
         $rule_action['actions'][] = 'square';
         $rule_action['actions'][] = 'index';
+        $rule_action['actions'][] = 'build_ocr_text';
 
         return $rule_action;
     }
@@ -126,8 +127,12 @@ class main extends BaseController
             $destination = $tmpDir . '/' .basename($_FILES['attach']['tmp_name']) . '.pdf';
             move_uploaded_file($_FILES['attach']['tmp_name'], $destination);
             //echo system('pdf2image');
+            $cwd = getcwd();
+            chdir($tmpDir);
             $command = sprintf(Application::config()->get('aliyun')->commandConvertPdfToPng, $destination);
             exec($command, $output, $return);
+            //var_dump($command, $output, $return);
+            chdir($cwd);
             $images = glob(realpath($tmpDir) . '/*.png');
             //var_dump($images);
             $appKey    = Application::config()->get('aliyun')->appKey;
@@ -135,10 +140,57 @@ class main extends BaseController
             $aliyunRequester = & loadClass('Aliyun_ApiCurlRequest', ['appKey'=>$appKey, 'appSecret'=>$appSecret]);
             foreach ($images as $_imageFile) {
                 $response = $aliyunRequester->ocrAdcanced($_imageFile);
-                var_dump($response);
+                if ($response->getHttpStatusCode()=='200' && $response->getBody()) {
+                    $response = json_decode($response->getBody(), true);
+
+                    $var = var_export($response, true);
+                    error_log($var, 3, $_imageFile.'.php');
+                    //var_dump(json_decode($response->getBody(), true) );
+                }
             }
         }
         View::assign('article_list', $article_list);
+
+        View::output('test/square');
+    }
+
+    public function build_ocr_text_action ()
+    {
+        $newOcrText = array();
+        $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000001.png.php');
+        $ocrText = $ocrText['prism_wordsInfo'];
+        foreach ($ocrText as $_key => $_ocrInfo) {
+            $minX = $minY = null;
+            $maxX = $maxY = null;
+            foreach ($_ocrInfo['pos'] as $_posInfo) {
+                if (! isset($minX)) {
+                    $minX = $_posInfo['x'];
+                    $minY = $_posInfo['y'];
+                    $maxX = $_posInfo['x'];
+                    $maxY = $_posInfo['y'];
+                }
+                $minX = $_posInfo['x'] > $minX ? $minX : $_posInfo['x'];
+                $minY = $_posInfo['y'] > $minY ? $minY : $_posInfo['y'];
+                $maxX = $_posInfo['x'] > $maxX ? $_posInfo['x'] : $maxX;
+                $maxY = $_posInfo['y'] > $maxY ? $_posInfo['y'] : $maxY;
+            }
+            $ocrText[$_key]['pos'] = ['minX'=>$minX, 'minY'=>$minY, 'maxX'=>$maxX, 'maxY'=>$maxY, 'size'=>$maxY-$minY];
+        }
+
+        var_dump($ocrText);
+        $textBlock = [];
+        $i = count($ocrText);
+        for ($j=0; $j<$i-1; $j++) {
+            for ($k=$j+1; $k<$i; $k++) {
+                // 合并 同一行 ？，两条数据 y轴坐标差不多 < 5px ？，a的x轴末尾坐标 和 b的x轴开头坐标距离不超过 3个字距离；
+                // 两条数据的字体大小， 差不多。 因为是识别的字体， 字体大小有偏差
+                // 合并后，将最大坐标位置， 需要重新计算 ？
+
+                // 合并同一段落？ 两条数据， x轴开头位置距离不超过3个字距离， a的y轴最大坐标 和 b 的y轴最小坐标， 在1个字范围
+
+
+            }
+        }
 
         View::output('test/square');
     }
