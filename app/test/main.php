@@ -208,9 +208,9 @@ class main extends BaseController
                     }
 
                 }
-
-                $textBlock[] = [$ocrText[$j]];
             }
+
+            $textBlock[] = [$ocrText[$j]];
 
         }
 
