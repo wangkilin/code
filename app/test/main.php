@@ -180,16 +180,38 @@ class main extends BaseController
         var_dump($ocrText);
         $textBlock = [];
         $i = count($ocrText);
-        for ($j=0; $j<$i-1; $j++) {
-            for ($k=$j+1; $k<$i; $k++) {
-                // 合并 同一行 ？，两条数据 y轴坐标差不多 < 5px ？，a的x轴末尾坐标 和 b的x轴开头坐标距离不超过 3个字距离；
-                // 两条数据的字体大小， 差不多。 因为是识别的字体， 字体大小有偏差
-                // 合并后，将最大坐标位置， 需要重新计算 ？
-
-                // 合并同一段落？ 两条数据， x轴开头位置距离不超过3个字距离， a的y轴最大坐标 和 b 的y轴最小坐标， 在1个字范围
-
-
+        for ($j=0; $j<$i; $j++) {
+            if (! $textBlock) {
+                $textBlock[0] = [$ocrText[$j]];
+                continue;
             }
+
+            foreach ($textBlock as $_k => $_blocks) {
+                foreach ($_blocks as $_block) {
+                    // 合并 同一行 ？，两条数据 y轴坐标差不多 < 5px ？，a的x轴末尾坐标 和 b的x轴开头坐标距离不超过 3个字距离；
+                    // 两条数据的字体大小， 差不多。 因为是识别的字体， 字体大小有偏差
+                    // 合并后，将最大坐标位置， 需要重新计算 ？
+                    if (abs($_block['pos']['maxY'] - $ocrText[$j]['pos']['minY'])  < 5
+                     && abs($_block['pos']['minX'] - $ocrText[$j]['pos']['maxX']) < $_block['pos']['size'] * 3
+                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/10) {
+                          $textBlock[$_k][] = $ocrText[$j];
+                          continue 2;
+                    }
+
+
+                    // 合并同一段落？ 两条数据， x轴开头位置距离不超过3个字距离， a的y轴最大坐标 和 b 的y轴最小坐标， 在1个字范围
+                    if (abs($_block['pos']['maxY'] - $ocrText[$j]['pos']['minY'])  < 5
+                     && abs($_block['pos']['minX'] - $ocrText[$j]['pos']['maxX']) < $_block['pos']['size'] * 3
+                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/10) {
+                         $textBlock[$_k][] = $ocrText[$j];
+                         continue 2;
+                    }
+
+                }
+
+                $textBlock[] = [$ocrText[$j]];
+            }
+
         }
 
         View::output('test/square');
