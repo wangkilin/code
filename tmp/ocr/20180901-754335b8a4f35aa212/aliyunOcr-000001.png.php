@@ -1,4 +1,5 @@
 <?php
+$orcText = 
 array (
   'sid' => 'e11b21cc08d2cc618722005126c4dfccb968ff4de7955a50bd028c7a63b7d33b524f3cd0',
   'prism_version' => '1.0.9',
@@ -2220,4 +2221,9 @@ array (
       ),
     ),
   ),
-)
+);
+
+
+return $orcText;
+
+/* EOF */

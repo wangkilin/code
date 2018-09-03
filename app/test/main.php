@@ -158,6 +158,9 @@ class main extends BaseController
     {
         $newOcrText = array();
         $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000001.png.php');
+        $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000002.png.php');
+        $ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php');
+        $ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000002.png.php');
         $ocrText = $ocrText['prism_wordsInfo'];
         foreach ($ocrText as $_key => $_ocrInfo) {
             $minX = $minY = null;
@@ -177,7 +180,7 @@ class main extends BaseController
             $ocrText[$_key]['pos'] = ['minX'=>$minX, 'minY'=>$minY, 'maxX'=>$maxX, 'maxY'=>$maxY, 'size'=>$maxY-$minY];
         }
 
-        var_dump($ocrText);
+        //var_dump($ocrText);
         $textBlock = [];
         $i = count($ocrText);
         for ($j=0; $j<$i; $j++) {
@@ -191,20 +194,22 @@ class main extends BaseController
                     // 合并 同一行 ？，两条数据 y轴坐标差不多 < 5px ？，a的x轴末尾坐标 和 b的x轴开头坐标距离不超过 3个字距离；
                     // 两条数据的字体大小， 差不多。 因为是识别的字体， 字体大小有偏差
                     // 合并后，将最大坐标位置， 需要重新计算 ？
-                    if (abs($_block['pos']['maxY'] - $ocrText[$j]['pos']['minY'])  < 5
-                     && abs($_block['pos']['minX'] - $ocrText[$j]['pos']['maxX']) < $_block['pos']['size'] * 3
-                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/10) {
+                    if ($ocrText[$j]['pos']['maxY'] - abs($_block['pos']['maxY'])  < 5
+                     && abs($ocrText[$j]['pos']['minX'] - $_block['pos']['maxX']) < $_block['pos']['size'] * 3
+                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/8
+                     ) {
                           $textBlock[$_k][] = $ocrText[$j];
-                          continue 2;
+                          continue 3;
                     }
 
 
                     // 合并同一段落？ 两条数据， x轴开头位置距离不超过3个字距离， a的y轴最大坐标 和 b 的y轴最小坐标， 在1个字范围
-                    if (abs($_block['pos']['maxY'] - $ocrText[$j]['pos']['minY'])  < 5
-                     && abs($_block['pos']['minX'] - $ocrText[$j]['pos']['maxX']) < $_block['pos']['size'] * 3
-                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/10) {
+                    if (abs($ocrText[$j]['pos']['minY'] - $_block['pos']['maxY'])  < $_block['pos']['size'] * 1.5
+                     && abs($ocrText[$j]['pos']['minX'] - $_block['pos']['minX'])  < $_block['pos']['size'] * 3
+                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/8
+                     ) {
                          $textBlock[$_k][] = $ocrText[$j];
-                         continue 2;
+                         continue 3;
                     }
 
                 }
@@ -214,6 +219,7 @@ class main extends BaseController
 
         }
 
+        var_dump($textBlock);
         View::output('test/square');
     }
 }
