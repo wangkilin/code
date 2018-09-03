@@ -159,7 +159,7 @@ class main extends BaseController
         $newOcrText = array();
         $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000001.png.php');
         $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000002.png.php');
-        $ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php');
+        //$ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php');
         //$ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000002.png.php');
         $ocrText = $ocrText['prism_wordsInfo'];
         foreach ($ocrText as $_key => $_ocrInfo) {
@@ -222,9 +222,9 @@ class main extends BaseController
         foreach ($textBlock as & $_blocks) {
             $text = '';
             foreach ($_blocks as $_block) {
-                $text .= trim($_block['word'], '.·');
+                $text .= ' ' . mb_ereg_replace ( '…+$', '', trim($_block['word'], '.·')) ;
             }
-            $_blocks = $text;
+            $_blocks = trim($text);
         }
 
         var_dump($textBlock);
