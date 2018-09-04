@@ -66,6 +66,10 @@ class main extends BaseController
         View::output('test/square');
     }
 
+    /**
+     * 将ocr识别的目录文件内容， 拼接成文本块， 以及目录行
+     * @param array $ocrText aliyun识别出来的文字内容。 带有坐标和文字信息的列表数组
+     */
     protected function buildOcrText($ocrText)
     {
         foreach ($ocrText as $_key => $_ocrInfo) {
@@ -102,7 +106,7 @@ class main extends BaseController
                     // 合并后，将最大坐标位置， 需要重新计算 ？
                     if ($ocrText[$j]['pos']['maxY'] - abs($_block['pos']['maxY'])  < 5
                      && abs($ocrText[$j]['pos']['minX'] - $_block['pos']['maxX']) < $_block['pos']['size'] * 3
-                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/8
+                     && abs($_block['pos']['size'] - $ocrText[$j]['pos']['size']) / $_block['pos']['size'] < 1/6
                      ) {
                           $textBlock[$_k][] = $ocrText[$j];
                           continue 3;
@@ -112,7 +116,7 @@ class main extends BaseController
                     // 合并同一段落？ 两条数据， x轴开头位置距离不超过3个字距离， a的y轴最大坐标 和 b 的y轴最小坐标， 在1个字范围
                     if (abs($ocrText[$j]['pos']['minY'] - $_block['pos']['maxY'])  < $_block['pos']['size'] * 1.5
                      && abs($ocrText[$j]['pos']['minX'] - $_block['pos']['minX'])  < $_block['pos']['size'] * 3
-                     && abs($_block['pos']['size'] - $_block['pos']['size']) / $_block['pos']['size'] < 1/8
+                     && abs($_block['pos']['size'] - $ocrText[$j]['pos']['size']) / $_block['pos']['size'] < 1/6
                      ) {
                          $textBlock[$_k][] = $ocrText[$j];
                          continue 3;
@@ -124,21 +128,49 @@ class main extends BaseController
             $textBlock[] = [$ocrText[$j]];
 
         }
+        //echo var_export($textBlock, true);
 
         foreach ($textBlock as & $_blocks) {
+            //echo '<br/>';
+            //echo var_export($_blocks, true);
+            //echo '<br/>';
             $text = '';
             foreach ($_blocks as $_block) {
                 $text .= ' ' . mb_ereg_replace ( '…+$', '', trim(trim($_block['word']), '.·')) ;
             }
             $_blocks = trim($text);
         }
+        //var_dump($textBlock);
 
         $excelData = [];
         $textNum = count($textBlock);
         for ($i=0; $i<$textNum; $i++) {
             if (is_numeric(trim($textBlock[$i], '() ') ) && isset($textBlock[$i-1])) {
+
                 if (isset($textBlock[$i-2]) && mb_strpos($textBlock[$i-2], '第')===0) {
                     $excelData[] = [$textBlock[$i-2], ''];
+                } else if (isset($textBlock[$i-3]) && mb_strpos($textBlock[$i-3], '第')===0) {
+                    $text = mb_strlen($textBlock[$i-3]) > 4 ? $textBlock[$i-3] : ($textBlock[$i-3] . $textBlock[$i-2]);
+                    $excelData[] = [$text, ''];
+                } else if (isset($textBlock[$i-4]) && mb_strpos($textBlock[$i-4], '第')===0) {
+                    $excelData[] = [$textBlock[$i-4] . $textBlock[$i-3]. $textBlock[$i-2], ''];
+                } else {
+                    // $j = $i-1;
+                    // $hasFound = false;
+                    // while($j < $i-5 && $j>0) {
+                    //     if (is_numeric(trim($textBlock[$j], '() ') )) {
+                    //         $hasFound = true;
+                    //         $j++;
+                    //         break;
+                    //     }
+                    //     $j--;
+                    // }
+                    // $text = $textBlock[$j];
+                    // while(mb_strlen($text) < 5 && isset($textBlock[$j+1])) {
+                    //     $text = $text . $textBlock[$j];
+                    //     $j++;
+                    // }
+                    // $excelData[] = [$text, ''];
                 }
                 $excelData[] = [$textBlock[$i-1], $textBlock[$i]];
             }
@@ -158,10 +190,10 @@ class main extends BaseController
         $ocrText = $ocrText['prism_wordsInfo'];
         $excelData = $this->buildOcrText($ocrText);
 
-        $phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
-        $phpExcel->export(basename($ocrTextFile) . '.xls', array('章节', '页码'), $excelData);
+        //$phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
+        //$phpExcel->export(basename($ocrTextFile) . '.xls', array('章节', '页码'), $excelData);
 
-        //var_dump($textBlock);
+        var_dump($excelData);
         View::output('test/square');
     }
 
@@ -172,14 +204,14 @@ class main extends BaseController
     {
         if (isset($_POST['excelData'], $_POST['filename']) ) {
             $phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
-            $phpExcel->export($_POST['filename'], array('章节', '页码'), json_decode($_POST['excelData'], true) );  
+            $phpExcel->export($_POST['filename'], array('章节', '页码'), json_decode($_POST['excelData'], true) );
         } else {
 
         }
     }
 
     /**
-     * 回调方法，excel在下载前， 设置下列宽度 
+     * 回调方法，excel在下载前， 设置下列宽度
      */
     public function __setExcelCellWidth ($phpExcelModel)
     {
