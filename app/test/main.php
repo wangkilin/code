@@ -14,111 +14,11 @@ class main extends BaseController
 
     public function index_action()
     {
-        if ($_GET['notification_id']) {
-            $this->model('notify')->read_notification($_GET['notification_id'], $this->user_id);
-        }
-
-        // 手机端请求
-        if (is_mobile()) {
-            HTTP::redirect('/m/course/' . $_GET['id']);
-        }
-        if (is_numeric($_GET['id'])) {
-            $itemInfo = $this->model('course')->getById($_GET['id']);
-        } else {
-            $itemInfo = $this->model('course')->getCourseByToken($_GET['id']);
-        }
-        // 指定文章没有找到
-        if (! $itemInfo) {
-            HTTP::error_404();
-        }
-        // 文章有附件
-        if ($itemInfo['has_attach']) {
-            $itemInfo['attachs'] = $this->model('publish')->getAttachListByItemTypeAndId('course', $itemInfo['id'], 'min');
-
-            $itemInfo['attachs_ids'] = FORMAT::parse_attachs($itemInfo['content'], true);
-        }
-        // 文章内容做bbc转换
-        $itemInfo['content'] = FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($itemInfo['content'])));
-        // 查看本人是否为此文章投票
-        if ($this->user_id) {
-            $itemInfo['vote_info'] = $this->model('article')->getVoteByArticleId('article', $itemInfo['id'], null, $this->user_id);
-        }
-        // 获取全部投票的用户
-        $itemInfo['vote_users'] = $this->model('article')->getVoteUsersByArticleId('article', $itemInfo['id'], 1, 10);
-
-        View::assign('itemInfo', $itemInfo);
-
-        //$articleTags = $this->model('tag')->getTagsByArticleIds($itemInfo['id'], 'course');
-        if ($articleTags) {
-            View::assign('article_topics', $articleTags);
-            $tagIds = array_keys($articleTags);
-        }
-
-        View::assign('reputation_topics', $this->model('people')->get_user_reputation_topic($itemInfo['user_info']['uid'], $user['reputation'], 5));
-
-        $this->crumb($itemInfo['title'], '/article/' . $itemInfo['id']);
-
-        View::assign('human_valid', human_valid('answer_valid_hour'));
-
-        if ($_GET['item_id']) {
-            $comments[] = $this->model('article')->get_comment_by_id($_GET['item_id']);
-        } else {
-            $comments = $this->model('article')->get_comments($itemInfo['id'], $_GET['page'], 100);
-        }
-
-        if ($comments AND $this->user_id) {
-            foreach ($comments AS $key => $val) {
-                $comments[$key]['vote_info'] = $this->model('article')->getVoteByArticleId('comment', $val['id'], 1, $this->user_id);
-                $comments[$key]['message'] = $this->model('question')->parse_at_user($val['message']);
-
-            }
-        }
-
-        if ($this->user_id)
-        {
-            View::assign('user_follow_check', $this->model('follow')->user_follow_check($this->user_id, $itemInfo['uid']));
-        }
-
-        View::assign('question_related_list', $this->model('question')->get_related_question_list(null, $itemInfo['title']));
-
-        $this->model('article')->update_views($itemInfo['id']);
-
-        View::assign('comments', $comments);
-        View::assign('comments_count', $itemInfo['comments']);
-
-        View::assign('human_valid', human_valid('answer_valid_hour'));
-
-        View::assign('pagination', Application::pagination()->initialize(array(
-            'base_url' => get_js_url('/article/id-' . $itemInfo['id']),
-            'total_rows' => $itemInfo['comments'],
-            'per_page' => 100
-        ))->create_links());
-
-        View::set_meta('keywords', implode(',', $this->model('system')->analysis_keyword($itemInfo['title'])));
-
-        View::set_meta('description', $itemInfo['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($itemInfo['message'])), 0, 128, 'UTF-8', '...'));
-
-        View::assign('attach_access_key', md5($this->user_id . time()));
-
-        $recommend_posts = $this->model('posts')->get_recommend_posts_by_topic_ids($article_topic_ids);
-
-        if ($recommend_posts) {
-            foreach ($recommend_posts as $key => $value) {
-                if ($value['id'] AND $value['id'] == $itemInfo['id']) {
-                    unset($recommend_posts[$key]);
-
-                    break;
-                }
-            }
-
-            View::assign('recommend_posts', $recommend_posts);
-        }
-
-        View::output('course/index');
     }
 
     public function index_square_action()
     {
+        $toShowOcrStat = false;
         if (isset($_FILES, $_FILES['attach'], $_FILES['attach']['tmp_name'])
            && is_file($_FILES['attach']['tmp_name']) && $_FILES['attach']['type']=='application/pdf' ) {
             //var_dump($_FILES['attach']);
@@ -138,30 +38,36 @@ class main extends BaseController
             $appKey    = Application::config()->get('aliyun')->appKey;
             $appSecret = Application::config()->get('aliyun')->appSecret;
             $aliyunRequester = & loadClass('Aliyun_ApiCurlRequest', ['appKey'=>$appKey, 'appSecret'=>$appSecret]);
+            $chapterList = array();
             foreach ($images as $_imageFile) {
                 $response = $aliyunRequester->ocrAdcanced($_imageFile);
                 if ($response->getHttpStatusCode()=='200' && $response->getBody()) {
-                    $response = json_decode($response->getBody(), true);
+                    $ocrText = json_decode($response->getBody(), true);
 
-                    $var = var_export($response, true);
-                    error_log($var, 3, $_imageFile.'.php');
+                    $ocrText = $ocrText['prism_wordsInfo'];
+
+                    $chapterList = array_merge($chapterList, $this->buildOcrText($ocrText));
+
+                    //$var = var_export($ocrText, true);
+                    //error_log($var, 3, $_imageFile.'.php');
                     //var_dump(json_decode($response->getBody(), true) );
                 }
             }
+
+            $toShowOcrStat = true;
+            View::assign('filename', basename($_FILES['attach']['name']).'.xls');
         }
-        View::assign('article_list', $article_list);
+
+        //var_dump($chapterList);
+
+        View::assign('toShowOcrStat', $toShowOcrStat);
+        View::assign('chapterList', $chapterList);
 
         View::output('test/square');
     }
 
-    public function build_ocr_text_action ()
+    protected function buildOcrText($ocrText)
     {
-        $newOcrText = array();
-        $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000001.png.php');
-        $ocrText = require(TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000002.png.php');
-        //$ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php');
-        //$ocrText = require(TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000002.png.php');
-        $ocrText = $ocrText['prism_wordsInfo'];
         foreach ($ocrText as $_key => $_ocrInfo) {
             $minX = $minY = null;
             $maxX = $maxY = null;
@@ -222,12 +128,62 @@ class main extends BaseController
         foreach ($textBlock as & $_blocks) {
             $text = '';
             foreach ($_blocks as $_block) {
-                $text .= ' ' . mb_ereg_replace ( '…+$', '', trim($_block['word'], '.·')) ;
+                $text .= ' ' . mb_ereg_replace ( '…+$', '', trim(trim($_block['word']), '.·')) ;
             }
             $_blocks = trim($text);
         }
 
-        var_dump($textBlock);
+        $excelData = [];
+        $textNum = count($textBlock);
+        for ($i=0; $i<$textNum; $i++) {
+            if (is_numeric(trim($textBlock[$i], '() ') ) && isset($textBlock[$i-1])) {
+                if (isset($textBlock[$i-2]) && mb_strpos($textBlock[$i-2], '第')===0) {
+                    $excelData[] = [$textBlock[$i-2], ''];
+                }
+                $excelData[] = [$textBlock[$i-1], $textBlock[$i]];
+            }
+        }
+
+        return $excelData;
+    }
+
+    public function build_ocr_text_action ()
+    {
+        $newOcrText = array();
+        $ocrTextFile = TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000001.png.php';
+        $ocrTextFile = TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000002.png.php';
+        $ocrTextFile = TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php';
+        $ocrTextFile = TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000002.png.php';
+        $ocrText = require($ocrTextFile);
+        $ocrText = $ocrText['prism_wordsInfo'];
+        $excelData = $this->buildOcrText($ocrText);
+
+        $phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
+        $phpExcel->export(basename($ocrTextFile) . '.xls', array('章节', '页码'), $excelData);
+
+        //var_dump($textBlock);
         View::output('test/square');
+    }
+
+    /**
+     * 下载excel文件
+     */
+    public function download_excel_action ()
+    {
+        if (isset($_POST['excelData'], $_POST['filename']) ) {
+            $phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
+            $phpExcel->export($_POST['filename'] . '.xls', array('章节', '页码'), $_POST['excelData']);  
+        } else {
+
+        }
+    }
+
+    /**
+     * 回调方法，excel在下载前， 设置下列宽度 
+     */
+    public function __setExcelCellWidth ($phpExcelModel)
+    {
+        $phpExcelModel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $phpExcelModel->getActiveSheet()->getDefaultColumnDimension('B')->setWidth(20);
     }
 }

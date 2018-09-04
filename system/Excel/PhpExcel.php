@@ -8,9 +8,15 @@ class Excel_PhpExcel
 {
     public $phpExcel;
 
-    public function __construct()
+    protected $hookBeforeDownload = null;
+
+    public function __construct($options=array())
     {
         $this->phpExcel = new PHPExcel();
+
+        if (isset($options['beforeDownload']) && is_callable($options['beforeDownload'])) {
+            $this->hookBeforeDownload = $options['beforeDownload'];
+        }
     }
 
     /**
@@ -107,10 +113,14 @@ class Excel_PhpExcel
 
         //设置活动单指数到第一个表,所以Excel打开这是第一个表
         $objPHPExcel->setActiveSheetIndex(0);
+
         ob_end_clean();//清除缓冲区,避免乱码
         header('Content-Type: application/vnd.ms-excel');
         header("Content-Disposition: attachment;filename=\"$fileName\"");
         header('Cache-Control: max-age=0');
+        if ($this->hookBeforeDownload) {
+            call_user_func($this->hookBeforeDownload, $objPHPExcel);
+        }
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 
