@@ -144,16 +144,19 @@ class main extends BaseController
 
         $excelData = [];
         $textNum = count($textBlock);
+        $lastPage = 0;
         for ($i=0; $i<$textNum; $i++) {
             if (is_numeric(trim($textBlock[$i], '() ') ) && isset($textBlock[$i-1])) {
 
-                if (isset($textBlock[$i-2]) && mb_strpos($textBlock[$i-2], '第')===0) {
+                if ($i-2 > $lastPage && isset($textBlock[$i-2]) && mb_strpos($textBlock[$i-2], '第')===0) {
                     $excelData[] = [$textBlock[$i-2], ''];
-                } else if (isset($textBlock[$i-3]) && mb_strpos($textBlock[$i-3], '第')===0) {
+                } else if ($i-3 > $lastPage && isset($textBlock[$i-3]) && mb_strpos($textBlock[$i-3], '第')===0) {
                     $text = mb_strlen($textBlock[$i-3]) > 4 ? $textBlock[$i-3] : ($textBlock[$i-3] . $textBlock[$i-2]);
                     $excelData[] = [$text, ''];
-                } else if (isset($textBlock[$i-4]) && mb_strpos($textBlock[$i-4], '第')===0) {
-                    $excelData[] = [$textBlock[$i-4] . $textBlock[$i-3]. $textBlock[$i-2], ''];
+                } else if ($i-4 > $lastPage && isset($textBlock[$i-4]) && mb_strpos($textBlock[$i-4], '第')===0) {
+                    $text = mb_strlen($textBlock[$i-4]) > 4 ? $textBlock[$i-4] : ($textBlock[$i-4] . $textBlock[$i-3]);
+                    $text = mb_strlen($text) > 4 ? $text : ($text . $textBlock[$i-2]);
+                    $excelData[] = [$text, ''];
                 } else {
                     // $j = $i-1;
                     // $hasFound = false;
@@ -173,6 +176,7 @@ class main extends BaseController
                     // $excelData[] = [$text, ''];
                 }
                 $excelData[] = [$textBlock[$i-1], $textBlock[$i]];
+                $lastPage = $i;
             }
         }
 
