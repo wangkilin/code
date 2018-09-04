@@ -7,26 +7,30 @@
 		<div class="row">
 		<?php if (isset($this->chapterList)) { ?>
 		<form id="chapter_form" method="post" action="test/download_excel/" enctype="multipart/form-data" class="form-horizontal">
-			<dl class="verify-attach">
+			<dl class="verify-attach clearfix">
 				<dt><?php _e('从PDF中识别出来的目录'); ?>:</dt>
 			</dl>
 			<dl >
-				<dt class="col-sm-5 clearfix"><?php _e('章节'); ?>:</dt>
-				<dt class="col-sm-5 clearfix"><?php _e('页码'); ?>:</dt>
+				<dt class="col-sm-4"><?php _e('章节'); ?>:</dt>
+				<dt class="col-sm-4"><?php _e('页码'); ?>:</dt>
+				<dt class="col-sm-3">&nbsp;</dt>
 			</dl>
 			<?php foreach ($this->chapterList as $row) { ?>
 			<dl >
-				<dd class="col-sm-5 clearfix">
-					<?php echo $row[0]; ?>
+				<dd class="col-sm-4">
+					<?php echo $row[0]; ?>&nbsp;
 				</dd>
-				<dd class="col-sm-5 clearfix">
-					<?php echo $row[1]; ?>
+				<dd class="col-sm-4">
+					<?php echo $row[1]; ?>&nbsp;
 				</dd>
-			<?php } ?>
+				<dd class="col-sm-3">
+					&nbsp;
+				</dd>
 			</dl>
+			<?php } ?>
 			<dl class="col-sm-12 clearfix">
 				<dd>
-				<input type="hidden" name="excelData" value="<?php echo json_encode($this->chapterList, JSON_UNESCAPED_UNICODE); ?>"/>
+				<input type="hidden" name="excelData" value='<?php echo json_encode($this->chapterList, JSON_UNESCAPED_UNICODE); ?>'/>
 				<input type="hidden" name="filename" value="<?php echo $this->filename;?>"/>	
 				<input type="submit" class="btn btn-primary btn-large" value="下载表格" />
 			    </dd>

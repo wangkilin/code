@@ -109,7 +109,7 @@ class Excel_PhpExcel
             $column++;
         }
 
-        $fileName = iconv("utf-8", "gb2312", $fileName);
+        //$fileName = iconv("utf-8", "gb2312", $fileName);
 
         //设置活动单指数到第一个表,所以Excel打开这是第一个表
         $objPHPExcel->setActiveSheetIndex(0);

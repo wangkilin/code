@@ -9,13 +9,10 @@ $config['appSecret']       = '012afbfd959ea6996ac65573f584d537';
 if (defined('ENV')) {
     switch (ENV) {
 
-        case 'home':
-            $config['commandConvertPdfToPng'] = 'pdftopng %s aliyunOcr';
-            break;
-
         case 'test':
+        case 'home':
         default:
-            $config['commandConvertPdfToPng'] = 'pdf2image  %s';
+            $config['commandConvertPdfToPng'] = 'pdftopng %s aliyunOcr';
             break;
 
     }

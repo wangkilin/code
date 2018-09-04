@@ -172,7 +172,7 @@ class main extends BaseController
     {
         if (isset($_POST['excelData'], $_POST['filename']) ) {
             $phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
-            $phpExcel->export($_POST['filename'] . '.xls', array('章节', '页码'), $_POST['excelData']);  
+            $phpExcel->export($_POST['filename'], array('章节', '页码'), json_decode($_POST['excelData'], true) );  
         } else {
 
         }
