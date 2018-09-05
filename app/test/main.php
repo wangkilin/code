@@ -32,6 +32,7 @@ class main extends BaseController
             $command = sprintf(Application::config()->get('aliyun')->commandConvertPdfToPng, $destination);
             exec($command, $output, $return);
             //var_dump($command, $output, $return);
+            @unlink($destination);
             chdir($cwd);
             $images = glob(realpath($tmpDir) . '/*.png');
             //var_dump($images);
@@ -52,7 +53,9 @@ class main extends BaseController
                     //error_log($var, 3, $_imageFile.'.php');
                     //var_dump(json_decode($response->getBody(), true) );
                 }
+                @unlink($_imageFile);
             }
+            @rmdir($tmpDir);
 
             $toShowOcrStat = true;
             View::assign('filename', basename($_FILES['attach']['name']).'.xls');
