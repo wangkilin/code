@@ -151,7 +151,7 @@ class main extends BaseController
                 if ($i-2 > $lastPage && isset($textBlock[$i-2]) && mb_strpos($textBlock[$i-2], '第')===0) {
                     $excelData[] = [$textBlock[$i-2], ''];
                 } else if ($i-3 > $lastPage && isset($textBlock[$i-3]) && mb_strpos($textBlock[$i-3], '第')===0) {
-                    $text = mb_strlen($textBlock[$i-3]) > 4 ? $textBlock[$i-3] : ($textBlock[$i-3] . $textBlock[$i-2]);
+                    $text = mb_strlen($textBlock[$i-3] . $textBlock[$i-2]) > 5 ? $textBlock[$i-3] : ($textBlock[$i-3] . $textBlock[$i-2]);
                     $excelData[] = [$text, ''];
                 } else if ($i-4 > $lastPage && isset($textBlock[$i-4]) && mb_strpos($textBlock[$i-4], '第')===0) {
                     $text = mb_strlen($textBlock[$i-4]) > 4 ? $textBlock[$i-4] : ($textBlock[$i-4] . $textBlock[$i-3]);
@@ -187,9 +187,9 @@ class main extends BaseController
     {
         $newOcrText = array();
         $ocrTextFile = TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000001.png.php';
-        $ocrTextFile = TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000002.png.php';
-        $ocrTextFile = TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php';
-        $ocrTextFile = TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000002.png.php';
+        //$ocrTextFile = TEMP_PATH . 'ocr/20180901-501005b8a4799115f8/aliyunOcr-000002.png.php';
+        //$ocrTextFile = TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000001.png.php';
+        //$ocrTextFile = TEMP_PATH . 'ocr/20180901-754335b8a4f35aa212/aliyunOcr-000002.png.php';
         $ocrText = require($ocrTextFile);
         $ocrText = $ocrText['prism_wordsInfo'];
         $excelData = $this->buildOcrText($ocrText);
@@ -197,7 +197,9 @@ class main extends BaseController
         //$phpExcel = & loadClass('Excel_PhpExcel', array('beforeDownload' => array($this, '__setExcelCellWidth')) );
         //$phpExcel->export(basename($ocrTextFile) . '.xls', array('章节', '页码'), $excelData);
 
-        var_dump($excelData);
+        //var_dump($excelData);
+        View::assign('chapterList', $excelData);
+
         View::output('test/square');
     }
 

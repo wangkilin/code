@@ -1,5 +1,21 @@
 <?php View::output('global/header.php'); ?>
-
+<style>
+.parentNode{
+    display:block;
+    cursor:pointer;
+}
+.childNode{
+    display:none;
+}
+.childNode dd:first-child{
+    text-indent:20px;
+}
+.dataItem {
+    border-width: 1px 0 0px 0;
+    border-color: #ccc;
+    border-style: dotted;
+}
+</style>
 <div class="icb-container">
 	<?php View::output('block/content_nav_menu.php'); ?>
 
@@ -10,15 +26,25 @@
 			<dl class="verify-attach clearfix">
 				<dt><?php _e('从PDF中识别出来的目录'); ?>:</dt>
 			</dl>
-			<dl >
+			<dl class="dataItem">
 				<dt class="col-sm-4"><?php _e('章节'); ?>:</dt>
 				<dt class="col-sm-4"><?php _e('页码'); ?>:</dt>
 				<dt class="col-sm-3">&nbsp;</dt>
 			</dl>
-			<?php foreach ($this->chapterList as $row) { ?>
-			<dl >
+            <?php
+            $i = 0;
+            foreach ($this->chapterList as $row) {
+                if (''===$row[1]) {
+                    $i++;
+                    $class='parentNode';
+                } else {
+                    $class='childNode';
+                }
+                $dataSet = 'block' . $i;
+            ?>
+			<dl class="<?php echo $class;?> dataItem" data-set="<?php echo $dataSet;?>">
 				<dd class="col-sm-4">
-					<?php echo $row[0]; ?>&nbsp;
+					<?php echo ''===$row[1]? '<b>'.$row[0].'</b>':$row[0]; ?>&nbsp;
 				</dd>
 				<dd class="col-sm-4">
 					<?php echo $row[1]; ?>&nbsp;
@@ -29,9 +55,10 @@
 			</dl>
 			<?php } ?>
 			<dl class="col-sm-12 clearfix">
+                <dt>&nbsp;</dt>
 				<dd>
 				<input type="hidden" name="excelData" value='<?php echo json_encode($this->chapterList, JSON_UNESCAPED_UNICODE); ?>'/>
-				<input type="hidden" name="filename" value="<?php echo $this->filename;?>"/>	
+				<input type="hidden" name="filename" value="<?php echo $this->filename;?>"/>
 				<input type="submit" class="btn btn-primary btn-large" value="下载表格" />
 			    </dd>
 			</dl>
@@ -54,5 +81,11 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+$('.parentNode').click(function(){
+    var dataSet = $(this).attr('data-set');
+    $('.childNode').filter('[data-set='+dataSet+']').toggle();
+});
+</script>
 
 <?php View::output('global/footer.php'); ?>
