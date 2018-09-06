@@ -56,7 +56,7 @@ class core_cache
 		}
 		else if ($this->backendName == 'File')
 		{
-			$cache_dir = ROOT_PATH . 'cache/';
+			$cache_dir = CACHE_PATH;
 
 			if (!file_exists($cache_dir . 'index.html'))
 			{
