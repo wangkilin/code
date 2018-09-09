@@ -17,5 +17,5 @@ if (defined('ENV')) {
 
     }
 } else {
-    $config['commandConvertPdfToPng'] = 'pdf2image  %s';
+    $config['commandConvertPdfToPng'] = 'pdftopng %s aliyunOcr';
 }
