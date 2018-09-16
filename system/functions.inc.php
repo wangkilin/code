@@ -1028,6 +1028,13 @@ function _t($string, $replace = null)
         return Application::lang()->translate($string, $replace);
     }
 }
+/**
+ * _t 别名
+ */
+function i18n($string, $replace = null)
+{
+    return _t($string, $replace = null);
+}
 
 /**
  * 格式化输出相应的语言
@@ -1120,6 +1127,18 @@ function is_mobile($ignore_cookie = false)
     }
 
     return false;
+}
+
+
+/**
+ * 判断是合格的手机客户端后， 跳转到url
+ */
+function mobileRedirect ($url, $ignoreCookie=false)
+{
+    // 移动端请求， 重定向到移动页面
+    if (is_mobile($ignoreCookie)) {
+        HTTP::redirect($url);
+    }
 }
 
 /**

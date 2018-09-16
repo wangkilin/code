@@ -29,9 +29,8 @@ class main extends BaseController
     public function index_action()
     {
         // 移动端请求， 重定向到移动页面
-        if (is_mobile()) {
-            HTTP::redirect('/m/index/' . $_GET['id']);
-        }
+        mobileRedirect('/m/index/' . $_GET['id']);
+
         // 已登录用户
         if ($this->user_id) {
             $this->crumb(Application::lang()->_t('发现'), '/index');
@@ -40,7 +39,7 @@ class main extends BaseController
                 HTTP::redirect('/account/complete_profile/');
             }
         }
-
+        // 获取分类
         if ($_GET['category']) {
             if (is_digits($_GET['category'])) {
                 $category_info = $this->model('system')->get_category_info($_GET['category']);
