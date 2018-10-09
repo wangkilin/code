@@ -3,85 +3,65 @@ class postsModel extends Model
 {
     public function set_posts_index($post_id, $post_type, $data = null)
     {
-        if ($data)
-        {
+        if ($data) {
             $result = $data;
-        }
-        else
-        {
-            switch ($post_type)
-            {
+        } else {
+            switch ($post_type) {
                 case 'question':
                     $result = $this->fetch_row('question', 'question_id = ' . intval($post_id));
-
                     break;
 
                 case 'article':
-                    $result = $this->fetch_row('article', 'id = ' . intval($post_id));
-
-                    break;
-
                 case 'project':
-                    $result = $this->fetch_row('project', 'id = ' . intval($post_id));
+                    $result = $this->fetch_row($post_type, 'id = ' . intval($post_id));
 
                     break;
             }
 
-            if (!$result)
-            {
+            if (!$result){
                 return false;
             }
         }
 
-        switch ($post_type)
-        {
+
+        $data = array(
+            'add_time'      => $result['add_time'],
+            'update_time'   => $result['update_time'],
+            'category_id'   => $result['category_id'],
+            'is_recommend'  => $result['is_recommend'],
+            'view_count'    => $result['view_count'],
+            'anonymous'     => $result['anonymous'],
+            'uid'           => $result['published_uid'],
+            'lock'          => $result['lock'],
+            'agree_count'   => $result['agree_count'],
+            'answer_count'  => $result['answer_count']
+        );
+        switch ($post_type) {
             case 'question':
-                $data = array(
-                    'add_time' => $result['add_time'],
-                    'update_time' => $result['update_time'],
-                    'category_id' => $result['category_id'],
-                    'is_recommend' => $result['is_recommend'],
-                    'view_count' => $result['view_count'],
-                    'anonymous' => $result['anonymous'],
-                    'popular_value' => $result['popular_value'],
-                    'uid' => $result['published_uid'],
-                    'lock' => $result['lock'],
-                    'agree_count' => $result['agree_count'],
-                    'answer_count' => $result['answer_count']
-                );
+                $data['popular_value'] = $result['popular_value'];
 
                 break;
 
             case 'article':
-                $data = array(
-                    'add_time' => $result['add_time'],
-                    'update_time' => $result['add_time'],
-                    'category_id' => $result['category_id'],
-                    'view_count' => $result['views'],
-                    'anonymous' => 0,
-                    'uid' => $result['uid'],
-                    'agree_count' => $result['votes'],
-                    'answer_count' => $result['comments'],
-                    'lock' => $result['lock'],
-                    'is_recommend' => $result['is_recommend'],
-                );
+                $data['update_time'] = $result['add_time'];
+                $data['view_count']  = $result['views'];
+                $data['anonymous']   = 0;
+                $data['uid']         = $result['uid'];
+                $data['agree_count'] = $result['votes'];
+                $data['answer_count'] = $result['comments'];
 
                 break;
 
             case 'project':
-                $data = array(
-                    'add_time' => $result['add_time'],
-                    'update_time' => $result['update_time'],
-                    'category_id' => 0,
-                    'is_recommend' => 0,
-                    'view_count' => $result['views'],
-                    'anonymous' => 0,
-                    'popular_value' => 0,
-                    'uid' => $result['uid'],
-                    'lock' => 0,
-                    'agree_count' => 0,
-                    'answer_count' => 0
-                );
+                $data['category_id']  = 0;
+                $data['is_recommend'] = 0;
+                $data['view_count']   = $result['views'];
+                $data['anonymous']    = 0;
+                $data['popular_value'] = 0;
+                $data['uid']           = $result['uid'];
+                $data['lock']          = 0;
+                $data['agree_count']   = 0;
+                $data['answer_count']  = 0;
 
                 break;
         }

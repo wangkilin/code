@@ -1239,6 +1239,9 @@ class ajax extends AdminController
         H::ajax_json_output(Application::RSM(null, 1, null));
     }
 
+    /**
+     * 上传导航菜单图片
+     */
     public function nav_menu_upload_action()
     {
         if (!$this->user_info['permission']['is_administortar']) {
@@ -1275,11 +1278,12 @@ class ajax extends AdminController
 
         if ($upload_data['is_image'] == 1) {
             Application::image()->initialize(array(
-                'quality' => 90,
+                'quality'      => 90,
                 'source_image' => $upload_data['full_path'],
-                'new_image' => $upload_data['full_path'],
-                'width' => 50,
-                'height' => 50
+                'new_image'    => $upload_data['full_path'],
+                'width'        => 50,
+                'height'       => 50,
+                'scale'        => IMAGE_CORE_SC_BEST_RESIZE_WIDTH,
             ))->resize();
         }
 

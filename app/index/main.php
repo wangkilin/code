@@ -39,7 +39,7 @@ class main extends BaseController
                 HTTP::redirect('/account/complete_profile/');
             }
         }
-        // 获取分类
+        // 查看分类下的列表。 先获取分类信息
         if ($_GET['category']) {
             if (is_digits($_GET['category'])) {
                 $category_info = $this->model('system')->get_category_info($_GET['category']);
@@ -47,26 +47,23 @@ class main extends BaseController
                 $category_info = $this->model('system')->get_category_info_by_url_token($_GET['category']);
             }
         }
-
+        // 获取到分类信息， 将分类信息传递到前端
         if ($category_info) {
             View::assign('category_info', $category_info);
 
             $this->crumb($category_info['title'], '/category-' . $category_info['id']);
-
+            // 组装meta关键字
             $meta_description = $category_info['title'];
-
-            if ($category_info['description'])
-            {
+            if ($category_info['description']){
                 $meta_description .= ' - ' . $category_info['description'];
             }
 
             View::set_meta('description', $meta_description);
         }
-
+        // 查看并准备模版中用到的块数据
         $this->_prepareDataByCheckingTplFile('index/index');
 
-        if (! $_GET['sort_type'] AND !$_GET['is_recommend'])
-        {
+        if (! $_GET['sort_type'] AND !$_GET['is_recommend']){
             $_GET['sort_type'] = 'new';
         }
 
