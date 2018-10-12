@@ -74,7 +74,12 @@ function download_url($file_name, $url)
     return get_js_url('/file/download/file_name-' . base64_encode($file_name) . '__url-' . base64_encode($url));
 }
 
-// 检测当前操作是否需要验证码
+/**
+ * 检测当前操作是否需要验证码
+ * @param string $permission_tag 权限标识
+ * 
+ * @return bool
+ */
 function human_valid($permission_tag)
 {
     if (! is_array(Application::session()->human_valid))

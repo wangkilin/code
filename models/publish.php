@@ -313,7 +313,16 @@ class publishModel extends Model
 
         return $question_id;
     }
-
+    /**
+     * 发表文章
+     * @param string $title
+     * @param string $message
+     * @param int $uid
+     * @param array $topics
+     * @param int $category_id
+     * @param string $attach_access_key
+     * @param bool $create_topic
+     */
     public function publish_article($title, $message, $uid, $topics = null, $category_id = null, $attach_access_key = null, $create_topic = true)
     {
         if ($article_id = $this->insert('article', array(

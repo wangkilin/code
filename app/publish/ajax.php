@@ -596,6 +596,9 @@ class ajax extends BaseController
         }
     }
 
+    /**
+     * 发表文章
+     */
     public function publish_article_action()
     {
         if (!$this->user_info['permission']['publish_article']) {
@@ -606,34 +609,29 @@ class ajax extends BaseController
         {
             H::ajax_json_output(Application::RSM(null, - 1, Application::lang()->_t('请输入文章标题')));
         }
-
-        if (get_setting('category_enable') == 'N')
-        {
+        // 没有设置文章分类， 统一设置到分类id=1中；
+        if (get_setting('category_enable') == 'N') {
             $_POST['category_id'] = 1;
         }
 
-        if (!$_POST['category_id'])
-        {
+        if (!$_POST['category_id']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择文章分类')));
         }
-
-        if (get_setting('question_title_limit') > 0 AND cjk_strlen($_POST['title']) > get_setting('question_title_limit'))
-        {
+        // 检查文章标题长度
+        if (get_setting('question_title_limit') > 0 AND cjk_strlen($_POST['title']) > get_setting('question_title_limit')) {
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('文章标题字数不得大于 %s 字节', get_setting('question_title_limit'))));
         }
-
-        if (!$this->user_info['permission']['publish_url'] AND FORMAT::outside_url_exists($_POST['message']))
-        {
+        // 检查是否允许文章中发布外部链接的内容
+        if (!$this->user_info['permission']['publish_url'] AND FORMAT::outside_url_exists($_POST['message'])) {
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('你所在的用户组不允许发布站外链接')));
         }
-
+        // 只允许插入当前页面上传的附件
         if (!$this->model('publish')->insert_attach_is_self_upload($_POST['message'], $_POST['attach_ids']))
         {
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('只允许插入当前页面上传的附件')));
         }
-
-        if (human_valid('question_valid_hour') AND !Application::captcha()->is_validate($_POST['seccode_verify']))
-        {
+        // 如开启验证码， 检查验证码是否正确
+        if (human_valid('question_valid_hour') AND !Application::captcha()->is_validate($_POST['seccode_verify'])) {
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请填写正确的验证码')));
         }
 
