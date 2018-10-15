@@ -14,7 +14,7 @@ defined('iCodeBang_Com') OR die('Access denied!');
 
 class postModuleModel extends Model
 {
-    protected $table = 'module';
+    protected $table = 'post_module';
 
     /**
      * 根据指定条件获取话题列表

@@ -45,7 +45,7 @@
                     <tfoot class="mod-foot-center">
                     <tr>
                         <td colspan="3">
-                        <form id="add_module_form" action="admin/ajax/save_module/" method="post" onsubmit="return false">
+                        <form id="add_module_form" action="admin/ajax/post_module_save/" method="post" onsubmit="return false">
                             <div class="form-group col-sm-5">
                                 <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('模块标题'); ?></span>
                                 <div class="col-sm-6 col-xs-12">
@@ -67,9 +67,6 @@
                 </table>
             </div>
         </div>
-    </div>
-    <div id="target-category" class="collapse">
-        <?php echo $this->target_category; ?>
     </div>
 </div>
 

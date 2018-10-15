@@ -21,7 +21,7 @@ class ajax extends AdminController
     }
 
     /**
-     * 保存标签分类内容
+     * 保存模块内容
      */
     public function post_module_save_action()
     {
@@ -32,50 +32,38 @@ class ajax extends AdminController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入分类名称')));
         }
         $set['title'] = $_POST['title'];
-        $set['description'] = $_POST['description'];
 
         if ($_POST['url_token']) {
             if (!preg_match("/^(?!__)[a-zA-Z0-9_]+$/i", $_POST['url_token'])) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名只允许输入英文或数字')));
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名只允许输入英文或数字')));
             }
 
             if (preg_match("/^[\d]+$/i", $_POST['url_token']) AND ($_POST['id'] != $_POST['url_token'])) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名不可以全为数字')));
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名不可以全为数字')));
             }
 
-            if (($category = $this->model('tag')->getTagCategoryByToken($_POST['url_token']))
-                    AND $category['id'] != $_POST['id']) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名已经被占用请更换一个')));
+            if (($module = $this->model('postModule')->getModuleByToken($_POST['url_token']))
+                    AND $module['id'] != $_POST['id']) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名已经被占用请更换一个')));
             }
             $set['url_token'] = $_POST['url_token'];
         }
 
-        if ($_POST['id']) {
-            $category = $this->model('tag')->getTagCategoryById($_POST['id']);
-            if (! $category) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('标签分类不存在！')));
-            }
-            $this->model('tag')->updateTagCategory($_POST['id'], $set);
-
-        } else {
-            $categoryId = $this->model('tag')->addTagCategory($set);
-        }
-
         H::ajax_json_output(Application::RSM(array(
-            'url' => get_js_url('/admin/tag/list_category/')
+            'url' => get_js_url('/admin/category/module/')
         ), 1, null));
     }
 
     /**
-     * 删除标签分类数据
+     * 删除模块数据
      */
     public function post_module_remove_action()
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
         if (empty($_POST['ids'])) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择模块进行操作')));
         }
-        $this->model('tag')->removeTagCategoryByIds($_POST['ids']);
+        $this->model('postModule')->removeByIds($_POST['ids']);
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }

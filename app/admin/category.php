@@ -54,11 +54,7 @@ class category extends AdminController
      */
     public function module_action ()
     {
-        View::assign('list', json_decode($this->model('system')->build_category_json('question'), true));
-
-        View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, false));
-
-        View::assign('target_category', $this->model('system')->build_category_html('question', 0, null));
+        View::assign('list', $this->model('postModule')->getModuleList(null, 'id DESC' ,PHP_INT_MAX));
         View::output('admin/category/module');
     }
 
