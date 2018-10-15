@@ -49,9 +49,32 @@ class category extends AdminController
         View::import_js('js/fileupload.js');
         View::output('admin/category/edit');
     }
-
+    /**
+     * 可发布内容的模块列表
+     */
     public function module_action ()
     {
+        View::assign('list', json_decode($this->model('system')->build_category_json('question'), true));
+
+        View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, false));
+
+        View::assign('target_category', $this->model('system')->build_category_html('question', 0, null));
         View::output('admin/category/module');
+    }
+
+    /**
+     * 显示可发布内容模块的编辑表单
+     */
+    public function edit_post_module_action ()
+    {
+        if (!$category_info = $this->model('system')->get_category_info($_GET['category_id']))
+        {
+            H::redirect_msg(Application::lang()->_t('指定分类不存在'), '/admin/category/list/');
+        }
+
+        View::assign('category', $category_info);
+        View::assign('category_option', $this->model('system')->build_category_html($category_info['type'], 0, $category['parent_id'], null, false));
+        View::import_js('js/fileupload.js');
+        View::output('admin/category/edit');
     }
 }

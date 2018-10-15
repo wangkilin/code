@@ -21,6 +21,66 @@ class ajax extends AdminController
     }
 
     /**
+     * 保存标签分类内容
+     */
+    public function post_module_save_action()
+    {
+        $this->checkPermission(self::IS_ROLE_ADMIN);
+
+        $set = array();
+        if (trim($_POST['title']) == '') {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入分类名称')));
+        }
+        $set['title'] = $_POST['title'];
+        $set['description'] = $_POST['description'];
+
+        if ($_POST['url_token']) {
+            if (!preg_match("/^(?!__)[a-zA-Z0-9_]+$/i", $_POST['url_token'])) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名只允许输入英文或数字')));
+            }
+
+            if (preg_match("/^[\d]+$/i", $_POST['url_token']) AND ($_POST['id'] != $_POST['url_token'])) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名不可以全为数字')));
+            }
+
+            if (($category = $this->model('tag')->getTagCategoryByToken($_POST['url_token']))
+                    AND $category['id'] != $_POST['id']) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类别名已经被占用请更换一个')));
+            }
+            $set['url_token'] = $_POST['url_token'];
+        }
+
+        if ($_POST['id']) {
+            $category = $this->model('tag')->getTagCategoryById($_POST['id']);
+            if (! $category) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('标签分类不存在！')));
+            }
+            $this->model('tag')->updateTagCategory($_POST['id'], $set);
+
+        } else {
+            $categoryId = $this->model('tag')->addTagCategory($set);
+        }
+
+        H::ajax_json_output(Application::RSM(array(
+            'url' => get_js_url('/admin/tag/list_category/')
+        ), 1, null));
+    }
+
+    /**
+     * 删除标签分类数据
+     */
+    public function post_module_remove_action()
+    {
+        $this->checkPermission(self::IS_ROLE_ADMIN);
+        if (empty($_POST['ids'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
+        }
+        $this->model('tag')->removeTagCategoryByIds($_POST['ids']);
+
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
+
+    /**
      * 标签批量管理： 批量，设置分类
      */
     public function tag_manage_action()
