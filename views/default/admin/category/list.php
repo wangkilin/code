@@ -46,16 +46,26 @@
                     <tr>
                         <td colspan="3">
                         <form id="add_category_form" action="admin/ajax/save_category/" method="post" onsubmit="return false">
-                            <div class="form-group col-sm-5">
-                                <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('分类标题'); ?></span>
-                                <div class="col-sm-6 col-xs-12">
+                            <div class="form-group col-sm-3">
+                                <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('标题'); ?></span>
+                                <div class="col-sm-9 col-xs-12">
                                     <input type="text" class="form-control" name="title" />
                                 </div>
                             </div>
 
-                            <div class="form-group col-sm-5">
-                                <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('父级分类') ?>:</span>
-                                <div class="col-sm-6 col-xs-12">
+                            <div class="form-group col-sm-3">
+                                <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('父级') ?></span>
+                                <div class="col-sm-9 col-xs-12">
+                                    <select name="parent_id" class="form-control">
+                                        <option value="0"><?php _e('无'); ?></option>
+                                        <?php echo $this->category_option; ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-4">
+                                <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('所属模块') ?></span>
+                                <div class="col-sm-9 col-xs-12">
                                     <select name="parent_id" class="form-control">
                                         <option value="0"><?php _e('无'); ?></option>
                                         <?php echo $this->category_option; ?>
