@@ -100,7 +100,7 @@ class postModuleModel extends Model
         if (! $itemInfo = $this->getModuleById($id)) {
             return $result;
         }
-        if ($set = $this->processCategoryData($data)) {
+        if ($set = $this->processModuleData($data)) {
             if (isset($set['url_token']) && $set['url_token']==$id) {
                 $set['url_token'] = '';
             }

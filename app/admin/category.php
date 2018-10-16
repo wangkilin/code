@@ -63,14 +63,13 @@ class category extends AdminController
      */
     public function edit_post_module_action ()
     {
-        if (!$category_info = $this->model('system')->get_category_info($_GET['category_id']))
+        if (!$itemInfo = $this->model('postModule')->getModuleById($_GET['id']))
         {
             H::redirect_msg(Application::lang()->_t('指定分类不存在'), '/admin/category/list/');
         }
 
-        View::assign('category', $category_info);
-        View::assign('category_option', $this->model('system')->build_category_html($category_info['type'], 0, $category['parent_id'], null, false));
+        View::assign('itemInfo', $itemInfo);
         View::import_js('js/fileupload.js');
-        View::output('admin/category/edit');
+        View::output('admin/category/edit_module');
     }
 }

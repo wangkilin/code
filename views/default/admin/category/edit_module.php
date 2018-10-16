@@ -2,8 +2,8 @@
 <?php View::output('admin/global/nav_menu.php'); ?>
 
 <div class="icb-content-wrap">
-	<form action="admin/ajax/save_module/" id="module_form" method="post" onsubmit="return false">
-	<input type="hidden" name="category_id" value="<?php echo $this->category['id']; ?>" />
+	<form action="admin/ajax/post_module_save/" id="module_form" method="post" onsubmit="return false">
+	<input type="hidden" name="id" value="<?php echo $this->itemInfo['id']; ?>" />
 	<div class="mod">
 		<div class="mod-head">
 			<h3>
@@ -12,14 +12,14 @@
 		</div>
 		<div class="tab-content mod-content">
 			<table class="table table-striped">
-				<?php if ($this->category) { ?>
+				<?php if ($this->itemInfo) { ?>
 				<?php } ?>
 				<tr>
 					<td>
 						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('模块标题'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
-								<input class="form-control" type="text" name="title" value="<?php echo $this->module['title']; ?>" />
+								<input class="form-control" type="text" name="title" value="<?php echo $this->itemInfo['title']; ?>" />
 							</div>
 						</div>
 					</td>
@@ -31,7 +31,7 @@
 							<div class="col-sm-9 col-xs-8">
 								<span class="col-sm-1 mod-text-inline">/index/module-</span>
 								<div class="col-xs-11 col-sm-9 pull-right nopadding">
-									<input type="text" name="url_token" class="form-control" value="<?php echo $this->module['url_token']; ?>" />
+									<input type="text" name="url_token" class="form-control" value="<?php echo $this->itemInfo['url_token']; ?>" />
 								</div>
 							</div>
 						</div>

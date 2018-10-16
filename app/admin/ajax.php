@@ -63,13 +63,13 @@ class ajax extends AdminController
     /**
      * 删除模块数据
      */
-    public function post_module_remove_action()
+    public function remove_module_action()
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
-        if (empty($_POST['ids'])) {
+        if (empty($_POST['id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择模块进行操作')));
         }
-        $this->model('postModule')->removeByIds($_POST['ids']);
+        $this->model('postModule')->deleteByIds(array($_POST['id']));
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }

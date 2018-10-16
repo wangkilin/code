@@ -34,9 +34,8 @@
                             </div>
                         </td>
                         <td >
-                            <a href="admin/category/edit/category_id-<?php echo $val['id']; ?>" data-toggle="tooltip" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>"></a>
-                            <a onclick="AWS.ajax_request(G_BASE_URL + '/admin/ajax/remove_category/', 'category_id=<?php echo $val['id'];?>');" data-toggle="tooltip" class="icon icon-trash md-tip" title="<?php _e('删除'); ?>"></a>
-                            <a data-id="<?php echo $val['id']; ?>" data-name="<?php echo $val['title']?>" data-url="admin/category/move_contents/category_id-" data-toggle="tooltip" class="icon icon-transfer md-tip move" title="<?php _e('批量移动'); ?>"></a>
+                            <a href="admin/category/edit_post_module/id-<?php echo $val['id']; ?>" data-toggle="tooltip" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>"></a>
+                            <a onclick="ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/remove_module/', 'id=<?php echo $val['id'];?>');" data-toggle="tooltip" class="icon icon-trash md-tip" title="<?php _e('删除'); ?>"></a>
                         </td>
                     </tr>
                     <?php } ?>
