@@ -17,7 +17,7 @@
                     <thead>
                     <tr>
                         <th><?php _e('模块标题'); ?></th>
-                        <th><?php _e('排序'); ?></th>
+                        <th><?php _e('别名'); ?></th>
                         <th><?php _e('操作'); ?></th>
                     </tr>
                     </thead>
@@ -30,7 +30,7 @@
                         </td>
                         <td>
                             <div class="col-sm-6 clo-xs-12 col-lg-offset-3">
-                                <input type="text" class="form-control sort-action" name="category[<?php echo $val['id']; ?>][sort]" value="<?php echo $val['sort']; ?>" />
+                                <input type="text" class="form-control sort-action" name="category[<?php echo $val['id']; ?>][sort]" value="<?php echo $val['url_token']; ?>" />
                             </div>
                         </td>
                         <td >

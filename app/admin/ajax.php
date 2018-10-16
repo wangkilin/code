@@ -48,6 +48,12 @@ class ajax extends AdminController
             }
             $set['url_token'] = $_POST['url_token'];
         }
+        if ($_POST['id']) {
+            $this->model('postModule')->updateModule($_POST['id'], $set);
+        } else {
+
+            $id = $this->model('postModule')->addModule($set['title'], $set['url_token']);
+        }
 
         H::ajax_json_output(Application::RSM(array(
             'url' => get_js_url('/admin/category/module/')

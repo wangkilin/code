@@ -93,7 +93,7 @@ class postModuleModel extends Model
      * @param array $data 分类数据列表
      * @return number
      */
-    public function updateCategory($id, $data)
+    public function updateModule($id, $data)
     {
         $id = intval($id);
         $result = false;
@@ -138,6 +138,19 @@ class postModuleModel extends Model
         }
 
         return $set;
+    }
+    /**
+     * 添加postModule
+     * @param string $title 标题
+     * @param string $urlToken url token
+     */
+    public function addModule ($title, $urlToken)
+    {
+        $data = $this->processModuleData (array('title'=>$title, 'url_token'=>$urlToken));
+        if($data) {
+            return $this->insert($this->table, $data);
+        }
+        return null;
     }
 
 
