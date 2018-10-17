@@ -30,7 +30,7 @@ class category extends AdminController
     {
         View::assign('list', json_decode($this->model('system')->build_category_json('question'), true));
 
-        View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, false));
+        View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, true));
 
         View::assign('target_category', $this->model('system')->build_category_html('question', 0, null));
 

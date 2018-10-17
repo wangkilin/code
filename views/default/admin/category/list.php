@@ -17,6 +17,7 @@
                     <thead>
                     <tr>
                         <th><?php _e('分类标题'); ?></th>
+                        <th><?php _e('别名'); ?></th>
                         <th><?php _e('排序'); ?></th>
                         <th><?php _e('操作'); ?></th>
                     </tr>
@@ -29,14 +30,21 @@
                             <a href="index/category-<?php echo ($val['url_token']) ? $val['url_token'] : $val['id']; ?>"><?php echo $val['title']; ?></a>
                         </td>
                         <td>
-                            <div class="col-sm-6 clo-xs-12 col-lg-offset-3">
-                                <input type="text" class="form-control sort-action" name="category[<?php echo $val['id']; ?>][sort]" value="<?php echo $val['sort']; ?>" />
+                            <div class="col-sm-12 clo-xs-12 col-lg-offset-1">
+                            <?php echo $val['url_token']; ?>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="col-sm-10 clo-xs-10 col-lg-offset-1">
+                                <input type="text" class="col-sm-10 clo-xs-10 form-control sort-action" name="category[<?php echo $val['id']; ?>][sort]" value="<?php echo $val['sort']; ?>" />
                             </div>
                         </td>
                         <td >
+                            <div class="col-sm-12 clo-xs-12">
                             <a href="admin/category/edit/category_id-<?php echo $val['id']; ?>" data-toggle="tooltip" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>"></a>
                             <a onclick="AWS.ajax_request(G_BASE_URL + '/admin/ajax/remove_category/', 'category_id=<?php echo $val['id'];?>');" data-toggle="tooltip" class="icon icon-trash md-tip" title="<?php _e('删除'); ?>"></a>
                             <a data-id="<?php echo $val['id']; ?>" data-name="<?php echo $val['title']?>" data-url="admin/category/move_contents/category_id-" data-toggle="tooltip" class="icon icon-transfer md-tip move" title="<?php _e('批量移动'); ?>"></a>
+                            </div>
                         </td>
                     </tr>
                     <?php } ?>
@@ -52,8 +60,14 @@
                                     <input type="text" class="form-control" name="title" />
                                 </div>
                             </div>
-
                             <div class="form-group col-sm-3">
+                                <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('别名'); ?></span>
+                                <div class="col-sm-9 col-xs-12">
+                                    <input type="text" class="form-control" name="url_token" />
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-4">
                                 <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('父级') ?></span>
                                 <div class="col-sm-9 col-xs-12">
                                     <select name="parent_id" class="form-control">
@@ -63,7 +77,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-sm-4">
+                            <!-- <div class="form-group col-sm-4">
                                 <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('所属模块') ?></span>
                                 <div class="col-sm-9 col-xs-12">
                                     <select name="parent_id" class="form-control">
@@ -71,7 +85,7 @@
                                         <?php echo $this->category_option; ?>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-sm-2 col-xs-12">
                              <a onclick="AWS.ajax_post($('#add_category_form'));" class="btn-primary btn"><?php _e('添加分类'); ?></a>
                             </div>

@@ -29,25 +29,27 @@ class ajax extends AdminController
 
         $set = array();
         if (trim($_POST['title']) == '') {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入分类名称')));
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入模块名称')));
         }
         $set['title'] = $_POST['title'];
-
-        if ($_POST['url_token']) {
-            if (!preg_match("/^(?!__)[a-zA-Z0-9_]+$/i", $_POST['url_token'])) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名只允许输入英文或数字')));
-            }
-
-            if (preg_match("/^[\d]+$/i", $_POST['url_token']) AND ($_POST['id'] != $_POST['url_token'])) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名不可以全为数字')));
-            }
-
-            if (($module = $this->model('postModule')->getModuleByToken($_POST['url_token']))
-                    AND $module['id'] != $_POST['id']) {
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名已经被占用请更换一个')));
-            }
-            $set['url_token'] = $_POST['url_token'];
+        if (trim($_POST['url_token']) == '') {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入模块代码')));
         }
+
+        if (!preg_match("/^(?!__)[a-zA-Z0-9_]+$/i", $_POST['url_token'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名只允许输入英文或数字')));
+        }
+
+        if (preg_match("/^[\d]+$/i", $_POST['url_token']) AND ($_POST['id'] != $_POST['url_token'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名不可以全为数字')));
+        }
+
+        if (($module = $this->model('postModule')->getModuleByToken($_POST['url_token']))
+                AND $module['id'] != $_POST['id']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('模块别名已经被占用请更换一个')));
+        }
+        $set['url_token'] = $_POST['url_token'];
+
         if ($_POST['id']) {
             $this->model('postModule')->updateModule($_POST['id'], $set);
         } else {
