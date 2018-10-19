@@ -78,30 +78,30 @@ class systemModel extends Model
     /* 获取分类 HTML 数据 */
     public function build_category_html($type, $parent_id = 0, $selected_id = 0, $prefix = '', $child = true)
     {
-        if (!$category_list = $this->fetch_category($type, $parent_id))
-        {
+        static $categoryList = array();
+        if (! $categoryList && $child=true) {
+
+        }
+        if (!$category_list = $this->fetch_category($type, $parent_id)) {
             return false;
         }
 
-        if ($prefix)
-        {
-            $_prefix = $prefix . ' ';
+        if ($prefix) {
+            $_prefix = $prefix . '|__';
         }
 
-        foreach ($category_list AS $category_id => $val)
-        {
-            if ($selected_id == $val['id'])
-            {
-                $html .= '<option value="' . $category_id . '" selected="selected">' . $_prefix . $val['title'] . '</option>';
+        foreach ($category_list AS $category_id => $val) {
+            if ($selected_id == $val['id']) {
+                $html .= '<option value="' . $category_id . '" selected="selected" data-module="'.$val['module'].'">' . $_prefix . $val['title'] . '</option>';
             }
             else
             {
-                $html .= '<option value="' . $category_id . '">' . $_prefix . $val['title'] . '</option>';
+                $html .= '<option value="' . $category_id . '" data-module="'.$val['module'].'">' . $_prefix . $val['title'] . '</option>';
             }
 
             if ($child AND $val['child'])
             {
-                $html .= $this->build_category_html($type, $val['id'], $selected_id, $prefix . '--');
+                $html .= $this->build_category_html($type, $val['id'], $selected_id, $prefix . '&nbsp; &nbsp; ');
             }
             else
             {
