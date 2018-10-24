@@ -68,5 +68,7 @@
         </div>
     </div>
 </div>
-
+<script type="text/javascript">
+    $(function () {});
+</script>
 <?php View::output('admin/global/footer.php'); ?>

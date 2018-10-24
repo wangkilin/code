@@ -32,7 +32,7 @@ class categoryModel extends Model
                 if (!$val['url_token']) {
                     $_list[$key]['url_token'] = rawurlencode($val['title']);
                 }
-                $list[$_list[$key]['id']] = & $_list[$key];
+                $list[$_list[$key]['id']] = $_list[$key];
             }
         }
 
@@ -253,6 +253,65 @@ class categoryModel extends Model
         }
 
         return true;
+    }
+
+    /**
+     * 获取分类列表
+     */
+    public function getCategoryListByType($type)
+    {
+        $category_list = array();
+
+        $category_all = $this->fetch_all('category', '`type` = \'' . $this->quote($type) . '\'', 'id ASC');
+
+        foreach($category_all as $key => $val)
+        {
+            if (!$val['url_token'])
+            {
+                $val['url_token'] = $val['id'];
+            }
+
+            $category_list[$val['id']] = $val;
+        }
+
+        return $category_list;
+    }
+
+    public function getAllCategories ($bindKey=null)
+    {
+        static $categoryList = null;
+        if (! is_array($categoryList) ) {
+            $categoryList = $this->fetch_all('category', '`type` = \'' . $this->quote($type) . '\'', 'id ASC');
+        }
+        if ($bindKey && $categoryList) {
+            $keys = array_column($categoryList, $bindKey);
+
+            return array_combine($keys, $categoryList);
+        }
+
+        return $categoryList;
+    }
+
+    /**
+     * 获取指定分类下的子集id和本身id列表
+     * 
+     * @param int $categoryId 分类id
+     * @return array 分类id列表
+     */
+    public function getCategoryAndChildIds($categoryId)
+    {
+        $ids= array(intval($categoryId));
+        $categoryList = $this->getAllCategories('id');
+        if(isset($categoryList[$categoryId])) {
+            $path = $categoryList[$categoryId]['path'] . $categoryId . '/';
+            foreach ($categoryList as $_item) {
+                if (strpos($_item['path'], $path)===0) {
+                    $ids [] = $_item['id'];
+                }
+            }
+        }
+
+        return $ids;
     }
 
 

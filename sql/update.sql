@@ -10,3 +10,7 @@ ALTER TABLE `icb_post_module`
   ADD PRIMARY KEY (`id`);
 ALTER TABLE `icb_post_module`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id';
+
+-- 20181024
+alter table icb_category 
+  add path varchar(255) not null default '/' comment '分类父级路径' after parent_id;

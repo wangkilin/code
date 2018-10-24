@@ -956,9 +956,9 @@ function array_random($arr)
 /**
  * 获得二维数据中第二维指定键对应的值，并组成新数组 (不支持二维数组)
  *
- * @param  array
- * @param  string
- * @return array
+ * @param  array $array 数组列表
+ * @param  string $key  数组键值名
+ * @return array 
  */
 function fetch_array_value($array, $key)
 {
