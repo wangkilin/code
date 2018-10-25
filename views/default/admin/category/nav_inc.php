@@ -9,7 +9,7 @@
       <a href="#edit" data-toggle="tab"><?php _e('分类编辑'); ?></a>
     </li>
     <?php } ?>
-    <!-- <li<?php echo ACTION=='module'?' class="active"':''?>>
+    <li<?php echo ACTION=='module'?' class="active"':''?>>
       <a href="<?php
           echo ACTION=='module'?'#module" data-toggle="tab':'admin/category/module/'
         ?>"><?php _e('模块设置'); ?></a>
@@ -18,5 +18,5 @@
     <li class="active">
       <a href="#edit" data-toggle="tab"><?php _e('模块编辑'); ?></a>
     </li>
-    <?php } ?> -->
+    <?php } ?>
 </ul>

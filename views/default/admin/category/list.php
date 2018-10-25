@@ -77,7 +77,7 @@
                                 </div>
                             </div>
 
-                            <!-- <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-4">
                                 <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('所属模块') ?></span>
                                 <div class="col-sm-9 col-xs-12">
                                     <select name="parent_id" class="form-control">
@@ -85,7 +85,7 @@
                                         <?php echo $this->category_option; ?>
                                     </select>
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="col-sm-2 col-xs-12">
                              <a onclick="AWS.ajax_post($('#add_category_form'));" class="btn-primary btn"><?php _e('添加分类'); ?></a>
                             </div>
