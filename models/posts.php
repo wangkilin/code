@@ -472,4 +472,64 @@ class postsModel extends Model
 
         return $recommend_posts;
     }
+
+    public function getPostsInCategoryIds($post_type, $category_id = 0, $topicIds = null, $day = 30, $page = 1, $per_page = 10)
+    {
+        $where = [];
+        if ($day) {
+            $where[] = 'add_time > ' . intval( strtotime('-' . $day . ' Day') );
+        }
+
+        if ($postType) {
+            $where[] = "post_type = '" . $this->quote($postType) . "'";
+        }
+
+        if ($categoryId)
+        {
+            $where[] = 'category_id IN(' . implode(',', $this->model('cagegory')->getCategoryAndChildIds($category_id)) . ')';
+        }
+
+        is_array($topicIds) OR $topicIds = [];
+        foreach ($topicIds AS $key => $val) {
+            if (!$val) {
+                unset($topicIds[$key]);
+            }
+        }
+
+        if ($topicIds) {
+            array_walk_recursive($topicIds, 'intval_string');
+
+            if (!$postType) {
+                $question_post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, 'question');
+                $article_post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, 'article');
+                if ($question_post_ids || $article_post_ids) {
+                    if ($question_post_ids) {
+                        $topic_where[] = 'post_id IN(' . implode(',', $question_post_ids) . ") AND post_type = 'question'";
+                    }
+
+                    if ($article_post_ids) {
+                        $topic_where[] = 'post_id IN(' . implode(',', $article_post_ids) . ") AND post_type = 'article'";
+                    }
+
+                    if ($topic_where) {
+                        $where[] = '(' . implode(' OR ', $topic_where) . ')';
+                    }
+
+                } else {
+                    return false;
+                }
+
+            } else if ($post_ids = $this->model('topic')->getItemIdsByTopicIds($topic_ids, $post_type)) {
+                $where[] = 'post_id IN(' . implode(',', $post_ids) . ") AND post_type = '" . $post_type . "'";
+            } else {
+                return false;
+            }
+        }
+
+        $posts_index = $this->fetch_page('posts_index', implode(' AND ', $where), 'popular_value DESC', $page, $per_page);
+
+        $this->posts_list_total = $this->found_rows();
+
+        return $this->process_explore_list_data($posts_index);
+    }
 }
