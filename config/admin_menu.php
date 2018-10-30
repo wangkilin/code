@@ -76,17 +76,17 @@ $config[] = array(
     'title' => _t('内容管理'),
     'cname' => 'reply',
     'children' => array(
-//         array(
-//             'id' => 'question/question_list',
-//             'title' => _t('问题管理'),
-//             'url' => 'admin/question/question_list/'
-//         ),
+        array(
+            'id' => 'question/question_list',
+            'title' => _t('问题管理'),
+            'url' => 'admin/question/question_list/'
+        ),
 
-//         array(
-//             'id' => 'article/list',
-//             'title' => _t('文章管理'),
-//             'url' => 'admin/article/list/'
-//         ),
+        array(
+            'id' => 'article/list',
+            'title' => _t('文章管理'),
+            'url' => 'admin/article/list/'
+        ),
 
         array(
             'id' => 'course',
@@ -99,11 +99,11 @@ $config[] = array(
             'title' => _t('分类管理'),
             'url' => 'admin/category/list/'
         ),
-//         array(
-//             'id' => 'page',
-//             'title' => _t('页面管理'),
-//             'url' => 'admin/page/'
-//         ),
+        array(
+            'id' => 'page',
+            'title' => _t('页面管理'),
+            'url' => 'admin/page/'
+        ),
 
 //         array(
 //             'id' => 'tag',
@@ -113,62 +113,62 @@ $config[] = array(
     )
 );
 
-// $config[] = array(
-//     'title' => _t('审核管理'),
-//     'cname' => 'report',
-//     'children' => array(
-//         array(
-//             'id' => 'approval/list',
-//             'title' => _t('内容审核'),
-//             'url' => 'admin/approval/list/'
-//         ),
+$config[] = array(
+    'title' => _t('审核管理'),
+    'cname' => 'report',
+    'children' => array(
+        array(
+            'id' => 'approval/list',
+            'title' => _t('内容审核'),
+            'url' => 'admin/approval/list/'
+        ),
 
-//         array(
-//             'id' => 'user/verify_approval_list',
-//             'title' => _t('认证审核'),
-//             'url' => 'admin/user/verify_approval_list/'
-//         ),
+        array(
+            'id' => 'user/verify_approval_list',
+            'title' => _t('认证审核'),
+            'url' => 'admin/user/verify_approval_list/'
+        ),
 
-//         array(
-//             'id' => 'user/register_approval_list',
-//             'title' => _t('注册审核'),
-//             'url' => 'admin/user/register_approval_list/'
-//         ),
+        array(
+            'id' => 'user/register_approval_list',
+            'title' => _t('注册审核'),
+            'url' => 'admin/user/register_approval_list/'
+        ),
 
-//         array(
-//             'id' => 'question/report_list',
-//             'title' => _t('用户举报'),
-//             'url' => 'admin/question/report_list/'
-//         )
-//     )
-// );
+        array(
+            'id' => 'question/report_list',
+            'title' => _t('用户举报'),
+            'url' => 'admin/question/report_list/'
+        )
+    )
+);
 
-// if (check_extension_package('project'))
-// {
-//     $config[] = array(
-//         'title' => '活动管理',
-//         'cname' => 'reply',
-//         'children' => array(
-//             array(
-//                 'id' => 'project/project_list',
-//                 'title' => '活动管理',
-//                 'url' => 'admin/project/project_list/'
-//             ),
+if (check_extension_package('project'))
+{
+    $config[] = array(
+        'title' => '活动管理',
+        'cname' => 'reply',
+        'children' => array(
+            array(
+                'id' => 'project/project_list',
+                'title' => '活动管理',
+                'url' => 'admin/project/project_list/'
+            ),
 
-//             array(
-//                 'id' => 'project/approval_list',
-//                 'title' => '活动审核',
-//                 'url' => 'admin/project/approval_list/'
-//             ),
+            array(
+                'id' => 'project/approval_list',
+                'title' => '活动审核',
+                'url' => 'admin/project/approval_list/'
+            ),
 
-//             array(
-//                 'id' => 'project/order_list',
-//                 'title' => '订单管理',
-//                 'url' => 'admin/project/order_list/'
-//             )
-//         )
-//     );
-// }
+            array(
+                'id' => 'project/order_list',
+                'title' => '订单管理',
+                'url' => 'admin/project/order_list/'
+            )
+        )
+    );
+}
 
 $config[] = array(
     'title' => _t('内容设置'),
@@ -290,32 +290,32 @@ $config[] = array(
     )
 );
 
-// $config[] = array(
-//     'title' => _t('邮件群发'),
-//     'cname' => 'inbox',
-//     'children' => array(
-//         array(
-//             'id' => 'edm/tasks',
-//             'title' => _t('任务管理'),
-//             'url' => 'admin/edm/tasks/'
-//         ),
+$config[] = array(
+    'title' => _t('邮件群发'),
+    'cname' => 'inbox',
+    'children' => array(
+        array(
+            'id' => 'edm/tasks',
+            'title' => _t('任务管理'),
+            'url' => 'admin/edm/tasks/'
+        ),
 
-//         array(
-//             'id' => 'edm/groups',
-//             'title' => _t('用户群管理'),
-//             'url' => 'admin/edm/groups/'
-//         )
-//     )
-// );
+        array(
+            'id' => 'edm/groups',
+            'title' => _t('用户群管理'),
+            'url' => 'admin/edm/groups/'
+        )
+    )
+);
 
-// $config[] = array(
-//     'title' => _t('工具'),
-//     'cname' => 'job',
-//     'children' => array(
-//         array(
-//             'id' => 'tools',
-//             'title' => _t('系统维护'),
-//             'url' => 'admin/tools/',
-//         )
-//     )
-// );
+$config[] = array(
+    'title' => _t('工具'),
+    'cname' => 'job',
+    'children' => array(
+        array(
+            'id' => 'tools',
+            'title' => _t('系统维护'),
+            'url' => 'admin/tools/',
+        )
+    )
+);

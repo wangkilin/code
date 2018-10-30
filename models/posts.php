@@ -195,7 +195,7 @@ class postsModel extends Model
 
         if (!is_array($topic_ids)) {
             $topic_ids = isset($topic_ids) ? array($topic_ids) : array();
-        } 
+        }
         // 获取指定话题下的热门
         foreach ($topic_ids AS $key => $val) {
             if (! $val) {
@@ -472,19 +472,18 @@ class postsModel extends Model
         return $recommend_posts;
     }
 
-    public function getPostsInCategoryIds($post_type, $category_id = 0, $topicIds = null, $day = 30, $page = 1, $per_page = 10)
+    public function getPostsInTypeCategoryIds($postType, $category_id = 0, $topicIds = null, $day = 30, $page = 1, $per_page = 10)
     {
         $where = [];
         if ($day) {
-            $where[] = 'add_time > ' . intval( strtotime('-' . $day . ' Day') );
+           // $where[] = 'add_time > ' . intval( strtotime('-' . $day . ' Day') );
         }
 
         if ($postType) {
             $where[] = "post_type = '" . $this->quote($postType) . "'";
         }
 
-        if ($categoryId)
-        {
+        if ($categoryId) {
             $where[] = 'category_id IN(' . implode(',', $this->model('cagegory')->getCategoryAndChildIds($category_id)) . ')';
         }
 
