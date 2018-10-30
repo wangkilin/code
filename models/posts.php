@@ -173,38 +173,37 @@ class postsModel extends Model
         return $this->process_explore_list_data($posts_index);
     }
 
+    /**
+     * 获取热门发布内容
+     */
     public function get_hot_posts($post_type, $category_id = 0, $topic_ids = null, $day = 30, $page = 1, $per_page = 10)
     {
-        if ($day)
-        {
+        $where = array();
+        if ($day) { // 获取多少天内热门
             $add_time = strtotime('-' . $day . ' Day');
         }
 
         $where[] = 'add_time > ' . intval($add_time);
 
-        if ($post_type)
-        {
+        if ($post_type) { // 获取指定类型的热门
             $where[] = "post_type = '" . $this->quote($post_type) . "'";
         }
 
-        if ($category_id)
-        {
+        if ($category_id) { // 获取指定分类下的热门
             $where[] = 'category_id IN(' . implode(',', $this->model('system')->get_category_with_child_ids('question', $category_id)) . ')';
         }
 
-        if (is_array($topic_ids))
-        {
-            foreach ($topic_ids AS $key => $val)
-            {
-                if (!$val)
-                {
-                    unset($topic_ids[$key]);
-                }
+        if (!is_array($topic_ids)) {
+            $topic_ids = isset($topic_ids) ? array($topic_ids) : array();
+        } 
+        // 获取指定话题下的热门
+        foreach ($topic_ids AS $key => $val) {
+            if (! $val) {
+                unset($topic_ids[$key]);
             }
         }
 
-        if ($topic_ids)
-        {
+        if ($topic_ids) {
             array_walk_recursive($topic_ids, 'intval_string');
 
             if (!$post_type)
@@ -244,7 +243,7 @@ class postsModel extends Model
         $posts_index = $this->fetch_page('posts_index', implode(' AND ', $where), 'popular_value DESC', $page, $per_page);
 
         $this->posts_list_total = $this->found_rows();
-
+        // 根据发布内容相关信息， 获取相应分类的详细内容
         return $this->process_explore_list_data($posts_index);
     }
 

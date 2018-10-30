@@ -260,23 +260,25 @@ class categoryModel extends Model
      */
     public function getCategoryListByType($type)
     {
-        $category_list = array();
+        $categoryList = array();
 
-        $category_all = $this->fetch_all('category', '`type` = \'' . $this->quote($type) . '\'', 'id ASC');
+        $categoryAll = $this->fetch_all('category', '`type` = \'' . $this->quote($type) . '\'', 'id ASC');
 
-        foreach($category_all as $key => $val)
-        {
-            if (!$val['url_token'])
-            {
+        foreach($categoryAll as $key => $val) {
+            if (!$val['url_token']) {
                 $val['url_token'] = $val['id'];
             }
 
-            $category_list[$val['id']] = $val;
+            $categoryList[$val['id']] = $val;
         }
 
-        return $category_list;
+        return $categoryList;
     }
 
+    /**
+     * 获取全部分类
+     * @param string $bindKey 按照哪个键值返回数组
+     */
     public function getAllCategories ($bindKey=null)
     {
         static $categoryList = null;
