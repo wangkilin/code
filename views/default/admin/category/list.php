@@ -34,12 +34,12 @@
                             <?php echo $val['url_token']; ?>
                             </div>
                         </td>
-                        <td>
+                        <td class="">
                             <div class="col-sm-10 clo-xs-10 col-lg-offset-1">
                                 <input type="text" class="col-sm-10 clo-xs-10 form-control sort-action" name="category[<?php echo $val['id']; ?>][sort]" value="<?php echo $val['sort']; ?>" />
                             </div>
                         </td>
-                        <td >
+                        <td class="col-sm-3 clo-xs-3">
                             <div class="col-sm-12 clo-xs-12">
                             <a href="admin/category/edit/category_id-<?php echo $val['id']; ?>" data-toggle="tooltip" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>"></a>
                             <a onclick="AWS.ajax_request(G_BASE_URL + '/admin/ajax/remove_category/', 'category_id=<?php echo $val['id'];?>');" data-toggle="tooltip" class="icon icon-trash md-tip" title="<?php _e('删除'); ?>"></a>
@@ -52,7 +52,7 @@
                     </tbody>
                     <tfoot class="mod-foot-center">
                     <tr>
-                        <td colspan="3">
+                        <td colspan="4">
                         <form id="add_category_form" action="admin/ajax/save_category/" method="post" onsubmit="return false">
                             <div class="form-group col-sm-3">
                                 <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('标题'); ?></span>
@@ -67,24 +67,18 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-sm-4">
-                                <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('父级') ?></span>
-                                <div class="col-sm-9 col-xs-12">
+                            <div class="form-group col-sm-2">
                                     <select name="parent_id" class="form-control">
-                                        <option value="0"><?php _e('无'); ?></option>
+                                        <option value="0"><?php _e('父级分类'); ?></option>
                                         <?php echo $this->category_option; ?>
                                     </select>
-                                </div>
                             </div>
 
-                            <div class="form-group col-sm-4">
-                                <span class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('所属模块') ?></span>
-                                <div class="col-sm-9 col-xs-12">
-                                    <select name="parent_id" class="form-control">
-                                        <option value="0"><?php _e('无'); ?></option>
-                                        <?php echo $this->category_option; ?>
+                            <div class="form-group col-sm-2">
+                                    <select name="module" class="form-control">
+                                        <option value="0"><?php _e('所属模块'); ?></option>
+                                        <?php echo $this->module_option; ?>
                                     </select>
-                                </div>
                             </div>
                             <div class="col-sm-2 col-xs-12">
                              <a onclick="AWS.ajax_post($('#add_category_form'));" class="btn-primary btn"><?php _e('添加分类'); ?></a>
