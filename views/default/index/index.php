@@ -11,9 +11,9 @@
 		  <div class="col-sm-4 clearfix"><?php _e('文章');?></div>
 	  </div>
 	  <div class="clearfix">
-		  <div class="col-sm-4 clearfix"><?php echo $this->posts_list_bit; ?></div>
-		  <div class="col-sm-4 clearfix"><?php echo $this->posts_list_bit; ?></div>
-		  <div class="col-sm-4 clearfix"><?php echo $this->posts_list_bit; ?></div>
+		  <div class="col-sm-4 clearfix"><?php echo $this->courseList; ?></div>
+		  <div class="col-sm-4 clearfix"><?php echo $this->mannualList; ?></div>
+		  <div class="col-sm-4 clearfix"><?php echo $this->articleList; ?></div>
 	  </div>
     </div>
 

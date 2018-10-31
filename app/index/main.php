@@ -75,7 +75,9 @@ class main extends BaseController
         {
             $posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
         }
-        $posts_list = $this->model('posts')->getPostsInTypeCategoryIds('question');
+        $courseList = $this->model('posts')->getPostsInTypeCategoryIds('course');
+        $mannualList = $this->model('posts')->getPostsInTypeCategoryIds('mannual');
+        $articleList = $this->model('posts')->getPostsInTypeCategoryIds('article');
 
         if ($posts_list)
         {
@@ -94,6 +96,12 @@ class main extends BaseController
             'per_page' => get_setting('contents_per_page')
         ))->create_links());
 
+        View::assign('posts_list', $courseList);
+        View::assign('courseList', View::output('index/ajax/list', false));
+        View::assign('posts_list', $articleList);
+        View::assign('articleList', View::output('index/ajax/list', false));
+        View::assign('posts_list', $mannualList);
+        View::assign('mannualList', View::output('index/ajax/list', false));
         View::assign('posts_list', $posts_list);
         View::assign('posts_list_bit', View::output('index/ajax/list', false));
 

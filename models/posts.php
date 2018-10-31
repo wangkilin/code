@@ -346,8 +346,7 @@ class postsModel extends Model
 
             $explore_list_data[$key]['post_type'] = $data['post_type'];
 
-            if (get_setting('category_enable') == 'Y')
-            {
+            if (get_setting('category_enable') == 'Y') {
                 $explore_list_data[$key]['category_info'] = $this->model('system')->get_category_info($data['category_id']);
             }
 
