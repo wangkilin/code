@@ -44,7 +44,7 @@ class main extends Controller
         //边栏可能感兴趣的人或话题
         if (View::is_output('block/sidebar_recommend_users_topics.php', 'favorite/index'))
         {
-            $recommend_users_topics = $this->model('module')->recommend_users_topics($this->user_id);
+            $recommend_users_topics = $this->model('system')->recommend_users_topics($this->user_id);
 
             View::assign('sidebar_recommend_users_topics', $recommend_users_topics);
         }

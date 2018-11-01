@@ -221,7 +221,7 @@ class main extends Controller
         //边栏热门话题
         if (View::is_output('block/sidebar_hot_topics.php', 'article/square'))
         {
-            View::assign('sidebar_hot_topics', $this->model('module')->sidebar_hot_topics($category_info['id']));
+            View::assign('sidebar_hot_topics', $this->model('system')->sidebar_hot_topics($category_info['id']));
         }
 
         if ($category_info)

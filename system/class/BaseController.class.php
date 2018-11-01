@@ -54,22 +54,22 @@ class BaseController extends Controller
 
 		// 边栏可能感兴趣的人
 		if (View::is_output('block/sidebar_recommend_users_topics.php', $tplFile)) {
-			View::assign('sidebar_recommend_users_topics', $this->model('module')->recommend_users_topics($this->user_id));
+			View::assign('sidebar_recommend_users_topics', $this->model('system')->recommend_users_topics($this->user_id));
 		}
 
 		// 边栏热门用户
 		if (View::is_output('block/sidebar_hot_users.php', $tplFile)) {
-			View::assign('sidebar_hot_users', $this->model('module')->sidebar_hot_users($this->user_id, 5));
+			View::assign('sidebar_hot_users', $this->model('system')->sidebar_hot_users($this->user_id, 5));
 		}
 
 		// 边栏热门话题
 		if (View::is_output('block/sidebar_hot_topics.php', $tplFile)) {
-			View::assign('sidebar_hot_topics', $this->model('module')->sidebar_hot_topics($category_info['id']));
+			View::assign('sidebar_hot_topics', $this->model('system')->sidebar_hot_topics($category_info['id']));
 		}
 
 		// 边栏专题
 		if (View::is_output('block/sidebar_feature.php', $tplFile)) {
-			View::assign('feature_list', $this->model('module')->feature_list());
+			View::assign('feature_list', $this->model('system')->feature_list());
 		}
 	}
 

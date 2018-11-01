@@ -48,6 +48,8 @@ class category extends AdminController
 
         View::assign('category', $category_info);
         View::assign('category_option', $this->model('system')->build_category_html($category_info['type'], 0, $category['parent_id'], null, false));
+
+        View::assign('module_option', buildSelectOptions($this->model('system')->getAllCategories(), 'title', 'id', $category_info['module'], array('module'=>'data-module') ) );
         View::import_js('js/fileupload.js');
         View::output('admin/category/edit');
     }

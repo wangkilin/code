@@ -60,6 +60,19 @@
 						</div>
 					</td>
 				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
+							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属模块'); ?>:</span>
+							<div class="col-sm-9 col-xs-8">
+								<select name="parent_id" class="form-control">
+									<option value="0"><?php _e('无'); ?></option>
+									<?php echo $this->module_option; ?>
+								</select>
+							</div>
+						</div>
+					</td>
+				</tr>
 				<tfoot>
 				<tr>
 					<td>

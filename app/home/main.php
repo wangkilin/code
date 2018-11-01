@@ -62,7 +62,7 @@ class main extends Controller
 
         // 边栏可能感兴趣的人或话题
         if (View::is_output('block/sidebar_recommend_users_topics.php', 'home/index')) {
-            $recommend_users_topics = $this->model('module')->recommend_users_topics($this->user_id);
+            $recommend_users_topics = $this->model('system')->recommend_users_topics($this->user_id);
 
             View::assign('sidebar_recommend_users_topics', $recommend_users_topics);
         }
@@ -70,7 +70,7 @@ class main extends Controller
         // 边栏热门用户
         if (View::is_output('block/sidebar_hot_users.php', 'home/index'))
         {
-            $sidebar_hot_users = $this->model('module')->sidebar_hot_users($this->user_id);
+            $sidebar_hot_users = $this->model('system')->sidebar_hot_users($this->user_id);
 
             View::assign('sidebar_hot_users', $sidebar_hot_users);
         }

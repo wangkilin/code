@@ -642,7 +642,7 @@ class main extends BaseController
 
         View::assign('content_nav_menu', $this->model('menu')->getNavMenuWithModuleInLink('explore'));
 
-        View::assign('sidebar_hot_topics', $this->model('module')->sidebar_hot_topics($_GET['category']));
+        View::assign('sidebar_hot_topics', $this->model('system')->sidebar_hot_topics($_GET['category']));
 
         if ($_GET['feature_id'])
         {
