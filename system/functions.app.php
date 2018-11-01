@@ -337,3 +337,40 @@ function remove_assoc($from, $type, $id)
 
     return $this->query('UPDATE ' . $this->get_table($from) . ' SET `' . $type . '_id` = NULL WHERE `' . $type . '_id` = ' . $id);
 }
+
+/**
+ * 用给定数组， 生成页面下拉列表的option数据。
+ * @param array $dataList 二维数组
+ * @param string $textKey 数组中用来生成option文本的键值
+ * @param string $valueKey 数组中用来生成option value的键值
+ * @param string|int $defaultValue 默认值
+ * @param array $bindAttributes 生成option中的属性绑定值
+ * 
+ * @return string
+ */
+function buildSelectOptions (array $dataList, $textKey, $valueKey, $defaultValue=null, array $bindAttributes=array())
+{
+    $html = '';
+
+    foreach ($dataList as $_item) {
+        if (isset($defaultValue) && $_item[$valueKey] == $defaultValue) {
+            $attributes  = ' selected="selected"';
+        } else {
+            $attributes  = '';
+        }
+        
+        foreach ($_item as $_key=>$_value) {
+            if (isset($bindAttributes[$_key])) {
+                $attributes .= ' ' . $bindAttributes[$_key] .'="' . $_value . '"';
+            } else if ($_key==$textKey || $_key==$valueKey) {
+                continue;
+            } else {
+                continue;
+                //$attributes .= ' data-' . $_key .'="' . $_value . '"';
+            }
+        }
+        $html .= '<option value="' . $_item[$valueKey]. '"' . $attributes . '>' . $_item[$textKey] . '</option>';
+    }
+
+    return $html;
+}

@@ -279,11 +279,11 @@ class categoryModel extends Model
      * 获取全部分类
      * @param string $bindKey 按照哪个键值返回数组
      */
-    public function getAllCategories ($bindKey=null)
+    public function getAllCategories ($bindKey=null, $type=null)
     {
         static $categoryList = null;
         if (! is_array($categoryList) ) {
-            $categoryList = $this->fetch_all('category', '`type` = \'' . $this->quote($type) . '\'', 'id ASC');
+            $categoryList = $this->fetch_all('category', null, 'id ASC');
         }
         if ($bindKey && $categoryList) {
             $keys = array_column($categoryList, $bindKey);
