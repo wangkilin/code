@@ -3,7 +3,7 @@
 <div class="icb-container">
 <style>
 .lunhuan {
-    position: relative;
+    position: absolute;
     width: 100%;
     height: 438px;
     background-color: #555;
@@ -50,8 +50,8 @@
 </style>
 <div class="lunhuan">
     <div id="lunhuanback">
-        <p style="background: url(static/css/default/img/background/sky_star_sky.jpg) center center no-repeat scroll; opacity: 1;">
-        <canvas id="J_dotLine" style="background-color: transparent;width: 100%;position: absolute;height: 700px;"></canvas>
+        <p style="background: url(static/css/default/img/background/sky_star.jpg) 0 0 no-repeat scroll; opacity: 1;">
+        <canvas id="J_dotLine" style="background-color: transparent;width: 100%;position: absolute;height: 300px;"></canvas>
         </p>
         <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/summit.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
@@ -272,8 +272,8 @@ $(function (containerSelector, slideSelector, controlSelector) {
 	var dotline = new Dotline({
 		dom: 'J_dotLine', //画布id
 		cw: 1500, //画布宽
-		ch: 900, //画布高
-		ds: 60, //点的个数
+		ch: 300, //画布高
+		ds: 30, //点的个数
 		r: 2, //圆点半径
 		cl: '#FFFFFF', //粒子线颜色
 		dis: 100 //触发连线的距离
@@ -283,7 +283,7 @@ $(function (containerSelector, slideSelector, controlSelector) {
 </script>
 
 	<?php View::output('block/content_nav_menu.php'); ?>
-
+<br/>
 	<div class="container">
 	  <div class="clearfix">
 		  <div class="col-sm-4 clearfix"><?php _e('教程');?></div>
