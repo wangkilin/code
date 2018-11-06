@@ -33,7 +33,8 @@ class category extends AdminController
         //View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, true));
 
         View::assign('category_option', buildSelectOptions($this->model('category')->getAllCategories(), 'title', 'id', null, array('module'=>'data-module') ) );
-
+        View::assign('module_option', buildSelectOptions($this->model('system')->fetch_all('post_module'), 'title', 'id', $category_info['module'], array('id'=>'data-id', 'url_token'=>'data-token') ) );
+        
         View::assign('target_category', $this->model('system')->build_category_html('question', 0, null));
 
         View::output('admin/category/list');

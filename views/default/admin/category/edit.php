@@ -52,7 +52,7 @@
 						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('父级分类'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
-								<select name="parent_id" class="form-control">
+								<select name="parent_id" id="parent_id" class="form-control">
 									<option value="0"><?php _e('无'); ?></option>
 									<?php echo $this->category_option; ?>
 								</select>
@@ -65,7 +65,7 @@
 						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属模块'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
-								<select name="parent_id" class="form-control">
+								<select name="module" id="module_id" class="form-control">
 									<option value="0"><?php _e('无'); ?></option>
 									<?php echo $this->module_option; ?>
 								</select>
@@ -102,6 +102,18 @@ $(function() {
 		);
 	}
 	<?php } ?>
+
+
+	// 选择分类后， 将对应模块选定。 如果是根分类， 需要选择所属的模块
+	$('#parent_id').change(function () {
+		var moduleId = $(this).find('option:selected').attr('data-module');
+		$('#module_id').val(moduleId);
+		if (moduleId!='0') {
+			$('#module_id').attr('disabled', 'disabled');
+		} else {
+			$('#module_id').removeAttr('disabled');
+		}
+	});
 });
 </script>
 <?php View::output('admin/global/footer.php'); ?>

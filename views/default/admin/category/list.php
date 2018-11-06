@@ -68,14 +68,14 @@
                             </div>
 
                             <div class="form-group col-sm-2">
-                                    <select name="parent_id" class="form-control">
-                                        <option value="0"><?php _e('父级分类'); ?></option>
+                                    <select name="parent_id" id="parent_id" class="form-control">
+                                        <option value="0" data-module="0"><?php _e('父级分类'); ?></option>
                                         <?php echo $this->category_option; ?>
                                     </select>
                             </div>
 
                             <div class="form-group col-sm-2">
-                                    <select name="module" class="form-control">
+                                    <select name="module" id="module_id" class="form-control">
                                         <option value="0"><?php _e('所属模块'); ?></option>
                                         <?php echo $this->module_option; ?>
                                     </select>
@@ -124,6 +124,16 @@
             AWS.dialog('adminCategoryMove', {'option':eval('[' + json + ']'), 'name':'分类移动','from_id':'#settings_form'});
             $('.from-category').val($(this).attr('data-id'));
             $('.icb-category-move-box .col-md-12').prepend('<p>将 <b>' + $(this).attr('data-name') + '</b> 的内容批量移动到</p>');
+        });
+        // 选择分类后， 将对应模块选定。 如果是根分类， 需要选择所属的模块
+        $('#parent_id').change(function () {
+            var moduleId = $(this).find('option:selected').attr('data-module');
+            $('#module_id').val(moduleId);
+            if (moduleId!='0') {
+                $('#module_id').attr('disabled', 'disabled');
+            } else {
+                $('#module_id').removeAttr('disabled');
+            }
         });
     });
 </script>
