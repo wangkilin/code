@@ -53,7 +53,7 @@
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('父级分类'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
 								<select name="parent_id" id="parent_id" class="form-control">
-									<option value="0"><?php _e('无'); ?></option>
+									<option value="0" data-module="0"><?php _e('无'); ?></option>
 									<?php echo $this->category_option; ?>
 								</select>
 							</div>

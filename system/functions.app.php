@@ -77,7 +77,7 @@ function download_url($file_name, $url)
 /**
  * 检测当前操作是否需要验证码
  * @param string $permission_tag 权限标识
- * 
+ *
  * @return bool
  */
 function human_valid($permission_tag)
@@ -345,7 +345,7 @@ function remove_assoc($from, $type, $id)
  * @param string $valueKey 数组中用来生成option value的键值
  * @param string|int $defaultValue 默认值
  * @param array $bindAttributes 生成option中的属性绑定值
- * 
+ *
  * @return string
  */
 function buildSelectOptions (array $dataList, $textKey, $valueKey, $defaultValue=null, array $bindAttributes=array())
@@ -358,7 +358,7 @@ function buildSelectOptions (array $dataList, $textKey, $valueKey, $defaultValue
         } else {
             $attributes  = '';
         }
-        
+
         foreach ($_item as $_key=>$_value) {
             if (isset($bindAttributes[$_key])) {
                 $attributes .= ' ' . $bindAttributes[$_key] .'="' . $_value . '"';
@@ -373,4 +373,36 @@ function buildSelectOptions (array $dataList, $textKey, $valueKey, $defaultValue
     }
 
     return $html;
+}
+/**
+ * 将列表数据，进行树形化名称返回
+ * @param array $lists
+ * @param string $titleKey
+ * @param string $idKey
+ * @param string $parentIdKey
+ *
+ * @return array
+ */
+function getListInTreeList ($lists, $titleKey='title', $idKey='id', $parentIdKey='parent_id')
+{
+    $tmpSortList = array();
+    foreach ($lists as & $_item) {
+        $_tmpId = $_item[$parentIdKey];
+        $_tmpKey = '/' . $_tmpId;
+        if (! isset($lists[$_tmpId])) {
+            $tmpSortList[$_tmpKey  . '/' . $_item[$idKey] .'/'] = $_item;
+            continue;
+        }
+        $_item[$titleKey] = '|__' . $_item[$titleKey];
+        while(isset($lists[$_tmpId])) {
+            $_item[$titleKey] = '&nbsp; &nbsp; ' . $_item[$titleKey];
+            $_tmpId = $lists[$_tmpId][$parentIdKey];
+            $_tmpKey = '/' . $_tmpId . $_tmpKey;
+        }
+        $tmpSortList[$_tmpKey  . '/' . $_item[$idKey] .'/' ] = $_item;
+    }
+    ksort($tmpSortList);
+    $lists = array_values($tmpSortList);
+
+    return $lists;
 }

@@ -32,7 +32,9 @@ class category extends AdminController
 
         //View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, true));
 
-        View::assign('category_option', buildSelectOptions($this->model('category')->getAllCategories(), 'title', 'id', null, array('module'=>'data-module') ) );
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('category_option', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
+        //View::assign('category_option', buildSelectOptions($this->model('category')->getAllCategories(), 'title', 'id', null, array('module'=>'data-module') ) );
         View::assign('module_option', buildSelectOptions($this->model('system')->fetch_all('post_module'), 'title', 'id', $category_info['module'], array('id'=>'data-id', 'url_token'=>'data-token') ) );
 
         View::assign('target_category', $this->model('system')->build_category_html('question', 0, null));
@@ -48,8 +50,10 @@ class category extends AdminController
         }
 
         View::assign('category', $category_info);
-        View::assign('category_option', $this->model('system')->build_category_html($category_info['type'], 0, $category['parent_id'], null, false));
-        View::assign('category_option', buildSelectOptions($this->model('category')->getAllCategoriesInTreeList(), 'title', 'id', null, array('module'=>'data-module') ) );
+        //View::assign('category_option', $this->model('system')->build_category_html($category_info['type'], 0, $category['parent_id'], null, false));
+
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('category_option', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
         View::assign('module_option', buildSelectOptions($this->model('system')->fetch_all('post_module'), 'title', 'id', $category_info['module'], array('id'=>'data-id', 'url_token'=>'data-token') ) );
         View::import_js('js/fileupload.js');
         View::output('admin/category/edit');

@@ -275,24 +275,6 @@ class categoryModel extends Model
         return $categoryList;
     }
 
-    public function getAllCategoriesInTreeList ()
-    {
-        $categoryList = $this->getAllCategories('id');
-        foreach ($categoryList as & $_item) {
-            $_tmpId = $_item['parent_id'];
-            if (! isset($categoryList[$_tmpId])) {
-                continue;
-            }
-            while(isset($categoryList[$_tmpId])) {
-                $_item['title'] = '__' . $_item['title'];
-                $_tmpId = $categoryList[$_tmpId]['parent_id'];
-            }
-            $_item['title'] = '|' . $_item['title'];
-        }
-
-        return $categoryList;
-    }
-
     /**
      * 获取全部分类
      * @param string $bindKey 按照哪个键值返回数组
