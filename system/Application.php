@@ -208,7 +208,7 @@ class Application
         show_error($exception_message, $exception->getMessage());
     }
 
-       /**
+    /**
      * 格式化系统返回消息
      *
      * 格式化系统返回的消息 json 数据包给前端进行处理

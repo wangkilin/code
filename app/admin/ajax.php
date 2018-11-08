@@ -690,7 +690,9 @@ class ajax extends AdminController
 
         H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('分类排序已自动保存')));
     }
-
+    /**
+     * 保存分类信息
+     */
     public function save_category_action()
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
@@ -704,8 +706,7 @@ class ajax extends AdminController
             $this->jsonErrExit(_t('请输入分类名称'));
         }
 
-        if ($_POST['url_token'])
-        {
+        if ($_POST['url_token']) {
             if (!preg_match("/^(?!__)[a-zA-Z0-9_]+$/i", $_POST['url_token'])) {
                 $this->jsonErrExit(_t('分类别名只允许输入英文或数字'));
             }
@@ -718,11 +719,14 @@ class ajax extends AdminController
                 $this->jsonErrExit(_t('分类别名已经被占用请更换一个'));
             }
         }
+        if (! $_POST['module'] || (! $moduleInfo = $this->model('postModule')->getById($_POST['module'])) ) {
+            $this->jsonErrExit(_t('请选择所属模块'));
+        }
 
         if ($_POST['category_id']) {
             $category_id = intval($_POST['category_id']);
         } else {
-            $category_id = $this->model('category')->add_category('question', $_POST['title'], $_POST['parent_id']);
+            $category_id = $this->model('category')->add_category($moduleInfo['url_token'], $_POST['title'], $_POST['parent_id']);
         }
 
         $category = $this->model('system')->get_category_info($category_id);
