@@ -85,7 +85,9 @@ class course extends AdminController
             'total_rows' => $totalRows,
             'per_page'   => $this->per_page
         ))->create_links());
-        View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
+        //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('totalRows', $totalRows);
         View::assign('itemsList', $courseList);
         View::assign('parentItemsList', $categoryList);
