@@ -10,7 +10,8 @@
         </div>
 	    <div class="tab-content mod-content mod-body">
 	      <div class="tab-pane active" id="course_table">
-	        <?php View::output('admin/course/tag_list_inc.php');?>
+	        <?php //View::output('admin/course/tag_list_inc.php');?>
+	        <?php View::output('admin/course/category_list_inc.php');?>
 	        <?php if ($this->parent_id) { ?>
 	        <div class="row">
 	            <div class="col-md-12">

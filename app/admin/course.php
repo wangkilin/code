@@ -122,7 +122,7 @@ class course extends AdminController
         }
 
         View::assign('topicOptions', $this->model('topic')->buildTopicDropdownHtml($selected));
-        View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', 0, '--'));
+        View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('list', $articleList);
         View::assign('contentTable', $contentTable);
 
