@@ -104,7 +104,8 @@
 			                    <div class="mod-set-body">
 			                        <form action="admin/ajax/add_content_table/" method="post">
 			                            <input type="hidden" name="from_type" value="course"/>
-			                            <input type="hidden" name="topic_id" value="<?php echo $this->parent_id;?>"/>
+			                            <!-- <input type="hidden" name="topic_id" value="<?php echo $this->parent_id;?>"/> -->
+			                            <input type="hidden" name="category_id" value="<?php echo $this->parent_id;?>"/>
 			                            <input type="hidden" name="title" value=""/>
 			                            <select name="course_id" class="form-control pull-left input-small js-course-list">
 			                                <option value="0"><?php _e('无'); ?></option>
@@ -126,7 +127,8 @@
 			                    <div class="mod-set-body">
 			                        <form action="admin/ajax/add_content_table/" method="post">
 			                            <input type="hidden" name="from_type" value="custom">
-			                            <input type="hidden" name="topic_id" value="<?php echo $this->parent_id;?>"/>
+			                            <!-- <input type="hidden" name="topic_id" value="<?php echo $this->parent_id;?>"/> -->
+			                            <input type="hidden" name="category_id" value="<?php echo $this->parent_id;?>"/>
 
 			                            <p class="clearfix">
 			                                <label type="button" class="btn mod-btn-color col-sm-offset-0">

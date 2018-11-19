@@ -12,5 +12,10 @@ ALTER TABLE `icb_post_module`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id';
 
 -- 20181024
-alter table icb_category 
+alter table icb_category
   add path varchar(255) not null default '/' comment '分类父级路径' after parent_id;
+
+-- 20181119
+ALTER TABLE `icb_course_content_table`
+ADD `category_id` INT(10) NOT NULL DEFAULT '0' COMMENT '所属分类id' AFTER `description`,
+ADD INDEX (`category_id`);

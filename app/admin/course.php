@@ -112,11 +112,11 @@ class course extends AdminController
         if (isset($_GET['parent_id'])) {
             $typeInfo = explode('-', $_GET['parent_id']);
             $selected = $_GET['parent_id'];
-            $topicInfo = $this->model('topic')->getById($_GET['parent_id']);
-            View::assign('parentTitle', $topicInfo['topic_title']);
+            $topicInfo = $this->model('category')->getById($_GET['parent_id']);
+            View::assign('parentTitle', $topicInfo['title']);
             $where = "parent_id = "  . intval($_GET['parent_id']);
             $articleList  = $this->model('course')->getCourseList($where, 'id DESC', PHP_INT_MAX, 0);
-            $where = "topic_id = "  . intval($_GET['parent_id']);
+            $where = "category_id = "  . intval($_GET['parent_id']);
             $contentTable = $this->model('course')->fetch_all('course_content_table', $where, 'sort ASC');
             View::assign('parent_id', $_GET['parent_id']);
         }
