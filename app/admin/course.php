@@ -158,7 +158,10 @@ class course extends AdminController
         }
 
         View::assign('bindTopics', $bindTopics);
-        View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
+
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', $selected, array('module'=>'data-module') ) );
+        //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
 
         View::assign('recent_topics', @unserialize($this->user_info['recent_topics']));
 
