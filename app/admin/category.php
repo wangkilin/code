@@ -44,8 +44,7 @@ class category extends AdminController
 
     public function edit_action()
     {
-        if (!$category_info = $this->model('system')->get_category_info($_GET['category_id']))
-        {
+        if (!$category_info = $this->model('category')->getById($_GET['category_id'])) {
             H::redirect_msg(Application::lang()->_t('指定分类不存在'), '/admin/category/list/');
         }
 
@@ -53,7 +52,7 @@ class category extends AdminController
         //View::assign('category_option', $this->model('system')->build_category_html($category_info['type'], 0, $category['parent_id'], null, false));
 
         $categoryList = $this->model('category')->getAllCategories('id');
-        View::assign('category_option', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
+        View::assign('category_option', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', $category_info['parent_id'], array('module'=>'data-module') ) );
         View::assign('module_option', buildSelectOptions($this->model('system')->fetch_all('post_module'), 'title', 'id', $category_info['module'], array('id'=>'data-id', 'url_token'=>'data-token') ) );
         View::import_js('js/fileupload.js');
         View::output('admin/category/edit');

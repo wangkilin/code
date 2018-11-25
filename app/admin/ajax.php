@@ -697,10 +697,10 @@ class ajax extends AdminController
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
 
-        if ($_POST['category_id'] AND $_POST['parent_id'] AND $category_list = $this->model('system')->fetch_category('question', $_POST['category_id']))
-        {
-            $this->jsonErrExit(_t('系统允许最多二级分类, 当前分类下有子分类, 不能移动到其它分类'));
-        }
+        // if ($_POST['category_id'] AND $_POST['parent_id'] AND $category_list = $this->model('system')->fetch_category('question', $_POST['category_id']))
+        // {
+        //     $this->jsonErrExit(_t('系统允许最多二级分类, 当前分类下有子分类, 不能移动到其它分类'));
+        // }
 
         if (trim($_POST['title']) == ''){
             $this->jsonErrExit(_t('请输入分类名称'));
@@ -719,7 +719,7 @@ class ajax extends AdminController
                 $this->jsonErrExit(_t('分类别名已经被占用请更换一个'));
             }
         }
-        if (! $_POST['module'] || (! $moduleInfo = $this->model('postModule')->getById($_POST['module'])) ) {
+        if (! $_POST['module_id'] || (! $moduleInfo = $this->model('postModule')->getById($_POST['module_id'])) ) {
             $this->jsonErrExit(_t('请选择所属模块'));
         }
 
@@ -734,8 +734,15 @@ class ajax extends AdminController
         if ($category['id'] == $_POST['parent_id']) {
             $this->jsonErrExit(_t('不能设置当前分类为父级分类'));
         }
+        $params = array(
+            'title' => $_POST['title'],
+            'module' => $_POST['module_id'],
+            'parent_id' => $_POST['parent_id'],
+            'url_token' => $_POST['url_token'],
+        );
+        $this->model('category')->update('category', $params, 'id='.$category_id);
 
-        $this->model('category')->update_category_info($category_id, $_POST['title'], $_POST['parent_id'], $_POST['url_token']);
+        //$this->model('category')->update_category_info($category_id, $_POST['title'], $_POST['parent_id'], $_POST['url_token']);
 
         $this->jsonMsgExit(array(
             'url' => get_js_url('/admin/category/list/')

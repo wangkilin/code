@@ -65,7 +65,7 @@
 						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属模块'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
-								<select name="module" id="module_id" class="form-control">
+								<select name="module_id" id="module_id" class="form-control">
 									<option value="0"><?php _e('无'); ?></option>
 									<?php echo $this->module_option; ?>
 								</select>
@@ -76,7 +76,7 @@
 				<tfoot>
 				<tr>
 					<td>
-						<input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#category_form'));" />
+						<input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="ICB.ajax.postForm($('#category_form'));" />
 					</td>
 				</tr>
 				</tfoot>
@@ -109,11 +109,13 @@ $(function() {
 		var moduleId = $(this).find('option:selected').attr('data-module');
 		$('#module_id').val(moduleId);
 		if (moduleId!='0') {
-			$('#module_id').attr('disabled', 'disabled');
+            $('#module_id').find('option[value="'+moduleId+'"]').attr('selected', 'selected');
+			$('#module_id').attr('readonly', 'readonly');
 		} else {
-			$('#module_id').removeAttr('disabled');
+			$('#module_id').removeAttr('readonly');
 		}
-	});
+    });
+    $('#parent_id').trigger('change');
 });
 </script>
 <?php View::output('admin/global/footer.php'); ?>
