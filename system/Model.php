@@ -86,8 +86,8 @@ class Model
         if (! $result = $this->fetch_all($table, $where) ) {
             return $list;
         }
-        foreach ($result as $_categoryInfo) {
-            $list[$_categoryInfo['id']] = $_categoryInfo;
+        foreach ($result as $_item) {
+            $list[$_item['id']] = $_item;
         }
 
         return $list;

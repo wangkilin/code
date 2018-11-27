@@ -39,7 +39,7 @@
 						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('分类别名'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
-								<span class="col-sm-1 mod-text-inline">/index/category-</span>
+								<span class="col-sm-1 mod-text-inline">/<span id="js_url_module_name">index</span>/category-</span>
 								<div class="col-xs-11 col-sm-9 pull-right nopadding">
 									<input type="text" name="url_token" class="form-control" value="<?php echo $this->category['url_token']; ?>" />
 								</div>
@@ -114,6 +114,11 @@ $(function() {
 		} else {
 			$('#module_id').removeAttr('readonly');
 		}
+        var moduleToken = $('#module_id').find('option[value="'+moduleId+'"]').attr('data-token');
+        if (! moduleToken) {
+            moduleToken = 'index';
+        }
+        $('#js_url_module_name').text(moduleToken);
     });
     $('#parent_id').trigger('change');
 });

@@ -729,10 +729,29 @@ class ajax extends AdminController
             $category_id = $this->model('category')->add_category($moduleInfo['url_token'], $_POST['title'], $_POST['parent_id']);
         }
 
-        $category = $this->model('system')->get_category_info($category_id);
+        $category = $this->model('category')->getById($category_id);
 
         if ($category['id'] == $_POST['parent_id']) {
             $this->jsonErrExit(_t('不能设置当前分类为父级分类'));
+        }
+
+        if ($_POST['parent_id']) {
+            $categoryList = $categoryList = $this->model('category')->getAllCategories('id');
+            $checkedIds = [$category_id];
+            $_parentId = $_POST['parent_id'];
+            if (isset($categoryList[$_parentId]) && $_POST['module_id'] !=$categoryList[$_parentId]['module']) {
+                $this->jsonErrExit(_t('选择的模块无效'));
+            }
+            while(isset($categoryList[$_parentId])) {
+                if (in_array($_parentId, $checkedIds)) {
+                    $this->jsonErrExit(_t('不能把子分类设置成父级分类'));
+                    break;
+                }
+                $_parentId = $categoryList[$_parentId]['parent_id'];
+            }
+            if ($_parentId!=0) {
+                $this->jsonErrExit(_t('选定的父级分类无效'));
+            }
         }
         $params = array(
             'title' => $_POST['title'],
