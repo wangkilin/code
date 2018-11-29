@@ -1,8 +1,8 @@
 <div class="icb-footer-wrap">
 	<div class="icb-footer">
-		Copyright © <?php echo date('Y'); ?><?php if(get_setting('icp_beian')){ ?><span class="hidden-xs"> - <?php echo get_setting('icp_beian'); ?><?php } ?>, All Rights Reserved</span>
+		<?php _e("版权所有");?> © <?php echo date('Y'); ?> <?php echo get_setting('site_name');?><?php if(get_setting('icp_beian')){ ?><span class="hidden-xs"> - <?php echo get_setting('icp_beian'); ?><?php } ?></span>
 
-		<span class="hidden-xs">Powered By <a href="http://www.wecenter.com/?copyright" target="blank">WeCenter <?php echo G_VERSION; ?></a></span>
+		<span class="hidden-xs">Powered By <a href="#" target="blank">iCodebang.com <?php echo G_VERSION; ?></a></span>
 
 		<?php if (is_mobile(true)) { ?>
 			<div class="container">
@@ -16,11 +16,11 @@
 
 <a id="icb-goto-top" class="icb-goto-top hidden-xs" href="javascript:;" onclick="$.scrollTo(1, 600, {queue:true});" title="<?php _e('返回顶部'); ?>" data-toggle="tooltip"><i class="icon icon-up"></i></a>
 
-<?php echo get_setting('statistic_code'); ?>
 
 <!-- DO NOT REMOVE -->
 <div id="icb-modal-window" class="icb-modal-window"></div>
 
+<?php echo get_setting('statistic_code'); ?>
 <div style="display:none;" id="__crond">
 	<script type="text/javascript">
 		$(document).ready(function () {
