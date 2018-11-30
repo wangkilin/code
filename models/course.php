@@ -279,6 +279,10 @@ class courseModel extends Model
                 $this->model('attach')->bindAttachAndItem('course', $id, $data['batchKey']);
             }
         }
+
+        $this->model('search_fulltext')->push_index('course', $title, $id);
+        $this->model('posts')->set_posts_index($id, 'course');
+        
         // 处理绑定的话题
         if ($id && isset($data['tag_names'])) {
             foreach ($data['tag_names'] as $tagName) {
@@ -288,8 +292,10 @@ class courseModel extends Model
             }
         }
 
+
         return $id;
     }
+    
 
     /**
      * 更新文章目录

@@ -13,6 +13,7 @@ class postsModel extends Model
 
                 case 'article':
                 case 'project':
+                case 'course':
                     $result = $this->fetch_row($post_type, 'id = ' . intval($post_id));
 
                     break;
