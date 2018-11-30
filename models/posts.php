@@ -24,7 +24,6 @@ class postsModel extends Model
             }
         }
 
-
         $data = array(
             'add_time'      => $result['add_time'],
             'update_time'   => $result['update_time'],
