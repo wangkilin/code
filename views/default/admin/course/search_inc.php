@@ -5,11 +5,11 @@
                         <div class="form-group icb-item-title" data-active="toggle">
 		                    <label class="col-sm-2 col-xs-2 control-label"><?php _e('分类');?>:</label>
 				            <div class="col-sm-5 active-hide-only ">
-		                            <select id="parent_id" name="parent_id" class="hidden js_parent_id">
+		                            <select id="category_id" name="category_id" class="hidden js_category_id">
 		                                <option value="0"><?php _e('选择分类'); ?></option>
 		                                <?php echo $this->itemOptions; ?>
 		                            </select>
-		                            <div class="dropdown" id="search_parent_id">
+		                            <div class="dropdown" id="search_category_id">
 										<div class="dropdown-toggle" data-toggle="dropdown">
 											<span id="icb-selected-tag-show"><?php _e('选择分类'); ?></span>
 											<a><i class="icon icon-down"></i></a>
@@ -76,9 +76,9 @@
 <script type="text/javascript">
 $(document).ready(function () {
 	//初始化分类
-	if ($('#parent_id').length) {
+	if ($('#category_id').length) {
 		// 组装下拉列表需要的数据， 获取默认选择
-		$.each($('.js_parent_id'), function () {
+		$.each($('.js_category_id'), function () {
 			var options = [], selectedId = '';
 			var select = this;
 			$.each($(this).find('option').toArray(), function (i, field) {
@@ -95,21 +95,21 @@ $(document).ready(function () {
 		// 监听下拉列表点击事件
 		var $dropdownList = $('.icb-item-title .dropdown li a');
 		$dropdownList.filter('[data-value="0"]').each(function(){
-			if (! $(this).closest('#search_parent_id').length) {
+			if (! $(this).closest('#search_category_id').length) {
 				$(this).closest('li').remove();
 			}
 		});
 		$dropdownList.click(function() {
-			var value = $(this).closest('form').find('#parent_id').val();
+			var value = $(this).closest('form').find('#category_id').val();
 			// 只对本表单内的父级id起作用， 不能修改其他表单内的东西
-			$(this).closest('form').find('#parent_id').val($(this).attr('data-value'));
+			$(this).closest('form').find('#category_id').val($(this).attr('data-value'));
 			// 如果本表单内有自动提交变更选择， 下拉列表选择发生变化， 提交表单
 			if ($(this).attr('data-value')!= value && $(this).closest('.js-submit-choose').length) {
 			    ICB.ajax.postForm($(this).closest('form'));
 			}
 		});
 		// 设置默认选中值内容
-		$('.js_parent_id').each (function () {
+		$('.js_category_id').each (function () {
 			var value = $(this).val();
 			$(this).closest('form').find('.dropdown li a[data-value="'+value+'"]').each(function() {
 				$(this).click().closest('li').addClass('active');

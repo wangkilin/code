@@ -39,9 +39,9 @@ class course extends AdminController
         $selected = array();
         $where = array();
 
-        if (! empty($_GET['parent_id'])) {
-            $where[] = 'parent_id = ' . intval($_GET['parent_id']);
-            $selected = array($_GET['parent_id']);
+        if (! empty($_GET['category_id'])) {
+            $where[] = 'category_id = ' . intval($_GET['category_id']);
+            $selected = array($_GET['category_id']);
         }
 
         if ($_GET['keyword']) {
@@ -67,7 +67,7 @@ class course extends AdminController
         $courseList = $this->model('course')->getCourseList(implode(' AND ', $where), 'id DESC', $this->per_page, $_GET['page']);
         $parentIds = array();
         foreach ($courseList as $_courseInfo) {
-            $parentIds[] = $_courseInfo['parent_id'];
+            $parentIds[] = $_courseInfo['category_id'];
         }
         $totalRows     = $this->model('course')->found_rows();
         $categoryList = $this->model('category')->getByIds($parentIds);
@@ -144,7 +144,7 @@ class course extends AdminController
             if (!$articleInfo) {
                 H::redirect_msg(Application::lang()->_t('教程不存在'), '/admin/course/course/');
             }
-            $selected = $articleInfo['parent_id'];
+            $selected = $articleInfo['category_id'];
 
             $bindTopics = $this->model('topic')->getTopicsByArticleId($_GET['id'], 'course');
 

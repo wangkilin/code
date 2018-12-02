@@ -45,8 +45,8 @@
                                 <td><?php echo $itemInfo['focuses']; ?></td>
 
                                 <td>
-                                    <a href="category/<?php echo $this->parentItemsList[$itemInfo['parent_id']]['url_token'];?>" target="_blank"><?php
-                                    echo isset($this->parentItemsList[$itemInfo['parent_id']]) ? $this->parentItemsList[$itemInfo['parent_id']]['title'] : '-'; ?></a>
+                                    <a href="category/<?php echo $this->parentItemsList[$itemInfo['category_id']]['url_token'];?>" target="_blank"><?php
+                                    echo isset($this->parentItemsList[$itemInfo['category_id']]) ? $this->parentItemsList[$itemInfo['category_id']]['title'] : '-'; ?></a>
                                 </td>
 
                                 <td><?php echo $itemInfo['is_recommend']==1 ?  ('<b>'. _t('是') . '</b>') : _t('否'); ?></td>

@@ -22,7 +22,7 @@
 						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
 						<input type="hidden" name="id" id="article_id" value="<?php echo $this->article_info['id']; ?>" />
 						<?php if ($this->itemOptions) { ?>
-							<select name="parent_id" class="collapse js_parent_id" id="parent_id">
+							<select name="category_id" class="collapse js_category_id" id="category_id">
 								<option value="0">- <?php _e('请选择分类'); ?> -</option>
 								<?php echo $this->itemOptions; ?>
 							</select>

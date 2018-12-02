@@ -19,3 +19,6 @@ alter table icb_category
 ALTER TABLE `icb_course_content_table`
 ADD `category_id` INT(10) NOT NULL DEFAULT '0' COMMENT '所属分类id' AFTER `description`,
 ADD INDEX (`category_id`);
+
+-- 20181202
+ALTER TABLE `icb_course` CHANGE `parent_id` `category_id` INT(10) NOT NULL COMMENT '对应 分类id';

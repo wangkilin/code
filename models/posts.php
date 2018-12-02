@@ -1,19 +1,29 @@
 <?php
 class postsModel extends Model
 {
+    /**
+     * 将发布的模块条目， 统一添加到条目管理中
+     *  1. 按照分类查找条目信息 / 或者参数直接设定条目信息
+     *  2. 更新/添加 对应条目中的信息： 每个条目一条。 删除多余的
+     * @param int $post_id 模块条目id
+     * @param string $post_type 模块标识名
+     * @param array|null $data 模块条目信息
+     *
+     */
     public function set_posts_index($post_id, $post_type, $data = null)
     {
         if ($data) {
             $result = $data;
         } else {
             switch ($post_type) {
-                case 'question':
+                case 'question': // 问答
                     $result = $this->fetch_row('question', 'question_id = ' . intval($post_id));
                     break;
 
-                case 'article':
-                case 'project':
-                case 'course':
+                case 'article': // 文章类型
+                case 'project': // 项目类型
+                case 'course': // 教程
+                default:
                     $result = $this->fetch_row($post_type, 'id = ' . intval($post_id));
 
                     break;
@@ -32,23 +42,13 @@ class postsModel extends Model
             'view_count'    => $result['view_count'],
             'anonymous'     => $result['anonymous'],
             'uid'           => $result['published_uid'],
-            'lock'          => $result['lock'],
+            'lock'          => intval($result['lock']),
             'agree_count'   => $result['agree_count'],
             'answer_count'  => $result['answer_count']
         );
         switch ($post_type) {
             case 'question':
                 $data['popular_value'] = $result['popular_value'];
-
-                break;
-
-            case 'article':
-                $data['update_time'] = $result['add_time'];
-                $data['view_count']  = $result['views'];
-                $data['anonymous']   = 0;
-                $data['uid']         = $result['uid'];
-                $data['agree_count'] = $result['votes'];
-                $data['answer_count'] = $result['comments'];
 
                 break;
 
@@ -64,6 +64,18 @@ class postsModel extends Model
                 $data['answer_count']  = 0;
 
                 break;
+
+            case 'article':
+            case 'course':
+            default:
+                $data['update_time'] = $result['add_time'];
+                $data['view_count']  = $result['views'];
+                $data['anonymous']   = 0;
+                $data['uid']         = $result['uid'];
+                $data['agree_count'] = $result['votes'];
+                $data['answer_count'] = $result['comments'];
+
+                break;
         }
 
         if ($posts_index = $this->fetch_all('posts_index', "post_id = " . intval($post_id) . " AND post_type = '" . $this->quote($post_type) . "'"))
@@ -72,8 +84,7 @@ class postsModel extends Model
 
             $this->update('posts_index', $data, 'id = ' . intval($post_index['id']));
 
-            if (sizeof($posts_index) > 1)
-            {
+            if (sizeof($posts_index) > 1) {
                 $this->delete('posts_index', "post_id = " . intval($post_id) . " AND post_type = '" . $this->quote($post_type) . "' AND id != " . intval($post_index['id']));
             }
         }
@@ -90,6 +101,12 @@ class postsModel extends Model
         }
     }
 
+    /**
+     * 根据id 和模块标识名 删除索引条目
+     * @param int $post_id 条目id
+     * @param string $post_type 模块标识名
+     *
+     */
     public function remove_posts_index($post_id, $post_type)
     {
         return $this->delete('posts_index', "post_id = " . intval($post_id) . " AND post_type = '" . $this->quote($post_type) . "'");

@@ -236,8 +236,8 @@ class courseModel extends Model
         if (isset($data['meta_keyword'])) {
             $set['meta_keyword'] = htmlspecialchars($data['meta_keyword']);
         }
-        if (isset($data['parent_id'])) {
-            $set['parent_id'] = intval($data['parent_id']);
+        if (isset($data['category_id'])) {
+            $set['category_id'] = intval($data['category_id']);
         }
         if (isset($data['tag_names'])) {
             $set['tag_names']  = $data['tag_names'];
@@ -282,7 +282,7 @@ class courseModel extends Model
 
         $this->model('search_fulltext')->push_index('course', $title, $id);
         $this->model('posts')->set_posts_index($id, 'course');
-        
+
         // 处理绑定的话题
         if ($id && isset($data['tag_names'])) {
             foreach ($data['tag_names'] as $tagName) {
@@ -295,7 +295,7 @@ class courseModel extends Model
 
         return $id;
     }
-    
+
 
     /**
      * 更新文章目录

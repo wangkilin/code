@@ -15,13 +15,11 @@ class main extends BaseController
 
     public function setup()
     {
-        if (is_mobile() AND !$_GET['ignore_ua_check'])
-        {
-            switch ($_GET['app'])
-            {
+        if (is_mobile() AND !$_GET['ignore_ua_check'])  {
+            switch ($_GET['app']) {
                 default:
                     HTTP::redirect('/m/');
-                break;
+                    break;
             }
         }
     }
@@ -76,6 +74,7 @@ class main extends BaseController
             $posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
         }
         $courseList = $this->model('posts')->getPostsInTypeCategoryIds('course');
+        var_dump($courseList);
         $mannualList = $this->model('posts')->getPostsInTypeCategoryIds('mannual');
         $articleList = $this->model('posts')->getPostsInTypeCategoryIds('article');
 
