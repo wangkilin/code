@@ -75,7 +75,7 @@
                             </div>
 
                             <div class="form-group col-sm-2">
-                                    <select name="module" id="module_id" class="form-control">
+                                    <select name="module_id" id="module_id" class="form-control">
                                         <option value="0"><?php _e('所属模块'); ?></option>
                                         <?php echo $this->module_option; ?>
                                     </select>

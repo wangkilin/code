@@ -28,11 +28,12 @@ class category extends AdminController
 
     public function list_action()
     {
-        View::assign('list', json_decode($this->model('system')->build_category_json('question'), true));
 
+        //View::assign('list', json_decode($this->model('system')->build_category_json('question'), true));
         //View::assign('category_option', $this->model('system')->build_category_html('question', 0, 0, null, true));
 
         $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('list', $categoryList);
         View::assign('category_option', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
         //View::assign('category_option', buildSelectOptions($this->model('category')->getAllCategories(), 'title', 'id', null, array('module'=>'data-module') ) );
         View::assign('module_option', buildSelectOptions($this->model('system')->fetch_all('post_module'), 'title', 'id', $category_info['module'], array('id'=>'data-id', 'url_token'=>'data-token') ) );

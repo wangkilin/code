@@ -285,10 +285,21 @@ class categoryModel extends Model
         if (! is_array($categoryList) ) {
             $categoryList = $this->fetch_all('category', null, 'id ASC');
         }
-        if ($bindKey && $categoryList) {
-            $keys = array_column($categoryList, $bindKey);
+        if ($categoryList) {
+            $tmpCategoryList = $categoryList;
+            if ($type) {
+                foreach ($tmpCategoryList as $_key=>$_item) {
+                    if ($type!=$_item['type']) {
+                        unset($tmpCategoryList[$_key]);
+                    }
+                }
+            }
+            if ($bindKey) {
+                $keys = array_column($tmpCategoryList, $bindKey);
 
-            return array_combine($keys, $categoryList);
+                $tmpCategoryList = array_combine($keys, $tmpCategoryList);
+            }
+            return $tmpCategoryList;
         }
 
         return $categoryList;
