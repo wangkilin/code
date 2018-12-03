@@ -1,6 +1,17 @@
 <?php if ($this->posts_list) { ?>
-<?php foreach($this->posts_list as $key => $val) { ?>
-<div class="icb-item <?php if ($val['question_id']) { ?><?php if ($val['answer_count'] == 0) { ?>active<?php } ?><?php } else {?>article<?php } ?>" data-topic-id="<?php foreach ($val['topics'] AS $k => $v) { ?><?php echo $v['topic_id']; ?>,<?php } ?>">
+<?php
+foreach($this->posts_list as $key => $val) { ?>
+<div class="icb-item <?php
+    if ($val['question_id']) {
+         if ($val['answer_count'] == 0) {
+    ?>active<?php
+         }
+    } else {
+        ?>article<?php
+    } ?>" data-topic-id="<?php
+    foreach ($val['topics'] AS $k => $v) {
+        echo $v['topic_id']; ?>,<?php
+    } ?>">
 	<?php if ($val['anonymous'] == 0) { ?><a class="icb-user-name hidden-xs" data-id="<?php echo $val['user_info']['uid']; ?>" href="user/<?php echo $val['user_info']['url_token']; ?>" rel="nofollow"><img src="<?php echo get_avatar_url($val['user_info']['uid'], 'max'); ?>" alt="" /><?php if ($val['user_info']['verified']) { ?><?php if ($val['user_info']['verified'] == 'personal') { ?><i class="icon icon-v"></i><?php } else { ?><i class="icon icon-v i-ve"></i><?php } ?><?php } ?></a><?php } else { ?><a class="icb-user-name hidden-xs" href="javascript:;"><img src="<?php echo G_STATIC_URL; ?>/common/avatar-max-img.png" alt="<?php _e('匿名用户'); ?>" title="<?php _e('匿名用户'); ?>" /></a><?php } ?>
 	<div class="icb-question-content">
 		<h4>

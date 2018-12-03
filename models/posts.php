@@ -488,17 +488,29 @@ class postsModel extends Model
         return $recommend_posts;
     }
 
+    /**
+     * 获取指定分类和制定模块下的条目
+     * @param string $post_type 模块标识名
+     * @param int $category_id 分类id
+     * @param array $topic_ids 话题id列表
+     * @param int $day 指定多少天内添加的条目
+     * @param int $page 分页野马
+     * @param int $per_page 每页显示多少条目
+     *
+     * @return array 返回数组
+     */
     public function getPostsInTypeCategoryIds($postType, $category_id = 0, $topicIds = null, $day = 30, $page = 1, $per_page = 10)
     {
         $where = [];
+        // 指定多少天内的添加的条目
         if ($day) {
-           // $where[] = 'add_time > ' . intval( strtotime('-' . $day . ' Day') );
+            $where[] = 'add_time > ' . intval( strtotime('-' . $day . ' Day') );
         }
-
+        // 指定所属模块
         if ($postType) {
             $where[] = "post_type = '" . $this->quote($postType) . "'";
         }
-
+        // 指定分类的id
         if ($categoryId) {
             $where[] = 'category_id IN(' . implode(',', $this->model('cagegory')->getCategoryAndChildIds($category_id)) . ')';
         }
@@ -512,32 +524,37 @@ class postsModel extends Model
 
         if ($topicIds) {
             array_walk_recursive($topicIds, 'intval_string');
-
-            if (!$postType) {
-                $question_post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, 'question');
-                $article_post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, 'article');
-                if ($question_post_ids || $article_post_ids) {
-                    if ($question_post_ids) {
-                        $topic_where[] = 'post_id IN(' . implode(',', $question_post_ids) . ") AND post_type = 'question'";
-                    }
-
-                    if ($article_post_ids) {
-                        $topic_where[] = 'post_id IN(' . implode(',', $article_post_ids) . ") AND post_type = 'article'";
-                    }
-
-                    if ($topic_where) {
-                        $where[] = '(' . implode(' OR ', $topic_where) . ')';
-                    }
-
-                } else {
-                    return false;
-                }
-
-            } else if ($post_ids = $this->model('topic')->getItemIdsByTopicIds($topic_ids, $post_type)) {
-                $where[] = 'post_id IN(' . implode(',', $post_ids) . ") AND post_type = '" . $post_type . "'";
-            } else {
-                return false;
+            $post_ids = $this->model('topic')->getItemIdsByTopicIds($topic_ids, $post_type);
+            $where[] = 'post_id IN(' . implode(',', $post_ids) . ")";
+            if ($post_type) {
+                $where[] ="post_type = '" . $post_type . "'";
             }
+
+            // if (!$postType) {
+            //     $question_post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, 'question');
+            //     $article_post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, 'article');
+            //     if ($question_post_ids || $article_post_ids) {
+            //         if ($question_post_ids) {
+            //             $topic_where[] = 'post_id IN(' . implode(',', $question_post_ids) . ") AND post_type = 'question'";
+            //         }
+
+            //         if ($article_post_ids) {
+            //             $topic_where[] = 'post_id IN(' . implode(',', $article_post_ids) . ") AND post_type = 'article'";
+            //         }
+
+            //         if ($topic_where) {
+            //             $where[] = '(' . implode(' OR ', $topic_where) . ')';
+            //         }
+
+            //     } else {
+            //         return false;
+            //     }
+
+            // } else if ($post_ids = $this->model('topic')->getItemIdsByTopicIds($topic_ids, $post_type)) {
+            //     $where[] = 'post_id IN(' . implode(',', $post_ids) . ") AND post_type = '" . $post_type . "'";
+            // } else {
+            //     return false;
+            // }
         }
 
         $posts_index = $this->fetch_page('posts_index', implode(' AND ', $where), 'popular_value DESC', $page, $per_page);
