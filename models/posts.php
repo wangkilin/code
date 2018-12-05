@@ -269,31 +269,38 @@ class postsModel extends Model
         return $this->posts_list_total;
     }
 
+    /**
+     * 根据发布的条目id列表， 进行条目分类型处理。 获取条目详细数据；
+     * @param array $posts_index 条目id列表
+     * @return array
+     */
     public function process_explore_list_data($posts_index)
     {
-        if (!$posts_index)
-        {
+        if (!$posts_index) {
             return false;
         }
+        $itemIdsInType = array();
+        foreach ($posts_index as $data) {
+            isset($itemIdsInType[$data['post_type']]) OR $itemIdsInType[$data['post_type']] =array();
+            $itemIdsInType[$data['post_type']][] = $data['post_id'];
+            $data_list_uids[$data['uid']] = $data['uid'];
 
-        foreach ($posts_index as $key => $data)
-        {
-            switch ($data['post_type'])
-            {
+            switch ($data['post_type']) {
                 case 'question':
-                    $question_ids[] = $data['post_id'];
-
-                    break;
-
-                case 'article':
-                    $article_ids[] = $data['post_id'];
-
+                    $itemIds[] = $data['post_id'];
                     break;
 
                 case 'project':
                     continue 2;
 
-                    $project_ids[] = $data['post_id'];
+                    $itemIds[] = $data['post_id'];
+
+                    break;
+
+                case 'article':
+                case 'course':
+                default:
+                    $itemIds[] = $data['post_id'];
 
                     break;
             }
@@ -301,9 +308,8 @@ class postsModel extends Model
             $data_list_uids[$data['uid']] = $data['uid'];
         }
 
-        if ($question_ids)
-        {
-            if ($last_answers = $this->model('answer')->get_last_answer_by_question_ids($question_ids))
+        if (isset($itemIdsInType['question'])) {
+            if ($last_answers = $this->model('answer')->get_last_answer_by_question_ids($itemIdsInType['question']))
             {
                 foreach ($last_answers as $key => $val)
                 {
@@ -311,23 +317,23 @@ class postsModel extends Model
                 }
             }
 
-            $topic_infos['question'] = $this->model('topic')->get_topics_by_item_ids($question_ids, 'question');
+            $topic_infos['question'] = $this->model('topic')->get_topics_by_item_ids($itemIdsInType['question'], 'question');
 
-            $question_infos = $this->model('question')->getQuestionsByIds($question_ids);
+            $question_infos = $this->model('question')->getQuestionsByIds($itemIdsInType['question']);
         }
 
-        if ($article_ids)
+        if (isset($itemIdsInType['article']))
         {
-            $topic_infos['article'] = $this->model('topic')->get_topics_by_item_ids($article_ids, 'article');
+            $topic_infos['article'] = $this->model('topic')->get_topics_by_item_ids($itemIdsInType['article'], 'article');
 
-            $article_infos = $this->model('article')->get_article_info_by_ids($article_ids);
+            $article_infos = $this->model('article')->get_article_info_by_ids($itemIdsInType['article']);
         }
 
-        if ($project_ids)
+        if (isset($itemIdsInType['project']))
         {
-            $topic_infos['project'] = $this->model('topic')->get_topics_by_item_ids($project_ids, 'project');
+            $topic_infos['project'] = $this->model('topic')->get_topics_by_item_ids($itemIdsInType['project'], 'project');
 
-            $project_infos = $this->model('project')->get_project_info_by_ids($project_ids);
+            $project_infos = $this->model('project')->get_project_info_by_ids($itemIdsInType['project']);
         }
 
         $users_info = $this->model('account')->getUsersByIds($data_list_uids);

@@ -95,6 +95,7 @@ class main extends BaseController
         ))->create_links());
 
         View::assign('posts_list', $courseList);
+        //var_dump($courseList,$articleList);
         View::assign('courseList', View::output('index/ajax/list', false));
         View::assign('posts_list', $articleList);
         View::assign('articleList', View::output('index/ajax/list', false));
