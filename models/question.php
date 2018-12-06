@@ -1,6 +1,55 @@
 <?php
 class questionModel extends Model
 {
+
+
+    /**
+     * 根据id获取内容
+     * @param unknown $id
+     * @param string $table
+     * @return boolean|multitype:
+     */
+    public function getById ($id, $table=null)
+    {
+        $itemInfo = array();
+        if (!is_numeric($id)) {
+            return $itemInfo;
+        }
+        $table = is_null($table) ? $this->table : $table;
+
+        $itemInfo = $this->fetch_row($table, 'question_id = ' . $id);
+
+        return $itemInfo;
+    }
+
+    /**
+     * 根据ids获取分类列表
+     * @param array $ids 分类id列表
+     * @return array
+     */
+    public function getByIds ($ids, $table=null)
+    {
+        $list = array();
+        if (is_numeric($ids)) {
+            $ids = array($ids);
+        }
+        $arrayLength = count($ids);
+        if (!is_array($ids) || $arrayLength==0) {
+            return $list;
+        }
+        $table = is_null($table) ? $this->table : $table;
+        array_walk($ids, 'intval_string');
+        $where = $arrayLength == 1 ? 'question_id = ' . end($ids) : 'question_id IN (' . join(',', $ids) . ')';
+        if (! $result = $this->fetch_all($table, $where) ) {
+            return $list;
+        }
+        foreach ($result as $_item) {
+            $list[$_item['question_id']] = $_item;
+        }
+
+        return $list;
+    }
+
     public function get_focus_uid_by_question_id($question_id)
     {
         return $this->query_all('SELECT uid FROM ' . $this->get_table('question_focus') . ' WHERE question_id = ' . intval($question_id));

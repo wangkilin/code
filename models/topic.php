@@ -1687,30 +1687,30 @@ class topicModel extends Model
         return $this->fetch_one('topic_relation', 'id', implode(' AND ', $where));
     }
 
+    /**
+     * 根据条目id获取绑定的话题ids列表
+     * @param int $item_id 条目id
+     * @param string $type 条目类型
+     */
     public function get_topics_by_item_id($item_id, $type)
     {
-        $result = $this->get_topics_by_item_ids(array(
-            $item_id
-        ), $type);
+        $result = $this->get_topics_by_item_ids(array($item_id), $type);
 
         return $result[$item_id];
     }
 
     public function get_topics_by_item_ids($item_ids, $type)
     {
-        if (!is_array($item_ids) OR sizeof($item_ids) == 0)
-        {
+        if (!is_array($item_ids) OR sizeof($item_ids) == 0) {
             return false;
         }
 
         array_walk_recursive($item_ids, 'intval_string');
 
         if (!$item_topics = $this->fetch_all('topic_relation', "item_id IN(" . implode(',', $item_ids) . ") AND `type` = '" . $this->quote($type) . "'"))
-        {
-            foreach ($item_ids AS $item_id)
-            {
-                if (!$result[$item_id])
-                {
+        {   // 没有找到对应的话题， 返回对应的条目id关联的空数组
+            foreach ($item_ids AS $item_id) {
+                if (!$result[$item_id]) {
                     $result[$item_id] = array();
                 }
             }
@@ -1718,8 +1718,7 @@ class topicModel extends Model
             return $result;
         }
 
-        foreach ($item_topics AS $key => $val)
-        {
+        foreach ($item_topics AS $key => $val) {
             $topic_ids[] = $val['topic_id'];
         }
 

@@ -308,11 +308,21 @@ class postsModel extends Model
             $data_list_uids[$data['uid']] = $data['uid'];
         }
 
+        foreach ($itemIdsInType as $_type=>$_ids) {
+            $topic_infos[$_type] = $this->model('topic')->get_topics_by_item_ids($_ids, $_type);
+            $itemInfos[$_type] = $this->model($_type)->getByIds($_ids);
+            if ($_type=='question' && $last_answers = $this->model('answer')->get_last_answer_by_question_ids($_ids)) {
+
+                    foreach ($last_answers as $val) {
+                        $data_list_uids[$val['uid']] = $val['uid'];
+                    }
+            }
+        }
+        /*
         if (isset($itemIdsInType['question'])) {
             if ($last_answers = $this->model('answer')->get_last_answer_by_question_ids($itemIdsInType['question']))
             {
-                foreach ($last_answers as $key => $val)
-                {
+                foreach ($last_answers as $val) {
                     $data_list_uids[$val['uid']] = $val['uid'];
                 }
             }
@@ -335,6 +345,7 @@ class postsModel extends Model
 
             $project_infos = $this->model('project')->get_project_info_by_ids($itemIdsInType['project']);
         }
+        */
 
         $users_info = $this->model('account')->getUsersByIds($data_list_uids);
 
@@ -343,7 +354,7 @@ class postsModel extends Model
             switch ($data['post_type'])
             {
                 case 'question':
-                    $explore_list_data[$key] = $question_infos[$data['post_id']];
+                    $explore_list_data[$key] = $itemInfos['question'][$data['post_id']];
 
                     $explore_list_data[$key]['answer_info'] = $last_answers[$data['post_id']];
 
@@ -354,15 +365,16 @@ class postsModel extends Model
 
                     break;
 
-                case 'article':
-                    $explore_list_data[$key] = $article_infos[$data['post_id']];
-
-                    break;
-
                 case 'project':
                     continue 2;
 
                     $explore_list_data[$key] = $project_infos[$data['post_id']];
+
+                    break;
+
+                case 'article':
+                default:
+                    $explore_list_data[$key] = $itemInfos[$data['post_type']][$data['post_id']];
 
                     break;
             }

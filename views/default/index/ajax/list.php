@@ -7,7 +7,7 @@ foreach($this->posts_list as $key => $val) { ?>
     ?>active<?php
          }
     } else {
-        ?>article<?php
+        echo $val['post_type']; // 条目类型
     } ?>" data-topic-id="<?php
     foreach ($val['topics'] AS $k => $v) {
         echo $v['topic_id']; ?>,<?php
@@ -18,7 +18,7 @@ foreach($this->posts_list as $key => $val) { ?>
 			<?php if ($val['question_id']) { ?>
 			<a href="question/<?php echo $val['question_id']; ?>"><?php echo $val['question_content']; ?></a>
 			<?php } else { ?>
-			<a href="article/<?php echo $val['id']; ?>"><?php echo $val['title']; ?></a>
+			<a href="<?php echo $val['post_type']; ?>/<?php echo $val['id']; ?>"><?php echo $val['title']; ?></a>
 			<?php } ?>
 		</h4>
 		<?php if (is_array($val['answer_users'])) { ?>
@@ -34,7 +34,7 @@ foreach($this->posts_list as $key => $val) { ?>
 
 		<p>
 			<?php if ($_GET['category'] != $val['category_id'] AND $val['category_info']['title']) { ?>
-				<a class="icb-question-tags" href="index/category-<?php echo $val['category_info']['url_token']; ?>"><?php echo $val['category_info']['title']; ?></a>
+				<a class="icb-question-tags" href="<?php echo $val['post_type'];?>/category-<?php echo $val['category_info']['url_token']; ?>"><?php echo $val['category_info']['title']; ?></a>
 				• <?php } ?>
 			<?php if ($val['question_id']) { ?>
 			<?php if ($val['answer_count'] > 0) { ?>
@@ -70,5 +70,8 @@ foreach($this->posts_list as $key => $val) { ?>
 		<?php } ?>
 	</div>
 </div>
-<?php } ?>
-<?php } ?>
+<?php
+    } // end foreach
+
+}
+ ?>

@@ -74,7 +74,7 @@ class main extends BaseController
             $posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
         }
         $courseList = $this->model('posts')->getPostsInTypeCategoryIds('course');
-        $mannualList = $this->model('posts')->getPostsInTypeCategoryIds('mannual');
+        $mannualList = $this->model('posts')->getPostsInTypeCategoryIds('question');
         $articleList = $this->model('posts')->getPostsInTypeCategoryIds('article');
 
         if ($posts_list)
