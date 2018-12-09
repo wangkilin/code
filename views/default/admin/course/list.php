@@ -24,7 +24,7 @@
                         <thead>
                             <tr>
                                 <th><input type="checkbox" class="check-all"></th>
-                                <th><?php _e('标题'); ?></th>
+                                <th class="text-left"><?php _e('标题'); ?></th>
                                 <th><?php _e('查看'); ?></th>
                                 <th><?php _e('关注'); ?></th>
                                 <th><?php _e('分类'); ?></th>
@@ -38,7 +38,7 @@
                             <tr>
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>
 
-                                <td><a href="course/id-<?php echo $itemInfo['url_token']; ?>" target="_blank"><?php echo $itemInfo['title']; ?></a></td>
+                                <td class="text-left"><a href="course/id-<?php echo $itemInfo['url_token']; ?>" target="_blank"><?php echo $itemInfo['title']; ?></a></td>
 
                                 <td><?php echo $itemInfo['views']; ?></td>
 

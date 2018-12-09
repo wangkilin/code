@@ -11,6 +11,7 @@
 <meta name="format-detection" content="telephone=no" />
 <title><?php echo $this->page_title; ?></title>
 <base href="<?php echo base_url();?>/<?php echo G_INDEX_SCRIPT; ?>" />
+<link href="<?php echo G_STATIC_URL; ?>/css/<?php echo $this->template_name; ?>/img/favicon.ico?v=<?php echo G_VERSION_BUILD; ?>" rel="shortcut icon" type="image/x-icon" />
 <link type="text/css" rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/css/bootstrap.css?v=<?php echo G_VERSION_BUILD; ?>" />
 <link type="text/css" rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/css/icon.css?v=<?php echo G_VERSION_BUILD; ?>" />
 <script type="text/javascript">

@@ -702,6 +702,9 @@ class ajax extends AdminController
         //     $this->jsonErrExit(_t('系统允许最多二级分类, 当前分类下有子分类, 不能移动到其它分类'));
         // }
 
+        if (! $_POST['module_id'] || (! $moduleInfo = $this->model('postModule')->getById($_POST['module_id'])) ) {
+            $this->jsonErrExit(_t('请选择所属模块'));
+        }
         if (trim($_POST['title']) == ''){
             $this->jsonErrExit(_t('请输入分类名称'));
         }
@@ -715,13 +718,11 @@ class ajax extends AdminController
                 $this->jsonErrExit(_t('分类别名不可以全为数字'));
             }
 
-            if ($this->model('category')->check_url_token($_POST['url_token'], $_POST['category_id'])) {
+            if ($this->model('category')->check_url_token($_POST['url_token'], $_POST['category_id'], $_POST['module_id'])) {
                 $this->jsonErrExit(_t('分类别名已经被占用请更换一个'));
             }
         }
-        if (! $_POST['module_id'] || (! $moduleInfo = $this->model('postModule')->getById($_POST['module_id'])) ) {
-            $this->jsonErrExit(_t('请选择所属模块'));
-        }
+        $moduleInfo = $this->model('postModule')->getById($_POST['module_id']);
 
         if ($_POST['category_id']) {
             $category_id = intval($_POST['category_id']);
@@ -754,10 +755,11 @@ class ajax extends AdminController
             }
         }
         $params = array(
-            'title' => $_POST['title'],
-            'module' => $_POST['module_id'],
+            'title'     => $_POST['title'],
+            'module'    => $_POST['module_id'],
             'parent_id' => $_POST['parent_id'],
             'url_token' => $_POST['url_token'],
+            'type'      => $moduleInfo['url_token'],
         );
         $this->model('category')->update('category', $params, 'id='.$category_id);
 

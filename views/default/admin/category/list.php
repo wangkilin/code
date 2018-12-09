@@ -17,6 +17,7 @@
                     <thead>
                     <tr>
                         <th><?php _e('分类标题'); ?></th>
+                        <th><?php _e('模块'); ?></th>
                         <th><?php _e('别名'); ?></th>
                         <th><?php _e('排序'); ?></th>
                         <th><?php _e('操作'); ?></th>
@@ -28,6 +29,11 @@
                     <tr>
                         <td>
                             <a href="index/category-<?php echo ($val['url_token']) ? $val['url_token'] : $val['id']; ?>"><?php echo $val['title']; ?></a>
+                        </td>
+                        <td>
+                            <div class="col-sm-12 clo-xs-12 col-lg-offset-1">
+                            <?php echo $val['type']; ?>
+                            </div>
                         </td>
                         <td>
                             <div class="col-sm-12 clo-xs-12 col-lg-offset-1">
@@ -52,8 +58,15 @@
                     </tbody>
                     <tfoot class="mod-foot-center">
                     <tr>
-                        <td colspan="4">
+                        <td colspan="5">
                         <form id="add_category_form" action="admin/ajax/save_category/" method="post" onsubmit="return false">
+
+                            <div class="form-group col-sm-2">
+                                    <select name="module_id" id="module_id" class="form-control">
+                                        <option value="0"><?php _e('所属模块'); ?></option>
+                                        <?php echo $this->module_option; ?>
+                                    </select>
+                            </div>
                             <div class="form-group col-sm-3">
                                 <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('标题'); ?></span>
                                 <div class="col-sm-9 col-xs-12">
@@ -71,13 +84,6 @@
                                     <select name="parent_id" id="parent_id" class="form-control">
                                         <option value="0" data-module="0"><?php _e('父级分类'); ?></option>
                                         <?php echo $this->category_option; ?>
-                                    </select>
-                            </div>
-
-                            <div class="form-group col-sm-2">
-                                    <select name="module_id" id="module_id" class="form-control">
-                                        <option value="0"><?php _e('所属模块'); ?></option>
-                                        <?php echo $this->module_option; ?>
                                     </select>
                             </div>
                             <div class="col-sm-2 col-xs-12">
@@ -125,6 +131,7 @@
             $('.from-category').val($(this).attr('data-id'));
             $('.icb-category-move-box .col-md-12').prepend('<p>将 <b>' + $(this).attr('data-name') + '</b> 的内容批量移动到</p>');
         });
+        /*
         // 选择分类后， 将对应模块选定。 如果是根分类， 需要选择所属的模块
         $('#parent_id').change(function () {
             var moduleId = $(this).find('option:selected').attr('data-module');
@@ -135,6 +142,25 @@
                 $('#module_id').removeAttr('disabled');
             }
         });
+        */
+        $('#parent_id').attr('disabled', 'disabled');
+        $('#module_id').change(function () {
+            var moduleId = $(this).val();
+            if (moduleId>0) {
+                $('#parent_id').find('option[data-module="'+moduleId+'"]').show();
+                $('#parent_id').find('option[data-module!="'+moduleId+'"]').hide();
+                $('#parent_id').find('option[data-module="0"]').show();
+                $('#parent_id').removeAttr('disabled');
+            } else {
+                $('#parent_id').attr('disabled', 'disabled');
+            }
+            var moduleToken = $(this).find('option[value="'+moduleId+'"]').attr('data-token');
+            if (! moduleToken) {
+                moduleToken = 'index';
+            }
+            $('#js_url_module_name').text(moduleToken);
+        });
+        $('#module_id').trigger('change');
     });
 </script>
 

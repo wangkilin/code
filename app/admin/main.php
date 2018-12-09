@@ -110,7 +110,10 @@ class main extends AdminController
 
         View::assign('nav_menu_list', $this->model('menu')->getNavMenuWithModuleInLink());
 
-        View::assign('category_list', $this->model('system')->build_category_html('question', 0, 0, null, true));
+        View::assign('module_option', buildSelectOptions($this->model('system')->fetch_all('post_module'), 'title', 'id', null, array('id'=>'data-id', 'url_token'=>'data-token') ) );
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('category_list', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
+        //View::assign('category_list', $this->model('system')->build_category_html('question', 0, 0, null, true));
         // 话题列表数据
         View::assign('tag_list', $this->model('topic')->buildTopicDropdownHtml());
         View::assign('setting', get_setting());

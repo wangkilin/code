@@ -78,7 +78,11 @@ class main extends BaseController
             $tagOrCategoryId = array('id'   => isset($question_info[1])?$question_info[1]:0,
                                        'type' => $question_info[0]);
             //View::assign('question_category_list', $this->model('system')->build_category_html('question', 0, $question_info['category_id']));
-            View::assign('tagsDropdown', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
+            //View::assign('tagsDropdown', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
+
+            // 只显示问题模块下面的分类
+            $categoryList = $this->model('category')->getAllCategories('id', 'question');
+            View::assign('tagsDropdown', buildSelectOptions(getListInTreeList($categoryList, 'question'), 'title', 'id', $article_info['category_id'], array('module'=>'data-module','title'=>'title') ) );
         }
 
         if ($modify_reason = $this->model('question')->get_modify_reason()) {
@@ -160,7 +164,10 @@ class main extends BaseController
             $tagOrCategoryId = array('id'   => isset($question_info[1])?$question_info[1]:0,
                                        'type' => $question_info[0]);
             //View::assign('article_category_list', $this->model('system')->build_category_html('question', 0, $article_info['category_id']));
-            View::assign('article_category_list', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
+            //View::assign('article_category_list', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
+            // 只显示文章下面的分类
+            $categoryList = $this->model('category')->getAllCategories('id', 'article');
+            View::assign('article_category_list', buildSelectOptions(getListInTreeList($categoryList, 'article'), 'title', 'id', $article_info['category_id'], array('module'=>'data-module','title'=>'title') ) );
         }
 
         View::assign('human_valid', human_valid('question_valid_hour'));

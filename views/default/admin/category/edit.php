@@ -16,6 +16,19 @@
 				<tr>
 					<td>
 						<div class="form-group">
+							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属模块'); ?>:</span>
+							<div class="col-sm-9 col-xs-8">
+								<select name="module_id" id="module_id" class="form-control">
+									<option value="0"><?php _e('无'); ?></option>
+									<?php echo $this->module_option; ?>
+								</select>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('缩略图'); ?>:</span>
 							<div class="col-sm-9 col-xs-8">
 								<a id="thumb_pic_uploader"><img src="<?php echo getModulePicUrlBySize('category', 'mid', $this->category['pic']); ?>" alt="" id="thumb_pic" class="img-polaroid" name="thumb_pic" /></a>
@@ -60,19 +73,6 @@
 						</div>
 					</td>
 				</tr>
-				<tr>
-					<td>
-						<div class="form-group">
-							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属模块'); ?>:</span>
-							<div class="col-sm-9 col-xs-8">
-								<select name="module_id" id="module_id" class="form-control">
-									<option value="0"><?php _e('无'); ?></option>
-									<?php echo $this->module_option; ?>
-								</select>
-							</div>
-						</div>
-					</td>
-				</tr>
 				<tfoot>
 				<tr>
 					<td>
@@ -103,7 +103,25 @@ $(function() {
 	}
 	<?php } ?>
 
-
+    $('#parent_id').attr('disabled', 'disabled');
+    $('#module_id').change(function () {
+        var moduleId = $(this).val();
+        if (moduleId>0) {
+            $('#parent_id').find('option[data-module="'+moduleId+'"]').show();
+            $('#parent_id').find('option[data-module!="'+moduleId+'"]').hide();
+            $('#parent_id').find('option[data-module="0"]').show();
+            $('#parent_id').removeAttr('disabled');
+        } else {
+            $('#parent_id').attr('disabled', 'disabled');
+        }
+        var moduleToken = $(this).find('option[value="'+moduleId+'"]').attr('data-token');
+        if (! moduleToken) {
+            moduleToken = 'index';
+        }
+        $('#js_url_module_name').text(moduleToken);
+    });
+    $('#module_id').trigger('change');
+    /*
 	// 选择分类后， 将对应模块选定。 如果是根分类， 需要选择所属的模块
 	$('#parent_id').change(function () {
 		var moduleId = $(this).find('option:selected').attr('data-module');
@@ -121,6 +139,7 @@ $(function() {
         $('#js_url_module_name').text(moduleToken);
     });
     $('#parent_id').trigger('change');
+    */
 });
 </script>
 <?php View::output('admin/global/footer.php'); ?>

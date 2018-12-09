@@ -958,7 +958,7 @@ function array_random($arr)
  *
  * @param  array $array 数组列表
  * @param  string $key  数组键值名
- * @return array 
+ * @return array
  */
 function fetch_array_value($array, $key)
 {
@@ -1044,12 +1044,28 @@ function i18n($string, $replace = null)
  * @param  string
  * @param  string
  */
-function _e($string, $replace = null)
+function _e($string, $replace = null, $tagInfo=array())
 {
+    if (! is_array($tagInfo)) {
+        $tagInfo = array('tag'=>strval($tagInfo) );
+    }
+    if ($tagInfo && isset($tagInfo['tag'])) {
+        echo '<' . $tagInfo['tag'];
+        foreach ($tagInfo as $_attrKey => $_attrValue) {
+            if ('tag'==$_attrKey) {
+                continue;
+            }
+            echo ' ' . $_attrKey . '="' . $_attrValue . '"';
+        }
+        echo '>';
+    }
     if (! class_exists('Application', false)) {
         echo loadClass('core_lang')->translate($string, $replace, TRUE);
     } else {
         echo Application::lang()->translate($string, $replace, TRUE);
+    }
+    if ($tagInfo && isset($tagInfo['tag'])) {
+        echo '</' . $tagInfo['tag'] . '>';
     }
 }
 

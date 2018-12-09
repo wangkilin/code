@@ -94,8 +94,13 @@
                     <div class="mod-set-body">
                         <form action="admin/ajax/add_nav_menu/" method="post">
                             <input type="hidden" name="type" value="category">
-                            <select name="type_id" class="form-control pull-left input-small">
-                                <option value="0"><?php _e('无'); ?></option>
+                            <select name="module_id" id="module_id" class="form-control pull-left input-small">
+                                <option value="0"><?php _e('选择模块'); ?></option>
+                                <?php echo $this->module_option; ?>
+                            </select>
+                            <br/><br/>
+                            <select name="type_id" id="type_id" class="form-control pull-left input-small">
+                                <option value="0"><?php _e('模块分类'); ?></option>
                                 <?php echo $this->category_list; ?>
                             </select>
                             <a onclick="AWS.ajax_post($(this).parents('form'));" class="btn btn-primary"><?php _e('添加至导航菜单'); ?></a>
@@ -162,6 +167,17 @@ $(document).ready(function () {
         <?php } ?>
     <?php } ?>
     <?php } ?>
+    $('#type_id').attr('disabled', 'disabled');
+    $('#module_id').change(function () {
+        var moduleId = $(this).val();
+        if (moduleId>0) {
+            $('#type_id').find('option[data-module="'+moduleId+'"]').show();
+            $('#type_id').find('option[data-module!="'+moduleId+'"]').hide();
+            $('#type_id').removeAttr('disabled');
+        } else {
+            $('#type_id').attr('disabled', 'disabled');
+        }
+    });
 });
 </script>
 

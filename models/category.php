@@ -91,9 +91,16 @@ class categoryModel extends Model
         }
     }
 
-    public function check_url_token($url_token, $category_id)
+    /**
+     * 查看url token是否被占用
+     */
+    public function check_url_token($url_token, $category_id, $moduleId=null)
     {
-        return $this->count('category', "url_token = '" . $this->quote($url_token) . "' AND id != " . intval($category_id));
+        $where = "url_token = '" . $this->quote($url_token) . "' AND id != " . intval($category_id);
+        if (isset($moduleId)) {
+            $where .= " AND module = " . intval($moduleId);
+        }
+        return $this->count('category', $where);
     }
 
     public function move_contents($from_id, $target_id)
