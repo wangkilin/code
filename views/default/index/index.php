@@ -34,7 +34,7 @@
     position: absolute;
     right: 20px;
     bottom: 27px;
-    z-index: 5;
+    z-index: 1000;
     height: 14px;
     line-height: 23px;
 }
@@ -46,6 +46,11 @@
     cursor: pointer;
     border: 2px solid #fafeff;
     border-radius:50%;
+}
+#lunbonum li.lunboone {
+    width: 50px;
+    background-color: #fafeff;
+    border-radius:6px;
 }
 </style>
 <div class="lunhuan">
@@ -70,7 +75,7 @@
     <div class="lunhuan_main">
         <!-- 轮换中间区域 -->
         <div class="lunhuancenter">
-            <ul id="lunbonum" style="z-index:4">
+            <ul id="lunbonum">
                 <li class="lunboone"></li>
                 <li class=""></li>
                 <li class=""></li>
