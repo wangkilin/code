@@ -82,16 +82,15 @@
 		<?php } /* end if ($val['title']) */ ?>
       <?php } /* end foreach */ ?>
 
-
+<!-- -->
         <div class="row icb-loop-play-pic">
           <div class="icb-content-wrap nav-block-row clearfix">
-           <div class="col-sm-3 icb-content-nav-top-menu">
+           <div class="col-sm-3 icb-content-nav-top-menu" style="border-bottom:0;">
             <span class="col-sm-9"></span>
 		   </div>
            <!--  start sub-category -->
 		   <div class="col-sm-9  scroll-pic">
-		   <div class="row">
-		               </div>
+		    <div class="row"></div>
 	       </div>
            <!-- end sub-category -->
           </div>
