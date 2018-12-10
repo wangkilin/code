@@ -45,17 +45,17 @@
 		 <div class="row icb-content-nav-menu my-category-<?php echo $val['url_token'] ? $val['url_token'] : $val['id']; ?>-and-sub-item">
 
 		  <div class="icb-content-wrap nav-block-row clearfix">
-           <div class="col-sm-3 icb-content-nav-top-menu  my-category-<?php echo $val['url_token'] ? $val['url_token'] : $val['id']; ?>">
+           <div class="col-sm-2 icb-content-nav-top-menu  my-category-<?php echo $val['url_token'] ? $val['url_token'] : $val['id']; ?>">
             <a <?php if ($val['link']) { echo 'href="'. $val['link'].'"';} if ($val['type'] == 'custom') { ?> target="_blank"<?php } ?>>
             <!-- <span class="col-sm-3"><img src="<?php if ($val['icon']) { ?><?php echo get_setting('upload_url'); ?>/nav_menu/<?php echo $val['icon']; ?><?php } else { ?><?php echo G_STATIC_URL; ?>/css/<?php echo $this->template_name; ?>/img/default_class_imgs.png<?php } ?>" alt="<?php echo $val['title']; ?>" /></span> -->
             <span class="title col-sm-12">
               <?php echo $val['title'];?>
             </span>
             </a>
-            <span class="col-sm-9"><?php echo $val['description']; ?></span>
+            <span class="col-sm-10"><?php echo $val['description']; ?></span>
 		   </div>
            <!--  start sub-category -->
-		   <div class="col-sm-9 icb-content-nav-sub-menu">
+		   <div class="col-sm-10 icb-content-nav-sub-menu">
 		   <div class="row">
 		   <?php foreach ($val['child'] AS $_key => $_val) { ?>
 		     <div class="col-sm-3 category-sub-item">
