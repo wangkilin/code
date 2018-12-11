@@ -10,8 +10,18 @@
 
 					<!-- tab切换 -->
 					<ul class="nav nav-tabs icb-nav-tabs right hidden-xs">
-						<li class="nav-tabs-title"><?php if ($this->category_info) { ?><?php echo $this->category_info['title']; ?><?php } else if ($this->feature_info) { ?><?php echo $this->feature_info['title']; ?><?php } else { ?><i class="icon icon-list"></i> <?php _e('教程'); ?><?php } ?></li>
-						<li<?php if ((!$_GET['sort_type'] OR $_GET['sort_type'] == 'new') AND !$_GET['is_recommend']) { ?> class="active"<?php } ?>><a href="course/<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?><?php if ($this->category_info['id']) { ?>category-<?php echo $this->category_info['id']; ?><?php } ?>"><?php _e('最新'); ?></a></li>
+						<li class="nav-tabs-title"><i class="icon icon-list"></i> <?php 
+						if ($this->category_info) {
+							echo $this->category_info['title']; 
+						} else if ($this->feature_info) { 
+							echo $this->feature_info['title']; 
+						}
+						?><?php _e('教程'); ?>
+						</li>
+						<li<?php 
+						if ((!$_GET['sort_type'] OR $_GET['sort_type'] == 'new') AND !$_GET['is_recommend']) {
+						?> class="active"<?php 
+						} ?>><a href="course/<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?><?php if ($this->category_info['id']) { ?>category-<?php echo $this->category_info['id']; ?><?php } ?>"><?php _e('最新'); ?></a></li>
 						<li<?php if ($_GET['is_recommend']) { ?> class="active"<?php } ?>><a href="course/<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?>category-<?php echo $this->category_info['id']; ?>__is_recommend-1"><?php _e('推荐'); ?></a></li>
 						<li<?php if ($_GET['sort_type'] == 'hot') { ?> class="active"<?php } ?>><a href="course/<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?>category-<?php echo $this->category_info['id']; ?>__sort_type-hot__day-7" id="sort_control_hot"><?php _e('热门'); ?></a></li>
 						<li<?php if ($_GET['sort_type'] == 'unresponsive') { ?> class="active"<?php } ?>><a href="course/<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?>category-<?php echo $this->category_info['id']; ?>__sort_type-unresponsive"><?php _e('视频'); ?></a></li>
