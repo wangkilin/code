@@ -60,10 +60,12 @@
         </p>
         <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/summit.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+			Truth can only be found in one place: the code.
         </p>
 
         <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/new-shuishou.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/event/wadi.html?utm_term=180607852862" target="_blank" rel="nofollow"></a>
+			Life is like a penis. It is short, but seems long when it gets hard... but you can have fun only when it gets hard.
         </p>
         <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/new-transfer.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/event/company_transfer.html?utm_term=180607852863" target="_blank" rel="nofollow"></a>

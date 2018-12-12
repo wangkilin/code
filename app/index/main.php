@@ -102,7 +102,7 @@ class main extends BaseController
         View::assign('posts_list', $mannualList);
         View::assign('mannualList', View::output('index/ajax/list', false));
         View::assign('posts_list', $posts_list);
-        View::assign('posts_list_bit', View::output('index/ajax/list', false));
+        View::assign('posts_list_bit', View::output('block/post_list', false));
 
         View::output('index/index');
     }
