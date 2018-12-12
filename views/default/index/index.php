@@ -333,7 +333,7 @@ $(function (containerSelector, slideSelector, controlSelector) {
 						<li<?php if ($_GET['sort_type'] == 'unresponsive') { ?> class="active"<?php } ?>><a href="<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?>category-<?php echo $this->category_info['id']; ?>__sort_type-unresponsive"><?php _e('等待回复'); ?></a></li>
 						<li<?php if ($_GET['sort_type'] == 'hot') { ?> class="active"<?php } ?>><a href="<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?>category-<?php echo $this->category_info['id']; ?>__sort_type-hot__day-7" id="sort_control_hot"><?php _e('热门'); ?></a></li>
 						<li<?php if ($_GET['is_recommend']) { ?> class="active"<?php } ?>><a href="<?php if ($this->feature_info) { ?>feature_id-<?php echo $this->feature_info['id']; ?>__<?php } ?>category-<?php echo $this->category_info['id']; ?>__is_recommend-1"><?php _e('推荐'); ?></a></li>
-					
+
 					</ul>
 					<!-- end tab切换 -->
 
