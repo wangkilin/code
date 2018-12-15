@@ -162,7 +162,6 @@ foreach ($val['topics'] AS $k => $v) {
             <?php echo $val['views']; ?> <em><?php _e('浏览'); ?></em>
         </span>
         <span class="votes hidden-xs">
-            0 <em>得票</em>
             <?php echo $val['comments']; ?> <em><?php _e('评论'); ?></em>
         </span><?php
     }?>
@@ -173,7 +172,6 @@ foreach ($val['topics'] AS $k => $v) {
         <div class="mod-body">
             <div class="icb-article-title-box clearfix">
                 <span class="icb-article-title">
-				 <a href="course/<?php echo $val['id']; ?>"><?php echo $val['title']; ?></a>
 				 <h4>
 					<?php if ($val['question_id']) { ?>
 					<a href="question/<?php echo $val['question_id']; ?>"><?php echo $val['question_content']; ?></a>
@@ -216,41 +214,39 @@ foreach ($val['topics'] AS $k => $v) {
                 if ($val['answer_count'] > 0) { ?>
                     <?php
                     if ($val['answer_info']['anonymous']) {
-                        ?> <a href="javascript:;" class="icb-user-name"><?php _e('匿名用户'); ?></a><?php
+                        ?> <a href="javascript:;" class=""><?php _e('匿名用户'); ?></a><?php
                     } else {
                         ?><a href="user/<?php
-                        echo $val['answer_info']['user_info']['url_token']; ?>" class="icb-user-name" data-id="<?php
+                        echo $val['answer_info']['user_info']['url_token']; ?>" class="" data-id="<?php
                         echo $val['answer_info']['user_info']['uid']; ?>"><?php
                         echo $val['answer_info']['user_info']['user_name']; ?></a><?php
                     } ?>
                      <span class="text-color-999"><?php
-                    _e('回复了问题'); ?><?php
-                     echo date_friendly($val['update_time']); ?>
+                    _e('回复'); ?> • <?php
+                     echo date_friendly($val['update_time'], null, 'Y-m-d'); ?>
                         </span>
                     <?php
                 } else { ?>
                 <?php
                     if ($val['anonymous'] == 0) { ?>
                         <a href="user/<?php
-                        echo $val['user_info']['url_token']; ?>" class="icb-user-name"><?php
+                        echo $val['user_info']['url_token']; ?>" class=""><?php
                         echo $val['user_info']['user_name']; ?></a><?php
                     } else {
-                        ?><a href="javascript:;" class="icb-user-name" data-id="<?php
+                        ?><a href="javascript:;" class="" data-id="<?php
                         echo $val['uid']; ?>"><?php _e('匿名用户'); ?></a><?php
                     } ?>
-                    <span class="text-color-999"><?php
-                    _e('发起了问题'); ?><?php
-                    echo date_friendly($val['add_time']); ?>
+                    <span class="text-color-999"> • <?php
+                    echo date_friendly($val['add_time'], null, 'Y-m-d'); ?>
                     </span>
                     <?php
                 } ?>
             <?php
             } else { ?>
                 <a href="user/<?php
-                echo $val['user_info']['url_token']; ?>" class="icb-user-name"><?php
-                echo $val['user_info']['user_name']; ?></a> <span class="text-color-999"><?php
-                _e('发表了文章'); ?><?php
-                echo date_friendly($val['add_time']); ?></span>
+                echo $val['user_info']['url_token']; ?>" class=""><?php
+                echo $val['user_info']['user_name']; ?></a> <span class="text-color-999"> • <?php
+                echo date_friendly($val['add_time'], null, 'Y-m-d'); ?></span>
             <?php
             } ?>
 

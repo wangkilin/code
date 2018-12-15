@@ -402,8 +402,10 @@ function jsonp_encode($json = array(), $callback = 'jsoncallback')
  * @param  int
  * @return string
  */
-function date_friendly($timestamp, $time_limit = 604800, $out_format = 'Y-m-d H:i', $formats = null, $time_now = null)
+function date_friendly($timestamp, $time_limit = null, $out_format = null, $formats = null, $time_now = null)
 {
+    isset($time_limit) OR $time_limit = 604800;
+    isset($out_format) OR $out_format = 'Y-m-d H:i';
     if (get_setting('time_style') == 'N')
     {
         return date($out_format, $timestamp);

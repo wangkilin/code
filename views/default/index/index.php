@@ -58,27 +58,35 @@
         <p style="background: url(static/css/default/img/background/sky_star.jpg) 0 0 no-repeat scroll; opacity: 1;">
         <canvas id="J_dotLine" style="background-color: transparent;width: 100%;position: absolute;height: 300px;"></canvas>
         </p>
-        <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/summit.jpg) center center no-repeat scroll; opacity: 0;">
+        <p style="background: url(static/css/default/img/background/codeonce.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-			Truth can only be found in one place: the code.
         </p>
-
-        <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/new-shuishou.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/event/wadi.html?utm_term=180607852862" target="_blank" rel="nofollow"></a>
-			Life is like a penis. It is short, but seems long when it gets hard... but you can have fun only when it gets hard.
+        <p style="background: url(static/css/default/img/background/goodsoftware_1.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
         </p>
-        <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/new-transfer.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/event/company_transfer.html?utm_term=180607852863" target="_blank" rel="nofollow"></a>
+        <p style="background: url(static/css/default/img/background/truth.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
         </p>
-        <p style="background: url(http://kfw-special.oss-cn-beijing.aliyuncs.com/banner/banner_zc.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/product/item/info/id/967_3302_0_5.html" target="_blank" rel="nofollow"></a>
+        <p style="background: url(static/css/default/img/background/showcode.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
         </p>
+        <p style="background: url(static/css/default/img/background/poweredworld.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        </p>
+        <p style="background: url(static/css/default/img/background/teamwork_1.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        </p>
+        <!-- <p style="background: url(static/css/default/img/background/teamwork_2.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        </p> -->
     </div>
     <div class="lunhuan_main">
         <!-- 轮换中间区域 -->
         <div class="lunhuancenter">
             <ul id="lunbonum">
                 <li class="lunboone"></li>
+                <li class=""></li>
+                <li class=""></li>
                 <li class=""></li>
                 <li class=""></li>
                 <li class=""></li>
@@ -349,12 +357,12 @@ $(function (containerSelector, slideSelector, controlSelector) {
 					<!-- end 自定义tab切换 -->
 					<?php } ?>
 
-					<div class="icb-mod icb-explore-list">
-						<div class="mod-body">
+					<div class="icb-mod icb-article-list">
+						<!-- <div class="mod-body">
 							<div class="icb-common-list">
-								<?php echo $this->posts_list_bit; ?>
 							</div>
-						</div>
+						</div> -->
+						<?php echo $this->posts_list_bit; ?>
 						<div class="mod-footer">
 							<?php echo $this->pagination; ?>
 						</div>
