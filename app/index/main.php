@@ -94,6 +94,10 @@ class main extends BaseController
             'per_page' => get_setting('contents_per_page')
         ))->create_links());
 
+        // @todo 获取各个分类的topics。 页面显示topics
+        $article_topics = $this->model('topic')->get_topics_by_item_ids($article_ids, 'article');
+        $course_topics = $this->model('topic')->get_topics_by_item_ids($course_ids, 'course');
+        $mannual_topics = $this->model('topic')->get_topics_by_item_ids($mannual_ids, 'mannual');
         View::assign('posts_list', $courseList);
         //var_dump($courseList,$articleList);
         View::assign('courseList', View::output('index/ajax/list', false));

@@ -5,7 +5,7 @@
 .lunhuan {
     position: absolute;
     width: 100%;
-    height: 440px;
+    height: 442px;
     background-color: #555;
 }
 .lunhuan #lunhuanback {
@@ -14,14 +14,14 @@
     left: 0;
     overflow: hidden;
     width: 100%;
-    height: 440px;
+    height: 442px;
 }
 .lunhuan #lunhuanback p {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 440px;
+    height: 442px;
     opacity: 0;
 }
 .lunhuan .lunhuan_main {
