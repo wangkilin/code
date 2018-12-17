@@ -60,30 +60,40 @@ class main extends BaseController
         }
         // 查看并准备模版中用到的块数据
         $this->_prepareDataByCheckingTplFile('index/index');
-
+        // 没设置排序， 也没有设置推荐， 按照最新排序
         if (! $_GET['sort_type'] AND !$_GET['is_recommend']){
             $_GET['sort_type'] = 'new';
         }
 
-        if ($_GET['sort_type'] == 'hot')
-        {
+        if ($_GET['sort_type'] == 'hot') {// 按照热门排序
             $posts_list = $this->model('posts')->get_hot_posts(null, $category_info['id'], null, $_GET['day'], $_GET['page'], get_setting('contents_per_page'));
-        }
-        else
-        {
+        } else {// 按照指定排序规则排序
             $posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
         }
         $courseList = $this->model('posts')->getPostsInTypeCategoryIds('course');
         $mannualList = $this->model('posts')->getPostsInTypeCategoryIds('question');
         $articleList = $this->model('posts')->getPostsInTypeCategoryIds('article');
 
-        if ($posts_list)
-        {
-            foreach ($posts_list AS $key => $val)
-            {
-                if ($val['answer_count'])
-                {
+        $articleIds = array();
+        $courseIds  = array();
+        $mannualIds = array();
+        if ($posts_list) {
+            foreach ($posts_list AS $key => $val) {
+                if ($val['answer_count']) {
                     $posts_list[$key]['answer_users'] = $this->model('question')->get_answer_users_by_question_id($val['question_id'], 2, $val['published_uid']);
+                }
+                switch ($val['post_type']) {
+                    case 'article':
+                        $articleIds[] = $val['id'];
+                        break;
+                    case 'course':
+                        $courseIds[] = $val['id'];
+                        break;
+                    case 'mannual':
+                        $mannualIds[] = $val['id'];
+                        break;
+                    default:
+                        break;
                 }
             }
         }
@@ -95,10 +105,14 @@ class main extends BaseController
         ))->create_links());
 
         // @todo 获取各个分类的topics。 页面显示topics
-        $article_topics = $this->model('topic')->get_topics_by_item_ids($article_ids, 'article');
-        $course_topics = $this->model('topic')->get_topics_by_item_ids($course_ids, 'course');
-        $mannual_topics = $this->model('topic')->get_topics_by_item_ids($mannual_ids, 'mannual');
+        $article_topics = $this->model('topic')->getTopicsByArticleIds($articleIds, 'article');
+        $course_topics  = $this->model('topic')->getTopicsByArticleIds($courseIds, 'course');
+        $mannual_topics = $this->model('topic')->getTopicsByArticleIds($mannualIds, 'mannual');
+        //var_dump($course_topics);
         View::assign('posts_list', $courseList);
+        View::assign('article_topics', $article_topics);
+        View::assign('course_topics', $course_topics);
+        View::assign('mannual_topics', $mannual_topics);
         //var_dump($courseList,$articleList);
         View::assign('courseList', View::output('index/ajax/list', false));
         View::assign('posts_list', $articleList);

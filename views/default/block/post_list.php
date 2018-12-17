@@ -180,16 +180,28 @@ foreach ($val['topics'] AS $k => $v) {
 					<?php } ?>
 				</h4>
                 </span>
-                <?php foreach($this->article_topics[$val['id']] as $topic_key => $topic_val) { ?>
+                <?php
+                switch ($val['post_type']) {
+                    case 'article':
+                        $topics = $this->article_topics;
+                        break;
+                    case 'mannual':
+                        $topics = $this->mannual_topics;
+                        break;
+                    case 'course':
+                        $topics = $this->course_topics;
+                        break;
+                    default:
+                        $topics = array();
+                        break;
+                }
+                //var_dump($val['post_type'],$topics);
+                foreach($topics[$val['id']] as $topic_key => $topic_val) { ?>
                 <span class="article-tag">
                     <a href="tag/<?php echo $topic_val['url_token']; ?>" class="text" data-id="<?php echo $topic_val['topic_id']; ?>"><?php echo $topic_val['topic_title']; ?></a>
                 </span>
-                <?php } ?>
-				<?php foreach($this->article_topics[$val['id']] as $topic_key => $topic_val) { ?>
-				<span class="article-tag">
-					<a href="tag/<?php echo $topic_val['url_token']; ?>" class="text" data-id="<?php echo $topic_val['topic_id']; ?>"><?php echo $topic_val['topic_title']; ?></a>
-				</span>
-				<?php } ?>
+                <?php
+                }?>
             </div>
 
             <div class="content-wrap">
