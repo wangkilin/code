@@ -15,24 +15,24 @@ foreach ($val['topics'] AS $k => $v) {
     <div class="icb-rank col-sm-1">
     <?php
     if ($val['question_id']) {
-        ?><span class="views hidden-xs viewsword100to999 stat-info">
-            <?php echo $val['view_count']; ?> <em><?php _e('浏览'); ?></em>
+        ?><span class="views hidden-xs viewsword100to999 stat-info icon-preview">
+            <?php echo $val['view_count']; ?> <em class=""><?php _e('浏览'); ?></em>
         </span>
-        <span class="votes hidden-xs stat-info">
+        <span class="votes hidden-xs stat-info icon-favor">
         <?php echo $val['focus_count']; ?><em><?php _e('关注'); ?></em>
         </span>
-        <span class="answer hidden-xs stat-info">
+        <span class="answer hidden-xs stat-info icon-topic">
         <?php echo $val['answer_count']; ?><em><?php _e('回复'); ?></em>
         </span>
     <?php
-    } else { ?> <span class="views hidden-xs stat-info">
+    } else { ?> <span class="views hidden-xs stat-info icon-preview">
             <?php echo $val['views']; ?> <em><?php _e('浏览'); ?></em>
         </span>
-        <span class="comments hidden-xs stat-info">
+        <span class="comments hidden-xs stat-info icon-comment">
             <?php echo $val['comments']; ?> <em><?php _e('评论'); ?></em>
         </span>
-        <span class="votes hidden-xs stat-info">
-            <?php echo $val['votes']; ?> <em><?php _e('评论'); ?></em>
+        <span class="votes hidden-xs stat-info  icon-agree">
+            <?php echo $val['votes']; ?> <em><?php _e('投票'); ?></em>
         </span><?php
     }?>
 

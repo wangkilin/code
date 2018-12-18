@@ -89,7 +89,7 @@
             <span class="col-sm-9"></span>
 		   </div>
            <!--  start sub-category -->
-		   <div class="col-sm-11  scroll-pic">
+		   <div class="col-sm-10  scroll-pic">
 		    <div class="row"></div>
 	       </div>
            <!-- end sub-category -->
