@@ -315,6 +315,11 @@ class publishModel extends Model
     }
     /**
      * 发表文章
+     *   1. 添加文章
+     *   2. 设定了topic，添加新topic， 绑定topic和文章的关系
+     *   3。 文章有附件， 处理附件信息
+     *   4. 将标题处理成可搜索的全文信息存储
+     *   5.
      * @param string $title
      * @param string $message
      * @param int $uid
@@ -325,6 +330,7 @@ class publishModel extends Model
      */
     public function publish_article($title, $message, $uid, $topics = null, $category_id = null, $attach_access_key = null, $create_topic = true)
     {
+        // 添加
         if ($article_id = $this->insert('article', array(
             'uid' => intval($uid),
             'title' => htmlspecialchars($title),
@@ -335,18 +341,15 @@ class publishModel extends Model
         {
             set_human_valid('question_valid_hour');
 
-            if (is_array($topics))
-            {
-                foreach ($topics as $key => $topic_title)
-                {
+            if (is_array($topics)) {
+                foreach ($topics as $key => $topic_title) {
                     $topic_id = $this->model('topic')->saveTopic($topic_title, $uid, $create_topic);
 
                     $this->model('topic')->setTopicItemRelation($uid, $topic_id, $article_id, 'article');
                 }
             }
 
-            if ($attach_access_key)
-            {
+            if ($attach_access_key) {
                 $this->model('publish')->update_attach('article', $article_id, $attach_access_key);
             }
 

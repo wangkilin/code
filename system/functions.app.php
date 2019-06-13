@@ -295,7 +295,11 @@ function get_weixin_rule_image($image_file, $size = '')
 
 function import_editor_static_files()
 {
-    View::import_js('js/editor/ckeditor/ckeditor.js');
+    //View::import_js('js/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js');
+    View::import_js('js/editor/ckeditor.4.11/ckeditor.js');
+    //View::import_js('js/editor/ckeditor/ckeditor.js');
+    //View::import_js('js/ckeditor/ckeditor.js');
+    //View::import_js('js/ckeditor/ckeditor.js');
     View::import_js('js/editor/ckeditor/adapters/jquery.js');
 }
 

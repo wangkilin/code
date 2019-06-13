@@ -28,7 +28,7 @@ defined('DS') OR define('DS', DIRECTORY_SEPARATOR);
 defined('ROOT_PATH') OR define('ROOT_PATH', dirname(dirname(__FILE__)) . DS);
 defined('INC_PATH')  OR define('INC_PATH', dirname(__FILE__) . DS);
 defined('CONF_PATH') OR define('CONF_PATH', ROOT_PATH . 'config' . DS);
-defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache', DS);
+defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache'. DS);
 
 if (function_exists('memory_get_usage')) {
     define('MEMORY_USAGE_START', memory_get_usage());
