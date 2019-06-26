@@ -151,7 +151,8 @@ $(function () {
 	// 初始化编辑器
 	//var editor = CKEDITOR.replace( 'article-content');
 	// 允许HTML
-	var editor = CKEDITOR.replace( 'article-content', { allowedContent: true});
+    //var editor = CKEDITOR.replace( 'article-content', { allowedContent: true});
+    var editor = CKEDITOR.replace( 'article-content');
 
 	// 绑定上传
 	var editorSetting = {'editor' : editor };

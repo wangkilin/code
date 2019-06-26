@@ -3,7 +3,7 @@
 <div class="icb-mod icb-editor-box">
 	<div class="mod-head">
 		<div class="wmd-panel">
-			<textarea class="article-content form-control autosize editor" id="article-content" rows="15" name="content"><?php echo $this->article_info['content']; ?></textarea>
+			<textarea class="article-content form-control autosize editor" id="article-content" rows="15" name="content"><?php echo htmlspecialchars($this->article_info['content']); ?></textarea>
         </div>
 	</div>
 	<div class="mod-body">

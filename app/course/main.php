@@ -41,7 +41,7 @@ class main extends BaseController
             $itemInfo['attachs_ids'] = FORMAT::parse_attachs($itemInfo['content'], true);
         }
         // 文章内容做bbc转换
-        $itemInfo['content'] = FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($itemInfo['content'])));
+        $itemInfo['content'] = FORMAT::parse_attachs(FORMAT::parse_bbcode($itemInfo['content']));
         // 查看本人是否为此文章投票
         if ($this->user_id) {
             $itemInfo['vote_info'] = $this->model('article')->getVoteByArticleId('article', $itemInfo['id'], null, $this->user_id);
