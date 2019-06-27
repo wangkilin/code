@@ -73,6 +73,7 @@ class Controller
             'css/common.css',
             'css/link.css',
             'js/fancybox/style.css',
+            'js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/styles/monokai_sublime.css'
         ));
 
         if (defined('SYSTEM_LANG'))

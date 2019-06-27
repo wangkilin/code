@@ -31,6 +31,16 @@
 
 <?php View::output('global/debuger.php'); ?>
 <!-- / DO NOT REMOVE -->
-
+<script type="text/javascript" src="static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
+<script type="text/javascript">
+$(function () {
+hljs.initHighlightingOnLoad();
+console.info($('code.hljs').length);
+$('code.hljs').each(function(i, block) {
+        hljs.lineNumbersBlock(block);
+    });
+});
+</script>
 </body>
 </html>
