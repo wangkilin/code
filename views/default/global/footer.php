@@ -37,10 +37,41 @@
 $(function () {
 hljs.initHighlightingOnLoad();
 console.info($('code.hljs').length);
-$('code.hljs').each(function(i, block) {
-        hljs.lineNumbersBlock(block);
+$('code').each(function(i, block) {
+        hljs.lineNumbersBlock(block, {singleLine:true});
     });
 });
 </script>
+<style type="text/css">
+code {
+    font-family: "Courier New",Courier,monospace,Arial,Serif,Menlo,Monaco,Consolas;
+}
+    /* for block of numbers */
+.hljs-ln-numbers {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    text-align: center;
+    color: #ccc;
+    border-right: 1px solid #CCC;
+    vertical-align: top;
+    padding-right: 5px;
+
+    /* your custom style here */
+}
+
+/* for block of code */
+.hljs-ln td.hljs-ln-code {
+    padding-left: 10px;
+}
+.hljs-ln-n:before {
+    content: attr(data-line-number);
+    color: #666;
+}
+</style>
 </body>
 </html>
