@@ -43,7 +43,7 @@ $('code').each(function(i, block) {
 });
 </script>
 <style type="text/css">
-code {
+pre code {
     font-family: "Courier New",Courier,monospace,Arial,Serif,Menlo,Monaco,Consolas;
 }
     /* for block of numbers */
@@ -70,7 +70,7 @@ code {
 }
 .hljs-ln-n:before {
     content: attr(data-line-number);
-    color: #666;
+    color: #999;
 }
 </style>
 </body>
