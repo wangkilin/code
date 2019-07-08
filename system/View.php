@@ -1,4 +1,50 @@
 <?php
+class SimpleView
+{
+    protected $__options = [
+        'template_path' => array(), // 模板路径
+    ];
+
+    public function __construct (array $optioins)
+    {
+        $this->__options = array_merge($this->__options, $optioins);
+    }
+
+    public function setOptions (array $options)
+    {
+        $this->__options = array_merge($this->__options, $optioins);
+
+        return $this;
+    }
+
+    /**
+     * 解析模板，生成html
+     */
+    public function getOutput ($templatePath)
+    {
+        ob_start();
+        if (substr($templatePath, 0, 1) == DS || preg_match('/^[a-z]:'.DS .'/i', $templatePath)) {
+            $pathList = array();
+        } else {
+            $pathList = $this->__options['template_path'];
+        }
+        $filepath = '';
+        foreach ($pathList as $_dir) {
+            $filepath = rtrim($_dir, DS) . $templatePath;
+            if (is_file($filepath)) {
+                break;
+            }
+        }
+        if (''===$filepath) {
+            throw new Exception('Template file is not found:' . $templatePath);
+        }
+
+        include $templatePath;
+
+        return ob_get_clean();
+    }
+}
+
 class View
 {
     public static $template_ext = '.php';
@@ -18,7 +64,8 @@ class View
             self::$template_path = realpath(ROOT_PATH . 'views/');
             set_include_path(self::$template_path . PATH_SEPARATOR . get_include_path());
 
-            self::$view = new Savant3(
+            self::$view = new SimpleView(
+            //self::$view = new Savant3(
                 array(
                     'template_path' => array(self::$template_path),
                     //'filters' => array('Savant3_Filter_trimwhitespace', 'filter')
@@ -34,6 +81,9 @@ class View
         return self::$view;
     }
 
+    /**
+     * 解析模板，输出内容
+     */
     public static function output($template_filename, $display = true)
     {
         if (!strstr($template_filename, self::$template_ext))
@@ -76,6 +126,10 @@ class View
         {
             if ($plugins = Application::plugins()->parse($_GET['app'], $_GET['c'], $_GET['act'], str_replace(self::$template_ext, '', $template_filename)))
             {
+                if ($plugins) {
+                    var_dump('调试插件。 引入插件文件：', $plugins);
+                    exit;
+                }
                 foreach ($plugins AS $plugin_file)
                 {
                     include_once $plugin_file;
