@@ -596,30 +596,35 @@ function show_error($exception_message, $error_message = '')
 {
     @ob_end_clean();
 
-    if (get_setting('report_diagnostics') == 'Y' AND class_exists('Application', false)) {
-        Application::mail()->send('wangkilin@126.com', '[' . G_VERSION . '][' . G_VERSION_BUILD . '][' . base_url() . ']' . $error_message, nl2br($exception_message), get_setting('site_name'), 'WeCenter');
-    }
-
     if (isset($_SERVER['SERVER_PROTOCOL']) AND strstr($_SERVER['SERVER_PROTOCOL'], '/1.0') !== false) {
         header("HTTP/1.0 500 Internal Server Error");
     } else {
         header("HTTP/1.1 500 Internal Server Error");
     }
-
-    if (Application::config()->get('system')->debug) {
-            $exception_message .= "\r\n-----------\r\n" ;
+    $fullMessage = $exception_message;
+    if (Application::config()->get('system')->debug || get_setting('report_diagnostics') == 'Y') {
+        $fullMessage .= "\r\n-----------\r\n" ;
         $debugTrace = array_reverse(debug_backtrace());
         foreach ($debugTrace as $_lineAndFileInfo) {
-            $exception_message .= $_lineAndFileInfo['file']
+            $fullMessage .= $_lineAndFileInfo['file']
                                . ':: Line ' . $_lineAndFileInfo['line'];
             if ($_lineAndFileInfo['function']) {
-                $exception_message .= ':: Function ' . $_lineAndFileInfo['function'];
+                $fullMessage .= ':: Function ' . $_lineAndFileInfo['function'];
             }
             if ($_lineAndFileInfo['args']) {
-                $exception_message .= ':: Param ' . print_r($_lineAndFileInfo['args'], true);
+                $fullMessage .= ':: Param ' . print_r($_lineAndFileInfo['args'], true);
             }
-            $exception_message .= "\r\n";
+            $fullMessage .= "\r\n";
         }
+    }
+
+    if (Application::config()->get('system')->debug) {
+        $exception_message = $fullMessage;
+    }
+
+    if (get_setting('report_diagnostics') == 'Y' AND class_exists('Application', false)) {
+        $fullMessage = 'RequestUri:' . $_SERVER['REQUEST_URI'] . "\r\n\r\n";
+        Application::mail()->send('wangkilin@126.com', '[' . G_VERSION . '][' . G_VERSION_BUILD . '][' . base_url() . ']' . $error_message, nl2br($fullMessage), get_setting('site_name'), 'WeCenter');
     }
 
     echo _show_error($exception_message);
