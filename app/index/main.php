@@ -93,7 +93,7 @@ class main extends BaseController
                         break;
                 }
                 isset($postIds[$val['post_type']]) OR $postIds[$val['post_type']] = array();
-                $postIds[$val['post_type']][] = $val['id'];
+                $postIds[$val['post_type']][] = isset($val['question_id']) ? $val['question_id']:$val['id'];
             }
         }
         $pagination = Application::pagination()->initialize(array(
