@@ -289,7 +289,7 @@ class BaseController extends Controller
         $upload_data = Application::upload()->data();
 
         if ($upload_data['is_image'] == 1) {
-            foreach (Application::config()->get('image')->attachment_thumbnail AS $val)
+            foreach (Application::config()->get('image')->attachment_thumbnail AS $key => $val)
             {
                 $thumb_file[$key] = getUploadPicFileNameBySize($val);
 

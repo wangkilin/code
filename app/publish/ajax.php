@@ -28,6 +28,13 @@ class ajax extends BaseController
 
     public function attach_upload_action()
     {
+
+        $filename = 'upload_file';
+        $batchKey = $_GET['batchKey'];
+        $module   = isset($_GET['type']) ? $_GET['type'] : 'course';
+
+        return $this->processUploadAttach($module, $batchKey, $filename);
+
         if (get_setting('upload_enable') != 'Y' OR !$_GET['id']) {
             die;
         }
@@ -66,13 +73,13 @@ class ajax extends BaseController
             'max_size'      => get_setting('upload_size_limit')
         ));
 
-        if (isset($_GET['aws_upload_file']))
+        if (isset($_GET['upload_file']))
         {
-            Application::upload()->do_upload($_GET['aws_upload_file'], file_get_contents('php://input'));
+            Application::upload()->do_upload($_GET['upload_file'], file_get_contents('php://input'));
         }
-        else if (isset($_FILES['aws_upload_file']))
+        else if (isset($_FILES['upload_file']))
         {
-            Application::upload()->do_upload('aws_upload_file');
+            Application::upload()->do_upload('upload_file');
         }
         else
         {

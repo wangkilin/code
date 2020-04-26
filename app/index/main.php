@@ -71,12 +71,13 @@ class main extends BaseController
             $posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
         }
         $courseList = $this->model('posts')->getPostsInTypeCategoryIds('course');
-        $mannualList = $this->model('posts')->getPostsInTypeCategoryIds('question');
+        $questionList = $this->model('posts')->getPostsInTypeCategoryIds('question');
         $articleList = $this->model('posts')->getPostsInTypeCategoryIds('article');
 
         $articleIds = array();
         $courseIds  = array();
-        $mannualIds = array();
+        $questionIds = array();
+        $postIds = array();
         if ($posts_list) {
             foreach ($posts_list AS $key => $val) {
                 if ($val['answer_count']) {
@@ -84,44 +85,60 @@ class main extends BaseController
                 }
                 switch ($val['post_type']) {
                     case 'article':
-                        $articleIds[] = $val['id'];
-                        break;
                     case 'course':
-                        $courseIds[] = $val['id'];
-                        break;
-                    case 'mannual':
-                        $mannualIds[] = $val['id'];
+                    case 'question':
+                        ${$val['post_type'] . 'Ids'} = $val['id'];
                         break;
                     default:
                         break;
                 }
+                isset($postIds[$val['post_type']]) OR $postIds[$val['post_type']] = array();
+                $postIds[$val['post_type']][] = $val['id'];
             }
         }
-
-        View::assign('pagination', Application::pagination()->initialize(array(
+        $pagination = Application::pagination()->initialize(array(
             'base_url' => get_js_url('/sort_type-' . preg_replace("/[\(\)\.;']/", '', $_GET['sort_type']) . '__category-' . $category_info['id'] . '__day-' . intval($_GET['day']) . '__is_recommend-' . intval($_GET['is_recommend'])),
             'total_rows' => $this->model('posts')->get_posts_list_total(),
             'per_page' => get_setting('contents_per_page')
-        ))->create_links());
+        ))->create_links();
 
         // @todo 获取各个分类的topics。 页面显示topics
         $article_topics = $this->model('topic')->getTopicsByArticleIds($articleIds, 'article');
         $course_topics  = $this->model('topic')->getTopicsByArticleIds($courseIds, 'course');
-        $mannual_topics = $this->model('topic')->getTopicsByArticleIds($mannualIds, 'mannual');
+        $question_topics = $this->model('topic')->getTopicsByArticleIds($questionIds, 'question');
+
+        $where = array();
+        foreach($postIds as $_itemType=>$_ids) {
+            $where[] = '(item_type="'.$_itemType.'" AND item_id IN (' . join(',', $_ids) . ') )';
+        }
+        $itemList = $this->model('attach')->fetch_all('', join(' OR ', $where));
+        $attachList = array();
+        foreach($itemList as $_item) {
+            isset($attachList[$_item['item_type']]) OR $attachList[$_item['item_type']] = array();
+            $attachList[$_item['item_type']][$_item['item_id']] = $this->model('publish')->parse_attach_data(array($_item), $_item['item_type']);
+            $attachList[$_item['item_type']][$_item['item_id']] = array_pop($attachList[$_item['item_type']][$_item['item_id']]);
+        }
+        //var_dump($attachList);
         //var_dump($course_topics);
+        View::assign('show_image', true);
+        View::assign('attach_list', $attachList);
         View::assign('posts_list', $courseList);
         View::assign('article_topics', $article_topics);
         View::assign('course_topics', $course_topics);
-        View::assign('mannual_topics', $mannual_topics);
+        View::assign('question_topics', $question_topics);
         //var_dump($courseList,$articleList);
-        View::assign('courseList', View::output('index/ajax/list', false));
+        //View::assign('courseList', View::output('index/ajax/list', false));
         View::assign('posts_list', $articleList);
-        View::assign('articleList', View::output('index/ajax/list', false));
-        View::assign('posts_list', $mannualList);
-        View::assign('mannualList', View::output('index/ajax/list', false));
+        //View::assign('articleList', View::output('index/ajax/list', false));
+        View::assign('posts_list', $questionList);
+        //View::assign('questionList', View::output('index/ajax/list', false));
         View::assign('posts_list', $posts_list);
         View::assign('posts_list_bit', View::output('block/post_list', false));
 
+
+
+
+        View::assign('pagination', $pagination);
         View::output('index/index');
     }
 }

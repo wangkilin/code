@@ -58,8 +58,9 @@ class main extends Controller
         }
 
         $article_info['user_info'] = $this->model('account')->getUserById($article_info['uid'], true);
-
-        $article_info['message'] = FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($article_info['message'])));
+        if ($article_info['content_type'] != 1) {
+            $article_info['message'] = FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($article_info['message'])));
+        }
 
         if ($this->user_id)
         {

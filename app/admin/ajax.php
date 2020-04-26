@@ -701,10 +701,6 @@ class ajax extends AdminController
         // {
         //     $this->jsonErrExit(_t('系统允许最多二级分类, 当前分类下有子分类, 不能移动到其它分类'));
         // }
-
-        if (! $_POST['module_id'] || (! $moduleInfo = $this->model('postModule')->getById($_POST['module_id'])) ) {
-            $this->jsonErrExit(_t('请选择所属模块'));
-        }
         if (trim($_POST['title']) == ''){
             $this->jsonErrExit(_t('请输入分类名称'));
         }
@@ -718,16 +714,15 @@ class ajax extends AdminController
                 $this->jsonErrExit(_t('分类别名不可以全为数字'));
             }
 
-            if ($this->model('category')->check_url_token($_POST['url_token'], $_POST['category_id'], $_POST['module_id'])) {
+            if ($this->model('category')->check_url_token($_POST['url_token'], $_POST['category_id'])) {
                 $this->jsonErrExit(_t('分类别名已经被占用请更换一个'));
             }
         }
-        $moduleInfo = $this->model('postModule')->getById($_POST['module_id']);
 
         if ($_POST['category_id']) {
             $category_id = intval($_POST['category_id']);
         } else {
-            $category_id = $this->model('category')->add_category($moduleInfo['url_token'], $_POST['title'], $_POST['parent_id']);
+            $category_id = $this->model('category')->add_category($_POST['title'], $_POST['parent_id']);
         }
 
         $category = $this->model('category')->getById($category_id);
@@ -740,9 +735,6 @@ class ajax extends AdminController
             $categoryList = $categoryList = $this->model('category')->getAllCategories('id');
             $checkedIds = [$category_id];
             $_parentId = $_POST['parent_id'];
-            if (isset($categoryList[$_parentId]) && $_POST['module_id'] !=$categoryList[$_parentId]['module']) {
-                $this->jsonErrExit(_t('选择的模块无效'));
-            }
             while(isset($categoryList[$_parentId])) {
                 if (in_array($_parentId, $checkedIds)) {
                     $this->jsonErrExit(_t('不能把子分类设置成父级分类'));
@@ -756,10 +748,8 @@ class ajax extends AdminController
         }
         $params = array(
             'title'     => $_POST['title'],
-            'module'    => $_POST['module_id'],
             'parent_id' => $_POST['parent_id'],
             'url_token' => $_POST['url_token'],
-            'type'      => $moduleInfo['url_token'],
         );
         $this->model('category')->update('category', $params, 'id='.$category_id);
 

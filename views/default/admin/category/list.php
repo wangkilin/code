@@ -17,7 +17,6 @@
                     <thead>
                     <tr>
                         <th><?php _e('分类标题'); ?></th>
-                        <th><?php _e('模块'); ?></th>
                         <th><?php _e('别名'); ?></th>
                         <th><?php _e('排序'); ?></th>
                         <th><?php _e('操作'); ?></th>
@@ -29,11 +28,6 @@
                     <tr>
                         <td>
                             <a href="index/category-<?php echo ($val['url_token']) ? $val['url_token'] : $val['id']; ?>"><?php echo $val['title']; ?></a>
-                        </td>
-                        <td>
-                            <div class="col-sm-12 clo-xs-12 col-lg-offset-1">
-                            <?php echo $val['type']; ?>
-                            </div>
                         </td>
                         <td>
                             <div class="col-sm-12 clo-xs-12 col-lg-offset-1">
@@ -61,12 +55,6 @@
                         <td colspan="5">
                         <form id="add_category_form" action="admin/ajax/save_category/" method="post" onsubmit="return false">
 
-                            <div class="form-group col-sm-2">
-                                    <select name="module_id" id="module_id" class="form-control">
-                                        <option value="0"><?php _e('所属模块'); ?></option>
-                                        <?php echo $this->module_option; ?>
-                                    </select>
-                            </div>
                             <div class="form-group col-sm-3">
                                 <span  class="col-sm-3 col-xs-12 mod-category-foot"><?php _e('标题'); ?></span>
                                 <div class="col-sm-9 col-xs-12">
@@ -142,25 +130,25 @@
                 $('#module_id').removeAttr('disabled');
             }
         });
-        */
-        $('#parent_id').attr('disabled', 'disabled');
-        $('#module_id').change(function () {
-            var moduleId = $(this).val();
-            if (moduleId>0) {
-                $('#parent_id').find('option[data-module="'+moduleId+'"]').show();
-                $('#parent_id').find('option[data-module!="'+moduleId+'"]').hide();
-                $('#parent_id').find('option[data-module="0"]').show();
-                $('#parent_id').removeAttr('disabled');
-            } else {
-                $('#parent_id').attr('disabled', 'disabled');
-            }
-            var moduleToken = $(this).find('option[value="'+moduleId+'"]').attr('data-token');
-            if (! moduleToken) {
-                moduleToken = 'index';
-            }
-            $('#js_url_module_name').text(moduleToken);
-        });
-        $('#module_id').trigger('change');
+         */
+        // $('#parent_id').attr('disabled', 'disabled');
+        // $('#module_id').change(function () {
+        //     var moduleId = $(this).val();
+        //     if (moduleId>0) {
+        //         $('#parent_id').find('option[data-module="'+moduleId+'"]').show();
+        //         $('#parent_id').find('option[data-module!="'+moduleId+'"]').hide();
+        //         $('#parent_id').find('option[data-module="0"]').show();
+        //         $('#parent_id').removeAttr('disabled');
+        //     } else {
+        //         $('#parent_id').attr('disabled', 'disabled');
+        //     }
+        //     var moduleToken = $(this).find('option[value="'+moduleId+'"]').attr('data-token');
+        //     if (! moduleToken) {
+        //         moduleToken = 'index';
+        //     }
+        //     $('#js_url_module_name').text(moduleToken);
+        // });
+        // $('#module_id').trigger('change');
     });
 </script>
 

@@ -41,7 +41,7 @@ class categoryModel extends Model
 
     public function update_category_info($category_id, $title, $parent_id, $url_token)
     {
-        return $this->update('category', array(
+        return $this->update($this->table, array(
             'title' => htmlspecialchars($title),
             'parent_id' => intval($parent_id),
             'url_token' => $url_token
@@ -50,15 +50,17 @@ class categoryModel extends Model
 
     public function set_category_sort($category_id, $sort)
     {
-        return $this->update('category', array(
+        return $this->update($this->table, array(
             'sort' => intval($sort)
         ), 'id = ' . intval($category_id));
     }
 
-    public function add_category($type, $title, $parent_id)
+    /**
+     * 添加分类
+     */
+    public function add_category($title, $parent_id)
     {
-        return $this->insert('category', array(
-            'type' => $type,
+        return $this->insert($this->table, array(
             'title' => $title,
             'parent_id' => intval($parent_id),
         ));
@@ -93,16 +95,21 @@ class categoryModel extends Model
 
     /**
      * 查看url token是否被占用
+     * @param string $url_token 分类别名
+     * @param int    $category_id 分类id
+     *
+     * @return 其他分类下的别名总数
      */
-    public function check_url_token($url_token, $category_id, $moduleId=null)
+    public function check_url_token($url_token, $category_id)
     {
         $where = "url_token = '" . $this->quote($url_token) . "' AND id != " . intval($category_id);
-        if (isset($moduleId)) {
-            $where .= " AND module = " . intval($moduleId);
-        }
+
         return $this->count('category', $where);
     }
 
+    /**
+     * 将内容变更分类id
+     */
     public function move_contents($from_id, $target_id)
     {
         if (!$from_id OR !$target_id)
@@ -222,9 +229,6 @@ class categoryModel extends Model
         if (isset($data['pic'])) {
             $set['pic'] = htmlspecialchars($data['pic']);
         }
-        if (isset($data['type'])) {
-            $set['type'] = $data['type'];
-        }
         if (isset($data['meta_words'])) {
             $set['meta_words'] = htmlspecialchars($data['meta_words']);
         }
@@ -263,30 +267,10 @@ class categoryModel extends Model
     }
 
     /**
-     * 获取分类列表
-     */
-    public function getCategoryListByType($type)
-    {
-        $categoryList = array();
-
-        $categoryAll = $this->fetch_all('category', '`type` = \'' . $this->quote($type) . '\'', 'id ASC');
-
-        foreach($categoryAll as $key => $val) {
-            if (!$val['url_token']) {
-                $val['url_token'] = $val['id'];
-            }
-
-            $categoryList[$val['id']] = $val;
-        }
-
-        return $categoryList;
-    }
-
-    /**
      * 获取全部分类
      * @param string $bindKey 按照哪个键值返回数组
      */
-    public function getAllCategories ($bindKey=null, $type=null)
+    public function getAllCategories ($bindKey=null)
     {
         static $categoryList = null;
         if (! is_array($categoryList) ) {
@@ -294,13 +278,6 @@ class categoryModel extends Model
         }
         if ($categoryList) {
             $tmpCategoryList = $categoryList;
-            if ($type) {
-                foreach ($tmpCategoryList as $_key=>$_item) {
-                    if ($type!=$_item['type']) {
-                        unset($tmpCategoryList[$_key]);
-                    }
-                }
-            }
             if ($bindKey) {
                 $keys = array_column($tmpCategoryList, $bindKey);
 

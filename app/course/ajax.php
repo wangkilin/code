@@ -37,7 +37,8 @@ class ajax extends BaseController
         $filename = 'upload_file';
         $batchKey = $_GET['batchKey'];
         $module   = isset($_GET['type']) ? $_GET['type'] : 'course';
-        $this->processUploadAttach($module, $batchKey, $filename);
+
+        return $this->processUploadAttach($module, $batchKey, $filename);
     }
 
     /**

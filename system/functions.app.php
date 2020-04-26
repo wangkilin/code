@@ -194,6 +194,284 @@ function get_feature_pic_url($size = null, $pic_file = null)
 
 
 
+/**
+ * 上传文件处理， 不受session限制
+ * @param string $module 模块名称
+ * @param string $batchKey 上传文件的key
+ * @param string $filename 文件名称， 需要包含扩展名
+ * @param string $dataStream 文件的二进制数据流
+ *
+ * @return array
+ */
+function doUploadAttach ($module, $batchKey, $filename, $dataStream=null)
+{
+    $settings = Application::$settings = Application::model('setting')->get_settings();
+    Application::upload()->initialize(array(
+        'allowed_types' => $settings['allowed_upload_types'],
+        'upload_path'   => $settings['upload_dir'] . '/' . $module . '/' . gmdate('Ymd', APP_START_TIME),
+        'is_image'      => FALSE,
+        'max_size'      => $settings['upload_size_limit']
+    ));
+
+    if($dataStream) {
+        Application::upload()->do_upload($filename, $dataStream);
+    } else if (isset($_GET[$filename])) {
+        Application::upload()->do_upload($_GET[$filename], file_get_contents('php://input'));
+    } else if (isset($_FILES[$filename])) {
+        Application::upload()->do_upload($filename);
+    } else {
+        return false;
+    }
+
+    // 检查上传结果
+    if (Application::upload()->get_error()) {
+        switch (Application::upload()->get_error()) {
+            case 'upload_invalid_filetype':
+                return Application::RSM(null, '-1', _t('文件类型无效'));
+                break;
+
+            case 'upload_invalid_filesize':
+                return Application::RSM(null, '-1', _t('文件尺寸过大, 最大允许尺寸为 %s KB', get_setting('upload_size_limit')));
+                break;
+
+            default:
+                return Application::RSM(null, '-1', _t('错误代码') . ': ' . Application::upload()->get_error());
+                break;
+        }
+    }
+
+    if (! Application::upload()->data()) {
+        return Application::RSM(null, '-1', _t('上传失败, 请与管理员联系'));
+    }
+
+    $upload_data = Application::upload()->data();
+
+    if ($upload_data['is_image'] == 1) {
+        foreach (Application::config()->get('image')->attachment_thumbnail AS $key => $val)
+        {
+            $thumb_file[$key] = getUploadPicFileNameBySize($val);
+
+            Application::image()->initialize(array(
+                'quality'      => 90,
+                'source_image' => $upload_data['full_path'],
+                'new_image'    => $thumb_file[$key],
+                'width'        => $val['w'],
+                'height'       => $val['h']
+            ))->resize();
+        }
+    }
+
+    $cssClass = Application::model('publish')->getCssClassByFileName(basename($upload_data['full_path']));
+    // 插入数据库
+    $attach_id = Application::model('publish')
+                      ->add_attach(
+                              $module,
+                              $upload_data['orig_name'],
+                              $batchKey,
+                              APP_START_TIME,
+                              basename($upload_data['full_path']),
+                              $upload_data['is_image'],
+                              $upload_data['file_type'],
+                              $cssClass
+                        );
+
+    $output = array(
+        'success' => true,
+        'delete_url' => get_js_url('/publish/ajax/remove_attach/attach_id-' . Application::crypt()->encode(json_encode(array(
+            'attach_id'  => $attach_id,
+            'access_key' => $batchKey
+        )))),
+        'attach_id'  => $attach_id,
+        'attach_tag' => 'attach'
+
+    );
+
+    $attach_info = Application::model('publish')->getAttachById($attach_id);
+    if ($attach_info['thumb']) {
+        $output['thumb'] = $attach_info['thumb'];
+    } else {
+        $output['class_name'] = $cssClass;
+    }
+    $output['url'] = $attach_info['attachment'];
+
+    //exit(htmlspecialchars(json_encode($output), ENT_NOQUOTES));
+    return $output;
+}
+
+
+/**
+ * 发表文章
+ */
+function doPublishArticle($userId, $title, $content, $categoryId=1, $topics=array(), $attachAccessKey='', $moreInfo=array())
+{
+    $settings = Application::$settings = Application::model('setting')->get_settings();
+    if (!$title) {
+        return (Application::RSM(null, - 1, Application::lang()->_t('请输入文章标题')));
+    }
+    // 检查文章标题长度
+    if ($settings['question_title_limit'] > 0 AND cjk_strlen($title) > $settings['question_title_limit']) {
+        return (Application::RSM(null, '-1', Application::lang()->_t('文章标题字数不得大于 %s 字节', $settings['question_title_limit'])));
+    }
+    // // 只允许插入当前页面上传的附件
+    // if (!$this->model('publish')->insert_attach_is_self_upload($_POST['message'], $_POST['attach_ids']))
+    // {
+    //     H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('只允许插入当前页面上传的附件')));
+    // }
+
+
+    if ($topics) {
+        foreach ($topics AS $key => $topic_title) {
+            $topic_title = trim($topic_title);
+
+            if ($topic_title) {
+                $topics[$key] = $topic_title;
+            } else {
+                unset($_POST['topics'][$key]);
+            }
+        }
+
+        if ($settings['question_topics_limit'] AND sizeof($topics) > $settings['question_topics_limit'])
+        {
+            return(Application::RSM(null, '-1', Application::lang()->_t('单个文章话题数量最多为 %s 个, 请调整话题数量', $settings['question_topics_limit'])));
+        }
+    }
+    if ($settings['new_question_force_add_topic'] == 'Y' AND !$topics) {
+        return(Application::RSM(null, '-1', Application::lang()->_t('请为文章添加话题')));
+    }
+
+    Application::model('draft')->delete_draft(1, 'article', $userId);
+
+
+
+    if (H::sensitive_word_exists($content)) {
+        Application::model('publish')->publish_approval('article', array(
+            'title' => $title,
+            'message' => $content,
+            'category_id' => $categoryId,
+            'topics' => $topics,
+            'permission_create_topic' => true
+        ), $userId, $attachAccessKey);
+
+        return(Application::RSM(array(
+            'url' => get_js_url('/publish/wait_approval/')
+        ), 1, null));
+
+    } else {
+        // 添加
+        $articleInfo = array(
+            'uid'          => intval($userId),
+            'title'        => htmlspecialchars($title),
+            'message'      => $content,
+            'category_id'  => intval($categoryId),
+            'add_time'     => time(),
+            'content_type' => 1
+        );
+        $articleInfo = array_merge($articleInfo, $moreInfo);
+        if ($article_id = Application::model()->insert('article',  $articleInfo) ) {
+
+            if (is_array($topics)) {
+                foreach ($topics as $key => $topic_title) {
+                    $topic_id = Application::model('topic')->saveTopic($topic_title, $userId, true);
+
+                    Application::model('topic')->setTopicItemRelation($userId, $topic_id, $article_id, 'article');
+                }
+            }
+
+            if ($attachAccessKey) {
+                Application::model('publish')->update_attach('article', $article_id, $attachAccessKey);
+            }
+
+            Application::model('search_fulltext')->push_index('article', $title, $article_id);
+
+            // 记录日志
+            ACTION_LOG::save_action($userId, $article_id, ACTION_LOG::CATEGORY_QUESTION, ACTION_LOG::ADD_ARTICLE, $title, $content, 0);
+
+            Application::model('posts')->set_posts_index($article_id, 'article');
+
+            Application::model()->update('users', array(
+                'article_count' => Application::model()->count('article', 'uid = ' . intval($userId))
+            ), 'uid = ' . intval($userId));
+        }
+        $url = get_js_url('/article/' . $article_id);
+
+        return(Application::RSM(array('url' => $url, 'id'=>$article_id), 1, null));
+    }
+}
+
+/**
+ * 请求远端服务器
+ * @param  string   $url    请求的url
+ * @param  string   $method  请求方法
+ * @param  array    $headers 请求header
+ * @param  resource $body    上传文件资源
+ * @return boolean
+ */
+function curlRequest($url, $method, $headers = null, $body = null){
+    $ch  = curl_init($url);
+
+    $_headers = array('Expect:');
+    if (!is_null($headers) && is_array($headers)){
+        foreach($headers as $k => $v) {
+            array_push($_headers, "{$k}: {$v}");
+        }
+    }
+
+    $length = 0;
+    $date   = gmdate('D, d M Y H:i:s \G\M\T');
+
+    if (!is_null($body)) {
+        if(is_resource($body)){
+            fseek($body, 0, SEEK_END);
+            $length = ftell($body);
+            fseek($body, 0);
+
+            array_push($_headers, "Content-Length: {$length}");
+            curl_setopt($ch, CURLOPT_INFILE, $body);
+            curl_setopt($ch, CURLOPT_INFILESIZE, $length);
+        } else {
+            $length = @strlen($body);
+            array_push($_headers, "Content-Length: {$length}");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        }
+    } else {
+        array_push($_headers, "Content-Length: {$length}");
+    }
+
+    // array_push($_headers, 'Authorization: ' . $this->sign($method, $uri, $date, $length));
+    array_push($_headers, "Date: {$date}");
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $_headers);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 20);
+    curl_setopt($ch, CURLOPT_HEADER, 1);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
+    if ($method == 'PUT' || $method == 'POST') {
+        curl_setopt($ch, CURLOPT_POST, 1);
+    } else {
+        curl_setopt($ch, CURLOPT_POST, 0);
+    }
+
+    if ($method == 'HEAD') {
+        curl_setopt($ch, CURLOPT_NOBODY, true);
+    }
+
+    $response = curl_exec($ch);
+    $status   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    list($header, $body) = explode("\r\n\r\n", $response, 2);
+    if ($status == 200) {
+        if ($method == 'GET') {
+            return $body;
+        } else {
+            return $response;
+        }
+    } else {
+        return array('status'=>$status);
+    }
+}
+
 
 /**
  * 根据图片在数据库中的名字和指定尺寸， 获取模块上传图片的文件名

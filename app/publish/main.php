@@ -81,7 +81,7 @@ class main extends BaseController
             //View::assign('tagsDropdown', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
 
             // 只显示问题模块下面的分类
-            $categoryList = $this->model('category')->getAllCategories('id', 'question');
+            $categoryList = $this->model('category')->getAllCategories('id');
             View::assign('tagsDropdown', buildSelectOptions(getListInTreeList($categoryList, 'question'), 'title', 'id', $article_info['category_id'], array('module'=>'data-module','title'=>'title') ) );
         }
 
@@ -166,7 +166,7 @@ class main extends BaseController
             //View::assign('article_category_list', $this->model('system')->build_category_html('question', 0, $article_info['category_id']));
             //View::assign('article_category_list', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
             // 只显示文章下面的分类
-            $categoryList = $this->model('category')->getAllCategories('id', 'article');
+            $categoryList = $this->model('category')->getAllCategories('id');
             View::assign('article_category_list', buildSelectOptions(getListInTreeList($categoryList, 'article'), 'title', 'id', $article_info['category_id'], array('module'=>'data-module','title'=>'title') ) );
         }
 

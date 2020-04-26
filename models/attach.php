@@ -14,6 +14,12 @@ defined('iCodeBang_Com') OR die('Access denied!');
 
 class attachModel extends Model
 {
+    /**
+     * 绑定附件和内容id
+     * @param string $item_type
+     * @param int    $item_id
+     * @param string $attach_access_key 附件所属的key。 多个附件可对应一个key
+     */
     public function bindAttachAndItem ($item_type, $item_id, $attach_access_key)
     {
         if (!is_digits($item_id) OR !$attach_access_key) {

@@ -517,7 +517,7 @@ class postsModel extends Model
      *
      * @return array 返回数组
      */
-    public function getPostsInTypeCategoryIds($postType, $category_id = 0, $topicIds = null, $day = 30, $page = 1, $per_page = 10)
+    public function getPostsInTypeCategoryIds($postType, $categoryId = 0, $topicIds = null, $day = 30, $page = 1, $per_page = 10)
     {
         $where = [];
         // 指定多少天内的添加的条目
@@ -530,7 +530,7 @@ class postsModel extends Model
         }
         // 指定分类的id
         if ($categoryId) {
-            $where[] = 'category_id IN(' . implode(',', $this->model('cagegory')->getCategoryAndChildIds($category_id)) . ')';
+            $where[] = 'category_id IN(' . implode(',', $this->model('cagegory')->getCategoryAndChildIds($categoryId)) . ')';
         }
 
         is_array($topicIds) OR $topicIds = [];
@@ -542,10 +542,10 @@ class postsModel extends Model
 
         if ($topicIds) {
             array_walk_recursive($topicIds, 'intval_string');
-            $post_ids = $this->model('topic')->getItemIdsByTopicIds($topic_ids, $post_type);
+            $post_ids = $this->model('topic')->getItemIdsByTopicIds($topicIds, $postType);
             $where[] = 'post_id IN(' . implode(',', $post_ids) . ")";
-            if ($post_type) {
-                $where[] ="post_type = '" . $post_type . "'";
+            if ($postType) {
+                $where[] ="post_type = '" . $postType . "'";
             }
 
             // if (!$postType) {

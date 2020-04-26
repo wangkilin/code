@@ -35,18 +35,65 @@
 <script type="text/javascript" src="static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
 $(function () {
-hljs.initHighlightingOnLoad();
-console.info($('code.hljs').length);
-$('code').each(function(i, block) {
+$('pre>code').each(function(index, element) {
+    $(this).data('data-code', $(this).html());
+    $(this).parent().append('<div class="code_tools"><a href="javascript:;" class="select_all" title="全选">全选</a><a href="javascript:;" class="copy_all" title="复制">复制</a><textarea class="code_container"></textarea></div>');
+    var highlightClass = $(this).attr("class").replace(/brush:([^;]*);?/i, '$1');
+    var classMap = {py:'python', js:'javascript','cpp':'c++','plain':'文本','xhtml':'html'};
+    var lang = typeof classMap[highlightClass] == 'undefined' ? '':classMap[highlightClass];
+
+	$(this).parent().find('.select_all').attr("title","全选当前"+lang+"代码");
+	$(this).parent().find('.copy_all').attr("title","复制当前"+lang+"代码");
+    $(this).parent().find('.code_container').val(this.innerText);
+    $(this).parent().find('.code_container')[0].innerHTML = this.innerText;
+
+    $(this).parent().find('.select_all:last').click(function(event) {
+        selectAllCode($(event.target).closest('pre').find('code')[0]);
+    });
+    $(this).parent().find('.copy_all:last').click(function(event) {
+        copyCode(event);
+	});
+});
+
+
+$('div.codetitle').each(function(index, element) {
+    var el = $(element);
+    el.find('.copybut')[0].onclick = function() {
+        copy(el.next()[0],el[0]);
+    }
+});
+$('div.msgheader').each(function(index, element) {
+    var el = $(element);
+    el.find('.copybut')[0].onclick = function() {
+        copy(el.next()[0],el[0]);
+    }
+});
+
+hljs.initHighlightingOnLoad(); // 启用代码高亮
+//console.info($('code.hljs').length);
+$('pre>code').each(function(i, block) { // 设置代码行号
         hljs.lineNumbersBlock(block, {singleLine:true});
     });
 });
+
+// 百度统计
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?681fc9b1c75c25b5868d6bfdea94f7df";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
 </script>
+
 <style type="text/css">
 pre code {
     font-family: "Courier New",Courier,monospace,Arial,Serif,Menlo,Monaco,Consolas;
 }
-    /* for block of numbers */
+/* for block of numbers */
+.hljs-ln{
+    width:100%;
+}
 .hljs-ln-numbers {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -60,7 +107,7 @@ pre code {
     border-right: 1px solid #CCC;
     vertical-align: top;
     padding-right: 5px;
-
+    white-space: nowrap;
     /* your custom style here */
 }
 
@@ -71,6 +118,9 @@ pre code {
 .hljs-ln-n:before {
     content: attr(data-line-number);
     color: #999;
+}
+.hljs-ln tr:nth-child(odd) td {
+    background: #444;
 }
 </style>
 </body>
