@@ -87,7 +87,7 @@ class main extends BaseController
                     case 'article':
                     case 'course':
                     case 'question':
-                        ${$val['post_type'] . 'Ids'} = $val['id'];
+                        ${$val['post_type'] . 'Ids'} = isset($val['question_id']) ? $val['question_id']:$val['id'];
                         break;
                     default:
                         break;
