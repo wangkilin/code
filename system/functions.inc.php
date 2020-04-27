@@ -592,6 +592,9 @@ function _show_error($exception_message)
 EOF;
 }
 
+/**
+ * 显示错误信息， 根据设置决定是否发送错误信息邮件。
+ */
 function show_error($exception_message, $error_message = '')
 {
     @ob_end_clean();
@@ -623,8 +626,12 @@ function show_error($exception_message, $error_message = '')
     }
 
     if (get_setting('report_diagnostics') == 'Y' AND class_exists('Application', false)) {
-        $fullMessage = 'RequestUri:' . $_SERVER['REQUEST_URI'] . "\r\n\r\n";
+        $fullMessage .= 'RequestUri:' . $_SERVER['REQUEST_URI'] . "\r\n\r\n";
         Application::mail()->send('wangkilin@126.com', '[' . G_VERSION . '][' . G_VERSION_BUILD . '][' . base_url() . ']' . $error_message, nl2br($fullMessage), get_setting('site_name'), 'WeCenter');
+    }
+
+    if (Application::config()->get('system')->debug) {
+        error_log($fullMessage, 3, '/tmp/error_debug.icodebang.log');
     }
 
     echo _show_error($exception_message);
@@ -1433,4 +1440,37 @@ function getResizedPicFileName ($sizeInfo, $path, $filename, $ext)
 function getSizePartInPicFileName ($sizeInfo)
 {
     return $sizeInfo['w'] . 'x' . $sizeInfo['h'];
+}
+
+/**
+ * 将链接地址发送到baidu
+ */
+function sendLinkToBaiduSearch ($urlList, $apiSitelink, $apiToken)
+{
+    // $urls = array(
+    //     'http://www.example.com/1.html',
+    //     'http://www.example.com/2.html',
+    // );
+    // $api = 'http://data.zz.baidu.com/urls?site=https://www.icodebang.com&token=lRre6F9JOmuYOdU4';
+    $api = 'http://data.zz.baidu.com/urls?site=' . $apiSitelink . '&token=' . $apiToken;
+    $ch = curl_init();
+    $options =  array(
+        CURLOPT_URL => $api,
+        CURLOPT_POST => true,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POSTFIELDS => implode("\n", $urlList),
+        CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+    );
+    curl_setopt_array($ch, $options);
+    $result = curl_exec($ch);
+    /*
+     {
+        "remain":4999998,    是	int	当天剩余的可推送url条数
+        "success":2,         是	int	成功推送的url条数
+        "not_same_site":[],  否	array	由于不是本站url而未处理的url列表
+        "not_valid":[]       否	array	不合法的url列表
+     }
+     */
+
+    echo $result;
 }

@@ -37,15 +37,16 @@
 $(function () {
 $('pre>code').each(function(index, element) {
     $(this).data('data-code', $(this).html());
-    $(this).parent().append('<div class="code_tools"><a href="javascript:;" class="select_all" title="全选">全选</a><a href="javascript:;" class="copy_all" title="复制">复制</a><textarea class="code_container"></textarea></div>');
+    $(this).parent().append('<div class="code_tools"><a href="javascript:;" class="select_all icon-insert-template" title="全选"></a><a href="javascript:;" class="copy_all icon-files-empty" title="复制"></a><textarea class="code__for__copy"></textarea></div>');
     var highlightClass = $(this).attr("class").replace(/brush:([^;]*);?/i, '$1');
     var classMap = {py:'python', js:'javascript','cpp':'c++','plain':'文本','xhtml':'html'};
     var lang = typeof classMap[highlightClass] == 'undefined' ? '':classMap[highlightClass];
 
 	$(this).parent().find('.select_all').attr("title","全选当前"+lang+"代码");
 	$(this).parent().find('.copy_all').attr("title","复制当前"+lang+"代码");
-    $(this).parent().find('.code_container').val(this.innerText);
-    $(this).parent().find('.code_container')[0].innerHTML = this.innerText;
+	$(this).parent().find('.save_code').attr("title","保存当前代码");
+    $(this).parent().find('.code__for__copy').val(this.innerText);
+    $(this).parent().find('.code__for__copy')[0].innerHTML = this.innerText;
 
     $(this).parent().find('.select_all:last').click(function(event) {
         selectAllCode($(event.target).closest('pre').find('code')[0]);
@@ -83,6 +84,20 @@ var _hmt = _hmt || [];
   hm.src = "https://hm.baidu.com/hm.js?681fc9b1c75c25b5868d6bfdea94f7df";
   var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
+})();
+
+// 百度自动推送
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
 })();
 </script>
 

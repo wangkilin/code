@@ -55,30 +55,37 @@
 </style>
 <div class="lunhuan">
     <div id="lunhuanback">
-        <p style="background: url(static/css/default/img/background/sky_star.jpg) 0 0 no-repeat scroll; opacity: 1;">
+    <?php
+    $loopPlayList = array(
+        '<p style="background: url(static/css/default/img/background/sky_star.jpg) 0 0 no-repeat scroll; opacity: 1;">
         <canvas id="J_dotLine" style="background-color: transparent;width: 100%;position: absolute;height: 300px;"></canvas>
-        </p>
-        <p style="background: url(static/css/default/img/background/codeonce.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/codeonce.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p>
-        <p style="background: url(static/css/default/img/background/goodsoftware_1.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/goodsoftware_1.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p>
-        <p style="background: url(static/css/default/img/background/truth.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/truth.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p>
-        <p style="background: url(static/css/default/img/background/showcode.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/showcode.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p>
-        <p style="background: url(static/css/default/img/background/poweredworld.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/poweredworld.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p>
-        <p style="background: url(static/css/default/img/background/teamwork_1.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/teamwork_1.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p>
-        <!-- <p style="background: url(static/css/default/img/background/teamwork_2.jpg) center center no-repeat scroll; opacity: 0;">
+        </p>',
+        '<p style="background: url(static/css/default/img/background/teamwork_2.jpg) center center no-repeat scroll; opacity: 0;">
             <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
-        </p> -->
+        </p>',
+    );
+    $_rand = rand(0, count($loopPlayList)-1);
+    //var_dump($loopPlayList[$_rand] );
+    echo $loopPlayList[$_rand];
+    ?>
     </div>
     <div class="lunhuan_main">
         <!-- 轮换中间区域 -->
@@ -98,12 +105,38 @@
     </div>
 </div>
 <script type="text/javascript">
-$(function (containerSelector, slideSelector, controlSelector) {
-    //首屏banner效果图
-    var ali=$('#lunbonum li');
-    var aPage=$('#lunhuanback p');
+/**
+ * 轮播功能
+ * @param containerSelector 包含待轮播内容的容器选择
+ * @param slideSelector
+ */
+function loopPlay (containerSelector, slideSelector, controlSelector) {
+    var ali=$(controlSelector);
+    var aPage=$(containerSelector);
     var aslide_img=$('.lunhuancenter > div');
     var iNow=0;
+    //首屏banner效果图
+    var totalShow = $(containerSelector).length;
+    var totalControl = $(controlSelector).length;
+    if (totalShow==0 || (totalShow==1 && totalControl==0)) {
+        return;
+    }
+    if (totalShow > totalControl) {
+        for(var index=totalShow-1; index>=totalControl; index--) {
+            $($(containerSelector)[index]).remove();
+        }
+    } else if (totalShow < totalControl) {
+        for(var index=totalControl-1; index>=totalShow; index--) {
+            $($(controlSelector)[index]).remove();
+        }
+    }
+    totalShow = $(containerSelector).length;
+    // 只有一个待播放，直接拿掉控制单元
+    if (totalShow == 1 && $(controlSelector).length>0) {
+        $($(controlSelector)[0]).remove();
+    }
+    // 将第一个可见
+    aPage.eq(0).css({opacity:1});
 
     ali.each(function(index){
     $(this).mouseenter(function(){
@@ -112,29 +145,31 @@ $(function (containerSelector, slideSelector, controlSelector) {
     });
 
     function slide(index){
-    iNow=index;
-    ali.eq(index).addClass('lunboone').siblings().removeClass();
-    aPage.eq(index).siblings().stop().animate({opacity:0},1000);
-    aPage.eq(index).stop().animate({opacity:1},1000);
-    aslide_img.eq(index).stop().animate({opacity:1,top:0},1000).siblings('div').stop().animate({opacity:0,top:0},1000);
+        iNow=index;
+        ali.eq(index).addClass('lunboone').siblings().removeClass();
+        aPage.eq(index).siblings().stop().animate({opacity:0},1000);
+        aPage.eq(index).stop().animate({opacity:1},1000);
+        aslide_img.eq(index).stop().animate({opacity:1,top:0},1000).siblings('div').stop().animate({opacity:0,top:0},1000);
     }
 
     function autoRun(){
-    iNow++;
-    if(iNow==ali.length){
-        iNow=0;
-    }
-    slide(iNow);
+        iNow++;
+        if(iNow==ali.length){
+            iNow=0;
+        }
+        slide(iNow);
     }
 
     var timer=setInterval(autoRun,5000);
+    // 鼠标滑过控制单元，切换
+    ali.hover(
+                function(){clearInterval(timer);},
+                function(){timer=setInterval(autoRun,5000);}
+            );
 
-    ali.hover(function(){
-    clearInterval(timer);
-    },function(){
-    timer=setInterval(autoRun,5000);
-    });
-
+};
+$(function (containerSelector, slideSelector, controlSelector) {
+    loopPlay ('#lunhuanback p', slideSelector, '#lunbonum li');
 });
 
 (function(window) {
@@ -284,6 +319,7 @@ $(function (containerSelector, slideSelector, controlSelector) {
 }(window));
 //调用
 //window.onload = function() {
+if ($('#J_dotLine').length) {
 	var dotline = new Dotline({
 		dom: 'J_dotLine', //画布id
 		cw: 1500, //画布宽
@@ -292,7 +328,8 @@ $(function (containerSelector, slideSelector, controlSelector) {
 		r: 2, //圆点半径
 		cl: '#FFFFFF', //粒子线颜色
 		dis: 100 //触发连线的距离
-	}).start();
+    }).start();
+}
 //}
 
 </script>
@@ -300,12 +337,12 @@ $(function (containerSelector, slideSelector, controlSelector) {
 	<?php View::output('block/content_nav_menu.php'); ?>
 <br/>
 	<div class="container">
-	  <div class="clearfix">
+	  <!-- <div class="clearfix">
 		  <div class="col-sm-4 clearfix"><?php _e('教程');?></div>
 
 		  <div class="col-sm-4 clearfix"><?php _e('问答');?></div>
 		  <div class="col-sm-4 clearfix"><?php _e('文章');?></div>
-	  </div>
+	  </div> -->
 	  <div class="clearfix">
 		  <div class="col-sm-4 clearfix"><?php echo $this->courseList; ?></div>
 		  <div class="col-sm-4 clearfix"><?php echo $this->mannualList; ?></div>
@@ -316,7 +353,8 @@ $(function (containerSelector, slideSelector, controlSelector) {
 	<div class="container">
 		<div class="row">
 			<div class="icb-content-wrap clearfix">
-				<div class="col-sm-12 col-md-9 icb-main-content">
+                <!-- 暂停侧边栏。 开启时，需要将col-md-12改成 col-md-9 -->
+				<div class="col-sm-12 col-md-12 icb-main-content">
 					<!-- 新消息通知 -->
 					<div class="icb-mod icb-notification-box collapse" id="index_notification">
 						<div class="mod-head common-head">
@@ -369,12 +407,14 @@ $(function (containerSelector, slideSelector, controlSelector) {
 					</div>
 				</div>
 
-				<!-- 侧边栏 -->
+                <!-- 侧边栏 -->
+                <!-- 暂停侧边栏
 				<div class="col-sm-12 col-md-3 icb-side-bar hidden-xs hidden-sm">
-					<?php View::output('block/sidebar_feature.php'); ?>
-					<?php View::output('block/sidebar_hot_topics.php'); ?>
-					<?php View::output('block/sidebar_hot_users.php'); ?>
-				</div>
+					<?php //View::output('block/sidebar_feature.php'); ?>
+					<?php //View::output('block/sidebar_hot_topics.php'); ?>
+					<?php //View::output('block/sidebar_hot_users.php'); ?>
+                </div>
+                -->
 				<!-- end 侧边栏 -->
 			</div>
 		</div>

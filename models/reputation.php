@@ -34,12 +34,11 @@ class reputationModel extends Model
                 $articles_vote_against_users = $this->model('article')->getVoteByArticleIds('article', $articles_ids, -1);
 
                 if ($article_topics_query = $this->query_all('SELECT item_id, topic_id
-                        FROM ' . get_table('tag_article_relation') . '
-                        WHERE article_id IN(' . implode(',', $articles_ids) . ")
-                          AND `type` = 'tag'
-                          AND article_type = 'article'")) {
+                        FROM ' . get_table('topic_relation') . '
+                        WHERE item_id IN(' . implode(',', $articles_ids) . ")
+                          AND type = 'article'")) {
                     foreach ($article_topics_query AS $article_topics_val) {
-                        $article_topics[$article_topics_val['article_id']][] = $article_topics_val;
+                        $article_topics[$article_topics_val['item_id']][] = $article_topics_val;
                     }
                     unset($article_topics_query);
                 }
