@@ -25,22 +25,17 @@ class core_uri
 
 	public function __construct()
 	{
-		if (!defined('G_INDEX_SCRIPT'))
-		{
+		if (!defined('G_INDEX_SCRIPT')) {
 			return false;
 		}
 
-		if (G_INDEX_SCRIPT == '')
-		{
+		if (G_INDEX_SCRIPT == '') {
 			$this->index_script = '?/';
-		}
-		else
-		{
+		} else {
 			$this->index_script = G_INDEX_SCRIPT;
 		}
 
-		if ($_SERVER['REQUEST_URI'])
-		{
+		if ($_SERVER['REQUEST_URI']) {
 			if (isset($_SERVER['HTTP_X_REWRITE_URL']))
 			{
 				$request_main = $_SERVER['HTTP_X_REWRITE_URL'];
@@ -48,7 +43,11 @@ class core_uri
 			else
 			{
 				$request_main = $_SERVER['REQUEST_URI'];
-			}
+            }
+            // 去掉末尾 .html
+            if (strtolower(substr($request_main,-5)) == '.html') {
+                $request_main = substr($request_main, 0, -5);
+            }
 
 			$requests = explode($this->index_script, $request_main);
 
@@ -83,10 +82,9 @@ class core_uri
 		if (strstr($base_script, '.php'))
 		{
 			$request_main = str_replace($base_script . '/', '', $request_main);
-		}
+        }
 
-		if (count($requests) == 1)
-		{
+		if (count($requests) == 1) {
 			$request_main = $this->_parse_uri($request_main);
 		}
 
@@ -95,13 +93,11 @@ class core_uri
 
 	public function set_rewrite()
 	{
-		if (!defined('G_INDEX_SCRIPT'))
-		{
+		if (!defined('G_INDEX_SCRIPT')) {
 			return false;
 		}
 
-		if (!$this->request_main OR $this->index_script == $this->request_main)
-		{
+		if (!$this->request_main OR $this->index_script == $this->request_main) {
 			$this->controller = 'main';
 			$this->action = 'index';
 
@@ -168,7 +164,7 @@ class core_uri
 			}
 		}
 
-		$args_count = count($uri['first']['args']);
+        $args_count = count($uri['first']['args']);
 
 		switch ($args_count)
 		{
@@ -213,8 +209,9 @@ class core_uri
 			case 5:
 				$this->args_var_str = end($uri['first']['args']);
 
-				$__app_dir = $uri['first']['args'][0] ? $uri['first']['args'][0] : $this->default_vars['app_dir'];	// 应用目录
-				$this->controller = $uri['first']['args'][2] ? $uri['first']['args'][1] . '/' . $uri['first']['args'][2] : $this->default_vars['controller'];	// 控制器
+				$__app_dir = $uri['first']['args'][0] ? $uri['first']['args'][0] . '/' . $uri['first']['args'][1] : $this->default_vars['app_dir'];	// 应用目录
+				$this->controller = $uri['first']['args'][2] ? $uri['first']['args'][2] : $this->default_vars['controller'];	// 控制器
+				//$this->controller = $uri['first']['args'][2] ? $uri['first']['args'][1] . '/' . $uri['first']['args'][2] : $this->default_vars['controller'];	// 控制器
 				$this->action = $uri['first']['args'][3] ? $uri['first']['args'][3] : $this->default_vars['action'];	// 动作
 			break;
 		}
@@ -223,7 +220,7 @@ class core_uri
 
 		$_GET['c'] = $this->controller;
 		$_GET['act'] = $this->action;
-		$_GET['app'] = $__app_dir;
+        $_GET['app'] = $__app_dir;
 
 		return $this;
 	}
