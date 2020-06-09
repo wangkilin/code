@@ -1,6 +1,16 @@
 <?php
 class articleModel extends Model
 {
+    protected $table = 'article';
+
+    public function getRow ($where)
+    {
+        $conditions = [];
+        foreach ($where AS $key => $val) {
+            $conditions[] = '`' . $this->quote($key) . "`='" . $this->quote($val) . "'";
+        }
+        return  $this->fetch_row($this->table, join(' AND ', $conditions));
+    }
     /**
      * 根据文章id获取文章信息
      * @param int $article_id
@@ -170,7 +180,8 @@ class articleModel extends Model
 
         $this->update('article', array(
             'title' => htmlspecialchars($title),
-            'message' => htmlspecialchars($message),
+            //'message' => htmlspecialchars($message),
+            'message' => $message,
             'category_id' => intval($category_id)
         ), 'id = ' . intval($article_id));
 

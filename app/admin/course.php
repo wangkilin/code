@@ -96,35 +96,112 @@ class course extends AdminController
     }
 
     /**
+     * 教程归类管理。 列表教程
+     */
+    public function table_action()
+    {
+        // POST方式选择了分类， GET方式跳转到对应分类内容展示
+        if (isset($_POST['category_id'])) {
+            H::ajax_json_output(Application::RSM(array(
+                'url' => get_js_url('/admin/course/content_table/__category_id-'.$_POST['category_id'])
+            ), 1, null));
+        }
+        // breadcrumb 内容
+        $this->crumb(Application::lang()->_t('教程归类'), 'admin/course/table/');
+        $tableList = array();
+        $where = null;
+        // GET方式展示指定分类下的文章目录
+        if (isset($_GET['category_id'])) {
+            $categoryInfo = $this->model('category')->getById($_GET['category_id']);
+            View::assign('parentTitle', $categoryInfo['title']);
+
+            $where = "category_id = "  . intval($_GET['category_id']);
+            View::assign('parent_id', $_GET['category_id']);
+        }
+        $tableList= Application::model()->fetch_all('course_table', $where, 'category_id ASC');
+        // 构建分类选择菜单
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', null, array('module'=>'data-module') ) );
+        View::assign('list', $tableList);
+        View::assign('categoryList', $categoryList);
+
+        View::output('admin/course/table_manage');
+    }
+
+    /**
+     * 编辑教程
+     */
+    public  function edit_table_action ()
+    {
+        $selected = null;
+        if ($_GET['id']) { // 有id， 获取对应的教程信息，显示编辑表单
+            $this->crumb(Application::lang()->_t('教程编辑'), 'admin/course/edit_table/');
+            // 获取对应教程
+            $info = Application::model()->getById($_GET['id'], 'course_table');
+            // 没有找到对应教程， 页面跳转
+            if (!$info) {
+                H::redirect_msg(Application::lang()->_t('教程不存在'), '/admin/course/table/');
+            }
+            $selected = $info['category_id'];
+            View::assign('itemInfo', $info);
+            $categoryList = $this->model('category')->getAllCategories('id');
+            View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', $selected, array('module'=>'data-module','title'=>'title') ) );
+
+            View::output('admin/course/edit_table');
+        }
+
+    }
+
+    /**
      * 教程目录管理
      */
     public function content_table_action()
     {
-        if (isset($_POST['parent_id'])) {
+        // POST方式选择了分类， GET方式跳转到对应分类内容展示
+        if (isset($_POST['table_id'], $_POST['load_table'])) {
             H::ajax_json_output(Application::RSM(array(
-                'url' => get_js_url('/admin/course/content_table/__parent_id-'.$_POST['parent_id'])
+                'url' => get_js_url('/admin/course/content_table/__table_id-'.$_POST['table_id'])
             ), 1, null));
         }
+        // breadcrumb 内容
         $this->crumb(Application::lang()->_t('教程目录'), 'admin/course/content_table/');
         $articleList = array();
         $contentTable = array();
-        $selected = array();
-        if (isset($_GET['parent_id'])) {
-            $typeInfo = explode('-', $_GET['parent_id']);
-            $selected = $_GET['parent_id'];
-            $topicInfo = $this->model('category')->getById($_GET['parent_id']);
-            View::assign('parentTitle', $topicInfo['title']);
-            $where = "parent_id = "  . intval($_GET['parent_id']);
+        $selectedCategory = isset($_GET['category_id']) ? $_GET['category_id'] : null;
+        $selectedTable = null;
+        // GET方式展示指定分类下的文章目录
+        if (isset($_GET['table_id'])) {
+            $typeInfo = explode('-', $_GET['table_id']);
+            $selectedTable = $_GET['table_id'];
+
+            // 获取对应教程
+            $info = Application::model()->getById($_GET['table_id'], 'course_table');
+            $selectedCategory = $info['category_id'];
+            //$categoryInfo = $this->model('category')->getById($_GET['category_id']);
+            View::assign('parentTitle', $info['title']);
+
+            $where = "category_id = "  . intval($selectedCategory);
             $articleList  = $this->model('course')->getCourseList($where, 'id DESC', PHP_INT_MAX, 0);
-            $where = "category_id = "  . intval($_GET['parent_id']);
-            $contentTable = $this->model('course')->fetch_all('course_content_table', $where, 'sort ASC');
-            View::assign('parent_id', $_GET['parent_id']);
+            $where = "table_id = "  . intval($_GET['table_id']);
+            $contentTable = Application::model()->fetch_all('course_content_table', $where, 'sort ASC');
+            View::assign('parent_id', $_GET['table_id']);
+            View::assign('table_id', $_GET['table_id']);
         }
 
-        View::assign('topicOptions', $this->model('topic')->buildTopicDropdownHtml($selected));
-        View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
+        View::assign('topicOptions', $this->model('topic')->buildTopicDropdownHtml($selectedCategory));
+        //View::assign('itemOptions', $this->buildCategoryDropdownHtml($selected, '--'));
+        // 构建分类选择菜单
+        $categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', $selectedCategory) );
+        // 构建分类选择菜单
+        $tableList = Application::model()->fetch_all('course_table', '', 'category_id,sort');
+        View::assign('tableOptions', buildSelectOptions(getListInTreeList($tableList), 'title', 'id', $selectedTable, array('category_id'=>'data-category') ) );
+
         View::assign('list', $articleList);
         View::assign('contentTable', $contentTable);
+
+        View::assign('categoryId', $selectedCategory);
+        View::assign('parentItemsList', $categoryList);
 
         View::output('admin/course/course_table');
     }
@@ -160,7 +237,7 @@ class course extends AdminController
         View::assign('bindTopics', $bindTopics);
 
         $categoryList = $this->model('category')->getAllCategories('id');
-        View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList, 'course'), 'title', 'id', $selected, array('module'=>'data-module','title'=>'title') ) );
+        View::assign('itemOptions', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', $selected, array('module'=>'data-module','title'=>'title') ) );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
 
         View::assign('recent_topics', @unserialize($this->user_info['recent_topics']));

@@ -8,22 +8,28 @@
  *
  * @return string
  */
-function base_url()
+function base_url($withScheme=true)
 {
     $clean_url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : NULL;
     $clean_url = dirname(substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen($clean_url)));
     $clean_url = rtrim($_SERVER['HTTP_HOST'] . $clean_url, '/\\');
 
-    if ((isset($_SERVER['HTTPS']) AND !in_array(strtolower($_SERVER['HTTPS']), array('off', 'no', 'false', 'disabled'))) OR $_SERVER['SERVER_PORT'] == 443)
-    {
-        $scheme = 'https';
-    }
-    else
-    {
-        $scheme = 'http';
+    if ($withScheme) {
+        if ((isset($_SERVER['HTTPS']) AND !in_array(strtolower($_SERVER['HTTPS']), array('off', 'no', 'false', 'disabled'))) OR $_SERVER['SERVER_PORT'] == 443)
+        {
+            $scheme = 'https';
+        }
+        else
+        {
+            $scheme = 'http';
+        }
+
+        $scheme .= ':';
+    } else {
+        $scheme = '';
     }
 
-    return $scheme . '://' . $clean_url;
+    return $scheme . '//' . $clean_url;
 }
 /**
  * 将当前访问的URL进行base64编码后返回

@@ -44,11 +44,19 @@ class main extends Controller
         {
             HTTP::redirect('/m/article/' . $_GET['id']);
         }
+        if(is_numeric($_GET['id'])) {
+            $article_info = $this->model('article')->get_article_info_by_id($_GET['id']);
+            if ($article_info && $article_info['url_token']!=='') {
+                $article_info = null;
+            }
+        } else {
+            $article_info = $this->model('article')->getRow(array('url_token'=>$_GET['id']));
+        }
 
-        if (! $article_info = $this->model('article')->get_article_info_by_id($_GET['id']))
-        {
+        if (! $article_info) {
             HTTP::error_404();
         }
+        $_GET['id'] = $article_info['id'];
 
         if ($article_info['has_attach'])
         {

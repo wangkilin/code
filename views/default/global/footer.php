@@ -31,16 +31,18 @@
 
 <?php View::output('global/debuger.php'); ?>
 <!-- / DO NOT REMOVE -->
-<script type="text/javascript" src="static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
-<script type="text/javascript" src="static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
+<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
 $(function () {
 $('pre>code').each(function(index, element) {
     $(this).data('data-code', $(this).html());
-    $(this).parent().append('<div class="code_tools"><a href="javascript:;" class="select_all icon-insert-template" title="全选"></a><a href="javascript:;" class="copy_all icon-files-empty" title="复制"></a><textarea class="code__for__copy"></textarea></div>');
-    var highlightClass = $(this).attr("class").replace(/brush:([^;]*);?/i, '$1');
-    var classMap = {py:'python', js:'javascript','cpp':'c++','plain':'文本','xhtml':'html'};
-    var lang = typeof classMap[highlightClass] == 'undefined' ? '':classMap[highlightClass];
+    $(this).parent().append('<div class="code_tools"><!--<a href="javascript:;" class="select_all icon-insert-template-" title="全选">全选</a>--><a href="javascript:;" class="copy_all icon-files-empty-" title="复制">复制</a><textarea class="code__for__copy"></textarea></div>');
+    if ($(this).attr("class")) {
+        var highlightClass = $(this).attr("class").replace(/brush:([^;]*);?/i, '$1');
+        var classMap = {py:'python', js:'javascript','cpp':'c++','plain':'文本','xhtml':'html'};
+        var lang = typeof classMap[highlightClass] == 'undefined' ? '':classMap[highlightClass];
+    }
 
 	$(this).parent().find('.select_all').attr("title","全选当前"+lang+"代码");
 	$(this).parent().find('.copy_all').attr("title","复制当前"+lang+"代码");
@@ -57,24 +59,22 @@ $('pre>code').each(function(index, element) {
 });
 
 
-$('div.codetitle').each(function(index, element) {
-    var el = $(element);
-    el.find('.copybut')[0].onclick = function() {
-        copy(el.next()[0],el[0]);
-    }
-});
-$('div.msgheader').each(function(index, element) {
-    var el = $(element);
-    el.find('.copybut')[0].onclick = function() {
-        copy(el.next()[0],el[0]);
-    }
-});
 
-hljs.initHighlightingOnLoad(); // 启用代码高亮
+//hljs.initHighlightingOnLoad(); // 启用代码高亮
 //console.info($('code.hljs').length);
+//$('pre>code, .content .codebody').each(function(i, block) { // 设置代码行号
 $('pre>code').each(function(i, block) { // 设置代码行号
+        hljs.configure({useBR: $(this).find('br').length>0});
+        hljs.highlightBlock(block);
         hljs.lineNumbersBlock(block, {singleLine:true});
     });
+});
+
+
+//
+$('div.code>div,div.content div.sample-code-container').each(function(i, block) {
+    hljs.configure({useBR: $(this).find('br').length>0});
+    hljs.highlightBlock(block);
 });
 
 // 百度统计
@@ -102,10 +102,25 @@ var _hmt = _hmt || [];
 </script>
 
 <style type="text/css">
-pre code {
-    font-family: "Courier New",Courier,monospace,Arial,Serif,Menlo,Monaco,Consolas;
+pre code,div.code > div,.sample-code-container{
+    font-family: "Courier New",Courier,-apple-system,BlinkMacSystemFont, '微软雅黑', 'Microsoft YaHei','Helvetica Neue','PingFang SC','Source Han Sans SC','Helvetica Neue', 'STHeiti';
+    border-radius: 4px;
+}
+.hljs-tag .hljs-title, .hljs-rules .hljs-property, .django .hljs-tag .hljs-keyword, .clojure .hljs-title .hljs-built_in {
+    font-weight: normal;
+}
+div.code  {
+    margin: 0;
+    padding: 5px;
+    overflow: hidden;
+    border: none;
+    border-radius: 3px;
+    background-color: #f7f7f7;
 }
 /* for block of numbers */
+.code-has-img{
+    background: none;
+}
 .hljs-ln{
     width:100%;
 }
@@ -117,12 +132,13 @@ pre code {
     -ms-user-select: none;
     user-select: none;
 
-    text-align: center;
+    text-align: right;
     color: #ccc;
     border-right: 1px solid #CCC;
     vertical-align: top;
-    padding-right: 5px;
+    padding-right: 5px !important;
     white-space: nowrap;
+    width:20px;
     /* your custom style here */
 }
 
@@ -137,6 +153,7 @@ pre code {
 .hljs-ln tr:nth-child(odd) td {
     background: #444;
 }
+
 </style>
 </body>
 </html>

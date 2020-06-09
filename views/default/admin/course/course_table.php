@@ -11,9 +11,29 @@
 	    <div class="tab-content mod-content mod-body">
 	      <div class="tab-pane active" id="course_table">
 	        <?php //View::output('admin/course/tag_list_inc.php');?>
-	        <?php View::output('admin/course/category_list_inc.php');?>
+            <?php View::output('admin/course/category_list_inc.php');?>
+            <div class="row">
+                <div class="col-sm-12 form-group icb-item-title" data-active="toggle">
+                    <form action="admin/course/content_table/" method="post" class="form-horizontal">
+                        <input type="hidden" name="load_table" value="1"/>
+                        <label class="pull-left control-label"><?php _e('所属教程');?>:</label>
+                        <div class="col-sm-7">
+                                <select id="table_id" name="table_id" class="hidden js_select_transform">
+                                    <option value="0"><?php _e('所属教程'); ?></option>
+                                    <?php echo $this->tableOptions; ?>
+                                </select>
+                                <div class="dropdown js-submit-choose">
+                                    <div class="dropdown-toggle" data-toggle="dropdown">
+                                        <span id="icb-selected-tag-show"><?php _e('所属教程'); ?></span>
+                                        <a><i class="icon icon-down"></i></a>
+                                    </div>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
 	        <?php if ($this->parent_id) { ?>
-	        <div class="row">
+	        <div class="row" id="js_course_table_list">
 	            <div class="col-md-12">
 		            <div class="col-md-7 nopadding">
 		                <form action="admin/ajax/save_content_table/" method="post" id="item_list" onsubmit="return false">
@@ -43,21 +63,26 @@
 		                                    <input class="form-control js-is-child" type="hidden" name="item[<?php echo $val['id']; ?>][is_child]" value="<?php echo intval($val['parent_id']>0); ?>" />
 		                                    <input class="form-control" type="hidden" name="item[<?php echo $val['id']; ?>][from_type]" value="<?php echo $val['from_type']; ?>" />
 		                                  </a>
-		                                  <a href="javascript:;" onclick="ICB.domEvents.deleteShowConfirmModal('<?php _e('确认删除?'); ?>', function(){ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/remove_content_table/', 'id=<?php echo $val['id']; ?>');}); return false;"><?php _e('删除'); ?></a>
+		                                  <a href="javascript:;" onclick="window.event && window.event.stopPropagation(); ICB.domEvents.deleteShowConfirmModal('<?php _e('确认删除?'); ?>', function(){ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/remove_content_table/', 'id=<?php echo $val['id']; ?>');}); return false;"><?php _e('删除'); ?></a>
 		                                </span>
-		                                <h4><?php echo $val['title']; ?> (<?php
+		                                <h4><?php
 		                                switch ($val['from_type']) {
-		                                	case 'course':
+                                            case 'course':
+                                                echo '<a target="_blank" href="'.base_url().'/course/',$this->parentItemsList[$val['category_id']]['url_token'], '/', $this->list[$val['article_id']]['url_token'], '">', $val['title'], '</a> (';
 		                                		_e('教程');
 		                                		break;
 		                                	case 'link':
+		                                		echo '<a target="_blank" href="',$val['link'],'">',$val['title'],'</a> (';
 		                                		_e('教程链接');
 		                                		break;
-		                                	case 'chapter':
+                                            case 'chapter':
+                                                echo $val['title'];
+                                                echo ' (';
 		                                		_e('章节列表');
 		                                		break;
-		                                }
-		                                ?>)</h4>
+                                        }
+                                        echo ')';
+		                                ?></h4>
 		                            </div>
 		                            <div class="mod-set-body clearfix">
 		                                <div class="clearfix">
@@ -105,7 +130,8 @@
 			                        <form action="admin/ajax/add_content_table/" method="post">
 			                            <input type="hidden" name="from_type" value="course"/>
 			                            <!-- <input type="hidden" name="topic_id" value="<?php echo $this->parent_id;?>"/> -->
-			                            <input type="hidden" name="category_id" value="<?php echo $this->parent_id;?>"/>
+			                            <input type="hidden" name="category_id" value="<?php echo $this->categoryId;?>"/>
+			                            <input type="hidden" name="table_id" value="<?php echo $this->table_id;?>"/>
 			                            <input type="hidden" name="title" value=""/>
 			                            <select name="course_id" class="form-control pull-left input-small js-course-list">
 			                                <option value="0"><?php _e('无'); ?></option>
@@ -128,7 +154,8 @@
 			                        <form action="admin/ajax/add_content_table/" method="post">
 			                            <input type="hidden" name="from_type" value="custom">
 			                            <!-- <input type="hidden" name="topic_id" value="<?php echo $this->parent_id;?>"/> -->
-			                            <input type="hidden" name="category_id" value="<?php echo $this->parent_id;?>"/>
+			                            <input type="hidden" name="category_id" value="<?php echo $this->categoryId;?>"/>
+			                            <input type="hidden" name="table_id" value="<?php echo $this->table_id;?>"/>
 
 			                            <p class="clearfix">
 			                                <label type="button" class="btn mod-btn-color col-sm-offset-0">
@@ -165,4 +192,38 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        /*
+        // 选择分类后， 将对应模块选定。 如果是根分类， 需要选择所属的模块
+        $('#parent_id').change(function () {
+            var moduleId = $(this).find('option:selected').attr('data-module');
+            $('#module_id').val(moduleId);
+            if (moduleId!='0') {
+                $('#module_id').attr('disabled', 'disabled');
+            } else {
+                $('#module_id').removeAttr('disabled');
+            }
+        });
+         */
+        // $('#parent_id').attr('disabled', 'disabled');
+        // $('#module_id').change(function () {
+        //     var moduleId = $(this).val();
+        //     if (moduleId>0) {
+        //         $('#parent_id').find('option[data-module="'+moduleId+'"]').show();
+        //         $('#parent_id').find('option[data-module!="'+moduleId+'"]').hide();
+        //         $('#parent_id').find('option[data-module="0"]').show();
+        //         $('#parent_id').removeAttr('disabled');
+        //     } else {
+        //         $('#parent_id').attr('disabled', 'disabled');
+        //     }
+        //     var moduleToken = $(this).find('option[value="'+moduleId+'"]').attr('data-token');
+        //     if (! moduleToken) {
+        //         moduleToken = 'index';
+        //     }
+        //     $('#js_url_module_name').text(moduleToken);
+        // });
+        // $('#module_id').trigger('change');
+    });
+</script>
 <?php View::output('admin/global/footer.php'); ?>

@@ -74,6 +74,12 @@
                                 </ul>
                                 <?php } ?>
                             </div>
+
+
+                    <div class="meta clearfix">
+                        <?php if ($this->article_info['author']!=='') echo '<span>作者:', $this->article_info['author'],'</span>';?>
+                        <?php if ($this->article_info['source_url']!=='') echo '<span>原文地址:', $this->article_info['source_url'],'</span>';?>
+                    </div>
                             <div class="meta clearfix">
                                 <div class="icb-article-vote pull-left<?php if (!$this->user_id OR $this->user_id == $this->article_info['uid']) { ?> disabled<?php } ?>">
                                     <a href="javascript:;" class="agree<?php if ($this->article_info['vote_info']['rating'] == 1) { ?> active<?php } ?>" onclick="AWS.User.article_vote($(this), <?php echo $this->article_info['id']; ?>, 1);"><i class="icon icon-agree"></i> <b><?php echo $this->article_info['votes']; ?></b></a>

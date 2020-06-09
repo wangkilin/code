@@ -20,9 +20,10 @@
 					<form action="admin/ajax/course_save/" method="post" id="item_form" onsubmit="return false;">
 						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
 						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
-						<input type="hidden" name="id" id="article_id" value="<?php echo $this->article_info['id']; ?>" />
+                        <input type="hidden" name="id" id="article_id" value="<?php echo $this->article_info['id']; ?>" />
+                        <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
 						<?php if ($this->itemOptions) { ?>
-							<select name="category_id" class="collapse js_category_id" id="category_id">
+							<select name="category_id" class="collapse js_select_transform" id="category_id">
 								<option value="0">- <?php _e('请选择分类'); ?> -</option>
 								<?php echo $this->itemOptions; ?>
 							</select>

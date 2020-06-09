@@ -23,7 +23,7 @@ class courseModel extends Model
      */
     public function removeById ($id)
     {
-        return $this->removeByIds($ids);
+        return $this->removeByIds(array($id));
     }
     /**
      * 根据ids删除
@@ -125,6 +125,35 @@ class courseModel extends Model
         }
 
         return $courseList;
+    }
+
+    /**
+     * 根据教程id， 获取对应教案下的教程列表
+     *
+     * @param int $id 教程id
+     *
+     * @return array 教程列表
+     */
+    public function getCourseListInTableByCourseId ($id)
+    {
+        $courseList = array();
+
+        $list = $this->fetch_all('course_content_table', 'article_id='.intval($id));
+        if (is_array($list) && count($list)==1) {
+            $courseList = $this->fetch_all('course_content_table', 'table_id='.intval($list[0]['talbe_id']), 'sort asc');
+        }
+
+        return $courseList;
+    }
+
+    /**
+     * 通过id获取上一篇 和 下一篇 信息
+     * @param int $id 教程id
+     * @param int $tableId [optional] 教案id
+     */
+    public function getPrevAndNextById ($id, $tableId=null)
+    {
+
     }
 
     /**
@@ -239,6 +268,9 @@ class courseModel extends Model
         if (isset($data['category_id'])) {
             $set['category_id'] = intval($data['category_id']);
         }
+        if (isset($data['table_id'])) {
+            $set['table_id'] = intval($data['table_id']);
+        }
         if (isset($data['tag_names'])) {
             $set['tag_names']  = $data['tag_names'];
         }
@@ -280,8 +312,8 @@ class courseModel extends Model
             }
         }
 
-        $this->model('search_fulltext')->push_index('course', $title, $id);
-        $this->model('posts')->set_posts_index($id, 'course');
+        // $this->model('search_fulltext')->push_index('course', $set['title'], $id);
+        // $this->model('posts')->set_posts_index($id, 'course');
 
         // 处理绑定的话题
         if ($id && isset($data['tag_names'])) {
@@ -332,6 +364,12 @@ class courseModel extends Model
         }
         if (isset($data['article_id'])) {
             $set['article_id'] = intval($data['article_id']);
+        }
+        if (isset($data['category_id'])) { // 所属分类
+            $set['category_id'] = intval($data['category_id']);
+        }
+        if (isset($data['table_id'])) { // 所属教程
+            $set['table_id'] = intval($data['table_id']);
         }
         if (isset($data['sort'])) {
             $set['sort'] = intval($data['sort']);

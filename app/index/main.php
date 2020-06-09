@@ -87,13 +87,13 @@ class main extends BaseController
                     case 'article':
                     case 'course':
                     case 'question':
-                        ${$val['post_type'] . 'Ids'} = isset($val['question_id']) ? $val['question_id']:$val['id'];
+                        ${$val['post_type'] . 'Ids'} = isset($val['question_id']) ? $val['question_id']:intval($val['id']);
                         break;
                     default:
                         break;
                 }
                 isset($postIds[$val['post_type']]) OR $postIds[$val['post_type']] = array();
-                $postIds[$val['post_type']][] = isset($val['question_id']) ? $val['question_id']:$val['id'];
+                $postIds[$val['post_type']][] = isset($val['question_id']) ? $val['question_id']:intval($val['id']);
             }
         }
         $pagination = Application::pagination()->initialize(array(

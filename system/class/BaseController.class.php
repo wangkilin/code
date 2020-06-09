@@ -105,24 +105,13 @@ class BaseController extends Controller
 	/**
 	 * 获取分类 HTML 数据
 	 */
-	public function buildCategoryDropdownHtml($module, $selectedId = 0, $prefix = '')
+	public function buildCategoryDropdownHtml($selectedId = 0, $prefix = '')
 	{
 		$itemModel = $this->model('category');
-		// 获取根条目和子条目
-		if (! is_array($module)) {
-			$module = array($module);
-		}
-		array_walk($module, 'intval_string');
 
-		if (count($module)==1) {
-		    $where = 'module=' . end($module);
-		} else {
-			$where = 'module IN (' . join(',', $module) . ')';
-		}
-
-		$rootItems = $itemModel->getCategoryList($where . ' AND parent_id=0', 'id DESC', PHP_INT_MAX);
+		$rootItems = $itemModel->getCategoryList('parent_id=0', 'id DESC', PHP_INT_MAX);
 		if ($rootItems) {
-		    $childItems    = $itemModel->getCategoryList($where . ' AND parent_id>0', 'id DESC', PHP_INT_MAX);
+		    $childItems    = $itemModel->getCategoryList('parent_id>0', 'id DESC', PHP_INT_MAX);
 		} else {
 			$childItems = array();
 		}
@@ -227,7 +216,7 @@ class BaseController extends Controller
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('无法获取附件列表')));
         }
 
-        if ($itemInfo['uid'] != $this->user_id AND ! $this->hasRolePermission(parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR)) {
+        if ($itemInfo['uid'] != $this->user_id AND ! $this->hasRolePermission(self::IS_ROLE_ADMIN | self::IS_ROLE_MODERATOR)) {
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('你没有权限编辑这个附件列表')));
         }
 

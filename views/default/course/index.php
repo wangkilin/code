@@ -4,8 +4,56 @@
     <div class="container">
         <div class="row">
             <div class="icb-content-wrap clearfix">
-                <div class="col-sm-12 col-md-9 icb-main-content icb-article-content">
+                <!-- 左侧边栏 -->
+                <div class="col-sm-12 col-md-2 icb-side-bar icb-left-side-bar course hidden-sm hidden-xs">
+                    <div class="icb-mod">
+                        <?php foreach ($this->tableList as $_tableInfo) {?>
+                        <div class="mod-head">
+                            <h3 class="course-title"><i class="icon-reader"> </i><?php echo $_tableInfo['title']; ?></h3>
+                        </div>
+                        <div class="mod-body">
+                            <ul class="course-content-table" id="course-content-table"><?php
+                            foreach ($this->itemList[$_tableInfo['id']] as $_item) {
+                                switch ($_item['from_type']) {
+                                    case 'course':
+                            ?><li class="course<?php
+                                echo $_GET['id']==$this->courseList[$_item['article_id']]['id'] || $_GET['url_token']==$this->courseList[$_item['url_token']]['id'] ? ' on':'';
+                                echo $_item['parent_id'] > 0 ? ' hidden' : '';
+                            ?>" data-parent-id="<?php echo $_item['parent_id'];?>" data-id="<?php echo $_item['id'];?>"><i class="icon-log<?php
+                                 echo $_item['parent_id'] > 0 ? ' sub-level' : ' icon-add-to-list';
+                                 ?>"></i><a href="./id-<?php echo empty($this->courseList[$_item['article_id']]['url_token']) ? $_item['article_id']:$this->courseList[$_item['article_id']]['url_token'];?>__table_id-<?php echo $_item['table_id'];?>.html"><?php echo $_item['title'];?></a></li>
+                            <?php
+                                        break;
+                                    case 'link':
+                            ?><li class="link"><i class="icon-log<?php
+                                    echo $_item['parent_id'] > 0 ? ' sub-level' : '';
+                            ?>" data-parent-id="<?php echo $_item['parent_id'];?>" data-id="<?php echo $_item['id'];?>"></i><a target="_blank" href="<?php echo $_item['link'];?>"><?php echo $_item['title'];?></a></li>
+                            <?php
+                                        break;
+                                    case 'chapter':
+                            ?><li class="chapter" data-parent-id="<?php echo $_item['parent_id'];?>" data-id="<?php echo $_item['id'];?>"><i class="icon-file"></i> <?php echo $_item['title'];?></li>
+                            <?php
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }?></ul>
+                        </div>
+                        <?php } ?>
+                    </div>
+
+                </div>
+                <!-- end 左侧边栏 -->
+                <div class="col-sm-12 col-md-8 icb-main-content icb-middle-main-content icb-article-content ">
                     <div class="icb-mod icb-article-title-box" id="question_topic_editor" data-type="article" data-id="<?php echo $this->itemInfo['id']; ?>">
+                        <div class="col-sm-12 clearfix nav-previous-next">
+                            <div class="nav-previous-link col-sm-5"><?php if ($this->prevItem) {
+                                ?><a href="<?php echo $this->prevItem['link'];?>"><i class="icon-left"></i><?php echo $this->prevItem['title']; ?></a><?php
+                             }?> </div>
+                            <div class="nav-next-link col-sm-5"><?php if ($this->nextItem) {
+                                ?><a href="<?php echo $this->nextItem['link'];?>"><?php echo $this->nextItem['title']; ?><i class="icon-right"></i></a><?php
+                            }?> </div>
+                        </div>
                         <div class="tag-queue-box clearfix">
                             <?php if ($this->article_topics) { ?>
                             <?php foreach($this->article_topics as $key => $val) { ?>
@@ -20,11 +68,9 @@
                     </div>
                     <div class="icb-mod icb-question-detail">
                         <div class="mod-head">
-                            <h1>
-                                <?php echo $this->itemInfo['title']; ?>
-                            </h1>
-
-                            <?php if ($this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) { ?>
+                            <h1><?php echo $this->itemInfo['title']; ?></h1>
+                            <?php if ($this->user_info['permission']['is_administortar']
+                                 OR $this->user_info['permission']['is_moderator']) { ?>
                             <div class="operate clearfix">
                                 <!-- 下拉菜单 -->
                                 <div class="btn-group pull-left">
@@ -32,16 +78,16 @@
                                     <div class="dropdown-menu icb-dropdown pull-right" role="menu" aria-labelledby="dropdownMenu">
                                         <ul class="icb-dropdown-list">
                                             <li>
-                                                <a href="javascript:;" onclick="AWS.ajax_request(G_BASE_URL + '/article/ajax/lock/', 'article_id=<?php echo $this->itemInfo['id']; ?>');"><?php if ($this->itemInfo['lock']) { ?><?php _e('解除锁定'); ?><?php } else { ?><?php _e('锁定文章'); ?><?php } ?></a>
+                                                <a href="/admin/course/course/id-<?php echo $this->itemInfo['id']; ?>__url-<?php echo base64_current_path();?>.html"><i class="icon icon-edit"></i> <?php _e('编辑'); ?></a>
                                             </li>
                                             <li>
-                                                <a href="javascript:;" onclick="AWS.dialog('confirm', {'message' : '<?php _e('确认删除?'); ?>'}, function(){AWS.ajax_request(G_BASE_URL + '/article/ajax/remove_article/', 'article_id=<?php echo $this->itemInfo['id']; ?>');});"><?php _e('删除文章'); ?></a>
+                                                <a href="javascript:;" onclick="ICB.modal.confirm('<?php _e('确认删除?'); ?>', function(){ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/course_remove/', 'ids[]=<?php echo $this->itemInfo['id']; ?>&backUrl=<?php echo base64_encode('/course/') ;?>.html');});"><?php _e('删除文章'); ?></a>
                                             </li>
                                             <li>
-                                                <a href="javascript:;" onclick="AWS.ajax_request(G_BASE_URL + '/article/ajax/set_recommend/', 'action=<?php if ($this->itemInfo['is_recommend']) { ?>un<?php } ?>set&article_id=<?php echo $this->itemInfo['id']; ?>');"><?php if ($this->itemInfo['is_recommend']) { ?><?php _e('取消推荐'); ?><?php } else { ?><?php _e('推荐文章'); ?><?php } ?></a>
+                                                <a href="javascript:;" onclick="AWS.ajax_request(G_BASE_URL + '/course/ajax/set_recommend/', 'action=<?php if ($this->itemInfo['is_recommend']) { ?>un<?php } ?>set&article_id=<?php echo $this->itemInfo['id']; ?>');"><?php if ($this->itemInfo['is_recommend']) { ?><?php _e('取消推荐'); ?><?php } else { ?><?php _e('推荐文章'); ?><?php } ?></a>
                                             </li>
                                             <li>
-                                                <a href="javascript:;" onclick="AWS.dialog('recommend', {'type': 'article', 'item_id': <?php echo $this->itemInfo['id']; ?>, 'focus_id': <?php if ($this->itemInfo['chapter_id']) { echo $this->itemInfo['chapter_id']; } else { ?>''<?php } ?>});"><?php _e('添加到帮助中心'); ?></a>
+                                                <a href="javascript:;" onclick="AWS.dialog('recommend', {'type': 'course', 'item_id': <?php echo $this->itemInfo['id']; ?>, 'focus_id': <?php if ($this->itemInfo['chapter_id']) { echo $this->itemInfo['chapter_id']; } else {  } ?>});"><?php _e('添加到帮助中心'); ?></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -56,8 +102,14 @@
 
                                 <?php if ($this->itemInfo['attachs']) {  ?>
                                 <div class="icb-upload-img-list">
-                                <?php foreach ($this->itemInfo['attachs'] AS $attach) { ?>
-                                <?php if ($attach['is_image'] AND (!$this->itemInfo['attachs_ids'] OR !in_array($attach['id'], $this->itemInfo['attachs_ids']))) { ?>
+                                <?php foreach ($this->itemInfo['attachs'] AS $attach) {?>
+                                <?php if ($attach['is_image']
+                                          AND (
+                                               ! $this->itemInfo['attachs_ids']
+                                               OR !in_array($attach['id'], $this->itemInfo['attachs_ids'])
+                                           )
+                                          AND strpos($this->itemInfo['content'],$attach['file_location'])===false
+                                ) { ?>
                                     <a href="<?php echo $attach['attachment']; ?>" target="_blank" data-fancybox-group="thumb" rel="lightbox"><img src="<?php echo $attach['attachment']; ?>" class="img-polaroid" alt="<?php echo $attach['file_name']; ?>" /></a>
                                 <?php } ?>
                                 <?php } ?>
@@ -84,7 +136,7 @@
 
                                 <span class="pull-right  more-operate">
                                     <?php if ((!$this->itemInfo['lock'] AND ($this->itemInfo['uid'] == $this->user_id OR $this->user_info['permission']['edit_article'])) OR $this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) { ?>
-                                    <a class="text-color-999" href="publish/article/<?php echo $this->itemInfo['id']; ?>"><i class="icon icon-edit"></i> <?php _e('编辑'); ?></a>
+                                    <a class="text-color-999" href="/admin/course/course/id-<?php echo $this->itemInfo['id']; ?>__url-<?php echo base64_current_path();?>.html"><i class="icon icon-edit"></i> <?php _e('编辑'); ?></a>
                                     <?php } ?>
 
                                     <?php if ($this->user_id) { ?><a href="javascript:;" onclick="AWS.dialog('favorite', {item_id:<?php echo $this->itemInfo['id']; ?>, item_type:'article'});" class="text-color-999"><i class="icon icon-favor"></i> <?php _e('收藏'); ?></a><?php } ?>
@@ -208,8 +260,8 @@
                     </div>
                     <!-- end 回复编辑器 -->
                 </div>
-                <!-- 侧边栏 -->
-                <div class="col-sm-12 col-md-3 icb-side-bar hidden-sm hidden-xs">
+                <!-- 右侧边栏 -->
+                <div class="col-sm-12 col-md-2 icb-side-bar  hidden-sm hidden-xs">
                     <!-- 发起人 -->
                     <?php if ($this->itemInfo['anonymous'] == 0) { ?>
                     <div class="icb-mod user-detail">
@@ -294,25 +346,33 @@
                     <!-- end 相关问题 -->
                     <?php } ?>
                 </div>
-                <!-- end 侧边栏 -->
+                <!-- end 右侧边栏 -->
             </div>
         </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    var ANSWER_EDIT_TIME = <?php echo get_setting('answer_edit_time'); ?>;
-
-    $(document).ready(function () {
-        if ($('.icb-article-vote.disabled').length)
-        {
-            $('.icb-article-vote.disabled a').attr('onclick', '');
+$(function () {
+    /**
+     * 左侧菜单， 点击展开/收起子菜单
+     */
+    $('#course-content-table li>i').click(function () {
+        if ($(this).parent().attr('data-parent-id')=='0') {
+            $('#course-content-table li[data-parent-id="'+$(this).parent().attr('data-id')+'"]').toggleClass('hidden');
         }
-
-        AWS.at_user_lists('#article-content');
-
-        AWS.Init.init_article_comment_box($('.icb-article-comment'));
     });
+    /**
+     * 页面载入， 将对应菜单的子菜单自动展开
+     */
+    if ($('#course-content-table li.on').length) {
+        if ($('#course-content-table li.on').attr('data-parent-id')=='0') {
+            $('#course-content-table li.on>i').trigger('click');
+        } else {
+            $('#course-content-table li[data-id="'+$('#course-content-table li.on').attr('data-parent-id')+'"]>i').trigger('click');
+        }
+    }
+});
 </script>
 
 <?php View::output('global/footer.php'); ?>

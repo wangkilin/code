@@ -44,9 +44,9 @@ foreach ($val['topics'] AS $k => $v) {
                 <span class="icb-article-title">
 				 <h4>
 					<?php if ($val['question_id']) { ?>
-					<a href="question/<?php echo $val['question_id']; ?>" target="blank"><?php echo $val['question_content']; ?></a>
+					<a href="question/<?php echo empty($val['url_token']) ? $val['question_id']: $val['url_token']; ?>" target="blank"><?php echo $val['question_content']; ?></a>
 					<?php } else { ?>
-					<a href="<?php echo $val['post_type']?>/<?php echo $val['id']; ?>" target="blank"><?php echo $val['title']; ?></a>
+					<a href="<?php echo $val['post_type']?>/<?php echo empty($val['url_token']) ? $val['id']: $val['url_token']; ?>" target="blank"><?php echo $val['title']; ?></a>
 					<?php } ?>
 				</h4>
                 </span>
@@ -86,12 +86,12 @@ foreach ($val['topics'] AS $k => $v) {
             <?php
             echo nl2br(cjk_substr(trim(strip_tags(FORMAT::parse_attachs(FORMAT::parse_bbcode($val['message'])))), 0, 200) ); ?> <?php
             if (cjk_strlen($val['message']) > 130) {
-                ?> ...  <a class="more" href="article/<?php echo $val['id']; ?>" target="blank">查看全部</a>
+                ?> ...  <a class="more" href="article/<?php echo empty($val['url_token']) ? $val['id']:$val['url_token']; ?>" target="blank">查看全部</a>
             <?php
             } ?>
 		</div>
                     <div class="collapse article-brief all-content">
-                        <?php echo FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($val['message']))); ?>
+                        <?php //echo FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($val['message']))); ?>
 
                     </div>
                 </div>

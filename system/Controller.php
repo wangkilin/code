@@ -99,6 +99,8 @@ class Controller
             'js/framework.js',
             'js/aws.js',
             'js/aw_template.js',
+            'js/global.js',
+            'js/icb_template.js',
             'js/app.js',
         ));
 

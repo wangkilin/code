@@ -268,8 +268,9 @@ class ajax extends AdminController
         }
         */
 
+        // 跳转， 如果设置了回跳地址， 跳转到对应的回跳地址； 否则回到教程列表页面
         H::ajax_json_output(Application::RSM(array(
-            'url' => get_js_url('/admin/course/list/')
+            'url' => $_POST['backUrl'] ? base64_decode($_POST['backUrl']) : get_js_url('/admin/course/list/')
         ), 1, null));
     }
 
@@ -280,11 +281,21 @@ class ajax extends AdminController
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
         if (empty($_POST['ids'])) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择分类进行操作')));
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误！请选择教程进行操作')));
         }
         $this->model('course')->deleteByIds($_POST['ids'], 'course');
 
-        H::ajax_json_output(Application::RSM(null, 1, null));
+
+        // 跳转， 如果设置了回跳地址， 跳转到对应的回跳地址； 否则回到教程列表页面
+        if ($_POST['backUrl']) {
+            H::ajax_json_output(Application::RSM(
+                array('url' => base64_decode($_POST['backUrl'])),
+                1,
+                null)
+            );
+        } else {
+            H::ajax_json_output(Application::RSM(null, 1, null));
+        }
     }
 
     /**
@@ -1120,12 +1131,15 @@ class ajax extends AdminController
     {
         $this->checkPermission(self::IS_ROLE_ADMIN);
 
-        $data = array('topic_id'  => $_POST['topic_id'],
-                      'from_type' => $_POST['from_type']);
+        $data = array('table_id'    => $_POST['table_id'],
+                      'from_type'   => $_POST['from_type'],
+                      'category_id' => $_POST['category_id'],
+                    );
         switch ($_POST['from_type']) {
             case 'course' :
                 $data['article_id'] = intval($_POST['course_id']);
-                $data['title']      = trim($_POST['title']);
+                $courseInfo = $this->model('course')->getById($_POST['course_id']);
+                $data['title']      = $courseInfo['title'];
                 break;
 
             case 'custom' :
@@ -1137,13 +1151,13 @@ class ajax extends AdminController
                 break;
         }
 
-        if (! $data['title']) {
+        if (!$data['title']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入目录标题')));
         }
 
         $this->model('course')->addContentTable($data);
 
-        H::ajax_json_output(Application::RSM(null, 1, null));
+        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('教程目录添加成功')));
     }
 
     /**

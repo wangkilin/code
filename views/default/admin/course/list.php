@@ -38,7 +38,7 @@
                             <tr>
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>
 
-                                <td class="text-left"><a href="course/id-<?php echo $itemInfo['url_token']; ?>" target="_blank"><?php echo $itemInfo['title']; ?></a></td>
+                                <td class="text-left"><a href="<?php echo base_url();?>/course/<?php echo $this->parentItemsList[$itemInfo['category_id']]['url_token'];?>/<?php echo $itemInfo['url_token']; ?>.html" target="_blank"><?php echo $itemInfo['title']; ?></a></td>
 
                                 <td><?php echo $itemInfo['views']; ?></td>
 

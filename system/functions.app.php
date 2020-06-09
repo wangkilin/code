@@ -398,6 +398,16 @@ function doPublishArticle($userId, $title, $content, $categoryId=1, $topics=arra
     }
 }
 
+function doPublishCourse ()
+{
+
+}
+
+function doPublishCourseTable ()
+{
+
+}
+
 /**
  * 请求远端服务器
  * @param  string   $url    请求的url
@@ -406,7 +416,8 @@ function doPublishArticle($userId, $title, $content, $categoryId=1, $topics=arra
  * @param  resource $body    上传文件资源
  * @return boolean
  */
-function curlRequest($url, $method, $headers = null, $body = null){
+function curlRequest($url, $method, $headers = null, $body = null)
+{
     $ch  = curl_init($url);
 
     $_headers = array('Expect:');
@@ -433,7 +444,7 @@ function curlRequest($url, $method, $headers = null, $body = null){
             array_push($_headers, "Content-Length: {$length}");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
         }
-    } else {
+    } else if ($method == 'PUT' || $method == 'POST'){
         array_push($_headers, "Content-Length: {$length}");
     }
 
@@ -446,6 +457,12 @@ function curlRequest($url, $method, $headers = null, $body = null){
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+    // https 请求， 忽略验证
+    if ( (is_string($url) && stripos($url, 'https://')===0)
+        || (isset($_headers['scheme']) && strtolower($_headers['scheme'])=='https') ) {
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+    }
 
     if ($method == 'PUT' || $method == 'POST') {
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -458,6 +475,7 @@ function curlRequest($url, $method, $headers = null, $body = null){
     }
 
     $response = curl_exec($ch);
+    $error = curl_error($ch); // 记录错误
     $status   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     list($header, $body) = explode("\r\n\r\n", $response, 2);
@@ -468,7 +486,11 @@ function curlRequest($url, $method, $headers = null, $body = null){
             return $response;
         }
     } else {
-        return array('status'=>$status);
+        $return = array('status'=>$status);
+        if ($error) {
+            $return['error'] = $error;
+        }
+        return $return;
     }
 }
 

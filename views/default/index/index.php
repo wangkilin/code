@@ -57,29 +57,23 @@
     <div id="lunhuanback">
     <?php
     $loopPlayList = array(
-        '<p style="background: url(static/css/default/img/background/sky_star.jpg) 0 0 no-repeat scroll; opacity: 1;">
+        '<p style="background: url('.base_url().'/static/css/default/img/background/sky_star.jpg) 0 0 no-repeat scroll; opacity: 1;">
         <canvas id="J_dotLine" style="background-color: transparent;width: 100%;position: absolute;height: 300px;"></canvas>
         </p>',
-        '<p style="background: url(static/css/default/img/background/codeonce.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/codeonce.jpg) center center no-repeat scroll; opacity: 0;">
+            <a href="'.base_url().'" target="_blank" rel="nofollow"></a>
         </p>',
-        '<p style="background: url(static/css/default/img/background/goodsoftware_1.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/goodsoftware_1.jpg) center center no-repeat scroll; opacity: 0;">
         </p>',
-        '<p style="background: url(static/css/default/img/background/truth.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/truth.jpg) center center no-repeat scroll; opacity: 0;">
         </p>',
-        '<p style="background: url(static/css/default/img/background/showcode.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/showcode.jpg) center center no-repeat scroll; opacity: 0;">
         </p>',
-        '<p style="background: url(static/css/default/img/background/poweredworld.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/poweredworld.jpg) center center no-repeat scroll; opacity: 0;">
         </p>',
-        '<p style="background: url(static/css/default/img/background/teamwork_1.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/teamwork_1.jpg) center center no-repeat scroll; opacity: 0;">
         </p>',
-        '<p style="background: url(static/css/default/img/background/teamwork_2.jpg) center center no-repeat scroll; opacity: 0;">
-            <a href="/activity/index/summit" target="_blank" rel="nofollow"></a>
+        '<p style="background: url('.base_url().'/static/css/default/img/background/teamwork_2.jpg) center center no-repeat scroll; opacity: 0;">
         </p>',
     );
     $_rand = rand(0, count($loopPlayList)-1);

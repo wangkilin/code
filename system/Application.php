@@ -37,9 +37,16 @@ class Application
 
         $action_method = loadClass('core_uri')->action . '_action';
 
-        // 判断
-        if (! is_object($handle_controller) OR ! method_exists($handle_controller, $action_method)) {
+        // 判断 控制器存在否
+        if (! is_object($handle_controller) ) {
             HTTP::error_404();
+        }
+        // 判断action方法存在否
+        if (! method_exists($handle_controller, $action_method)) {
+            // 判断默认方法存在否？
+            if (! method_exists($handle_controller, $action_method = 'default_action')) {
+                HTTP::error_404();
+            }
         }
 
         if (method_exists($handle_controller, 'get_access_rule')) {
@@ -68,6 +75,7 @@ class Application
         if (method_exists($handle_controller, 'beforeAction') ){
             $handle_controller->beforeAction();
         }
+
         // 执行
         if (empty($_GET['id']) AND method_exists($handle_controller, loadClass('core_uri')->action . '_square_action')) {
             $action_method = loadClass('core_uri')->action . '_square_action';
