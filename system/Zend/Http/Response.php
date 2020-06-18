@@ -264,7 +264,8 @@ class Zend_Http_Response
 
             // Handle chunked body
             case 'chunked':
-                $body = self::decodeChunkedBody($this->body);
+                //$body = self::decodeChunkedBody($this->body);
+                $body = $this->body;
                 break;
 
             // No transfer encoding, or unknown encoding extension:
