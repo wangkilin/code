@@ -9,6 +9,7 @@ isset($config) OR $config = array();
 // 金属解析
 $config['metal'] = array(
     'url_prefix'    => 'https://hq.smm.cn',
+    'host'          => 'hq.smm.cn',
 );
 
 // 文章解析
@@ -428,7 +429,7 @@ EOF
         ),
         'Tomcat' =>
         array (
-            '_id' => '50',
+            '_id' => '49',
         ),
         'nginx' =>
         array (
@@ -956,6 +957,15 @@ EOF
         '_id' => '91',
         )
     )
+);
+$config['w3c'] = array (
+    'list_dir'     => '/Users/zhoumingxia/git/sites/www.jb51.net/list',
+);
+
+// 陆股通解析
+$config['lugutong'] = array(
+    'lugutong_sz_url'       => 'https://sc.hkexnews.hk/TuniS/www.hkexnews.hk/sdw/search/mutualmarket_c.aspx?t=sz',
+    'lugutong_sh_url'       => 'https://sc.hkexnews.hk/TuniS/www.hkexnews.hk/sdw/search/mutualmarket_c.aspx?t=sh',
 );
 
 return $config;
