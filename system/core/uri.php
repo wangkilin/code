@@ -216,7 +216,7 @@ class core_uri
 			break;
 		}
 
-		$this->app_dir = ROOT_PATH . 'app/' . $__app_dir . '/';
+        $this->app_dir = ROOT_PATH . CONTROLLER_DIR . DS . $__app_dir . DS;
 
 		$_GET['c'] = $this->controller;
 		$_GET['act'] = $this->action;

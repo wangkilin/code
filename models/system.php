@@ -216,14 +216,10 @@ class systemModel extends Model
     {
         static $all_category;
 
-        if (!$all_category)
-        {
-            if ($all_category_query = $this->fetch_all('category'))
-            {
-                foreach ($all_category_query AS $key => $val)
-                {
-                    if (!$val['url_token'])
-                    {
+        if (! $all_category) {
+            if ($all_category_query = $this->fetch_all('category')) {
+                foreach ($all_category_query AS $key => $val) {
+                    if (!$val['url_token']) {
                         $val['url_token'] = $val['id'];
                     }
 

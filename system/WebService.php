@@ -56,6 +56,8 @@ class WebService
 
     protected $requestContent = '';
 
+    protected $httpClientConfig = array();
+
     /*
      * 通过HTTP请求新建数据
      * @const string
@@ -100,25 +102,38 @@ class WebService
      */
     public function getHttpClient ($url = null, $config = array())
     {
+        // 合并配置参数
+        settype($config, 'array');
+        isset($config['timeout']) OR $config['timeout'] = 30;
         // 优先使用 curl
         if(function_exists('curl_init')) { // 系统存在curl模块
             $httpRequestConfig = array('ssltransport' => 'tls',
                 'adapter'=>'Zend_Http_Client_Adapter_Curl',
-                'curloptions'=>array(CURLOPT_SSL_VERIFYPEER=>false));
+                'curloptions'=>array(CURLOPT_SSL_VERIFYPEER=>false),
+                'request_timeout'   => $config['timeout'],
+            );
         } else { //系统没有 curl模块，通过socket建立http连接
             $httpRequestConfig = array('adapter'=>'Zend_Http_Client_Adapter_Socket',);
         }
-
-        // 合并配置参数
-        settype($config, 'array');
-        //$config['timeout'] = 300;
-        $httpRequestConfig = array_merge($config, $httpRequestConfig);
-
+        $httpRequestConfig = array_merge($httpRequestConfig, $config, $this->httpClientConfig);
 
         // 实例化http client
         $this->httpClient = new Zend_Http_Client($url, $httpRequestConfig);
 
         return $this->httpClient;
+    }
+
+    public function setClientConfig ($config)
+    {
+        settype($config, 'array');
+
+        if ($this->httpClient instanceof Zend_Http_Client) {
+            $this->httpClient->setConfig($config);
+        } else {
+            $this->httpClientConfig = array_merge($this->httpClientConfig, $config);
+        }
+
+        return $this;
     }
 
     protected function _convertRequestMethod ($crud = self::HTTP_CRUD_R)

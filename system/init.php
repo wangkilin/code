@@ -30,6 +30,12 @@ defined('INC_PATH')  OR define('INC_PATH', dirname(__FILE__) . DS);
 defined('CONF_PATH') OR define('CONF_PATH', ROOT_PATH . 'config' . DS);
 defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache'. DS);
 
+if (isset($_SERVER['SERVER_NAME']) && file_exists(CONF_PATH . $_SERVER['SERVER_NAME'] .'.inc.php')) {// 包含网站独立的配置参数
+    include_once(CONF_PATH . $_SERVER['SERVER_NAME'] .'.inc.php');
+}
+// 定义控制器文件存放的顶级目录
+defined('CONTROLLER_DIR') OR define('CONTROLLER_DIR', 'app');
+
 if (function_exists('memory_get_usage')) {
     define('MEMORY_USAGE_START', memory_get_usage());
 }
