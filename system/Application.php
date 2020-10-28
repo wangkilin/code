@@ -57,7 +57,7 @@ class Application
         if ($access_rule) {
             // 黑名单, 黑名单中的检查 'white' 白名单,白名单以外的检查 (默认是黑名单检查)
             if (isset($access_rule['rule_type']) AND $access_rule['rule_type'] == 'white') {
-                if ((! $access_rule['actions']) OR (! in_array(loadClass('core_uri')->action, $access_rule['actions']))) {
+                if ((! $access_rule['actions']) OR (! in_array(loadClass('core_uri')->action, $access_rule['actions']) )) {
                     self::login();
                 }
             } else if (isset($access_rule['actions']) AND in_array(loadClass('core_uri')->action, $access_rule['actions']))     {

@@ -1,17 +1,27 @@
 <?php
 class main extends BaseController
 {
+    /**
+     * 做黑名单检查。 不做访问限制
+     */
     public function get_access_rule()
     {
-        $rule_action['rule_type'] = 'white';
+        // 黑名单检查
+        $rule_action['rule_type'] = 'black';
 
-        if ($this->user_info['permission']['visit_question'] AND $this->user_info['permission']['visit_site'])
+        //var_dump($this->user_info);exit;
+        if ($this->user_info['permission']['visit_site'])
         {
-            $rule_action['actions'][] = 'square';
-            $rule_action['actions'][] = 'index';
+            //$rule_action['actions'][] = 'square';
+            //$rule_action['actions'][] = 'index';
         }
 
         return $rule_action;
+    }
+
+    public function go_action ()
+    {
+        echo 'aa';
     }
 
     /**

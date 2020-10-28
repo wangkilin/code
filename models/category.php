@@ -273,8 +273,9 @@ class categoryModel extends Model
     public function getAllCategories ($bindKey=null)
     {
         static $categoryList = null;
+
         if (! is_array($categoryList) ) {
-            $categoryList = $this->fetch_all('category', null, 'id ASC');
+            $categoryList = $this->fetch_all('category', null, 'title ASC');
         }
         if ($categoryList) {
             $tmpCategoryList = $categoryList;

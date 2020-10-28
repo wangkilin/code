@@ -70,7 +70,7 @@ class course extends AdminController
             $parentIds[] = $_courseInfo['category_id'];
         }
         $totalRows     = $this->model('course')->found_rows();
-        $categoryList = $this->model('category')->getByIds($parentIds);
+        //$categoryList = $this->model('category')->getByIds($parentIds);
 
         $url_param = array();
 

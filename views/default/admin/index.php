@@ -211,5 +211,6 @@
 </div>
 
 <script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/admin/js/echarts-data.js"></script>
-<script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/admin/js/echarts.js"></script>
+<!-- <script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/admin/js/echarts.js"></script> -->
+<script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/js/echarts.4_8.min.js"></script>
 <?php View::output('admin/global/footer.php'); ?>

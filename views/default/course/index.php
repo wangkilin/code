@@ -97,7 +97,7 @@
                             <?php } ?>
                         </div>
                         <div class="mod-body">
-                            <div class="content markitup-box">
+                            <div class="content course-content markitup-box">
                                 <?php echo $this->itemInfo['content']; ?>
 
                                 <?php if ($this->itemInfo['attachs']) {  ?>

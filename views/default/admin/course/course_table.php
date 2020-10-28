@@ -68,7 +68,7 @@
 		                                <h4><?php
 		                                switch ($val['from_type']) {
                                             case 'course':
-                                                echo '<a target="_blank" href="'.base_url().'/course/',$this->parentItemsList[$val['category_id']]['url_token'], '/', $this->list[$val['article_id']]['url_token'], '">', $val['title'], '</a> (';
+                                                echo '<a target="_blank" href="'.base_url().'/course/',$this->parentItemsList[$val['category_id']]['url_token'], '/id-', $this->list[$val['article_id']]['url_token'],'__table_id-',$_GET['table_id'], '.html">', $val['title'], '</a> (';
 		                                		_e('教程');
 		                                		break;
 		                                	case 'link':

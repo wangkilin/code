@@ -174,7 +174,7 @@ class postsModel extends Model
 
             if ($category_id)
             {
-                $where[] = 'category_id IN(' . implode(',', $this->model('system')->get_category_with_child_ids('question', $category_id)) . ')';
+                $where[] = 'category_id IN(' . implode(',', $this->model('system')->get_category_with_child_ids(null, $category_id)) . ')';
             }
 
             if ($post_type)
@@ -383,6 +383,13 @@ class postsModel extends Model
 
             if (get_setting('category_enable') == 'Y') {
                 $explore_list_data[$key]['category_info'] = $this->model('system')->get_category_info($data['category_id']);
+                // 逐级获取分类信息的父级
+                $explore_list_data[$key]['category_list'] = [];
+                $_tmpParentId = $explore_list_data[$key]['category_info']['parent_id'];
+                while (($_tmpInfo = $this->model('system')->get_category_info($_tmpParentId) )) {
+                    $explore_list_data[$key]['category_list'][] = $_tmpInfo;
+                    $_tmpParentId = $_tmpInfo['parent_id'];
+                }
             }
 
             $explore_list_data[$key]['topics'] = $topic_infos[$data['post_type']][$data['post_id']];

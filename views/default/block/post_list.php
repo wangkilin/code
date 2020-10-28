@@ -100,12 +100,20 @@ foreach ($val['topics'] AS $k => $v) {
         <div class="mod-footer clearfix">
 
             <?php
-            if ($_GET['category'] != $val['category_id'] AND $val['category_info']['title']) { ?>
+            if (true OR $_GET['category'] != $val['category_id'] AND $val['category_info']['title']) { ?>
                <a class="icb-question-tags text-left" href="index/category-<?php
                echo $val['category_info']['url_token']; ?>"><?php
                echo $val['category_info']['title']; ?></a>
             <?php
-            } ?>
+            }
+            foreach ($val['category_list'] as $_categoryInfo) { ?>
+                <a class="icb-question-tags text-left" href="index/category-<?php
+                echo $_categoryInfo['url_token']; ?>"><?php
+                echo $_categoryInfo['title']; ?></a>
+             <?php
+
+            }
+            ?>
             <span class="pull-right more-operate text-color-999">
             <?php
             if ($val['question_id']) { ?>
