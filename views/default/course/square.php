@@ -115,6 +115,17 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-md-4 col-lg-3">
+                            <a class="clearfix-item" href="/course/es6/es6_tutorial.html" title="ES6 教程">
+                                <div class="course_img col-sm-3 col-md-3 col-lg-3">
+                                    <img src="//www.icodebang.cn/uploads/nav_menu/es6.png" alt="ES6 教程">
+                                </div>
+                                <div class="course_info col-sm-9 col-md-9 col-lg-9">
+                                    <h4 class="table-title">ES6 教程</h4>
+                                    <p class="table-desc">ES6， 全称 ECMAScript 6.0 ，是 JavaScript 的一个版本标准，目前基本成为业界标准</p>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="col-sm-6 col-md-4 col-lg-3">
                             <a class="clearfix-item" href="/course/javascript/id-jsref_tutorial__table_id-8.html" title="JavaScript 和 HTML DOM 参考手册">
                                 <div class="course_img col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/jsref.png" alt="JavaScript 和 HTML DOM 参考手册">
