@@ -59,7 +59,7 @@ class main extends BaseController
         $prevDateList = $this->model()->fetch_all('stock_lugutong', 'belong_date = "' . $prevDate . '"', 'code ASC');
         $codeList = array_column($prevDateList, 'code');
         $prevDateList = array_combine($codeList, $prevDateList);
-        $stockList = $this->model()->fetch_all('stock_code');
+        $stockList = $this->model()->fetch_all('stock_code', 'belong_date = "' . $prevDate . '"');
         $codeList = array_column($stockList, 'code');
         $stockList = array_combine($codeList, $stockList);
         // 变换股票名称。 在香港网站的股票名称，有的和内地的名称不一致
