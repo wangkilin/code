@@ -28,11 +28,12 @@ defined('DS') OR define('DS', DIRECTORY_SEPARATOR);
 defined('ROOT_PATH') OR define('ROOT_PATH', dirname(dirname(__FILE__)) . DS);
 defined('INC_PATH')  OR define('INC_PATH', dirname(__FILE__) . DS);
 defined('CONF_PATH') OR define('CONF_PATH', ROOT_PATH . 'config' . DS);
-defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache'. DS);
-
-if (isset($_SERVER['SERVER_NAME']) && file_exists(CONF_PATH . $_SERVER['SERVER_NAME'] .'.inc.php')) {// 包含网站独立的配置参数
-    include_once(CONF_PATH . $_SERVER['SERVER_NAME'] .'.inc.php');
+if (isset($_SERVER['HTTP_HOST']) && file_exists(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php')) {// 包含网站独立的配置参数
+    include_once(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php');
 }
+
+defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache'. DS);
+defined('VIEW_PATH') OR define('VIEW_PATH', ROOT_PATH . 'views' . DS);
 // 定义控制器文件存放的顶级目录
 defined('CONTROLLER_DIR') OR define('CONTROLLER_DIR', 'app');
 
