@@ -1,15 +1,13 @@
 <?php
-/*
-+--------------------------------------------------------------------------
-|   WeCenter [#RELEASE_VERSION#]
-|   ========================================
-|   by WeCenter Software
-|   © 2011 - 2014 WeCenter. All Rights Reserved
-|   http://www.wecenter.com
-|   ========================================
-|   Support: WeCenter@qq.com
-|
-+---------------------------------------------------------------------------
+/**
++-------------------------------------------+
+|   iCodeBang CMS [#RELEASE_VERSION#]       |
+|   by iCodeBang.com Team                   |
+|   © iCodeBang.com. All Rights Reserved    |
+|   ------------------------------------    |
+|   Support: icodebang@126.com              |
+|   WebSite: http://www.icodebang.com       |
++-------------------------------------------+
 */
 
 class core_db

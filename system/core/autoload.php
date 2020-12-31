@@ -60,7 +60,17 @@ class core_autoload
 			else if (file_exists(INC_PATH . 'class/' . $class_name . '.inc.php'))
 			{
 				$class_file_location = INC_PATH . 'class/' . $class_name . '.inc.php';
-			}
+            }
+            // 查找第三方class
+            else if (file_exists(INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php'))
+			{
+				$class_file_location = INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php';
+            }
+            // 没找到文件， 抛出异常
+            else {
+                echo INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php';exit;
+                throw new Exception('Class file not found. Class:' . $class_name);
+            }
 		}
 
 		if ($class_file_location)

@@ -32,7 +32,7 @@ class Application
 
         loadClass('core_uri')->set_rewrite();
 
-        // 传入应用目录, 返回控制器对象
+        // 传入应用目录, 返回控制器对象。
         $handle_controller = self::create_controller(loadClass('core_uri')->controller, loadClass('core_uri')->app_dir);
 
         $action_method = loadClass('core_uri')->action . '_action';

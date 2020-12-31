@@ -31,6 +31,11 @@ function base_url($withScheme=true)
 
     return $scheme . '//' . $clean_url;
 }
+
+function getIcodebangCdnUrl ()
+{
+    return 'http://cdn.icodebang.com';
+}
 /**
  * 将当前访问的URL进行base64编码后返回
  * @return string
@@ -1378,6 +1383,12 @@ function get_random_filename($dir, $file_ext)
     return $filename . '.' . $file_ext;
 }
 
+/**
+ * 通过查看model文件是否存在来确认扩展包是否启用
+ * @param string $package 扩展包名
+ *
+ * @return bool
+ */
 function check_extension_package($package)
 {
     if (!file_exists(ROOT_PATH . 'models/' . $package . '.php'))
@@ -1387,7 +1398,11 @@ function check_extension_package($package)
 
     return true;
 }
-
+/**
+ * 计算现在时间到指定时间戳还有几天。 过去的时间返回0
+ * @param int $timestamp 时间戳
+ * @return int 天数
+ */
 function get_left_days($timestamp)
 {
     $left_days = intval(($timestamp - time()) / (3600 * 24));

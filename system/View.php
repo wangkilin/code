@@ -12,7 +12,7 @@ class SimpleView
 
     public function setOptions (array $options)
     {
-        $this->__options = array_merge($this->__options, $optioins);
+        $this->__options = array_merge($this->__options, $options);
 
         return $this;
     }
@@ -61,7 +61,8 @@ class View
     {
         if (!is_object(self::$view))
         {
-            self::$template_path = realpath(ROOT_PATH . 'views/');
+            self::$template_path = defined('VIEW_PATH') ? realpath(VIEW_PATH . DS) : realpath(ROOT_PATH . 'views/');
+
             set_include_path(self::$template_path . PATH_SEPARATOR . get_include_path());
 
             self::$view = new SimpleView(
@@ -220,7 +221,7 @@ class View
                     $val = str_replace('css/', 'css/default/', $val);
                 }
 
-                if (substr($val, 0, 4) != 'http')
+                if (substr($val, 0, 4) != 'http' && substr($val, 0, 2) != '//')
                 {
                     $val = G_STATIC_URL . '/' . $val;
                 }
@@ -235,7 +236,7 @@ class View
                 $path = str_replace('css/', 'css/default/', $path);
             }
 
-            if (substr($path, 0, 4) != 'http')
+            if (substr($path, 0, 4) != 'http' && substr($path, 0, 2) != '//')
             {
                 $path = G_STATIC_URL . '/' . $path;
             }
@@ -252,14 +253,14 @@ class View
     {
         if (is_array($path)) {
             foreach ($path AS $key => $val) {
-                if (substr($val, 0, 4) != 'http') {
+                if (substr($val, 0, 4) != 'http' && substr($val, 0, 2) != '//') {
                     $val = G_STATIC_URL . '/' . $val;
                 }
 
                 self::$view->_import_js_files[] = $val;
             }
         } else {
-            if (substr($path, 0, 4) != 'http') {
+            if (substr($path, 0, 4) != 'http' && substr($path, 0, 2) != '//') {
                 $path = G_STATIC_URL . '/' . $path;
             }
 

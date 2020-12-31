@@ -1,4 +1,14 @@
 <?php
+/**
++-------------------------------------------+
+|   iCodeBang CMS [#RELEASE_VERSION#]       |
+|   by iCodeBang.com Team                   |
+|   © iCodeBang.com. All Rights Reserved    |
+|   ------------------------------------    |
+|   Support: icodebang@126.com              |
+|   WebSite: http://www.icodebang.com       |
++-------------------------------------------+
+*/
 class core_uri
 {
 	var $params = array(
@@ -14,9 +24,10 @@ class core_uri
 		'action' => 'index'
 	);
 
-	var $app_dir = '';
+    var $app_dir    = '';
+    var $app        = '';
 	var $controller = '';
-	var $action = '';
+	var $action     = '';
 
 	var $request_main = '';
 	var $index_script = '';
@@ -187,7 +198,7 @@ class core_uri
 
 				$__app_dir = $uri['first']['args'][0] ? $uri['first']['args'][0] : $this->default_vars['app_dir'];	// 应用目录
 
-				if (file_exists(ROOT_PATH . 'app/' . $__app_dir . '/' . $uri['first']['args'][1] . '.php'))
+				if (file_exists(ROOT_PATH . CONTROLLER_DIR . DS . $__app_dir . DS . $uri['first']['args'][1] . '.php'))
 				{
 					$this->controller = $uri['first']['args'][1];	// 控制器
 				}
@@ -217,6 +228,7 @@ class core_uri
 		}
 
         $this->app_dir = ROOT_PATH . CONTROLLER_DIR . DS . $__app_dir . DS;
+        $this->app     = $__app_dir;
 
 		$_GET['c'] = $this->controller;
 		$_GET['act'] = $this->action;

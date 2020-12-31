@@ -18,7 +18,7 @@ class Controller
         $this->user_id = Application::user()->get_info('uid');
 
         if ($this->user_info = $this->model('account')->getUserById($this->user_id, TRUE))
-        {
+        {// 找到用户相关信息，根据用户相关信息， 获取对应的组信息
             $user_group = $this->model('account')->get_user_group($this->user_info['group_id'], $this->user_info['reputation_group']);
 
             if ($this->user_info['default_timezone'])
@@ -29,11 +29,11 @@ class Controller
             $this->model('online')->online_active($this->user_id, $this->user_info['last_active']);
         }
         else if ($this->user_id)
-        {
+        {// 用户存在cookie，但是没找到用户，应该是数据库做了删除用户操作
             $this->model('account')->logout();
         }
         else
-        {
+        {// 没有用户信息， 获取游客组信息
             $user_group = $this->model('account')->get_user_group_by_id(99);
 
             if ($_GET['fromuid'])
@@ -73,7 +73,8 @@ class Controller
             'css/common.css',
             'css/link.css',
             'js/fancybox/style.css',
-            'js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/styles/rainbow.css'
+            //'js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/styles/rainbow.css',
+            "//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/styles/monokai-sublime.min.css",
         ));
 
         if (defined('SYSTEM_LANG'))

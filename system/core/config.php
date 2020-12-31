@@ -54,7 +54,13 @@ class core_config
 		}
 	}
 
-	function load_config($config_id)
+    /**
+     * 从配置文件中载入配置信息
+     * @param string $config_id  配置信息名称， 对应到配置文件名称
+     *
+     * @return object 配置信息
+     */
+	public function load_config($config_id)
 	{
 		if (defined('CONF_PATH')) {
 		    $confFile = CONF_PATH . '/' . $config_id . '.php';
@@ -65,9 +71,9 @@ class core_config
 		{
 			throw new Zend_Exception('The configuration file config/' . $config_id . '.php does not exist.');
 		}
-		include_once($confFile);
+        include_once($confFile);
 
-		if (!is_array($config))
+		if (! is_array($config))
 		{
 			throw new Zend_Exception('Your config/' . $config_id . '.php file does not appear to contain a valid configuration array.');
 		}
@@ -77,6 +83,13 @@ class core_config
 		return $this->config[$config_id];
 	}
 
+    /**
+     * 设置配置信息， 将配置信息存储到文件中
+     * @param string $config_id 配置信息全局名称， 会被转换成文件名
+     * @param array  $data      配置信息关联数组
+     *
+     * @return int  >0表示文件写入成功， =0表示文件写入失败
+     */
 	public function set($config_id, $data)
 	{
 		if (!$data || ! is_array($data))
@@ -86,18 +99,12 @@ class core_config
 
 		$content = "<?php\n\n";
 
-		foreach($data as $key => $val)
-		{
-			if (is_array($val))
-			{
-				$content .= "\$config['{$key}'] = " . var_export($val, true) . ";";;
-			}
-			else if (is_bool($val))
-			{
+		foreach($data as $key => $val) {
+			if (is_array($val)) {
+				$content .= "\$config['{$key}'] = " . var_export($val, true) . ";";
+			} else if (is_bool($val)) {
 				$content .= "\$config['{$key}'] = " . ($val ? 'true' : 'false') . ";";
-			}
-			else
-			{
+			} else {
 				$content .= "\$config['{$key}'] = '" . addcslashes($val, "'") . "';";
 			}
 
@@ -111,7 +118,7 @@ class core_config
 		}
 		$fp = @fopen($confFile, "w");
 
-		@chmod($confFile, 0777);
+		@chmod($confFile, 0755);
 
 		$fwlen = @fwrite($fp, $content);
 
