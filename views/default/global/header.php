@@ -20,23 +20,31 @@
 				<nav role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
 				  <ul class="nav navbar-nav">
 					<li><a href="<?php echo base_url(); ?>" class="<?php if (!$_GET['app'] OR $_GET['app'] == 'index') { ?>active<?php } ?>"><i class="icon icon-home"></i><?php _e('首页'); ?></a></li>
-                    <li><a href="course/" class="<?php if ($_GET['app'] == 'course') { ?>active<?php } ?>"><?php _e('教程'); ?></a></li>
-                    <li><a href="asked/" class="<?php if ($_GET['app'] == 'asked') { ?>active<?php } ?>"><?php _e('面试题'); ?></a></li>
-                    <li><a href="manual/" class="<?php if ($_GET['app'] == 'manual') { ?>active<?php } ?>"><?php _e('手册'); ?></a></li>
-                    <li><a href="job/" class="<?php if ($_GET['app'] == 'job') { ?>active<?php } ?>"><?php _e('工作'); ?></a></li>
+                    <?php if(Application::config()->get('system')->model['course']['status']) {
+                    ?><li><a href="course/" class="<?php if ($_GET['app'] == 'course') { ?>active<?php } ?>"><?php _e('教程'); ?></a></li><?php } ?>
+                    <?php if(Application::config()->get('system')->model['article']['status']) {
+                    ?><li><a href="article/" class="<?php if ($_GET['app'] == 'article') { ?>active<?php } ?>"><?php _e('文章'); ?></a></li><?php } ?>
+                    <?php if(Application::config()->get('system')->model['asked']['status']) {
+                    ?><li><a href="asked/" class="<?php if ($_GET['app'] == 'asked') { ?>active<?php } ?>"><?php _e('面试题'); ?></a></li><?php } ?>
+                    <?php if(Application::config()->get('system')->model['manual']['status']) {
+                    ?><li><a href="manual/" class="<?php if ($_GET['app'] == 'manual') { ?>active<?php } ?>"><?php _e('手册'); ?></a></li><?php } ?>
+                    <?php if(Application::config()->get('system')->model['job']['status']) {
+                    ?><li><a href="job/" class="<?php if ($_GET['app'] == 'job') { ?>active<?php } ?>"><?php _e('工作'); ?></a></li><?php } ?>
                     <!-- <li><a href="project/" class="<?php if ($_GET['app'] == 'project') { ?>active<?php } ?>"><?php _e('项目'); ?></a></li> -->
 
                     <?php if ($this->user_id) { ?>
-					<li><a href="home/"<?php if ($_GET['app'] == 'home') { ?> class="active"<?php } ?>><?php _e('动态'); ?></a></li>
+                        <?php if(Application::config()->get('system')->model['home']['status']) {
+                    ?><li><a href="home/"<?php if ($_GET['app'] == 'home') { ?> class="active"<?php } ?>><?php _e('动态'); ?></a></li><?php } ?>
 					<?php } ?>
 
-					<li><a href="question/" class="<?php if ($_GET['app'] == 'question') { ?>active<?php } ?>"><?php _e('问题'); ?></a></li>
+					<?php if(Application::config()->get('system')->model['question']['status']) {
+                    ?><li><a href="question/" class="<?php if ($_GET['app'] == 'question') { ?>active<?php } ?>"><?php _e('问题'); ?></a></li><?php } ?>
 
-					<li><a href="article/" class="<?php if ($_GET['app'] == 'article') { ?>active<?php } ?>"><?php _e('文章'); ?></a></li>
-
-					<li><a href="topic" <?php if ($_GET['app'] == 'topic') { ?>class="active"<?php } ?>><?php _e('话题'); ?></a></li>
+                    <?php if(Application::config()->get('system')->model['topic']['status']) {
+                    ?><li><a href="topic" <?php if ($_GET['app'] == 'topic') { ?>class="active"<?php } ?>><?php _e('话题'); ?></a></li><?php } ?>
 					<?php if ($this->user_id) { ?>
-					<li>
+                    <?php if(Application::config()->get('system')->model['notifications']['status']) {
+                    ?><li>
 						<a href="notifications/" class="<?php if ($_GET['app'] == 'notifications') { ?>active<?php } ?>"><i class="icon icon-bell"></i> <?php _e('通知'); ?></a>
 						<span class="badge badge-important" style="display:none" id="notifications_unread"><?php echo $this->user_info['notification_unread']; ?></span>
 						<div class="icb-dropdown pull-right hidden-xs">
@@ -47,7 +55,7 @@
 								<a href="notifications/"><?php _e('查看全部'); ?></a>
 							</div>
 						</div>
-					</li>
+					</li><?php } ?>
 					<?php } ?>
 					<?php if (check_extension_package('ticket') && get_setting('ticket_enabled') == 'Y' && ($this->user_info['permission']['publish_ticket'] || $this->user_info['permission']['is_administortar'] || $this->user_info['permission']['is_service'])) { ?>
                     <!-- <li><a href="ticket/"<?php if ($_GET['app'] == 'ticket') { ?> class="active"<?php } ?><?php _e('工单'); ?></a></li>-->

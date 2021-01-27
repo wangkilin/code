@@ -124,7 +124,7 @@ var echartOptions = {
             },
             data: dates //[]
         }],
-        yAxis: [{
+        yAxis: [{// Y轴左侧坐标;
             type: 'value',
             max: maxLeft,
             min: minLeft,
@@ -144,28 +144,30 @@ var echartOptions = {
                     width: 1
                 }
             }
-        },
-        {
-            type: 'value',
-            max: 1200,
-            min: 0,
-            splitLine: {
-                show: false,
-            },
+        }
+        // ,
+        // { // Y轴右侧坐标
+        //     type: 'value',
+        //     max: 1200,
+        //     min: 0,
+        //     splitLine: {
+        //         show: false,
+        //     },
 
-            axisLine: {
-                show: true
-            },
+        //     axisLine: {
+        //         show: true
+        //     },
 
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    color: 'rgba(0,0,0,0.1)',
-                    type: 'dashed',
-                    width: 1
-                }
-            }
-        }],
+        //     splitLine: {
+        //         show: true,
+        //         lineStyle: {
+        //             color: 'rgba(0,0,0,0.1)',
+        //             type: 'dashed',
+        //             width: 1
+        //         }
+        //     }
+        // }
+    ],
         graphic: [
         {
             type: 'image',

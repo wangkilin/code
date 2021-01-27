@@ -104,16 +104,18 @@ class main extends BaseController
         View::import_clean();
 
         View::import_css(array(
-            'mobile/css/mobile.css'
+            'js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/styles/rainbow.css',
+            'mobile/css/mobile.css',
         ));
 
         View::import_js(array(
             'js/jquery.2.js',
             'js/jquery.form.js',
             'mobile/js/framework.js',
-            'mobile/js/aws-mobile.js',
+            'mobile/js/icb-mobile.js',
             'mobile/js/app.js',
-            'mobile/js/icb-mobile-template.js'
+            'mobile/js/icb-mobile-template.js',
+            'js/global.js',
         ));
 
         if (in_weixin())
@@ -1114,7 +1116,7 @@ class main extends BaseController
 
         $article_info['user_info'] = $this->model('account')->getUserById($article_info['uid'], true);
 
-        $article_info['message'] = FORMAT::parse_attachs(nl2br(FORMAT::parse_bbcode($article_info['message'])));
+        $article_info['message'] = FORMAT::parse_attachs(FORMAT::parse_bbcode($article_info['message']));
 
         if ($this->user_id)
         {
@@ -1145,6 +1147,9 @@ class main extends BaseController
         }
 
         $this->model('article')->update_views($article_info['id']);
+
+        View::set_meta('keywords', implode(',', $this->model('system')->analysis_keyword($article_info['title'])));
+        View::set_meta('description', $article_info['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($article_info['message'])), 0, 128, 'UTF-8', '...'));
 
         View::assign('comments', $comments);
         View::assign('comments_count', $article_info['comments']);

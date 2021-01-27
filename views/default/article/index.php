@@ -79,6 +79,7 @@
                     <div class="meta clearfix">
                         <?php if ($this->article_info['author']!=='') echo '<span>作者:', $this->article_info['author'],'</span>';?>
                         <?php if ($this->article_info['source_url']!=='') echo '<span>原文地址:', $this->article_info['source_url'],'</span>';?>
+                        <?php if ($this->article_info['copy_from']!=='' && ($this->user_info['permission']['edit_article'] OR $this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) ) echo '<br/><span>来源:<a href="'.$this->article_info['copy_from'].'" target="blank">', $this->article_info['copy_from'],'</a></span>';?>
                     </div>
                             <div class="meta clearfix">
                                 <div class="icb-article-vote pull-left<?php if (!$this->user_id OR $this->user_id == $this->article_info['uid']) { ?> disabled<?php } ?>">

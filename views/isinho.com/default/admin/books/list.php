@@ -20,7 +20,7 @@
                     <input type="hidden" id="action" name="action" value="" />
                 <?php if ($this->itemsList) { ?>
 
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" class="check-all"></th>
@@ -43,7 +43,7 @@
                         </thead>
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { ?>
-                            <tr>
+                            <tr class="<?php if($itemInfo['is_payed']==1) {echo 'book_is_payed success';} ?>">
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>
                                 <td class="text-left">
 
@@ -140,7 +140,7 @@ $(function(){
                             $('#sinho_editor>option[value="'+data.rsm.data[_i].user_id+'"]').attr('selected', 'selected');
                         }
                     }
-                })
+                });
                 $("#sinho_editor").multiselect({
         			nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
                     maxHeight       : 200,
@@ -175,6 +175,8 @@ $(function(){
         var deliveryDate = $(this).data('delivery-date');
         var returnDate   = $(this).data('return-date');
         var onshowCallback = function () {
+            //$('.js-datepicker').date_input(); // 已有日期输入。 后台管理首页，有示例
+
             $( ".js-datepicker" ).datetimepicker({
                 format  : 'yyyy-mm-dd',
                 language:  'zh-CN',

@@ -8,6 +8,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 	<link rel="apple-touch-startup-image" href="/startup.png" />
 	<link rel="apple-touch-startup-image" sizes="640x1096" href="/startup_5.png" />-->
+	<meta name="keywords" content="<?php echo $this->_meta_keywords; ?>" />
 	<meta name="description" content="<?php echo $this->_meta_description; ?>" />
 	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="<?php echo G_STATIC_URL; ?>/common/apple_touch_icon.png" />
 	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="<?php echo G_STATIC_URL; ?>/common/apple_touch_icon_114x114.png" />

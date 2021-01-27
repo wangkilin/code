@@ -421,6 +421,81 @@
 					</td>
 				</tr>
 				<?php } ?>
+                <!-- 新禾网站权限  -->
+                <?php if (check_extension_package('sinhoWorkload')) { ?>
+                <tr class="js-sinho">
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('允许管理稿件'); ?>:</span>
+                            <div class="col-sm-6 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="js-sinho">
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('允许添加个人工作量'); ?>:</span>
+                            <div class="col-sm-6 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="js-sinho">
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('允许核算工作量'); ?>:</span>
+                            <div class="col-sm-6 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="js-sinho">
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('允许查阅工作量'); ?>:</span>
+                            <div class="col-sm-6 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <?php } ?>
 
 				<?php } else { ?>
 				<tr>
@@ -562,6 +637,11 @@
 				</tr>
 				<?php } ?>
 				<tfoot>
+				<tr>
+					<td>
+						<div class="form-group bg-warning">页面增加参数后， 需要修改 app/admin/ajax.php中的权限参数设置。 将新参数名称加入到对应方法中</div>
+					</td>
+				</tr>
 				<tr>
 					<td>
 						<input type="button" value="<?php _e('保存设置'); ?>" class="btn btn-primary center-block" onclick="AWS.ajax_post($('#settings_form'));" />

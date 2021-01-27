@@ -3,8 +3,10 @@
  * phpExcel 组件类
  */
 require_once( INC_PATH . 'vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
+/** Include PHPExcel_IOFactory */
+require_once INC_PATH .  'vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
-class Excel_PhpExcel
+class Tools_Excel_PhpExcel
 {
     public $phpExcel;
 
@@ -12,11 +14,66 @@ class Excel_PhpExcel
 
     public function __construct($options=array())
     {
-        $this->phpExcel = new PHPExcel();
-
         if (isset($options['beforeDownload']) && is_callable($options['beforeDownload'])) {
             $this->hookBeforeDownload = $options['beforeDownload'];
         }
+    }
+
+    /**
+     * 解析excel文件, 获取每个单元格数据
+     * @param string $filepath Excel文件路劲
+     * @param int|array $sheetIndex 要获取的表序号。 int时为指定第几个表的数据。 array时为指定几个表的数据
+     *
+     * @return array
+     */
+    public function parseFile ($filepath, $sheetIndex=null)
+    {
+        $this->phpExcel = PHPExcel_IOFactory::load($filepath);
+        $sheets = $this->phpExcel->getAllSheets();
+
+        if (is_null($sheetIndex)) {
+            $sheetIndex = range(0, count($sheets)-1);
+        } if (! is_array($sheetIndex)) {
+            $sheetIndex = array($sheetIndex);
+        }
+        $returnData = array('sheetNames' => array(), 'sheetDatas' => array());
+        foreach($sheetIndex as $_index) {
+            $data = array();
+            // 如果不存在指定的表， 对应返回数据为空数组
+            if (! isset($sheets[$_index])) {
+                $returnData['sheetNames'][$_index] = $_index;
+                $returnData['sheetDatas'][$_index] = $data;
+                continue;
+            }
+            $currentSheet = $this->phpExcel->getSheet($_index);
+            $returnData['sheetNames'][$_index] = $currentSheet->getTitle();
+
+            $allColumn = $currentSheet->getHighestColumn();
+            $allColumn++; // 将最大列 + 1. 作为列的边界
+
+            $allRow = $currentSheet->getHighestRow();
+
+            for ($currentRow = 1; $currentRow <= $allRow; $currentRow++) {
+                $currentColumn = 'A';
+                $i = 0; // 最多处理50列. 在边界范围内获取数据
+                while ($currentColumn != $allColumn && $i<50) {
+                    $address = $currentColumn.$currentRow;
+
+                    $cell = $currentSheet->getCell($address)->getCalculatedValue();
+                    if (is_object($cell)) {
+                        $cell = $cell->__toString();
+                    }
+                    $data[$currentRow][$currentColumn] = $cell;
+
+                    $currentColumn++; // Z + 1 => AA, AZ + 1 => BA
+                    $i++;
+                }
+            }
+
+            $returnData['sheetDatas'][$_index] = $data;
+        }
+
+        return $returnData;
     }
 
     /**

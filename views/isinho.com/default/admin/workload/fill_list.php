@@ -162,6 +162,24 @@ function compute_chars_ammount ()
     totalChars = float(totalChars, 4);
     var amount = float(totalChars * 2, 2);
 
+    console && console.info( float($('#workload-edit-form-container input[name="content_table_pages"]').val())
+                    , float($('#workload-edit-form-container input[name="text_pages"]').val() )
+                , float($('#workload-edit-form-container input[name="text_table_chars_per_page"]').val() )
+            , (float($('#workload-edit-form-container input[name="answer_pages"]').val() )
+                * float($('#workload-edit-form-container input[name="answer_chars_per_page"]').val() ) )
+            , (float($('#workload-edit-form-container input[name="test_pages"]').val())
+                * float($('#workload-edit-form-container input[name="test_chars_per_page"]').val())  )
+            , (float($('#workload-edit-form-container input[name="test_answer_pages"]').val())
+                * float($('#workload-edit-form-container input[name="test_answer_chars_per_page"]').val())  )
+            , (float($('#workload-edit-form-container input[name="exercise_pages"]').val())
+                * float($('#workload-edit-form-container input[name="exercise_chars_per_page"]').val())  )
+            , (float($('#workload-edit-form-container input[name="function_book"]').val())
+                * float($('#workload-edit-form-container input[name="function_book_chars_per_page"]').val())  )
+            , (float($('#workload-edit-form-container input[name="function_answer"]').val())
+                * float($('#workload-edit-form-container input[name="function_answer_chars_per_page"]').val())  )
+
+        , float($('#workload-edit-form-container input[name="weight"]').val() )
+    );
    $('#workload-edit-form-container input[name="total_chars"]').val(totalChars);
    $('#workload-edit-form-container input[name="payable_amount"]').val(amount);
    //return {'chars':totalChars, 'amount':amount};
@@ -226,6 +244,9 @@ function editWorkload (id)
         /**
          * 监听输入框输入按键为回车时， 如果输入框为空值， 使用默认值填充
          */
+        $('#workload-edit-form input').blur(function () {
+            compute_chars_ammount();
+        });
         $('#workload-edit-form input').keydown(function (event) {
             compute_chars_ammount();
             if (13 != event.keyCode || $(this).val()!=='') {

@@ -161,7 +161,6 @@
 	<?php echo get_setting('statistic_code'); ?>
 </div>
 <!-- / DO NOT REMOVE -->
-
 <?php if (in_weixin()) { ?>
 <script src="//res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
@@ -236,7 +235,50 @@ wx.ready(function () {
 </script>
 <?php } ?>
 
+<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
+$(function () {
+//hljs.initHighlightingOnLoad(); // 启用代码高亮
+//console.info($('code.hljs').length);
+//$('pre>code, .content .codebody').each(function(i, block) { // 设置代码行号
+$('pre>code').each(function(i, block) { // 设置代码行号
+        hljs.configure({useBR: $(this).find('br').length>0});
+        hljs.highlightBlock(block);
+        hljs.lineNumbersBlock(block, {singleLine:true});
+    });
+});
+
+
+//
+$('div.code>div,div.content div.sample-code-container').each(function(i, block) {
+    hljs.configure({useBR: $(this).find('br').length>0});
+    hljs.highlightBlock(block);
+});
+
+// 百度统计
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?681fc9b1c75c25b5868d6bfdea94f7df";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+
+// 百度自动推送
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+
   window.bughd = window.bughd || function(){};
   bughd("create",{key:"d96d072cefc5ab3c6256af43ec8859bc"})
 </script>

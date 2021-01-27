@@ -28,10 +28,13 @@
 		});
 	</script>
 </div>
+<!--把button放在右下角，这个是可以随意修改的，你可以改成一个链接一个图片之类的-->
+<div id="google_translate_element" style="position:absolute;top:10px;right:10px;z-index:2000;opacity:0.7"></div>
 
 <?php View::output('global/debuger.php'); ?>
 <!-- / DO NOT REMOVE -->
-<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+<!-- <script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script> -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
 <script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
 $(function () {
@@ -101,59 +104,8 @@ var _hmt = _hmt || [];
 })();
 </script>
 
-<style type="text/css">
-pre code,div.code > div,.sample-code-container{
-    font-family: "Courier New",Courier,-apple-system,BlinkMacSystemFont, '微软雅黑', 'Microsoft YaHei','Helvetica Neue','PingFang SC','Source Han Sans SC','Helvetica Neue', 'STHeiti';
-    border-radius: 4px;
-}
-.hljs-tag .hljs-title, .hljs-rules .hljs-property, .django .hljs-tag .hljs-keyword, .clojure .hljs-title .hljs-built_in {
-    font-weight: normal;
-}
-div.code  {
-    margin: 0;
-    padding: 5px;
-    overflow: hidden;
-    border: none;
-    border-radius: 3px;
-    background-color: #f7f7f7;
-}
-/* for block of numbers */
-.code-has-img{
-    background: none;
-}
-.hljs-ln{
-    width:100%;
-}
-.hljs-ln-numbers {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 
-    text-align: right;
-    color: #ccc;
-    border-right: 1px solid #CCC;
-    vertical-align: top;
-    padding-right: 5px !important;
-    white-space: nowrap;
-    width:20px;
-    /* your custom style here */
-}
+<script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateCallback"></script>
 
-/* for block of code */
-.hljs-ln td.hljs-ln-code {
-    padding-left: 10px;
-}
-.hljs-ln-n:before {
-    content: attr(data-line-number);
-    color: #999;
-}
-.hljs-ln tr:nth-child(odd) td {
-    background: #444;
-}
-
-</style>
 </body>
 </html>

@@ -3,20 +3,36 @@ defined('iCodeBang_Com') OR die('Access denied!');
 
 class adminModel extends Model
 {
-    public function fetch_menu_list($select_id=null)
+    /**
+     * 获取菜单列表， 根据传入id，找到对应选定菜单
+     * @param string    $select_id          选定的菜单id
+     * @param string    $menuConfigName     对应的菜单配置文件
+     *
+     * @return array 格式化后的菜单数组
+     */
+    public function fetch_menu_list($select_id=null, $menuConfigName='admin_menu')
     {
         $_select_id = $select_id;
+        // 传入空id， 将 controller/action 作为id
         if (null===$select_id) {
             $controller = loadClass('core_uri')->controller;
             $action     = loadClass('core_uri')->action;
             $_select_id = $controller . '/' .$action;
+            if (''!=loadClass('core_uri')->app) {
+                $_select_id = loadClass('core_uri')->app . '/' . $_select_id;
+            }
         }
-        $admin_menu = (array)Application::config()->get('admin_menu');
+        // 获取菜单配置信息
+        $admin_menu = (array)Application::config()->get($menuConfigName);
         $isFound = false;
         $tmpList = array();
 
         foreach($admin_menu as $m_id => $menu) {
             if (! $menu['children']) {
+                if ($menu['id']==$_select_id || $menu['url'] == $_select_id || $menu['url'] == $_select_id.'/') {
+                    $admin_menu[$m_id]['select'] = true;
+                    $isFound = true;
+                }
                 continue;
             }
             foreach($menu['children'] as $c_id => $c_menu) {

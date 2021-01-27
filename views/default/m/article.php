@@ -28,7 +28,7 @@
 					<div id="weixin-desc" style="display:none;">
 						<?php echo cjk_substr(str_replace(array("\r","\n"),array(' ',' '), strip_tags($this->article_info['message'])), 0, 130, 'UTF-8', '...');?>
 					</div>
-									
+
 					<?php if ($this->article_info['attachs']) {  ?>
 					<div class="icb-upload-img-list">
 					<?php foreach ($this->article_info['attachs'] AS $attach) { ?>
@@ -38,7 +38,7 @@
 					<?php } ?>
 					</div>
 					<?php } ?>
-					
+
 					<?php if ($this->article_info['attachs']) {  ?>
 					<ul class="icb-upload-file-list">
 						<?php foreach ($this->article_info['attachs'] AS $attach) { ?>
@@ -119,7 +119,7 @@
 		<?php if ($this->next_page) { ?>
 		<a href="m/question/<?php echo $this->question_info['question_id']; ?>?page-<?php echo $this->next_page; ?>" class="icb-load-more">下一页</a>
 		<?php } ?>
-		
+
 		<?php if ($this->article_info['lock']) { ?>
 		<p align="center"><?php _e('该文章目前已经被锁定, 无法添加新评论'); ?></p>
 		<?php } else if (!$this->user_id) { ?>

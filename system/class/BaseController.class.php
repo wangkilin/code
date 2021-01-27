@@ -23,8 +23,13 @@ class BaseController extends Controller
 	 *
 	 * @const int
 	 */
-	const IS_ROLE_ADMIN = 0x01;
-	const IS_ROLE_MODERATOR = 0x02;
+	const IS_ROLE_ADMIN = 0x01; // 后台管理员
+    const IS_ROLE_MODERATOR = 0x02;  // 前台文章修改
+
+    const PERMISSION_MAP = array (
+        self::IS_ROLE_ADMIN         => 'is_administortar',
+        self::IS_ROLE_MODERATOR     => 'is_moderator',
+    );
 
 	/**
 	 * 移动端访问， 跳转到相应链接
@@ -159,15 +164,22 @@ class BaseController extends Controller
 	 */
 	protected function hasRolePermission ($checkingRoleFlags)
 	{
-		if ( ($checkingRoleFlags & self::IS_ROLE_ADMIN)
-		 && $this->user_info['permission']['is_administortar']) {
-			return true;
-		}
+		// if ( ($checkingRoleFlags & self::IS_ROLE_ADMIN)
+		//  && $this->user_info['permission']['is_administortar']) {
+		// 	return true;
+		// }
 
-		if ( ($checkingRoleFlags & self::IS_ROLE_MODERATOR)
-		 && $this->user_info['permission']['is_moderator']) {
-			return true;
-		}
+		// if ( ($checkingRoleFlags & self::IS_ROLE_MODERATOR)
+		//  && $this->user_info['permission']['is_moderator']) {
+		// 	return true;
+        // }
+
+        foreach ($this::PERMISSION_MAP as $_key => $_value) {
+            if ( ($checkingRoleFlags & $_key )
+                && $this->user_info['permission'][$_value]) {
+                return true;
+            }
+        }
 
 		return false;
 	}

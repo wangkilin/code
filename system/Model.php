@@ -702,7 +702,7 @@ class Model
      * @param    string
      * @return    array
      */
-    public function query_all($sql, $limit = null, $offset = null, $where = null, $group_by = null)
+    public function query_all($sql, $limit = null, $offset = null, $where = null, $group_by = null, $order_by = '')
     {
         $this->slave();
 
@@ -719,6 +719,10 @@ class Model
         if ($group_by)
         {
             $sql .= " GROUP BY `" . $this->quote($group_by) . "`";
+        }
+
+        if ($order_by) {
+            $sql .= ' ORDER BY ' . $order_by;
         }
 
         if ($limit)

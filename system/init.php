@@ -60,7 +60,7 @@ if (defined('IN_SAE')) {
         error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
     }
 
-    define('TEMP_PATH', ROOT_PATH . '/tmp/');
+    define('TEMP_PATH', ROOT_PATH . 'tmp/');
 }
 
 if (function_exists('get_magic_quotes_gpc') && @get_magic_quotes_gpc()) { // GPC 进行反向处理

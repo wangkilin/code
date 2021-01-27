@@ -1,5 +1,5 @@
 <?php
-/**
+/*
 +-------------------------------------------+
 |   iCodeBang CMS [#RELEASE_VERSION#]       |
 |   by iCodeBang.com Team                   |

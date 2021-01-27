@@ -78,7 +78,7 @@ class core_captcha
 			{
 				$this->captcha->generate();
 			}
-			
+
 			return true;
 		}
 

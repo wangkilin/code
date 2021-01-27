@@ -204,7 +204,7 @@ class main extends BaseController
 
         View::set_meta('keywords', implode(',', $this->model('system')->analysis_keyword($itemInfo['title'])));
 
-        View::set_meta('description', $itemInfo['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($itemInfo['message'])), 0, 128, 'UTF-8', '...'));
+        View::set_meta('description', $itemInfo['title'] . ' - ' . cjk_substr(str_replace(array("\r","\n", '  '), array('','',' '), strip_tags($itemInfo['content'])), 0, 128, 'UTF-8', '...'));
 
         View::assign('attach_access_key', md5($this->user_id . time()));
 
@@ -311,7 +311,7 @@ class main extends BaseController
 
         View::set_meta('keywords', implode(',', $this->model('system')->analysis_keyword($itemInfo['title'])));
 
-        View::set_meta('description', $itemInfo['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($itemInfo['message'])), 0, 128, 'UTF-8', '...'));
+        View::set_meta('description', $itemInfo['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($itemInfo['content'])), 0, 128, 'UTF-8', '...'));
 
         View::assign('attach_access_key', md5($this->user_id . time()));
 

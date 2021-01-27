@@ -167,6 +167,16 @@
                             <?php } ?>
                         </div>
                     </div>
+                    <div class="icb-mod icb-article-title-box" id="question_topic_editor" data-type="article" data-id="<?php echo $this->itemInfo['id']; ?>">
+                        <div class="col-sm-12 clearfix nav-previous-next">
+                            <div class="nav-previous-link col-sm-5"><?php if ($this->prevItem) {
+                                ?><a href="<?php echo $this->prevItem['link'];?>"><i class="icon-left"></i><?php echo $this->prevItem['title']; ?></a><?php
+                             }?> </div>
+                            <div class="nav-next-link col-sm-5"><?php if ($this->nextItem) {
+                                ?><a href="<?php echo $this->nextItem['link'];?>"><?php echo $this->nextItem['title']; ?><i class="icon-right"></i></a><?php
+                            }?> </div>
+                        </div>
+                    </div>
 
                     <!-- 文章评论 -->
                     <div class="icb-mod">

@@ -1,10 +1,10 @@
 <?php
 
-$config['charset'] = 'utf8';
+$config['charset'] = 'utf8mb4';
 $config['prefix'] = 'icb_';
 $config['driver'] = 'MySQLi';
 $config['master'] = array (
-  'charset' => 'utf8',
+  'charset' => 'utf8mb4',
   'host' => 'localhost',
   'username' => 'root',
   'password' => '4728999',

@@ -2,69 +2,31 @@
 <?php View::output('admin/global/nav_menu.php'); ?>
 
 <div class="icb-content-wrap">
-	<?php if ($this->writable_check) { ?>
-	<?php foreach ($this->writable_check as $key => $val) { ?>
-	<?php if (!$val) { ?>
-	<div class="alert alert-danger"><?php echo $key; ?> <?php _e('文件夹无法写入, 请检查并将文件夹权限设置为 0777'); ?></div>
-	<?php } ?>
-	<?php } ?>
-	<?php } ?>
+	<?php
+    if (property_exists($this, 'currentWorkload')) {
+        $hasDanger = $this->currentWorkload < $this->nowPassedDays * 50;
+    ?><div class="alert <?php echo $hasDanger ? 'bg-danger' : 'bg-info'; ?>">
+    <?php echo $hasDanger ? '！！！要加油啦！！！ ' : ''; ?>
+    本月工作量：<?php echo $this->currentWorkload; ?>千字 /
+    <?php echo $this->workingDaysAmount * 50;?>千字 ——
+    本月工作日天数剩余：<?php echo $this->workingDaysAmount-$this->nowPassedDays, '天/', $this->workingDaysAmount, '天';?></div><?php
+    }
+    foreach ($this->warningMsgList as $_msg) { ?>
+	<div class="alert alert-danger"><?php echo $_msg; ?> </div>
+    <?php }
+    ?>
 
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-6">
-                    <div id="main"></div>
-                    <div class="form-group echart-date">
-                        <label class="col-sm-2 col-xs-3 control-label nopadding">统计时间段:</label>
-                        <div class="col-sm-8 col-xs-9">
-                            <div class="row">
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control mod-data date-start">
-                                    <i class="icon icon-date"></i>
-                                </div>
-                               <span class="mod-symbol col-xs-1 col-sm-1">
-                                   -
-                               </span>
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control mod-data date-end">
-                                    <i class="icon icon-date"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-1">
-                            <a href="javascript:;" class="btn btn-primary  btn-sm date-seach">确认查询</a>
-                        </div>
-                    </div>
+                <?php if (property_exists($this, 'personalWorkloadList')) { ?>
+                <div class="col-md-12 form-group">
+                    <div id="statistic_chart" class="echart_stat"></div>
                 </div>
-                <div class="col-md-6">
-                    <div id="main2"></div>
-                    <div class="form-group echart-date">
-                        <label class="col-sm-2 col-xs-3 control-label nopadding">统计时间段:</label>
-                        <div class="col-sm-8 col-xs-9">
-                            <div class="row">
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control mod-data date-start">
-                                    <i class="icon icon-date"></i>
-                                </div>
-                               <span class="mod-symbol col-xs-1 col-sm-1">
-                                   -
-                               </span>
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control mod-data date-end">
-                                    <i class="icon icon-date"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-1">
-                            <a href="javascript:;" class="btn btn-primary btn-sm date-seach">确认查询</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div id="main3"></div>
+                <?php } ?>
+                <?php if (property_exists($this, 'employeeWorkloadList')) { ?>
+                <div class="col-md-12 form-group">
+                    <div id="workload_chart" class="echart_stat"></div>
                     <div class="form-group echart-date col-xs-offset-1">
                         <label class="col-sm-2 col-xs-3 control-label nopadding">统计时间段:</label>
                         <div class="col-sm-8 col-xs-9">
@@ -87,130 +49,345 @@
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>
         </div>
-    </div>
 
-    <div class="row mod-echat-info">
+        <?php if ($this->totalCharsListLastMonth) { ?>
         <div class="col-md-6">
             <div class="mod">
-                <div class="mod-head">
-                    <h3>
-                        <span class="pull-left"><?php _e('热门话题'); ?></span>
-                    </h3>
-                </div>
-                <div class="mod-body tab-content">
-                    <table  class="table table-striped" id="sorttable">
-                        <thead align="center">
+
+            <div class="form-group echart-date mod-head">
+                        <div class="col-sm-3 nopadding">
+                        <h3>
+                        <span class="pull-left"><?php _e('工作量榜单'); ?></span>
+                        </h3>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="row">
+                                <div class="col-sm-6 mod-double">
+                                    <input type="text" class="form-control icon-indent  js-monthpicker">
+                                    <i class="icon icon-date"></i>
+                                </div>
+                               <span class="mod-symbol col-xs-1 col-sm-1">
+                                   -
+                               </span>
+                                <div class="col-sm-6 mod-double">
+                                    <input type="text" class="form-control icon-indent  js-monthpicker">
+                                    <i class="icon icon-date"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <a href="javascript:;" class="btn btn-primary  btn-sm date-seach">确认查询</a>
+                        </div>
+                    </div>
+                <div class="tab-content mod-content">
+                    <table  class="table table-striped">
+                        <thead>
                             <tr>
-                                <td>话题名称</td>
-                                <td>
-                                    本周/问题数
-                                    <i class="icon icon-down"></i>
-                                </td>
-                                <td>
-                                    本月/问题数
-                                    <i class="icon collapse"></i>
-                                </td>
-                                <td>
-                                    全部/问题数
-                                    <i class="icon collapse"></i>
-                                </td>
+                                <th>#</th>
+                                <th><?php _e('责编');?></th>
+                                <th><?php _e('字数（乘系数）');?></th>
+                                <th><?php _e('绩效');?></th>
                             </tr>
                         </thead>
-                        <tbody id="sorttbody">
-                        </tbody>
-                    </table>
-                    <div class="sorttable-mask collapse">
-                        <p>当前周期内没有数据！</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="mod">
-                <div class="mod-head">
-                    <h3>
-                        <span class="pull-left"><?php _e('系统信息'); ?></span>
-                    </h3>
-                </div>
-                <div class="tab-content mod-content">
-                    <table  class="table table-striped">
                         <tbody>
-                        	<tr>
-                                <td><?php _e('操作系统'); ?></td>
-                                <td><?php echo php_uname('s'); ?> <?php echo php_uname('r'); ?></td>
-                            </tr>
+                            <?php $i=1; foreach ($this->totalCharsListLastMonth as $_userId => $_totalChars) { ?>
                             <tr>
-                                <td><?php _e('PHP 版本'); ?></td>
-                                <td><?php echo PHP_VERSION; ?></td>
+                                <td><?php echo $i++;?></td>
+                                <td><?php echo $this->userList[$_userId]['user_name']; ?></td>
+                                <td><?php echo $_totalChars; ?></td>
+                                <td><?php echo round($_totalChars*2,2);?></td>
                             </tr>
-                            <tr>
-                                <td><?php _e('MySQL 版本'); ?></td>
-                                <td><?php echo MYSQL_VERSION; ?></td>
-                            </tr>
+                            <?php }?>
                         </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="mod">
-                <div class="mod-head">
-                    <h3>
-                        <span class="pull-left"><?php _e('用户数据'); ?></span>
-                    </h3>
-                </div>
-                <div class="tab-content mod-content">
-                    <table  class="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td><?php _e('会员总数'); ?></td>
-                                <td><?php echo $this->users_count; ?></td>
+                        <tfoot>
+                            <tr class="info">
+                                <td colspan="2">合计</td>
+                                <td><?php echo array_sum($this->totalCharsListLastMonth);?></td>
+                                <td><?php echo round(array_sum($this->totalCharsListLastMonth)*2, 2);?></td>
                             </tr>
-                            <tr>
-                                <td><?php _e('Email 激活会员'); ?></td>
-                                <td><?php echo $this->users_valid_email_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('问题总数'); ?></td>
-                                <td><?php echo $this->question_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('回答总数'); ?></td>
-                                <td><?php echo $this->answer_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('等待回答的问题'); ?></td>
-                                <td><?php echo $this->question_no_answer_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('最佳答案数量'); ?></td>
-                                <td><?php echo $this->best_answer_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('话题总数'); ?></td>
-                                <td><?php echo $this->topic_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('附件总数'); ?></td>
-                                <td><?php echo $this->attach_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('待审核问题'); ?></td>
-                                <td><?php echo $this->approval_question_count; ?></td>
-                            </tr>
-                            <tr>
-                                <td><?php _e('待审核回答'); ?></td>
-                                <td><?php echo $this->approval_answer_count; ?></td>
-                            </tr>
-                        </tbody>
+                        </tfoot>
                     </table>
                 </div>
             </div>
         </div>
+        <?php } ?>
     </div>
 </div>
+<script type="text/javascript">
+$(function () {
+    // 月份输入框
+    $( ".js-monthpicker" ).datetimepicker({
+                format  : 'yyyy-mm',
+                language:  'zh-CN',
+                weekStart: 1, // 星期一 为一周开始
+                todayBtn:  1, // 显示今日按钮
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
+                forceParse: 0,
+                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+            });
 
-<script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/admin/js/echarts-data.js"></script>
-<!-- <script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/admin/js/echarts.js"></script> -->
+
+<?php if (property_exists($this, 'personalWorkloadList')) { ?>
+    var stockName = "<?php echo $val['name'];?>";
+    var shOrSztong  = "<?php echo $val['code'][0]=='6' ? "沪股通" : "深股通";?>";
+    var dates = JSON.parse('<?php echo json_encode(array_keys($this->personalWorkloadList));?>');
+    var shares = JSON.parse('<?php echo json_encode(array_values($this->personalWorkloadList));?>');
+    var minLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalWorkloadList));?>) +50);
+    var maxLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalWorkloadList));?>) -50);
+    console && console.info(shares, minLeft, maxLeft);
+    var echartOptions = {
+            backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
+            animation: false,
+            addDataAnimation: false,
+            grid: {
+                //backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
+                borderColor: '#fff', //  borderColor = '#ccc'注意：此配置项生效的前提是，设置了 show: true
+                show : true, // 网格的边框颜色。
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            title: {
+                text:  '我的工作量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: [shOrSztong + ':' + stockName,'b','c','d','e'],//[],
+                padding: 8,
+                x: 'right',
+            },
+            calculable: false,
+            series: [
+                {
+                    name: '',
+                    type: 'line',
+                    //stack: '总量',
+                    data: shares
+                }
+            ],
+            xAxis: [{
+                type: 'category',
+                splitLine: {
+                    show: false,
+                },
+
+                axisLine: {
+                    show: true
+                },
+                axisTick: {
+                    show: false,
+                },
+                data: dates //[]
+            }],
+            yAxis: [{// Y轴左侧坐标
+                type: 'value',
+                max: maxLeft,
+                min: minLeft,
+                splitLine: {
+                    show: false,
+                },
+
+                axisLine: {
+                    show: true
+                },
+
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: 'rgba(0,0,0,0.1)',
+                        type: 'dashed',
+                        width: 1
+                    }
+                }
+            }
+            // ,
+            // {// Y轴右侧坐标
+            //     type: 'value',
+            //     max: 1200,
+            //     min: 0,
+            //     splitLine: {
+            //         show: false,
+            //     },
+
+            //     axisLine: {
+            //         show: true
+            //     },
+
+            //     splitLine: {
+            //         show: true,
+            //         lineStyle: {
+            //             color: 'rgba(0,0,0,0.1)',
+            //             type: 'dashed',
+            //             width: 1
+            //         }
+            //     }
+            // }
+        ],
+            graphic: [
+            {
+                type: 'image',
+                id: 'logo',
+                right: 20,
+                top: 20,
+                z: -1,
+                bounding: 'raw',
+                origin: [75, 75],
+                style: {
+                    image: 'http://www.icodebang.cn/static/css/default/img/icodebang_white_face_logo@2x.png',
+                    width: 150,
+                    height: 150,
+                    opacity: 0
+                }
+            }],
+        };
+
+    var chart = echarts.init($('#statistic_chart')[0]);
+    chart.setOption(echartOptions);
+
+    window.addEventListener("orientationchange", function ()
+    {
+        var chart = echarts.init($('#statistic_chart'));
+        chart.setOption(echartOptions);
+    }, false);
+
+
+<?php } ?>
+
+<?php if (property_exists($this, 'employeeWorkloadList')) { ?>
+    var stockName = "<?php echo $val['name'];?>";
+    var shOrSztong  = "<?php echo $val['code'][0]=='6' ? "沪股通" : "深股通";?>";
+    //var dates = JSON.parse('<?php echo json_encode(array_keys($this->employeeWorkloadList));?>');
+    //var shares = JSON.parse('<?php echo json_encode(array_values($this->employeeWorkloadList));?>');
+    var minLeft = parseInt(Math.max(<?php echo join(',', $this->allTotalChars);?>) +50);
+    var maxLeft = parseInt(Math.min(<?php echo join(',', $this->allTotalChars);?>) -50);
+    console && console.info(shares, minLeft, maxLeft);
+    var echartOptions = {
+            backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
+            animation: false,
+            addDataAnimation: false,
+            grid: {
+                //backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
+                borderColor: '#fff', //  borderColor = '#ccc'注意：此配置项生效的前提是，设置了 show: true
+                show : true, // 网格的边框颜色。
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            title: {
+                text:  '近期工作量'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                //data: employeeList,//[],
+                padding: 8,
+                x: 'right',
+            },
+            calculable: false,
+            series: [ // 显示的数据。
+                <?php
+                $length = count($this->employeeWorkloadList);
+                $i = 1;
+                foreach ($this->employeeWorkloadList as $_userId=>$_stats) {
+                ?>
+                {
+                    name: '<?php echo $this->userList[$_userId]['user_name'];?>',
+                    type: 'line',
+                    //stack: '总量',
+                    data: JSON.parse('<?php echo json_encode(array_values($_stats));?>')
+                }
+
+                <?php
+                if ($length>$i++) echo ',';
+                } ?>
+                // ,
+                // {
+                //     name: '',
+                //     type: 'line',
+                //     //stack: '总量',
+                //     data: data
+                // }
+                // ...
+            ],
+            xAxis: [{
+                type: 'category',
+                splitLine: {
+                    show: false,
+                },
+
+                axisLine: {
+                    show: true
+                },
+                axisTick: {
+                    show: false,
+                },
+                data: JSON.parse('<?php echo json_encode(array_values($this->monthList));?>') //[]
+            }],
+            yAxis: [{// Y轴左侧坐标
+                type: 'value',
+                //max: maxLeft,
+                //min: minLeft,
+                splitLine: {
+                    show: false,
+                },
+
+                axisLine: {
+                    show: true
+                },
+
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: 'rgba(0,0,0,0.1)',
+                        type: 'dashed',
+                        width: 1
+                    }
+                }
+            }
+        ],
+            graphic: [
+            {
+                type: 'image',
+                id: 'logo',
+                right: 20,
+                top: 20,
+                z: -1,
+                bounding: 'raw',
+                origin: [75, 75],
+                style: {
+                    image: 'http://www.icodebang.cn/static/css/default/img/icodebang_white_face_logo@2x.png',
+                    width: 150,
+                    height: 150,
+                    opacity: 0
+                }
+            }],
+        };
+
+    var chart = echarts.init($('#workload_chart')[0]);
+    chart.setOption(echartOptions);
+
+    window.addEventListener("orientationchange", function ()
+    {
+        var chart = echarts.init($('#workload_chart'));
+        chart.setOption(echartOptions);
+    }, false);
+
+
+<?php } ?>
+
+
+});
+
+</script>
 <script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/js/echarts.4_8.min.js"></script>
 <?php View::output('admin/global/footer.php'); ?>

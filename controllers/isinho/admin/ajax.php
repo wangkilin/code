@@ -1787,13 +1787,7 @@ class ajax extends AdminController
             'publish_article',
             'edit_article',
             'edit_question_topic',
-            'publish_comment',
-
-            /* ----------- 新禾核算工作量 */
-            sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM,    // 是否允许修改稿件参数
-            sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD,            // 是否允许核算工作量
-            sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD,              // 是否允许添加个人工足量
-            sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD,              // 是否允许添加个人工足量
+            'publish_comment'
         );
 
         if (check_extension_package('ticket'))
