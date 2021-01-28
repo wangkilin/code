@@ -23,8 +23,7 @@ class main extends BaseController
 
     public function index_action()
     {
-        echo 'HELLO';
-        EXIT;
+        View::output('index/index');
     }
 
     /**
