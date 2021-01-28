@@ -59,7 +59,7 @@ class core_crypt
 
         mcrypt_generic_init($mcrypt, $this->get_key($mcrypt, $key), mcrypt_create_iv(mcrypt_enc_get_iv_size($mcrypt), MCRYPT_RAND));
 
-        $result = trim(mdecrypt_generic($mcrypt, $data));
+        $result = trim(mdecrypt_generic($mcrypt, $data)); // 此处出现过问题。 对json_encode中文后的数据， 结尾出现了若干空格情况
 
         mcrypt_generic_deinit($mcrypt);
         mcrypt_module_close($mcrypt);

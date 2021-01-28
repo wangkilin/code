@@ -858,7 +858,7 @@ function get_login_cookie_hash($user_name, $password, $salt, $uid, $hash_passwor
         'uid' => $uid,
         'user_name' => $user_name,
         'password' => $password
-    )), $auth_hash_key);
+    ), JSON_UNESCAPED_UNICODE), $auth_hash_key);
 }
 
 /**

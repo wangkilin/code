@@ -60,7 +60,12 @@ class ajax extends SinhoBaseController
         // 更新用户登录时间。 属于 register_shutdown_function 行为
         $this->model('account')->update_user_last_login($user_info['uid']);
         // 将旧信息失效
-        $this->model('account')->logout();
+        if (isset(Application::session()->client_info)) {
+            unset(Application::session()->client_info);
+        }
+        if (isset(Application::session()->permission)) {
+            unset(Application::session()->permission);
+        }
 
         $url = '/admin/';
         $this->model('account')->setcookie_login($user_info['uid'], $_POST['user_name'], $_POST['password'], $user_info['salt'], $expire);
@@ -74,6 +79,36 @@ class ajax extends SinhoBaseController
             ), 1, null));
 
 
+    }
+
+    /**
+     * 修改密码
+     */
+    public function modify_password_action()
+    {
+        if (!$_POST['old_password'])
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请输入当前密码')));
+        }
+
+        if ($_POST['password'] != $_POST['re_password'])
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请输入相同的确认密码')));
+        }
+
+        if (strlen($_POST['password']) < 6 OR strlen($_POST['password']) > 16)
+        {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('密码长度不符合规则')));
+        }
+
+        if ($this->model('account')->update_user_password($_POST['old_password'], $_POST['password'], $this->user_id, $this->user_info['salt']))
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('密码修改成功, 请牢记新密码')));
+        }
+        else
+        {
+            H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('请输入正确的当前密码')));
+        }
     }
 
 

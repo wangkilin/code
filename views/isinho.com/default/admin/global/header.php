@@ -54,36 +54,10 @@
 
     <div class="mod-header-user">
         <ul class="pull-right">
-            <?php $notifications_texts = Application::model('admin')->get_notifications_texts(); ?>
-
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle mod-bell" data-toggle="dropdown">
-                    <i class="icon icon-bell"></i>
-                    <?php if ($notifications_texts) { ?>
-                    <span class="label label-danger"><?php echo count($notifications_texts); ?></span>
-                    <?php } ?>
-                </a>
-                <ul class="dropdown-menu mod-chat">
-                <?php if ($notifications_texts) { ?>
-                    <div class="mod-list-head">
-                        <?php _e('您有 %s 条消息', count($notifications_texts)); ?>
-                    </div>
-
-                    <?php foreach ($notifications_texts AS $notifications_text) { ?>
-                    <li class="mod-media">
-                        <a href="<?php echo $notifications_text['url']; ?>">
-                            <?php echo $notifications_text['text']; ?>
-                        </a>
-                    </li>
-                    <?php } } else { ?>
-                    <p><?php _e('没有通知'); ?></p>
-                    <?php } ?>
-                </ul>
-            </li>
 
             <li class="dropdown username">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                    <img src="<?php echo get_avatar_url($this->user_info['uid'], 'mid'); ?>" class="img-circle" width="30">
+                    <img src="/static/isinho.com/logo-blue-fat-small.png" class="img-circle" width="30">
                     <?php echo $this->user_info['user_name']; ?>
                     <span class="caret"></span>
                 </a>
@@ -94,7 +68,11 @@
                     </li>
 
                     <li>
-                        <a href="admin/"><i class="icon icon-ul"></i><?php _e('概述'); ?></a>
+                        <a href="admin/"><i class="icon icon-ul"></i><?php _e('主页面板'); ?></a>
+                    </li>
+
+                    <li>
+                        <a href="admin/passwd/"><i class="icon icon-protect"></i><?php _e('修改密码'); ?></a>
                     </li>
 
                     <li>

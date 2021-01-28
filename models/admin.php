@@ -72,7 +72,7 @@ class adminModel extends Model
             'uid' => $uid,
             'UA' => $_SERVER['HTTP_USER_AGENT'],
             'ip' => fetch_ip()
-        )));
+        ), JSON_UNESCAPED_UNICODE));
     }
 
     public function admin_logout()

@@ -301,6 +301,13 @@ class main extends SinhoBaseController
     }
 
 
+
+    public function passwd_action ()
+    {
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/fill_list', 'sinho_admin_menu') ) );
+
+        View::output("passwd");
+    }
 }
 
 /* EOF */
