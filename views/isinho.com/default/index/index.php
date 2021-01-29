@@ -942,6 +942,7 @@ var G_STATIC_URL = './static/isinho.com/';
                                 <li class="active"><a href="#newmedia"><i class="fa fa-link"></i>新媒体</a></li>
                                 <li class="active"><a href="#software"><i class="fa fa-mobile"></i>软件</a></li>
                                 <li class="active"><a href="#website"><i class="fa fa-link"></i>网站</a></li>
+                                <li class="active"><a href="/account/login/"><i class="fa fa-sign-in"></i>员工登录</a></li>
                             </ul>
                         </div>
                     </div>
@@ -957,7 +958,8 @@ var G_STATIC_URL = './static/isinho.com/';
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="text">
-                            <p>版权所有 &copy; <?php echo date('Y'); ?> 沈阳新禾文化传媒有限公司</p>
+                            <p>版权所有 &copy; <?php echo date('Y'); ?> 沈阳新禾文化传媒有限公司
+                            <span class="hidden-xs">备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a></span></p>
                         </div>
                     </div>
                 </div>
