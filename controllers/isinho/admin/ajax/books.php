@@ -37,6 +37,8 @@ class books extends SinhoBaseController
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/books/')), 1, Application::lang()->_t('教程保存成功')));
         } else { // 添加
+
+            $_POST['delivery_date'] = strtotime($_POST['delivery_date'])>0 ? date('Y-m-d', strtotime($_POST['delivery_date'])) : date('Y-m-d');
             Application::model('sinhoWorkload')->addBook($_POST);
 
             H::ajax_json_output(Application::RSM(
@@ -240,6 +242,7 @@ class books extends SinhoBaseController
                 $dataLine[$id_number_key]==='' && $dataLine[$delivery_date_key]===''
                     AND $dataLine[$delivery_date_key] = $prevInfo[$delivery_date_key];
                 $dataLine[$id_number_key]==='' AND $dataLine[$id_number_key]=$prevInfo[$id_number_key];
+                $dataLine[$delivery_date_key] = strtotime($dataLine[$delivery_date_key])>0 ? date('Y-m-d', strtotime($dataLine[$delivery_date_key])) : date('Y-m-d');
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
                                  ->fetch_row(sinhoWorkloadModel::BOOK_TABLE,
@@ -379,10 +382,10 @@ class books extends SinhoBaseController
     public function remove_action()
     {
         $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
-        if (empty($_POST['id'])) {
+        if (empty($_POST['ids'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
         }
-        Application::model()->delete(sinhoWorkloadModel::BOOK_TABLE, 'id=' . intval($_POST['id']));
+        Application::model()->delete(sinhoWorkloadModel::BOOK_TABLE, 'id IN( ' . join('', $_POST['ids']) . ')' );
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }

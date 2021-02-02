@@ -223,7 +223,7 @@ class books extends SinhoBaseController
             H::redirect_msg(Application::lang()->_t('你没有访问权限'), 'admin/');
         }
 
-        View::assign('itemsList', $this->model('sinhoWorkload')->getBookList(null, 'add_time DESC, modify_time DESC, id DESC', $this->per_page, $_GET['page']));
+        View::assign('itemsList', $this->model('sinhoWorkload')->getBookList(null, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']));
         $totalRows     = $this->model('sinhoWorkload')->found_rows();
 
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
