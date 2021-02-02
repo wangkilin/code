@@ -268,6 +268,7 @@ class sinhoWorkloadModel extends Model
             'weight', // varchar(255) DEFAULT NULL COMMENT '难度系数',
             'total_chars', // varchar(255) DEFAULT NULL COMMENT '字数（合计）',
             'total_chars_without_weight', // varchar(255) DEFAULT NULL COMMENT '字数（未乘系数）',
+            'payable_amount',
         );
         // 转换成整数的数据
         $intVars   = array(
@@ -301,6 +302,7 @@ class sinhoWorkloadModel extends Model
             'remarks', // mediumtext COMMENT '备注',); // 转换成浮点型的数据
             'category',
             'working_times',
+            'payable_amount',
         ); // 允许存在的数据
 
         $set = array();
