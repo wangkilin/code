@@ -220,6 +220,16 @@
 
                             </div>
 
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('备注'); ?>:</label>
+                                </div>
+                                <div class="col-sm-11 icb-item-title">
+                                    <input type="text" name="remarks" value="<?php echo $this->itemInfo['remarks']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['remarks']; ?>" title="<?php echo $this->bookInfo['weight']; ?>" data-toggle="tooltip" />
+                                </div>
+
+                            </div>
+
 
                             <div class="row">
                                 <div class="col-sm-1"></div>
