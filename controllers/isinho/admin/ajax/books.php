@@ -220,8 +220,9 @@ class books extends SinhoBaseController
                     $dataLine[$_key] = trim(str_replace(' ', ' ', $_value));
                 }
                 // 总字数为0， 权重为0 ， 不合法数据
-                if ($dataLine[$function_answer_chars_per_page_key ] == 0 &&
-                    $dataLine[$weight_key                         ] == 0    ) {
+                if (is_null($dataLine[$function_answer_chars_per_page_key ]) || is_null($dataLine[$weight_key]) ||
+                     ($dataLine[$function_answer_chars_per_page_key ] ==='' &&
+                    $dataLine[$weight_key                         ] === '')    ) {
 
                     continue;
                 }
