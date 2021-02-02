@@ -10,7 +10,16 @@
  * +-------------------------------------------+
  */
 /**
- * select c.`系列`, p.* from personal_workload p left join company_workload c on p.`系列` = c.`系列` and p.`书名` = c.`书名` and p.`校次` = c.`校次`; ## 匹配公司稿件和个人分配的稿件
+ *
+ * select c.`serial`,
+       p.*
+from icb_sinho_employee_workload p
+left join icb_sinho_company_workload c
+  on  p.`serial` = c.`serial`
+  and p.`book_name` = c.`book_name`
+  #and p.`proofreading_times` = c.`proofreading_times`
+where belong_month = '202101'
+; ## 匹配公司稿件和个人分配的稿件
 
 select * from (
 select

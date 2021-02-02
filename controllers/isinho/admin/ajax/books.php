@@ -229,14 +229,16 @@ class books extends SinhoBaseController
                     $prevInfo = $dataLine;
                 }
                 // 考虑系列和书名存在合并单元格情况
+                $dataLine[$id_number_key]==='' && $dataLine[$book_name_key]==='' && $dataLine[$serial_key]===''
+                                               && $dataLine[$delivery_date_key]===''
+                    AND $dataLine[$book_name_key] = $prevInfo[$book_name_key];
+                $dataLine[$id_number_key]==='' && $dataLine[$serial_key]===''
+                                                && $dataLine[$delivery_date_key]===''
+                    AND $dataLine[$serial_key] = $prevInfo[$serial_key];
                 $dataLine[$id_number_key]==='' && $dataLine[$return_date_key]===''
                     AND $dataLine[$return_date_key] = $prevInfo[$return_date_key];
                 $dataLine[$id_number_key]==='' && $dataLine[$delivery_date_key]===''
                     AND $dataLine[$delivery_date_key] = $prevInfo[$delivery_date_key];
-                $dataLine[$id_number_key]==='' && $dataLine[$book_name_key]==='' && $dataLine[$serial_key]===''
-                    AND $dataLine[$book_name_key] = $prevInfo[$book_name_key];
-                $dataLine[$id_number_key]==='' && $dataLine[$serial_key]===''
-                    AND $dataLine[$serial_key] = $prevInfo[$serial_key];
                 $dataLine[$id_number_key]==='' AND $dataLine[$id_number_key]=$prevInfo[$id_number_key];
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
