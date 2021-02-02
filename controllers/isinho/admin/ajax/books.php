@@ -29,7 +29,7 @@ class books extends SinhoBaseController
     {
         $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
 
-        if (!$_POST['serial'] || !$_POST['book_name'] || !$_POST['proofreading_times']) {
+        if (!$_POST['serial'] && !$_POST['book_name'] && !$_POST['proofreading_times']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
 
@@ -336,7 +336,7 @@ class books extends SinhoBaseController
     }
 
     /**
-     *
+     * 将导入的书稿，
      */
     public function set_payed_action ()
     {
