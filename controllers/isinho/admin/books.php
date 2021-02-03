@@ -217,6 +217,7 @@ class books extends SinhoBaseController
      */
     public function index_action()
     {
+        $this->per_page = 30;
         $this->crumb(Application::lang()->_t('书稿管理'), 'admin/books/');
 
         if (!$this->user_info['permission'][self::PERMISSION_BOOKLIST]) {
@@ -271,6 +272,7 @@ class books extends SinhoBaseController
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('totalRows', $totalRows);
+        View::assign('amountPerPage', $this->per_page);
 
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
         View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');

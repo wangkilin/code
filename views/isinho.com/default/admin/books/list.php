@@ -79,7 +79,7 @@
                 </div>
 
                 <div class="mod-table-foot">
-                    <div class="text-right">共<?php echo $this->totalRows;?>本</div>
+                    <div class="text-right">每页<?php echo $this->amountPerPage; ?> &nbsp; 共<?php echo $this->totalRows;?>本</div>
                     <?php echo $this->pagination; ?>
 
                     <a class="btn btn-danger" id="deleteBatchBtn"><?php _e('删除书稿'); ?></a>
