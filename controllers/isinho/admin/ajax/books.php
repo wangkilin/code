@@ -8,6 +8,9 @@
 |   Support: icodebang@126.com              |
 |   WebSite: http://www.icodebang.com       |
 +-------------------------------------------+
+update icb_sinho_company_workload set delivery_date = '2020.10.28' where delivery_date = '';
+
+update icb_sinho_company_workload set delivery_date =  FROM_UNIXTIME(unix_timestamp(delivery_date), '%Y-%m-%d');
 */
 
 defined('iCodeBang_Com') OR die('Access denied!');
@@ -210,6 +213,8 @@ class books extends SinhoBaseController
         $data = $phpExcel->parseFile($newFilePath);
         $batchKey = md5($this->user_id . rand(1, 1000000000) . microtime());
         $totalImport = 0; // 导入的数据条数
+
+        $uniqueList = array(); // 有书稿会按照页码分多次提交。 将这样的书稿数据合并起来
         foreach($data['sheetDatas'] as $_index=>$dataList) {
             $sheetName = $data['sheetNames'][$_index];
             $prevInfo = null;
@@ -227,6 +232,21 @@ class books extends SinhoBaseController
 
                     continue;
                 }
+                // 对重复的书稿， 做合并处理
+                $_uniqueKey = $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key];
+                if (isset($uniqueList[$_uniqueKey]) ) {
+                    $dataLine[$content_table_pages_key            ] += doubleval($uniqueList[$_uniqueKey][$content_table_pages_key            ]);
+                    $dataLine[$text_pages_key                     ] += doubleval($uniqueList[$_uniqueKey][$text_pages_key                     ]);
+                    $dataLine[$answer_pages_key                   ] += doubleval($uniqueList[$_uniqueKey][$answer_pages_key                   ]);
+                    $dataLine[$test_pages_key                     ] += doubleval($uniqueList[$_uniqueKey][$test_pages_key                     ]);
+                    $dataLine[$test_answer_pages_key              ] += doubleval($uniqueList[$_uniqueKey][$test_answer_pages_key              ]);
+                    $dataLine[$exercise_pages_key                 ] += doubleval($uniqueList[$_uniqueKey][$exercise_pages_key                 ]);
+                    $dataLine[$function_book_key                  ] += doubleval($uniqueList[$_uniqueKey][$function_book_key                  ]);
+                    $dataLine[$function_answer_key                ] += doubleval($uniqueList[$_uniqueKey][$function_answer_key                ]);
+                    $dataLine[$total_chars_key                    ] += doubleval($uniqueList[$_uniqueKey][$total_chars_key                    ]);
+                    $dataLine[$remarks_key                        ] .=  ';;;' . $uniqueList[$_uniqueKey][$remarks_key                        ];
+                }
+                $uniqueList[$_uniqueKey] = $dataLine;
                 if (! isset($prevInfo)) {
                     $prevInfo = $dataLine;
                 }
@@ -242,7 +262,7 @@ class books extends SinhoBaseController
                 $dataLine[$id_number_key]==='' && $dataLine[$delivery_date_key]===''
                     AND $dataLine[$delivery_date_key] = $prevInfo[$delivery_date_key];
                 $dataLine[$id_number_key]==='' AND $dataLine[$id_number_key]=$prevInfo[$id_number_key];
-                $dataLine[$delivery_date_key] = strtotime($dataLine[$delivery_date_key])>0 ? date('Y-m-d', strtotime($dataLine[$delivery_date_key])) : date('Y-m-d');
+                $dataLine[$delivery_date_key] = strtotime(str_replace('.','-',$dataLine[$delivery_date_key]))>0 ? date('Y-m-d', strtotime(str_replace('.','-',$dataLine[$delivery_date_key]))) : date('Y-m-d');
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
                                  ->fetch_row(sinhoWorkloadModel::BOOK_TABLE,
