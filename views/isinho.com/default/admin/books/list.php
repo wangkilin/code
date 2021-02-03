@@ -38,6 +38,7 @@
                                 <th><?php _e('功能册<br/>答案'); ?></th>
                                 <th><?php _e('系数'); ?></th>
                                 <th><?php _e('字数'); ?></th>
+                                <th><?php _e('备注'); ?></th>
                                 <th style="width:120px;"><?php _e('操作'); ?></th>
                             </tr>
                         </thead>
@@ -62,6 +63,7 @@
                                 <td><?php echo $itemInfo['function_answer']; ?></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
+                                <td><?php echo $itemInfo['remarks']; ?></td>
 
                                 <td>
                                   <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a>
