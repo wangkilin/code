@@ -178,6 +178,34 @@
 
                             </div>
 
+                            <div class="row">
+                                <!-- 系数， 总字数 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('难度系数'); ?>:</label>
+                                </div>
+                                <div class="col-sm-2 icb-item-title">
+                                    <input type="text" name="weight" value="<?php echo $this->itemInfo['weight']; ?>" class="form-control" />
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="icb-label"><?php _e('字数（合计）'); ?>:</label>
+                                </div>
+                                <div class="col-sm-2 icb-item-title">
+                                    <input type="text" name="total_chars" value="<?php echo $this->itemInfo['total_chars']; ?>" class="form-control" />
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <!-- 备注信息 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('备注'); ?>:</label>
+                                </div>
+                                <div class="col-sm-11 icb-item-title">
+                                    <input type="text" name="remarks" value="<?php echo $this->itemInfo['remarks']; ?>" class="form-control" />
+                                </div>
+
+                            </div>
+
 							<div class="mod-footer clearfix">
 								<?php if ($this->itemInfo['id'] ) { ?>
 								<a class="btn btn-large btn-danger" id="deleteBatchBtn" onclick="deleteItem(<?php echo $this->article_info['id'];?>); return false;"><?php _e('删除书稿'); ?></a>

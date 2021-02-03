@@ -125,8 +125,16 @@ class sinhoWorkloadModel extends Model
 
             //$data[$varName] = trim($data[$varName], " \t\n\r\0\x0B");
             $data[$varName] = doubleval($data[$varName]);
+            if (0==$data[$varName]) {
+                $data[$varName] = '';
+            }
 
-            $set[$varName] = rtrim(strval($data[$varName]), ".0"); // 移除末尾的 0，以及小数点
+            // 移除末尾的 0，以及小数点
+            $data[$varName] = strval($data[$varName]);
+            if (strpos($data[$varName], '.')) {
+                $data[$varName] = rtrim($data[$varName], '0');
+            }
+            $set[$varName] = rtrim($data[$varName], ".");
         }
         foreach ($intVars as $varName) {
             if (! isset($data[$varName])) {
