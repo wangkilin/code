@@ -38,7 +38,7 @@ class books extends SinhoBaseController
 
         if ($_POST['id']) { // 更新
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
-            H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/books/')), 1, Application::lang()->_t('教程保存成功')));
+            H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/books/')), 1, Application::lang()->_t('书稿保存成功')));
         } else { // 添加
 
             $_POST['delivery_date'] = strtotime($_POST['delivery_date'])>0 ? date('Y-m-d', strtotime($_POST['delivery_date'])) : date('Y-m-d');
@@ -99,7 +99,7 @@ class books extends SinhoBaseController
             }
         }
 
-        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('教程保存成功')));
+        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('分配书稿成功')));
     }
 
     public function assigned_action ()
@@ -400,7 +400,7 @@ class books extends SinhoBaseController
 
 
     /**
-     * 批量删除教程数据
+     * 批量删除数据
      */
     public function remove_action()
     {
