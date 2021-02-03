@@ -408,7 +408,7 @@ class books extends SinhoBaseController
         if (empty($_POST['ids'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
         }
-        Application::model()->delete(sinhoWorkloadModel::BOOK_TABLE, 'id IN( ' . join('', $_POST['ids']) . ')' );
+        Application::model()->delete(sinhoWorkloadModel::BOOK_TABLE, 'id IN( ' . join(', ', $_POST['ids']) . ')' );
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }
