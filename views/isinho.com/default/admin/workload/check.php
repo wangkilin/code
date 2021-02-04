@@ -6,10 +6,15 @@
         <div class="mod-head">
             <h3>
                 <ul class="nav nav-tabs">
-                    <li class="active">
+                    <li class="<?php if($_GET['by']=='book') echo 'active'; ?>">
                     <a href="<?php
-                        echo ACTION=='index'?'#index" data-toggle="tab':'admin/books/index/'
-                        ?>"><?php _e('绩效核算'); ?></a>
+                        echo $_GET['by']=='book'?'#index" data-toggle="tab':'admin/check_list/by-book'
+                        ?>"><?php _e('书稿工作量'); ?></a>
+                    </li>
+                    <li class="<?php if($_GET['by']=='user') echo 'active'; ?>">
+                    <a href="<?php
+                        echo $_GET['by']=='user'?'#index" data-toggle="tab':'admin/check_list/by-user'
+                        ?>"><?php _e('编辑工作量'); ?></a>
                     </li>
                 </ul>
             </h3>

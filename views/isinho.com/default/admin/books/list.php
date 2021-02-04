@@ -39,7 +39,7 @@
                                 <th><?php _e('系数'); ?></th>
                                 <th><?php _e('字数'); ?></th>
                                 <th><?php _e('备注'); ?></th>
-                                <th style="width:120px;"><?php _e('操作'); ?></th>
+                                <th style="white-space: nowrap;"><?php _e('操作'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,8 +65,9 @@
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
                                 <td><?php echo $itemInfo['remarks']; ?></td>
 
-                                <td>
+                                <td style="white-space: nowrap;">
                                   <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a>
+                                  <a href="admin/check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/books/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
                                 </td>

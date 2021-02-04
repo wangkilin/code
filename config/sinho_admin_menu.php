@@ -38,7 +38,7 @@ $config[] = array(
         array(
             'id'        => 'admin/check_list',
             'title'     => _t('查看工作量'),
-            'cname'     => 'verify',
+            'cname'     => 'search',
             'url'       => 'admin/check_list/',
             'permission'=> sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD,
         ),

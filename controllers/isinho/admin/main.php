@@ -270,7 +270,17 @@ class main extends SinhoBaseController
      */
     public function check_list_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+
+        switch (strtolower($_GET['by'])) {
+            case 'user':
+                break;
+            case 'book':
+            default:
+                $_GET['by'] = 'book';
+                break;
+        }
+
         $toBeVerifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'status = ' . sinhoWorkloadModel::STATUS_VERIFYING, 'book_id,category,working_times');
         $bookIds  = array_column($toBeVerifiedList, 'book_id');
         $verifiedList = array();
@@ -285,8 +295,11 @@ class main extends SinhoBaseController
 
             $workloadList[$_itemInfo['book_id']][] = $_itemInfo;
         }
+        $bookList = array();
         $bookIds = array_keys($workloadList);
-        $bookList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 'id IN (' . join(',', $bookIds) . ')', 'id DESC');
+        if ($bookList) {
+            $bookList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 'id IN (' . join(',', $bookIds) . ')', 'id DESC');
+        }
 
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
         $userIds  = array_column($userList, 'uid');
@@ -301,7 +314,9 @@ class main extends SinhoBaseController
     }
 
 
-
+    /**
+     * 修改密码界面
+     */
     public function passwd_action ()
     {
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/fill_list', 'sinho_admin_menu') ) );

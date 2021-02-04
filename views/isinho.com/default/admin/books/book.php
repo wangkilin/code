@@ -206,9 +206,9 @@
 
                             </div>
 
-							<div class="mod-footer clearfix">
+							<div class="row mod-footer clearfix">
 								<?php if ($this->itemInfo['id'] ) { ?>
-								<a class="btn btn-large btn-danger" id="deleteBatchBtn" onclick="deleteItem(<?php echo $this->article_info['id'];?>); return false;"><?php _e('删除书稿'); ?></a>
+								<a class="btn btn-large btn-danger" id="deleteBatchBtn" onclick="deleteItem(<?php echo $this->itemInfo['id'];?>); return false;"><?php _e('删除书稿'); ?></a>
 								<?php } ?>
 								<a class="btn btn-large btn-success btn-publish-submit" id="publish_submit" onclick="ICB.ajax.postForm($('#item_form')); return false;"><?php _e('保存书稿'); ?></a>
 							</div>
@@ -226,9 +226,9 @@
 function deleteItem(id)
 {
     ICB.domEvents.deleteShowConfirmModal(
-  	   _t('确认删除教程？'),
+  	   _t('确认删除书稿？'),
   	   function(){
-      	   var url = G_BASE_URL + '/admin/ajax/course_remove/',
+      	   var url = G_BASE_URL + '/admin/ajax/books/remove/',
       	       params = {'ids[]':id, 'action':'remove', '_post_type':'ajax'};
   		   ICB.ajax.requestJson(
   	      	   url,
@@ -241,8 +241,8 @@ function deleteItem(id)
 	      	      	if (response.err) {
 	      	      		ICB.modal.alert(response.err);
 	      	      	} else if (response.errno == 1) {
-	      	      	    ICB.modal.alert(_t('已删除'), {'hidden.bs.modal': function () {
-		      	      		    window.location.href = G_BASE_URL + '/admin/course/list/';
+	      	      	    ICB.modal.alert(_t('书稿成功删除'), {'hidden.bs.modal': function () {
+		      	      		    window.location.href = G_BASE_URL + '/admin/books/';
 		      	      	    }
 	      	      	    });
 	      	      	} else {

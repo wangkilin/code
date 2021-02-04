@@ -59,14 +59,18 @@ class books extends SinhoBaseController
     {
         $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
 
-        if (! $_GET['id'] || ! $_POST['sinho_editor']) {
+        if (! $_GET['id'] || $_POST['action']!='assign') {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
         if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) ) ) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
         }
 
-        $assigned = (array) $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($_GET['id']) );
+        if (! $_POST['sinho_editor']) {
+            $_POST['sinho_editor'] = array();
+        }
+
+        $assigned = (array) $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($_GET['id']) .' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE );
         $assignedUserIds = array_column($assigned, 'user_id');
         $toBeRemoved = array();
         foreach ($assigned as $_itemInfo) {
@@ -84,12 +88,12 @@ class books extends SinhoBaseController
             $toBeRemoved[] = $_itemInfo['id'];
         }
         if ($toBeRemoved) { // 取消绑定， 设置成删除状态
-            $this->model('sinhoWorkload')
-                 ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
-                            array('status' => sinhoWorkloadModel::STATUS_DELETE),
-                            'id IN(' . join(',', $toBeRemoved). ') AND status = ' . sinhoWorkloadModel::STATUS_RECORDING
-                    );
-            //$this->model('sinhoWorkload')->deleteByIds ($toBeRemoved, sinhoWorkloadModel::WORKLOAD_TABLE);
+            // $this->model('sinhoWorkload')
+            //      ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
+            //                 array('status' => sinhoWorkloadModel::STATUS_DELETE),
+            //                 'id IN(' . join(',', $toBeRemoved). ')' // AND status = ' . sinhoWorkloadModel::STATUS_RECORDING
+            //         );
+            $this->model('sinhoWorkload')->deleteByIds ($toBeRemoved, sinhoWorkloadModel::WORKLOAD_TABLE);
         }
 
         foreach ($_POST['sinho_editor'] as $_userId) {
@@ -102,6 +106,9 @@ class books extends SinhoBaseController
         H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('分配书稿成功')));
     }
 
+    /**
+     * 分配书稿到编辑/取消分配
+     */
     public function assigned_action ()
     {
         $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
@@ -113,7 +120,7 @@ class books extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
         }
 
-        $data = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($_GET['id']) );
+        $data = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($_GET['id']) .' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE );
         H::ajax_json_output(Application::RSM(array('data' => $data), 1, null));
     }
 
