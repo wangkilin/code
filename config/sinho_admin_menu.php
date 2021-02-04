@@ -24,7 +24,7 @@ $config[] = array(
         array (
             'id'        => 'admin/fill_list',
             'title'     => _t('填报工作量'),
-            'cname'     => 'log',
+            'cname'     => 'edit',
             'url'       => 'admin/fill_list/',
             'permission'=> sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD,
         ),
