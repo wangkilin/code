@@ -268,7 +268,7 @@ class books extends SinhoBaseController
             'total_rows' => $totalRows,
             'per_page'   => $this->per_page
         ))->create_links());
-        $categoryList = $this->model('category')->getAllCategories('id');
+        //$categoryList = $this->model('category')->getAllCategories('id');
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('totalRows', $totalRows);
