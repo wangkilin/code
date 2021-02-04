@@ -35,7 +35,7 @@ class books extends SinhoBaseController
         if (!$_POST['serial'] && !$_POST['book_name'] && !$_POST['proofreading_times']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
-
+        // 查找是否已存在相同书稿。 已存在相同书稿， 提示
         $itemInfo = Application::model('sinhoWorkload')->fetch_row(
             sinhoWorkloadModel::BOOK_TABLE,
             'serial            = "' . $this->model('sinhoWorkload')->quote($_POST['serial']) . '"
