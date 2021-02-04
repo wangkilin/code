@@ -1003,12 +1003,12 @@ class Model
      * @param    string
      * @return    int
      */
-    public function count($table, $where = '')
+    public function count($table, $where = '', $column='*')
     {
         $this->slave();
 
         $select = $this->select();
-        $select->from($this->get_table($table), 'COUNT(*) AS n');
+        $select->from($this->get_table($table), 'COUNT('.$column.') AS n');
 
         if ($where)
         {
