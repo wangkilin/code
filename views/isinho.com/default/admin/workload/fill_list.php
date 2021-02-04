@@ -62,6 +62,7 @@
                                 <th><?php _e('核算总<br/>字数(千)'); ?></th>
                                 <th><?php _e('应发<br/>金额'); ?></th>
                                 <th><?php _e('备注'); ?></th>
+                                <th><?php _e('月份'); ?></th>
                                 <th style="width:85px;"><?php _e('操作'); ?></th>
                             </tr>
                         </thead>
@@ -99,9 +100,10 @@
                                 <td data-td-name="function_answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $itemInfo['function_answer_chars_per_page']; ?></a></td>
                                 <td data-td-name="weight" class="js-allow-mark"><a><?php echo $itemInfo['weight']; ?></a></td>
                                 <td data-td-name="total_chars" class=""><a><?php echo $itemInfo['total_chars']; ?></a></td>
-                                <td data-td-name="payable_amount" class=""><a><?php echo $itemInfo['payable_amount']; ?></a></td>
+                                <td data-td-name="payable_amount" class=""><a><?php echo round($itemInfo['total_chars'] * 2, 2); ?><?php //echo $itemInfo['payable_amount']; ?></a></td>
                                 <!-- 存在js-allow-diff-book-mark, 允许跨书稿间计算单元格；js-can-not-compute表示单元格不可以参与计算 -->
                                 <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute "><a><?php echo $itemInfo['remarks']; ?></a></td>
+                                <td data-td-name="belong_month" class="js-can-not-compute "><a><?php echo $itemInfo['belong_month']; ?></a></td>
 
                                 <td>
                                   <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING || $itemInfo['status']==sinhoWorkloadModel::STATUS_VERIFYING) {// 没有核算过，允许修改 ?>
@@ -211,12 +213,14 @@ function submit_workload_edit_form ()
     // 标识了参数错误， 提醒是否确认提交
     if ($hasWarning) {
         var onYesCallback = function () {
+            compute_chars_ammount();
             ICB.ajax.postForm($('#workload-edit-form'));
             $('#workload-edit-form-container').remove();
         };
 
         ICB.modal.confirm('存在不一致的参数。 是否继续提交？', onYesCallback);
     } else { // 没有错误， 直接提交
+        compute_chars_ammount();
         ICB.ajax.postForm($('#workload-edit-form'));
         $('#workload-edit-form-container').remove();
     }
