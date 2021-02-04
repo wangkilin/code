@@ -36,6 +36,17 @@ class books extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
 
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(
+            sinhoWorkloadModel::BOOK_TABLE,
+            'serial            = "' . $this->model('sinhoWorkload')->quote($_POST['serial']) . '"
+            AND book_name          = "' . $this->model('sinhoWorkload')->quote($_POST['book_name'] ) .'"
+            AND proofreading_times = "' . $this->model('sinhoWorkload')->quote($_POST['proofreading_times']) .'"'
+
+        ) ;
+        if ($itemInfo && $itemInfo['id']!=$_POST['id']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完成相同的书稿')));
+        }
+
         if ($_POST['id']) { // 更新
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/books/')), 1, Application::lang()->_t('书稿保存成功')));
