@@ -43,7 +43,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($this->itemsList AS $itemInfo) { ?>
+                            <?php foreach ($this->itemsList AS $itemInfo) { $bookInfo = $itemInfo; ?>
                             <tr data-book-id="<?php echo $itemInfo['id'];?>" class="book-line">
                                 <td class="text-left">
 
@@ -120,8 +120,16 @@
                 </div>
 
                 <div class="mod-table-foot">
+                <?php if (isset($_GET['id'])) { 
+                        if ($bookInfo) {
+                ?>
+                    <div class="text-right"><span class="bg-warning">当前书稿：<?php echo $bookInfo['serial'], ' ', $bookInfo['book_name'], ' ', $bookInfo['proofreading_times']; ?> </span></div>
+                <?php 
+                        }
+                } else { ?>
                     <div class="text-right">每页<?php echo $this->amountPerPage; ?> &nbsp; 共<?php echo $this->totalRows;?>本</div>
                     <?php echo $this->pagination; ?>
+                <?php } ?>
                 </div>
             </div>
 

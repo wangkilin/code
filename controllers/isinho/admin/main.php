@@ -325,14 +325,16 @@ class main extends SinhoBaseController
                                 );
             //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
         }
-
-        $allList = $this->model('sinhoWorkload')
-                         ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE, 
-                                    'book_id IN ( ' . join(', ',  $bookIds). ') ' 
-                                    . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE 
-                                    . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING, 
-                                'book_id,category,working_times'
-                            );
+        $allList = array();
+        if ($bookIds) {
+            $allList = $this->model('sinhoWorkload')
+                            ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE, 
+                                        'book_id IN ( ' . join(', ',  $bookIds). ') ' 
+                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE 
+                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING, 
+                                    'book_id,category,working_times'
+                                );
+        }
 
         $userIds = array_column($allList, 'user_id');
         $userList = array();
