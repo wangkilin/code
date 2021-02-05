@@ -926,8 +926,9 @@ var G_STATIC_URL = './static/isinho.com/';
                             <h4>联系方式</h4>
                             <ul class="list">
                                 <li><i class="fa fa-map-marker"></i>地址: 沈阳市浑南区招商局大厦A座12层</li>
-                                <li><i class="fa fa-phone"></i>电话: +8613811998433 </li>
                                 <li><i class="fa fa-envelope"></i>邮箱: isinho@126.com</li>
+                                <li><i class="fa fa-wechat"></i>微信: 18310310582 </li>
+                                <li><i class="fa fa-qq"></i>Q Q: 63923159 </li>
                             </ul>
                         </div>
                     </div>
@@ -938,10 +939,10 @@ var G_STATIC_URL = './static/isinho.com/';
                             <h4 class="wow fadeIn">快速导航</h4>
                             <ul class="social-icon">
                                 <li class="active"><a href="#slider"><i class="fa fa-home"></i>首页</a></li>
-                                <li class="active"><a href="#BookPublish"><i class="fa fa-book"></i>图书</a></li>
+                                <li class="active"><a href="#BookPublish"><i class="fa fa-book"></i>图书出版</a></li>
                                 <li class="active"><a href="#newmedia"><i class="fa fa-link"></i>新媒体</a></li>
-                                <li class="active"><a href="#software"><i class="fa fa-mobile"></i>软件</a></li>
-                                <li class="active"><a href="#website"><i class="fa fa-link"></i>网站</a></li>
+                                <li class="active"><a href="#software"><i class="fa fa-mobile"></i>软件开发</a></li>
+                                <li class="active"><a href="#website"><i class="fa fa-link"></i>网站建设</a></li>
                                 <li class="active"><a href="/account/login/"><i class="fa fa-sign-in"></i>员工登录</a></li>
                             </ul>
                         </div>
@@ -958,7 +959,7 @@ var G_STATIC_URL = './static/isinho.com/';
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="text">
-                            <p>版权所有 &copy; <?php echo date('Y'); ?> 沈阳新禾文化传媒有限公司
+                            <p>版权所有 &copy; 2020~<?php echo date('Y'); ?> 沈阳新禾文化传媒有限公司
                             <span class="hidden-xs">备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a></span></p>
                         </div>
                     </div>
