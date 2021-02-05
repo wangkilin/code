@@ -217,10 +217,14 @@ class main extends SinhoBaseController
         $toBeVerifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'status = ' . sinhoWorkloadModel::STATUS_VERIFYING, 'book_id,category,working_times');
         $bookIds  = array_column($toBeVerifiedList, 'book_id');
         $verifiedList = array();
+        // if ($bookIds) { 
+        //     $verifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND status = ' . sinhoWorkloadModel::STATUS_VERIFIED, 'book_id,category,working_times');
+        // }
+        // $allList = array_merge($toBeVerifiedList, $verifiedList);
+        // 按照书稿，类别， 遍次排序。
         if ($bookIds) {
-            $verifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND status = ' . sinhoWorkloadModel::STATUS_VERIFIED, 'book_id,category,working_times');
+            $allList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND (status = ' . sinhoWorkloadModel::STATUS_VERIFIED . ' OR status = ' . sinhoWorkloadModel::STATUS_VERIFYING . ')', 'book_id,category,working_times');
         }
-        $allList = array_merge($toBeVerifiedList, $verifiedList);
 
         $workloadList = array();
         foreach ($allList as $_itemInfo) {
@@ -271,23 +275,72 @@ class main extends SinhoBaseController
     public function check_list_action ()
     {
         $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+        $_GET['page'] = intval($_GET['page']) >0 ? intval($_GET['page']) : 1;
 
+        $userList = array();
+        $bookList = array();
         switch (strtolower($_GET['by'])) {
             case 'user':
+                $this->check_by_user($userList, $bookList);
                 break;
             case 'book':
             default:
                 $_GET['by'] = 'book';
+                $this->check_by_book($userList, $bookList);
                 break;
         }
 
-        $toBeVerifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'status = ' . sinhoWorkloadModel::STATUS_VERIFYING, 'book_id,category,working_times');
-        $bookIds  = array_column($toBeVerifiedList, 'book_id');
-        $verifiedList = array();
-        if ($bookIds) {
-            $verifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND status = ' . sinhoWorkloadModel::STATUS_VERIFIED, 'book_id,category,working_times');
+        View::assign('amountPerPage', $this->per_page);
+        View::assign('userList', $userList);
+        View::assign('bookList', $bookList);
+
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/check_list','sinho_admin_menu') ) );
+        View::output('admin/workload/check');
+    }
+
+    protected function check_by_user (& $userList, & $bookList)
+    {
+
+    }
+    protected function check_by_book (& $userList, & $bookList)
+    {
+        $this->per_page = 10;
+        if (isset($_GET['id'])) { // 查询指定书稿的工作量
+            $bookIds = array( intval($_GET['id']) );
+            $totalRows = 1;
+        } else { // 查询全部书稿的工作量
+            $bookIdList = $this->model('sinhoWorkload')
+                               ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
+                                        $this->per_page,
+                                        $this->per_page * intval($_GET['page'])-1,
+                                        '`status`<>'.sinhoWorkloadModel::STATUS_DELETE.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING,
+                                        null,
+                                        '`status` desc, belong_month desc'
+                                    );  // ($sql, $limit = null, $offset = null, $where = null, $group_by = null, $order_by = '');
+            $bookIds = array_column($bookIdList, 'book_id');
+            $totalRows = $this->model('sinhoWorkload')
+                              ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
+                                      '`status`<>'.sinhoWorkloadModel::STATUS_DELETE.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING,
+                                      'DISTINCT  book_id'
+                                );
+            //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
         }
-        $allList = array_merge($toBeVerifiedList, $verifiedList);
+
+        $allList = $this->model('sinhoWorkload')
+                         ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE, 
+                                    'book_id IN ( ' . join(', ',  $bookIds). ') ' 
+                                    . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE 
+                                    . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING, 
+                                'book_id,category,working_times'
+                            );
+
+        $userIds = array_column($allList, 'user_id');
+        $userList = array();
+        if ($userIds) {
+            $userList = $this->model('sinhoWorkload')->getUserList('uid IN (' . join(',', $userIds) . ')', 'uid DESC', PHP_INT_MAX);
+        }
+        $userIds  = array_column($userList, 'uid');
+        $userList = array_combine($userIds, $userList);
 
         $workloadList = array();
         foreach ($allList as $_itemInfo) {
@@ -295,22 +348,32 @@ class main extends SinhoBaseController
 
             $workloadList[$_itemInfo['book_id']][] = $_itemInfo;
         }
+
         $bookList = array();
-        $bookIds = array_keys($workloadList);
-        if ($bookList) {
-            $bookList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 'id IN (' . join(',', $bookIds) . ')', 'id DESC');
+        if ($bookIds) {
+            $bookList = $this->model('sinhoWorkload')
+                             ->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 
+                                    'id IN (' . join(', ', $bookIds) . ')'
+                                );
         }
 
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
-        $userIds  = array_column($userList, 'uid');
-        $userList = array_combine($userIds, $userList);
+        $url_param = array();
+        foreach($_GET as $key => $val) {
+            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
+                $url_param[] = $key . '-' . $val;
+            }
+        }
 
-        View::assign('userList', $userList);
+        View::assign('pagination', Application::pagination()->initialize(array(
+            'base_url'   => get_js_url('/admin/check_list/') . implode('__', $url_param),
+            'total_rows' => $totalRows,
+            'per_page'   => $this->per_page
+        ))->create_links());
+        
         View::assign('itemsList', $bookList);
         View::assign('workloadList', $workloadList);
+        View::assign('totalRows', $totalRows);
 
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/check_list','sinho_admin_menu') ) );
-        View::output('admin/workload/check');
     }
 
 
