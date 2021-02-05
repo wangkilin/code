@@ -18,6 +18,8 @@
                                 <div  class="col-sm-12">
                                     <a class="btn btn-default js-upload-btn">上传附件</a>
                                     <span class="text-color-999 icb-upload-tips hidden-xs bg-danger"><?php _e('允许的附件文件类型'); ?>: xls, xlsx; </span>
+                                    &nbsp; 
+                                    <span class="icb-upload-tips hidden-xs bg-success"> <a href="/static/isinho.com/template_book_import.xls" target="_blank">导入模板下载</a></span>
                                     <div class="upload-container"></div>
                                 </div>
 
