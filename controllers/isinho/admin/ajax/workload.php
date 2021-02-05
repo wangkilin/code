@@ -37,8 +37,9 @@ class workload extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('没找到对应书稿工足量')));
         }
 
+        // 计算total_chars
         if (isset($itemInfo['total_chars'])) {// 计算应付金额
-            $itemInfo['payable_amount'] = round($itemInfo['total_chars'], 2);
+            $itemInfo['payable_amount'] = round($itemInfo['total_chars'] * 2, 2);
         }
         // 保存填充的工作量内容
         Application::model('sinhoWorkload')->fillWorkload(intval($_POST['id']), $_POST);
