@@ -217,7 +217,7 @@ class main extends SinhoBaseController
         $toBeVerifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'status = ' . sinhoWorkloadModel::STATUS_VERIFYING, 'book_id,category,working_times');
         $bookIds  = array_column($toBeVerifiedList, 'book_id');
         $verifiedList = array();
-        // if ($bookIds) { 
+        // if ($bookIds) {
         //     $verifiedList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND status = ' . sinhoWorkloadModel::STATUS_VERIFIED, 'book_id,category,working_times');
         // }
         // $allList = array_merge($toBeVerifiedList, $verifiedList);
@@ -300,15 +300,91 @@ class main extends SinhoBaseController
 
     protected function check_by_user (& $userList, & $bookList)
     {
+        $this->per_page = 30;
+        $userIds = array();
+        $where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING;
+        if ($_GET['id']) {
+            $userIds = explode(',', $_GET['id']);
+            foreach ($userIds as & $_id) {
+                $_id = intval($_id);
+            }
 
+            $where .= ' AND user_id IN ( ' . join(', ',  $userIds). ') ';
+        }
+        if ($_GET['start_month']) {
+            $where .= ' AND (belong_month >= ' . intval($_GET['start_month']) . ' OR belong_month IS NULL )';
+        }
+        if ($_GET['end_month']) {
+            $where .= ' AND belong_month <= ' . intval($_GET['end_month']);
+        }
+
+        $allList = $this->model('sinhoWorkload')
+                        ->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE,
+                                    $where,
+                                    'user_id,id desc',
+                                    $_GET['page'],
+                                    $this->per_page
+                            );
+        $totalRows = $this->model('sinhoWorkload')->found_rows();
+        $bookIds = array_column($allList, 'book_id');
+        // 根据书稿id列表获取书稿信息
+        $bookList = array();
+        if ($bookIds) {
+            $bookList = $this->model('sinhoWorkload')
+                            ->fetch_all(sinhoWorkloadModel::BOOK_TABLE,
+                                    'id IN (' . join(', ', $bookIds) . ')'
+                                );
+            $bookIds = array_column($bookList, 'id');
+            $bookList = array_combine($bookIds, $bookList);
+        }
+
+        // 获取用户信息列表,
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+
+        View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $userIds ) );
+
+        $userIds  = array_column($userList, 'uid');
+        $userList = array_combine($userIds, $userList);
+
+
+        $url_param = array();
+        foreach($_GET as $key => $val) {
+            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
+                $url_param[] = $key . '-' . $val;
+            }
+        }
+        // 生成页码导航
+        View::assign('pagination', Application::pagination()->initialize(array(
+            'base_url'   => get_js_url('/admin/check_list/') . implode('__', $url_param),
+            'total_rows' => $totalRows,
+            'per_page'   => $this->per_page
+        ))->create_links());
+
+        View::assign('itemsList', $allList);
+        View::assign('workloadList', $allList);
+        View::assign('totalRows', $totalRows);
+
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
+        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
+        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
     }
+    /**
+     * 根据书稿查看工作量。 工作量在每个书稿下面排放
+     * @param array $userList 用户列表变量占位符， 将变量数据填充回传
+     * @param array $bookList 书稿列表变量占位符， 将变量数据填充回传
+     */
     protected function check_by_book (& $userList, & $bookList)
     {
+        // 每页显示10本书稿的工作量
         $this->per_page = 10;
         if (isset($_GET['id'])) { // 查询指定书稿的工作量
             $bookIds = array( intval($_GET['id']) );
             $totalRows = 1;
         } else { // 查询全部书稿的工作量
+            // 1. 获取到存在工作量的书稿id
+            // 2. 根据书稿， 统计具有工作量书稿的总数
             $bookIdList = $this->model('sinhoWorkload')
                                ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
                                         $this->per_page,
@@ -325,17 +401,19 @@ class main extends SinhoBaseController
                                 );
             //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
         }
+        // 根据书稿id ， 获取到对应的工作量
         $allList = array();
         if ($bookIds) {
             $allList = $this->model('sinhoWorkload')
-                            ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE, 
-                                        'book_id IN ( ' . join(', ',  $bookIds). ') ' 
-                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE 
-                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING, 
+                            ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE,
+                                        'book_id IN ( ' . join(', ',  $bookIds). ') '
+                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
+                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING,
                                     'book_id,category,working_times'
                                 );
         }
 
+        // 获取用户信息列表,
         $userIds = array_column($allList, 'user_id');
         $userList = array();
         if ($userIds) {
@@ -344,17 +422,18 @@ class main extends SinhoBaseController
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
 
+        // 将工作量按照书稿id分组
         $workloadList = array();
         foreach ($allList as $_itemInfo) {
             isset($workloadList[$_itemInfo['book_id']]) OR $workloadList[$_itemInfo['book_id']] = array();
 
             $workloadList[$_itemInfo['book_id']][] = $_itemInfo;
         }
-
+        // 根据书稿id列表获取书稿信息
         $bookList = array();
         if ($bookIds) {
             $bookList = $this->model('sinhoWorkload')
-                             ->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 
+                             ->fetch_all(sinhoWorkloadModel::BOOK_TABLE,
                                     'id IN (' . join(', ', $bookIds) . ')'
                                 );
         }
@@ -365,13 +444,13 @@ class main extends SinhoBaseController
                 $url_param[] = $key . '-' . $val;
             }
         }
-
+        // 生成页码导航
         View::assign('pagination', Application::pagination()->initialize(array(
             'base_url'   => get_js_url('/admin/check_list/') . implode('__', $url_param),
             'total_rows' => $totalRows,
             'per_page'   => $this->per_page
         ))->create_links());
-        
+
         View::assign('itemsList', $bookList);
         View::assign('workloadList', $workloadList);
         View::assign('totalRows', $totalRows);

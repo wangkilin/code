@@ -647,7 +647,7 @@ function remove_assoc($from, $type, $id)
  * @param array $dataList 二维数组
  * @param string $textKey 数组中用来生成option文本的键值
  * @param string $valueKey 数组中用来生成option value的键值
- * @param string|int $defaultValue 默认值
+ * @param string|int|array $defaultValue 默认值
  * @param array $bindAttributes 生成option中的属性绑定值
  *
  * @return string
@@ -656,8 +656,9 @@ function buildSelectOptions (array $dataList, $textKey, $valueKey, $defaultValue
 {
     $html = '';
 
+    isset($defaultValue) && !is_array($defaultValue) AND $defaultValue = array($defaultValue);
     foreach ($dataList as $_item) {
-        if (isset($defaultValue) && $_item[$valueKey] == $defaultValue) {
+        if (isset($defaultValue) && in_array($_item[$valueKey], $defaultValue)) {
             $attributes  = ' selected="selected"';
         } else {
             $attributes  = '';

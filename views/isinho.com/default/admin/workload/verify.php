@@ -101,8 +101,11 @@
                                                     <td class="text-left">
                                                         <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>" />
                                                         <a class="md-tip" title="<?php _e('发稿日期');
-                                                                                    echo $itemInfo['delivery_date']; ?> <?php _e('回稿日期');
-                                                                                                                                        echo $itemInfo['return_date']; ?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5); ?></a>
+                                                            echo $itemInfo['delivery_date']; ?> <?php _e('回稿日期');
+                                                            echo $itemInfo['return_date'];
+                                                        ?>" data-toggle="tooltip"><?php
+                                                            echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5);
+                                                        ?></a>
                                                     </td>
                                                     <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
                                                     <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
@@ -132,7 +135,7 @@
                                                     <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
                                                 </tr>
                                             <?php } ?>
-                                        <?php } //end if 
+                                        <?php } //end if
                                         ?>
                                     <?php } ?>
                                 <?php } else { ?>
@@ -190,13 +193,14 @@
                             <?php if ($this->totalCharsList) { ?>
                                 <?php foreach ($this->totalCharsList as $userId => $workloadInfo) { ?>
                                     <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $workloadInfo['id']; ?>" class="workload-line<?php
-                                                                                                                                                                //if ($workloadInfo['status']==sinhoWorkloadModel::STATUS_VERIFIED) echo ' verified-line';
-                                                                                                                                                                if ($workloadInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) echo ' verifying-line';
-                                                                                                                                                                //if ($workloadInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line';
-                                                                                                                                                                ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
-                                        <td class="no-word-break"><a href="admin/check_list/by-user__user_id-<?php echo $userId; ?>" class="md-tip" title="<?php _e('查看');
-                                                                                                                                                            echo $this->userList[$userId]['user_name'];
-                                                                                                                                                            _e('的工作量'); ?>" data-toggle="tooltip"><?php echo $this->userList[$userId]['user_name']; ?></a></td>
+                                            //if ($workloadInfo['status']==sinhoWorkloadModel::STATUS_VERIFIED) echo ' verified-line';
+                                            if ($workloadInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) echo ' verifying-line';
+                                            //if ($workloadInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line';
+                                        ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
+                                        <td class="no-word-break"><a href="admin/check_list/by-user__id-<?php echo $userId; ?>__start_month-<?php echo str_replace('-','',$this->belongMonth);?>__end_month-<?php echo str_replace('-','',$this->belongMonth);?>" class="md-tip" title="<?php _e('查看');
+                                            echo $this->userList[$userId]['user_name'];
+                                            _e('的工作量');
+                                        ?>" data-toggle="tooltip"><?php echo $this->userList[$userId]['user_name']; ?></a></td>
                                         <td data-td-name="content_table_pages" class="js-allow-mark"><a><?php echo $workloadInfo['content_table_pages']; ?></a></td>
                                         <td data-td-name="text_pages" class="js-allow-mark"><a><?php echo $workloadInfo['text_pages']; ?></a></td>
                                         <td data-td-name="answer_pages" class="js-allow-mark"><a><?php echo $workloadInfo['answer_pages']; ?></a></td>
@@ -209,7 +213,7 @@
                                         <td data-td-name="payable_amount" class=""><a><?php echo round($workloadInfo['total_chars'] * 2, 2); ?></a></td>
                                         <td data-td-name="belong_month" class=""><a><?php echo $workloadInfo['belong_month']; ?></a></td>
                                     </tr>
-                                <?php } //end foreach 
+                                <?php } //end foreach
                                 ?>
                             <?php } ?>
                         </tbody>
