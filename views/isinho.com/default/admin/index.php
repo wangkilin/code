@@ -114,6 +114,102 @@
             </div>
         </div>
         <?php } ?>
+
+        <?php if ($this->globalStatMsgList) { ?>
+        <div class="col-md-6">
+            <div class="mod">
+
+            <div class="form-group echart-date mod-head">
+                        <div class="col-sm-3 nopadding">
+                        <h3>
+                        <span class="pull-left"><?php _e('全局统计'); ?></span>
+                        </h3>
+                        </div>
+                    </div>
+                <div class="tab-content mod-content">
+                    <table  class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><?php _e('统计内容');?></th>
+                                <th><?php _e('统计数据');?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $i=1; foreach ($this->globalStatMsgList as $_statName => $_statValue) { ?>
+                            <tr>
+                                <td><?php echo $i++;?></td>
+                                <td><?php echo $_statName; ?></td>
+                                <td><?php echo $_statValue;?></td>
+                            </tr>
+                            <?php }?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+        <?php if ($this->totalCharsListLastMonth) {
+
+        ?>
+        <div class="col-sm-12">开发计划:员工考勤</div>
+        <?php $year = date('Y'); $month = date('m');?>
+        <table  class="table table-striped table-bordered ">
+            <thead>
+                <tr>
+                    <th><span class="col-sm-12 no-padding text-right"><?php echo $year,'-',$month;?></span><span class="col-sm-12 no-padding cell-rotate-separator"></span><span class="col-sm-12 no-padding">姓名</span></th>
+                    <?php $totalDaysInMonth = date('t');
+                    for($i=1; $i<=$totalDaysInMonth; $i++) {
+                        $_weekIndex = date('w', strtotime($year.$month.sprintf('%02d', $i)));
+                        $class = $_weekIndex%6==0 ? 'bg-warning' : '';
+                    ?>
+                      <th style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>"><?php echo $i;?></th>
+                    <?php }?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($this->userList as $_userInfo) { ?>
+                <tr>
+                    <td><?php echo $_userInfo['user_name'];?></td>
+                    <?php
+                    for($i=1; $i<=$totalDaysInMonth; $i++) {
+                        $_weekIndex = date('w', strtotime($year.$month.sprintf('%02d', $i)));
+                        $class = $_weekIndex%6==0 ? 'bg-warning' : '';
+                    ?>
+                      <td style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>" title="<?php echo $i;?>" data-toggle="tooltip"></td>
+                    <?php }?>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+
+        开发计划:假期设置
+        <!-- <table  class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th><span>月份</span><span>日期</span></th>
+                    <?php $totalDaysInMonth = date('t');
+                    for($i=0; $i<$totalDaysInMonth; $i++) {?>
+                      <th><?php echo $i+1; ?></th>
+                    <?php }
+                    for($i=$totalDaysInMonth; $i<31; $i++) {?>
+                        <th><?php echo $i+1; ?></th>
+                    <?php } ?>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for ($i=0; $i<12; $i++) { ?>
+                <tr>
+                    <td><?php echo $i+1, '月';?></td>
+                    <?php
+                    for($j=0; $j<31; $j++) {?>
+                      <td>&nbsp;</td>
+                    <?php }?>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table> -->
+        <?php } ?>
     </div>
 </div>
 <script type="text/javascript">
@@ -133,12 +229,11 @@ $(function () {
 
 
 <?php if (property_exists($this, 'personalWorkloadList')) { ?>
-    var stockName = "<?php echo $val['name'];?>";
-    var shOrSztong  = "<?php echo $val['code'][0]=='6' ? "沪股通" : "深股通";?>";
     var dates = JSON.parse('<?php echo json_encode(array_keys($this->personalWorkloadList));?>');
     var shares = JSON.parse('<?php echo json_encode(array_values($this->personalWorkloadList));?>');
-    var minLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalWorkloadList));?>) +50);
-    var maxLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalWorkloadList));?>) -50);
+    var maxLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalWorkloadList));?>) +50);
+    var minLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalWorkloadList));?>) -50);
+    minLeft = minLeft < 0 ? 0 : minLeft;
     console && console.info(shares, minLeft, maxLeft);
     var echartOptions = {
             backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
@@ -158,11 +253,6 @@ $(function () {
             },
             tooltip: {
                 trigger: 'axis'
-            },
-            legend: {
-                data: [shOrSztong + ':' + stockName,'b','c','d','e'],//[],
-                padding: 8,
-                x: 'right',
             },
             calculable: false,
             series: [
@@ -262,12 +352,11 @@ $(function () {
 <?php } ?>
 
 <?php if (property_exists($this, 'employeeWorkloadList')) { ?>
-    var stockName = "<?php echo $val['name'];?>";
-    var shOrSztong  = "<?php echo $val['code'][0]=='6' ? "沪股通" : "深股通";?>";
     //var dates = JSON.parse('<?php echo json_encode(array_keys($this->employeeWorkloadList));?>');
     //var shares = JSON.parse('<?php echo json_encode(array_values($this->employeeWorkloadList));?>');
-    var minLeft = parseInt(Math.max(<?php echo join(',', $this->allTotalChars);?>) +50);
-    var maxLeft = parseInt(Math.min(<?php echo join(',', $this->allTotalChars);?>) -50);
+    var maxLeft = parseInt(Math.max(<?php echo join(',', $this->allTotalChars);?>) +50);
+    var minLeft = parseInt(Math.min(<?php echo join(',', $this->allTotalChars);?>) -50);
+    minLeft = minLeft < 0 ? 0 : minLeft;
     console && console.info(shares, minLeft, maxLeft);
     var echartOptions = {
             backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’

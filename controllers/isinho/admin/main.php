@@ -132,6 +132,17 @@ class main extends SinhoBaseController
             View::assign('allTotalChars', $allTotalChars);
             View::assign('employeeWorkloadList', $employeeWorkloadList);
         }
+
+        // 各项全局统计信息
+        $globalStatMsgList = array();
+        // 获取总书稿数
+        // 获取总字数
+        // 获取当前工作的书稿数；
+        // 获取绩效总数
+        // 导入工资表， 计算成本
+        //
+
+        View::assign('globalStatMsgList', $globalStatMsgList);
         View::assign('belongMonth', $belongMonth);
         View::assign('warningMsgList', $warningMsgList);
         View::assign('totalCharsListLastMonth', $totalCharsListLastMonth);

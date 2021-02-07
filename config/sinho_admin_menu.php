@@ -14,7 +14,7 @@ $config[] = array(
     'cname'     => 'reader',
     'url'       => 'admin/books/index/',
     'children'  => array(),
-    'permission'=> sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM,
+    'permission'=> SinhoBaseController::PERMISSION_BOOKLIST,
 );
 $config[] = array(
     'id'    => 'admin/workload',
@@ -26,21 +26,21 @@ $config[] = array(
             'title'     => _t('填报工作量'),
             'cname'     => 'edit',
             'url'       => 'admin/fill_list/',
-            'permission'=> sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD,
+            'permission'=> SinhoBaseController::PERMISSION_FILL_WORKLOAD,
         ),
         array(
             'id'        => 'admin/verify_list',
             'title'     => _t('核算工作量'),
             'cname'     => 'verify',
             'url'       => 'admin/verify_list/',
-            'permission'=> sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD,
+            'permission'=> SinhoBaseController::PERMISSION_VERIFY_WORKLOAD,
         ),
         array(
             'id'        => 'admin/check_list',
             'title'     => _t('查看工作量'),
             'cname'     => 'search',
             'url'       => 'admin/check_list/',
-            'permission'=> sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD,
+            'permission'=> SinhoBaseController::PERMISSION_CHECK_WORKLOAD,
         ),
     )
 );

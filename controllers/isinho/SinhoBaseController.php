@@ -16,15 +16,30 @@ defined('iCodeBang_Com') OR die('Access denied!');
  */
 class SinhoBaseController extends BaseController
 {
-    const PERMISSION_BOOKLIST        = sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM;
-    const PERMISSION_VERIFY_WORKLOAD = sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD;
-    const PERMISSION_FILL_WORKLOAD   = sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD;
-    const PERMISSION_CHECK_WORKLOAD  = sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD;
+
+    const PERMISSION_VERIFY_WORKLOAD    = 'sinho_verify_workload';
+    const PERMISSION_FILL_WORKLOAD      = 'sinho_fill_workload';
+    const PERMISSION_BOOKLIST = 'sinho_modify_manuscript_param';
+    const PERMISSION_CHECK_WORKLOAD     = 'sinho_check_workload';
+    const PERMISSION_ADMINISTRATION     = 'sinho_administration';
+    const SINHO_PERMISSION_LIST = array(
+        self::PERMISSION_FILL_WORKLOAD,
+        self::PERMISSION_BOOKLIST,
+        self::PERMISSION_VERIFY_WORKLOAD,
+        self::PERMISSION_CHECK_WORKLOAD,
+        self::PERMISSION_ADMINISTRATION,
+    );
+
+    // const PERMISSION_BOOKLIST        = SinhoBaseController::PERMISSION_MODIFY_MANUSCRIPT_PARAM;
+    // const PERMISSION_VERIFY_WORKLOAD = SinhoBaseController::PERMISSION_VERIFY_WORKLOAD;
+    // const PERMISSION_FILL_WORKLOAD   = SinhoBaseController::PERMISSION_FILL_WORKLOAD;
+    // const PERMISSION_CHECK_WORKLOAD  = SinhoBaseController::PERMISSION_CHECK_WORKLOAD;
 
     const IS_SINHO_BOOK_ADMIN = 0x04; // 新禾图书编辑
     const IS_SINHO_FILL_WORKLOAD = 0x08; // 填充工作量
     const IS_SINHO_VERIFY_WORKLOAD = 0x10; // 核对工作量
     const IS_SINHO_CHECK_WORKLOAD  = 0x20; // 查看工作量
+    const IS_SINHO_ADMIN           = 0x40; // 行政管理
 
     const PERMISSION_MAP = array (
         self::IS_ROLE_ADMIN         => parent::PERMISSION_MAP[parent::IS_ROLE_ADMIN],

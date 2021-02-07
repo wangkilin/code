@@ -21,19 +21,19 @@ class sinhoWorkloadModel extends Model
      */
     const WORKLOAD_TABLE = 'sinho_employee_workload';
 
-    /**
-     * 新禾各种权限常量
-     */
-    const PERMISSION_VERIFY_WORKLOAD = 'sinho_verify_workload';
-    const PERMISSION_FILL_WORKLOAD   = 'sinho_fill_workload';
-    const PERMISSION_MODIFY_MANUSCRIPT_PARAM = 'sinho_modify_manuscript_param';
-    const PERMISSION_CHECK_WORKLOAD  = 'sinho_check_workload';
-    const SINHO_PERMISSION_LIST = array(
-        self::PERMISSION_FILL_WORKLOAD,
-        self::PERMISSION_MODIFY_MANUSCRIPT_PARAM,
-        self::PERMISSION_VERIFY_WORKLOAD,
-        self::PERMISSION_CHECK_WORKLOAD,
-    );
+    // /**
+    //  * 新禾各种权限常量
+    //  */
+    // const PERMISSION_VERIFY_WORKLOAD = 'sinho_verify_workload';
+    // const PERMISSION_FILL_WORKLOAD   = 'sinho_fill_workload';
+    // const PERMISSION_MODIFY_MANUSCRIPT_PARAM = 'sinho_modify_manuscript_param';
+    // const PERMISSION_CHECK_WORKLOAD  = 'sinho_check_workload';
+    // const SINHO_PERMISSION_LIST = array(
+    //     self::PERMISSION_FILL_WORKLOAD,
+    //     self::PERMISSION_MODIFY_MANUSCRIPT_PARAM,
+    //     self::PERMISSION_VERIFY_WORKLOAD,
+    //     self::PERMISSION_CHECK_WORKLOAD,
+    // );
 
     const STATUS_DELETE    = 0; // 已删除
     const STATUS_VERIFIED  = 1; // 已核算
@@ -180,7 +180,7 @@ class sinhoWorkloadModel extends Model
         foreach ($customGroupList as $_item) {
             $_item['permission'] = unserialize($_item['permission']);
             foreach ($_item['permission'] as $_key=>$_v) {
-                if ($_v == 1 && in_array($_key, self::SINHO_PERMISSION_LIST)) {
+                if ($_v == 1 && in_array($_key, SinhoBaseController::SINHO_PERMISSION_LIST)) {
                     $requiredGroupdIds[] = $_item['group_id'];
                     break;
                 }

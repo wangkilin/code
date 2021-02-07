@@ -430,11 +430,11 @@
                             <div class="col-sm-6 col-xs-8">
                                 <div class="btn-group mod-btn">
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                        <input type="radio" value="1" name="<?php echo SinhoBaseController::PERMISSION_BOOKLIST;?>"<?php if ($this->group_pms[SinhoBaseController::PERMISSION_BOOKLIST]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
                                     </label>
 
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_MODIFY_MANUSCRIPT_PARAM]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                        <input type="radio" value="0" name="<?php echo SinhoBaseController::PERMISSION_BOOKLIST;?>"<?php if (!$this->group_pms[SinhoBaseController::PERMISSION_BOOKLIST]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
                                     </label>
                                 </div>
                             </div>
@@ -448,11 +448,11 @@
                             <div class="col-sm-6 col-xs-8">
                                 <div class="btn-group mod-btn">
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                        <input type="radio" value="1" name="<?php echo SinhoBaseController::PERMISSION_FILL_WORKLOAD;?>"<?php if ($this->group_pms[SinhoBaseController::PERMISSION_FILL_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
                                     </label>
 
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_FILL_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                        <input type="radio" value="0" name="<?php echo SinhoBaseController::PERMISSION_FILL_WORKLOAD;?>"<?php if (!$this->group_pms[SinhoBaseController::PERMISSION_FILL_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
                                     </label>
                                 </div>
                             </div>
@@ -466,11 +466,11 @@
                             <div class="col-sm-6 col-xs-8">
                                 <div class="btn-group mod-btn">
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                        <input type="radio" value="1" name="<?php echo SinhoBaseController::PERMISSION_VERIFY_WORKLOAD;?>"<?php if ($this->group_pms[SinhoBaseController::PERMISSION_VERIFY_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
                                     </label>
 
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_VERIFY_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                        <input type="radio" value="0" name="<?php echo SinhoBaseController::PERMISSION_VERIFY_WORKLOAD;?>"<?php if (!$this->group_pms[SinhoBaseController::PERMISSION_VERIFY_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
                                     </label>
                                 </div>
                             </div>
@@ -484,11 +484,11 @@
                             <div class="col-sm-6 col-xs-8">
                                 <div class="btn-group mod-btn">
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="1" name="<?php echo sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD;?>"<?php if ($this->group_pms[sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                        <input type="radio" value="1" name="<?php echo SinhoBaseController::PERMISSION_CHECK_WORKLOAD;?>"<?php if ($this->group_pms[SinhoBaseController::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
                                     </label>
 
                                     <label type="button" class="btn mod-btn-color">
-                                        <input type="radio" value="0" name="<?php echo sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD;?>"<?php if (!$this->group_pms[sinhoWorkloadModel::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                        <input type="radio" value="0" name="<?php echo SinhoBaseController::PERMISSION_CHECK_WORKLOAD;?>"<?php if (!$this->group_pms[SinhoBaseController::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
                                     </label>
                                 </div>
                             </div>
