@@ -9,10 +9,19 @@ DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload"  #要备份�
 DIR_STORE=/tmp
 
 NOW_DATE=`date "+%Y-%m-%d"`                     # 当前日期，用于生成数据库备份文件名称
-ONE_WEEK_AGO_DATE=`date -v-7d "+%Y-%m-%d"`      # 7天前日期， 用于生成数据库备份文件名， 执行删除文件操作， 释放空间
+if [  "$OSTYPE" =~ "linux" ]; then
+    ONE_WEEK_AGO_DATE=`date -d "-7day"  "+%Y-%m-%d"`      # 7天前日期， 用于生成数据库备份文件名， 执行删除文件操作， 释放空间
+else
+    ONE_WEEK_AGO_DATE=`date -v-7d "+%Y-%m-%d"`      # 7天前日期， 用于生成数据库备份文件名， 执行删除文件操作， 释放空间
+fi
 
-# 1. 数据库备份
-mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE  $DB_TABLES> $DIR_STORE/isinho_$NOW_DATE.sql
+if [ "$DB_PASSWORD" = "" ]; then
+    # 1. 数据库备份
+    mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE  $DB_TABLES> $DIR_STORE/isinho_$NOW_DATE.sql
+else
+    # 1. 数据库备份
+    mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE  $DB_TABLES> $DIR_STORE/isinho_$NOW_DATE.sql
+fi
 # 1.1 打包数据库备份文件
 tar zcf sinho_db_$NOW_DATE.tgz  isinho_$NOW_DATE.sql
 # 1.2 打包后，将刚生成的sql文件删除，只保留打包文件，释放空间。
