@@ -8,20 +8,22 @@
 </div>
 
 <a id="icb-goto-top" class="icb-goto-top hidden-xs" href="javascript:;" onclick="$.scrollTo(1, 600, {queue:true});" title="<?php _e('返回顶部'); ?>" data-toggle="tooltip"><i class="icon icon-up"></i></a>
-
-<!-- / DO NOT REMOVE -->
-<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
-<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
+<?php if (strpos($_SERVER['HTTP_HOST'], 'dazhang8.com')) {
+    $baiduStatCode = "4f1556e9ba8cb0ab9522277102269cb5";
+}
+
+if ($baiduStatCode) {
+?>
 // 百度统计
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?681fc9b1c75c25b5868d6bfdea94f7df";
+  hm.src = "https://hm.baidu.com/hm.js?<?php echo $baiduStatCode;?>";
   var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(hm, s);
 })();
-
+<?php }?>
 // 百度自动推送
 (function(){
     var bp = document.createElement('script');
@@ -36,5 +38,9 @@ var _hmt = _hmt || [];
     s.parentNode.insertBefore(bp, s);
 })();
 </script>
+
+<!--
+<script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateCallback"></script> -->
+
 </body>
 </html>

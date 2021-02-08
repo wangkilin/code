@@ -91,3 +91,4 @@ $('.js-show-fixed-market.active').trigger('click');
 
 $('input.date-input').date_input();
 </script>
+<?php View::output('stock/block/footer.php'); ?>

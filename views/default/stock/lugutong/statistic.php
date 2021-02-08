@@ -196,3 +196,5 @@ chart.setOption(echartOptions);
         chart.setOption(echartOptions);
     }, false);
 </script>
+
+<?php View::output('stock/block/footer.php'); ?>
