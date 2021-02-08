@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="blank" />
 <meta name="format-detection" content="telephone=no" />
 <title><?php echo $this->page_title; ?></title>
-
+<link href="<?php echo G_STATIC_URL; ?>/isinho.com/favicon.png?v=<?php echo G_VERSION_BUILD; ?>" rel="shortcut icon" type="image/png" />
 <link type="text/css" rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/css/bootstrap.css?v=<?php echo G_VERSION_BUILD; ?>" />
 <link type="text/css" rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/css/icon.css?v=<?php echo G_VERSION_BUILD; ?>" />
 <link type="text/css" rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/admin/css/login.css?v=<?php echo G_VERSION_BUILD; ?>" />
