@@ -319,6 +319,7 @@ class books extends SinhoBaseController
 
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
 
+        View::import_js('js/functions.js');
         View::output('admin/books/book');
     }
 

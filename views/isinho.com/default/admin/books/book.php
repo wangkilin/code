@@ -58,19 +58,19 @@
                                     <label class="icb-label"><?php _e('目录'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="content_table_pages" value="<?php echo $this->itemInfo['content_table_pages']; ?>" class="form-control" />
+                                    <input type="text" name="content_table_pages" value="<?php echo $this->itemInfo['content_table_pages']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('正文'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="text_pages" value="<?php echo $this->itemInfo['text_pages']; ?>" class="form-control" />
+                                    <input type="text" name="text_pages" value="<?php echo $this->itemInfo['text_pages']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('目录+正文千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-3 icb-item-title">
-                                    <input type="text" name="text_table_chars_per_page" value="<?php echo $this->itemInfo['text_table_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="text_table_chars_per_page" value="<?php echo $this->itemInfo['text_table_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -81,13 +81,13 @@
                                     <label class="icb-label"><?php _e('答案'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="answer_pages" value="<?php echo $this->itemInfo['answer_pages']; ?>" class="form-control" />
+                                    <input type="text" name="answer_pages" value="<?php echo $this->itemInfo['answer_pages']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('答案千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="answer_chars_per_page" value="<?php echo $this->itemInfo['answer_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="answer_chars_per_page" value="<?php echo $this->itemInfo['answer_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -98,13 +98,13 @@
                                     <label class="icb-label"><?php _e('试卷'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="test_pages" value="<?php echo $this->itemInfo['test_pages']; ?>" class="form-control" />
+                                    <input type="text" name="test_pages" value="<?php echo $this->itemInfo['test_pages']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('试卷千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="test_chars_per_page" value="<?php echo $this->itemInfo['test_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="test_chars_per_page" value="<?php echo $this->itemInfo['test_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -115,13 +115,13 @@
                                     <label class="icb-label"><?php _e('试卷答案'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="test_answer_pages" value="<?php echo $this->itemInfo['test_answer_pages']; ?>" class="form-control" />
+                                    <input type="text" name="test_answer_pages" value="<?php echo $this->itemInfo['test_answer_pages']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('试卷答案千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="test_answer_chars_per_page" value="<?php echo $this->itemInfo['test_answer_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="test_answer_chars_per_page" value="<?php echo $this->itemInfo['test_answer_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -133,13 +133,13 @@
                                     <label class="icb-label"><?php _e('课后作业'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="exercise_pages" value="<?php echo $this->itemInfo['exercise_pages']; ?>" class="form-control" />
+                                    <input type="text" name="exercise_pages" value="<?php echo $this->itemInfo['exercise_pages']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('课后作业千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="exercise_chars_per_page" value="<?php echo $this->itemInfo['exercise_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="exercise_chars_per_page" value="<?php echo $this->itemInfo['exercise_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -150,13 +150,13 @@
                                     <label class="icb-label"><?php _e('功能册'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="function_book" value="<?php echo $this->itemInfo['function_book']; ?>" class="form-control" />
+                                    <input type="text" name="function_book" value="<?php echo $this->itemInfo['function_book']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('功能册千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="function_book_chars_per_page" value="<?php echo $this->itemInfo['function_book_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="function_book_chars_per_page" value="<?php echo $this->itemInfo['function_book_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -167,13 +167,13 @@
                                     <label class="icb-label"><?php _e('功能册答案'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="function_answer" value="<?php echo $this->itemInfo['function_answer']; ?>" class="form-control" />
+                                    <input type="text" name="function_answer" value="<?php echo $this->itemInfo['function_answer']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('功能册答案千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="function_answer_chars_per_page" value="<?php echo $this->itemInfo['function_answer_chars_per_page']; ?>" class="form-control" />
+                                    <input type="text" name="function_answer_chars_per_page" value="<?php echo $this->itemInfo['function_answer_chars_per_page']; ?>" class="form-control js-monitor-compute" />
                                 </div>
 
                             </div>
@@ -184,7 +184,7 @@
                                     <label class="icb-label"><?php _e('难度系数'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="weight" value="<?php echo $this->itemInfo['weight']; ?>" class="form-control" />
+                                    <input type="text" name="weight" value="<?php echo $this->itemInfo['weight']; ?>" class="form-control js-monitor-compute" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('字数（合计）'); ?>:</label>
@@ -222,7 +222,50 @@
     </div>
 </div>
 <script>
+function compute_chars_ammount ()
+{
+    // =((H5+I5)*J5+K5*L5+M5*N5+O5*P5+Q5*R5+S5*T5+U5*V5)*W5
+    var totalChars =
+        ( (float($('#item_form input[name="content_table_pages"]').val())
+                    + float($('#item_form input[name="text_pages"]').val() ) )
+                * float($('#item_form input[name="text_table_chars_per_page"]').val() )
+            + (float($('#item_form input[name="answer_pages"]').val() )
+                * float($('#item_form input[name="answer_chars_per_page"]').val() ) )
+            + (float($('#item_form input[name="test_pages"]').val())
+                * float($('#item_form input[name="test_chars_per_page"]').val())  )
+            + (float($('#item_form input[name="test_answer_pages"]').val())
+                * float($('#item_form input[name="test_answer_chars_per_page"]').val())  )
+            + (float($('#item_form input[name="exercise_pages"]').val())
+                * float($('#item_form input[name="exercise_chars_per_page"]').val())  )
+            + (float($('#item_form input[name="function_book"]').val())
+                * float($('#item_form input[name="function_book_chars_per_page"]').val())  )
+            + (float($('#item_form input[name="function_answer"]').val())
+                * float($('#item_form input[name="function_answer_chars_per_page"]').val())  )
+        )
+        * float($('#item_form input[name="weight"]').val() ) ;
+    totalChars = float(totalChars, 4);
 
+    console && console.info( float($('#item_form input[name="content_table_pages"]').val())
+                    , float($('#item_form input[name="text_pages"]').val() )
+                , float($('#item_form input[name="text_table_chars_per_page"]').val() )
+            , (float($('#item_form input[name="answer_pages"]').val() )
+                * float($('#item_form input[name="answer_chars_per_page"]').val() ) )
+            , (float($('#item_form input[name="test_pages"]').val())
+                * float($('#item_form input[name="test_chars_per_page"]').val())  )
+            , (float($('#item_form input[name="test_answer_pages"]').val())
+                * float($('#item_form input[name="test_answer_chars_per_page"]').val())  )
+            , (float($('#item_form input[name="exercise_pages"]').val())
+                * float($('#item_form input[name="exercise_chars_per_page"]').val())  )
+            , (float($('#item_form input[name="function_book"]').val())
+                * float($('#item_form input[name="function_book_chars_per_page"]').val())  )
+            , (float($('#item_form input[name="function_answer"]').val())
+                * float($('#item_form input[name="function_answer_chars_per_page"]').val())  )
+
+        , float($('#item_form input[name="weight"]').val() )
+    );
+   $('#item_form input[name="total_chars"]').val(totalChars);
+   //return {'chars':totalChars, 'amount':amount};
+}
 function deleteItem(id)
 {
     ICB.domEvents.deleteShowConfirmModal(
@@ -256,6 +299,19 @@ function deleteItem(id)
 $(function () {
 
 
+    /**
+     * 监听输入框输入按键, 计算总字数
+     */
+    $('#item_form input').blur(function () {
+        if($(this).hasClass('js-monitor-compute')) {
+            compute_chars_ammount();
+        }
+    });
+    $('#item_form input').keyup(function (event) {
+        if($(this).hasClass('js-monitor-compute')) {
+            compute_chars_ammount();
+        }
+    });
 });
 </script>
 <?php View::output('admin/global/footer.php'); ?>
