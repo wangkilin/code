@@ -224,9 +224,10 @@ class books extends SinhoBaseController
             H::redirect_msg(Application::lang()->_t('你没有访问权限'), 'admin/');
         }
 
-        View::assign('itemsList', $this->model('sinhoWorkload')->getBookList(null, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']));
-        $totalRows     = $this->model('sinhoWorkload')->found_rows();
-
+        $itemList  = $this->model('sinhoWorkload')->getBookList(null, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+        $totalRows = $this->model('sinhoWorkload')->found_rows();
+        $bookIds   = array_column($itemList, 'id');
+        $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
 
         $this->crumb(Application::lang()->_t('书稿列表'), 'admin/books/index/');
@@ -269,6 +270,9 @@ class books extends SinhoBaseController
             'per_page'   => $this->per_page
         ))->create_links());
         //$categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('itemsList', $itemList);
+        View::assign('booksWorkload', $booksWorkload);
+
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('totalRows', $totalRows);

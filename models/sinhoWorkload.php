@@ -548,6 +548,57 @@ class sinhoWorkloadModel extends Model
         return array_combine($keys, $list);
     }
 
+    /**
+     * 基于书稿做工作量数据统计
+     * @param array $bookIds 编辑ids
+     * @param int   $status  状态
+     *
+     * @return float
+     */
+    public function getWorkloadStatByBookIds ($bookIds = array(), $status = null, $belongMonth = null)
+    {
+        if (isset($belongMonth) && ! is_array($belongMonth)) {
+            $belongMonth = array($belongMonth);
+        }
+        if (isset($status) && ! is_array($status)) {
+            $status = array(intval($status));
+        }
+        // ( (目录+正文)*目录正文字数+答案*答案字数...) * 系数
+        $sql = 'SELECT
+                    SUM(content_table_pages             ) AS content_table_pages           ,
+                    SUM(text_pages                      ) AS text_pages                    ,
+                    SUM(answer_pages                    ) AS answer_pages                  ,
+                    SUM(test_pages                      ) AS test_pages                    ,
+                    SUM(test_answer_pages               ) AS test_answer_pages             ,
+                    SUM(exercise_pages                  ) AS exercise_pages                ,
+                    SUM(function_book                   ) AS function_book                 ,
+                    SUM(function_answer                 ) AS function_answer               ,
+                    `status`,
+                    belong_month,
+                    book_id
+                FROM ' . $this->get_table(self::WORKLOAD_TABLE);
+        $whereList = array();
+        if ($bookIds) {
+            $whereList[] = 'book_id IN (' . join(',', $bookIds) . ')';
+        }
+        if ($status) {
+            $whereList[] = 'status IN ( ' . join(',', $status) . ')';
+        }
+        if ($belongMonth) {
+            $whereList[] = 'belong_month IN (' . join(',', $belongMonth)  . ')';
+        }
+
+        $where = null;
+        if ($whereList) {
+            $where = join(' AND ', $whereList);
+        }
+
+        $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, 'book_id');
+        $keys = array_column($list, 'book_id');
+
+        return array_combine($keys, $list);
+    }
+
 
 }
 

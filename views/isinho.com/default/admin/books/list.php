@@ -44,7 +44,23 @@
                         </thead>
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { ?>
-                            <tr class="<?php if($itemInfo['is_payed']==1) {echo 'book_is_payed success';} ?>">
+                            <tr class="<?php
+                                      if(! $this->booksWorkload[$itemInfo['id']]) {
+
+                                      } else if($this->booksWorkload[$itemInfo['id']]['content_table_pages']>=$itemInfo['content_table_pages']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['text_pages']>=$itemInfo['text_pages']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['answer_pages']>=$itemInfo['answer_pages']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['test_pages']>=$itemInfo['test_pages']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['test_answer_pages']>=$itemInfo['test_answer_pages']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['exercise_pages']>=$itemInfo['exercise_pages']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['function_book']>=$itemInfo['function_book']
+                                       &&       $this->booksWorkload[$itemInfo['id']]['function_answer']>=$itemInfo['function_answer']
+                                       ) {
+                                          echo 'book_is_payed success';
+                                      } else {
+                                          echo 'warning';
+                                      }
+                            ?>">
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>
                                 <td class="text-left">
 
