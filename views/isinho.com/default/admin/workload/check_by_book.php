@@ -82,6 +82,19 @@
                             <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line':' verifying-line'; ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
                                 <td class="text-left">
                                     <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>"/>
+                                    <?php
+                                    if ($workloadInfo['add_time']) {
+                                        echo date('m-d', $workloadInfo['add_time']);
+                                    } else {
+                                        echo substr($itemInfo['delivery_date'], 5);
+                                    }
+                                    echo '~';
+                                    if ($workloadInfo['fill_time']) {
+                                        echo date('m-d', $workloadInfo['fill_time']);
+                                    } else {
+                                        substr($itemInfo['return_date'], 5);
+                                    }
+                                    ?>
                                 </td>
                                 <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
@@ -120,11 +133,11 @@
                 </div>
 
                 <div class="mod-table-foot">
-                <?php if (isset($_GET['id'])) { 
+                <?php if (isset($_GET['id'])) {
                         if ($bookInfo) {
                 ?>
                     <div class="text-right"><span class="bg-warning">当前书稿：<?php echo $bookInfo['serial'], ' ', $bookInfo['book_name'], ' ', $bookInfo['proofreading_times']; ?> </span></div>
-                <?php 
+                <?php
                         }
                 } else { ?>
                     <div class="text-right">每页<?php echo $this->amountPerPage; ?> &nbsp; 共<?php echo $this->totalRows;?>本</div>

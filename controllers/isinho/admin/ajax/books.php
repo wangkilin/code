@@ -109,7 +109,12 @@ class books extends SinhoBaseController
 
         foreach ($_POST['sinho_editor'] as $_userId) {
             if (! in_array($_userId, $assignedUserIds)) {
-                $set = array('book_id' => $_GET['id'], 'user_id' => $_userId, 'status'=>sinhoWorkloadModel::STATUS_RECORDING);
+                $set = array(
+                    'book_id'   => $_GET['id'],
+                    'user_id'   => $_userId,
+                    'status'    => sinhoWorkloadModel::STATUS_RECORDING,
+                    'add_time'  => time(),
+                );
                 $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::WORKLOAD_TABLE, $set);
             }
         }
