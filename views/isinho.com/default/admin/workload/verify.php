@@ -101,10 +101,12 @@
                                                     <td class="text-left">
                                                         <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>" />
                                                         <a class="md-tip" title="<?php _e('发稿日期');
-                                                            echo $itemInfo['delivery_date']; ?> <?php _e('回稿日期');
-                                                            echo $itemInfo['return_date'];
+                                                            echo $workloadInfo['add_time']>0 ? date('Y-m-d', $workloadInfo['add_time']) : $itemInfo['delivery_date']; ?> <?php _e('回稿日期');
+                                                            echo $workloadInfo['fill_time']>0 ? date('Y-m-d', $workloadInfo['fill_time']) :  $itemInfo['return_date'];
                                                         ?>" data-toggle="tooltip"><?php
-                                                            echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5);
+                                                            echo $workloadInfo['add_time']>0 ? date('m-d', $workloadInfo['add_time']) : substr($itemInfo['delivery_date'], 5);
+                                                            echo  '~';
+                                                            echo $workloadInfo['fill_time']>0 ? date('m-d', $workloadInfo['fill_time']) : substr($itemInfo['return_date'], 5);
                                                         ?></a>
                                                     </td>
                                                     <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>

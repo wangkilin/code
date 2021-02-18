@@ -73,9 +73,9 @@
                                                             echo $workloadInfo['add_time']>0 ? date('Y-m-d', $workloadInfo['add_time']) : $this->bookList[$workloadInfo['book_id']]['delivery_date']; ?> <?php _e('回稿日期');
                                                             echo $workloadInfo['fill_time']>0 ? date('Y-m-d', $workloadInfo['fill_time']) : $this->bookList[$workloadInfo['book_id']]['return_date'];
                                                         ?>" data-toggle="tooltip"><?php
-                                                            echo $workloadInfo['add_time']>0 ? date('Y-m-d', $workloadInfo['add_time']) : substr($this->bookList[$workloadInfo['book_id']]['delivery_date'], 5);
+                                                            echo $workloadInfo['add_time']>0 ? date('m-d', $workloadInfo['add_time']) : substr($this->bookList[$workloadInfo['book_id']]['delivery_date'], 5);
                                                             echo  '~';
-                                                            echo $workloadInfo['fill_time']>0 ? date('Y-m-d', $workloadInfo['fill_time']) : substr($this->bookList[$workloadInfo['book_id']]['return_date'], 5);
+                                                            echo $workloadInfo['fill_time']>0 ? date('m-d', $workloadInfo['fill_time']) : substr($this->bookList[$workloadInfo['book_id']]['return_date'], 5);
                                                         ?></a>
                                 </td>
                                 <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
