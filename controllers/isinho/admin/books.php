@@ -294,6 +294,7 @@ class books extends SinhoBaseController
     {
         $tags = array();
         $selected = null;
+
         if ($_GET['id']) {
             $this->crumb(Application::lang()->_t('书稿编辑'), 'admin/books/');
 
@@ -305,6 +306,14 @@ class books extends SinhoBaseController
 
             View::assign('itemInfo', $itemInfo);
         } else {
+            // 基于指定书稿复制成新书稿. 将书稿id清空， 只用其他数据
+            if (isset($_GET['from_id'])) {
+                $itemInfo = $this->model('sinhoWorkload')->getBookById($_GET['from_id']);
+                if ($itemInfo) {
+                    unset($itemInfo['id']);
+                }
+                View::assign('itemInfo', $itemInfo);
+            }
             $this->crumb(Application::lang()->_t('添加书稿'), 'admin/books/');
         }
 
