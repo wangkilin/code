@@ -198,9 +198,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php for ($i=0; $i<12; $i++) { ?>
+                <?php for ($i=1; $i<=12; $i++) { ?>
                 <tr>
-                    <td><?php echo $i+1, '月';?></td>
+                    <td><?php echo $i, '月';?></td>
                     <?php
                     for($j=0; $j<31; $j++) {?>
                       <td>&nbsp;</td>
@@ -348,17 +348,23 @@ $(function () {
         chart.setOption(echartOptions);
     }, false);
 
+    // 左侧菜单收缩重新渲染图表
+    $('.icb-header .mod-head-btn').click(function () {
+        //chart = echarts.init($('#statistic_chart')[0]);
+        //chart.setOption(echartOptions);
+    });
+
 
 <?php } ?>
 
 <?php if (property_exists($this, 'employeeWorkloadList')) { ?>
     //var dates = JSON.parse('<?php echo json_encode(array_keys($this->employeeWorkloadList));?>');
     //var shares = JSON.parse('<?php echo json_encode(array_values($this->employeeWorkloadList));?>');
-    var maxLeft = parseInt(Math.max(<?php echo join(',', $this->allTotalChars);?>) +50);
-    var minLeft = parseInt(Math.min(<?php echo join(',', $this->allTotalChars);?>) -50);
-    minLeft = minLeft < 0 ? 0 : minLeft;
-    console && console.info(shares, minLeft, maxLeft);
-    var echartOptions = {
+    var maxLeft2 = parseInt(Math.max(<?php echo join(',', $this->allTotalChars);?>) +50);
+    var minLeft2 = parseInt(Math.min(<?php echo join(',', $this->allTotalChars);?>) -50);
+    minLeft2 = minLeft2 < 0 ? 0 : minLeft2;
+    console && console.info(shares, minLeft2, maxLeft2);
+    var echartOptions2 = {
             backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
             animation: false,
             addDataAnimation: false,
@@ -424,8 +430,8 @@ $(function () {
             }],
             yAxis: [{// Y轴左侧坐标
                 type: 'value',
-                //max: maxLeft,
-                //min: minLeft,
+                //max: maxLeft2,
+                //min: minLeft2,
                 splitLine: {
                     show: false,
                 },
@@ -462,14 +468,19 @@ $(function () {
             }],
         };
 
-    var chart = echarts.init($('#workload_chart')[0]);
-    chart.setOption(echartOptions);
+    var chart2 = echarts.init($('#workload_chart')[0]);
+    chart2.setOption(echartOptions2);
 
     window.addEventListener("orientationchange", function ()
     {
-        var chart = echarts.init($('#workload_chart'));
-        chart.setOption(echartOptions);
+        var chart2 = echarts.init($('#workload_chart'));
+        chart2.setOption(echartOptions2);
     }, false);
+
+    // 左侧菜单收缩重新渲染图表
+    $('.icb-header .mod-head-btn').click(function () {
+        chart2.setOption(echartOptions2);
+    });
 
 
 <?php } ?>

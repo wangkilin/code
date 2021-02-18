@@ -127,22 +127,45 @@ class main extends SinhoBaseController
                     $employeeWorkloadList[$_userId][$_month] = $allTotalChars[] = $_statInfo['total_chars'];
                 }
             }
+            // 各项全局统计信息
+            $globalStatMsgList = array();
+            // 获取总书稿数
+            // 获取总字数
+            // 获取当前工作的书稿数；
+            // 获取绩效总数
+            // 导入工资表， 计算成本
+            //
+            $globalStatMsgList['书稿总数']        = $this->model('sinhoWorkload')
+                                                      ->count(sinhoWorkloadModel::BOOK_TABLE);
+            $globalStatMsgList['书稿总字数']    = number_format($this->model('sinhoWorkload')->sum(sinhoWorkloadModel::BOOK_TABLE, 'total_chars'), 4);
+            $globalStatMsgList['正在工作中的书稿']   = $this->model('sinhoWorkload')
+                                                      ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
+                                                             ' `status` = ' . sinhoWorkloadModel::STATUS_VERIFYING . ' OR  `status` = ' . sinhoWorkloadModel::STATUS_RECORDING,
+                                                             'distinct book_id'
+                                                            );
+            $totalEmployees   = $this->model('sinhoWorkload')
+                                     ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
+                                            '`status` = ' . sinhoWorkloadModel::STATUS_VERIFIED,
+                                            'distinct user_id'
+                                        );
+            $globalStatMsgList['已发放绩效总额']   = $this->model('sinhoWorkload')
+                                                    ->sum(sinhoWorkloadModel::WORKLOAD_TABLE, 'total_chars', ' `status` = ' . sinhoWorkloadModel::STATUS_VERIFIED)
+                                                            * 2;
+            //$globalStatMsgList['平均绩效']   = number_format($globalStatMsgList['已发放绩效'] / $totalEmployees, 4);
+            $globalStatMsgList['已发放绩效总额']   = number_format($this->model('sinhoWorkload')
+                                                                    ->sum(sinhoWorkloadModel::WORKLOAD_TABLE, 'total_chars', ' `status` = ' . sinhoWorkloadModel::STATUS_VERIFIED)
+                                                            * 2, 4);
+            $globalStatMsgList['当前核算中绩效']   = number_format($this->model('sinhoWorkload')
+                                                                    ->sum(sinhoWorkloadModel::WORKLOAD_TABLE, 'total_chars', ' `status` = ' . sinhoWorkloadModel::STATUS_VERIFYING . ' OR  `status` = ' . sinhoWorkloadModel::STATUS_RECORDING)
+                                                            * 2, 4);
+
+            View::assign('globalStatMsgList', $globalStatMsgList);
 
             View::assign('monthList', array_keys($itemList));
             View::assign('allTotalChars', $allTotalChars);
             View::assign('employeeWorkloadList', $employeeWorkloadList);
         }
 
-        // 各项全局统计信息
-        $globalStatMsgList = array();
-        // 获取总书稿数
-        // 获取总字数
-        // 获取当前工作的书稿数；
-        // 获取绩效总数
-        // 导入工资表， 计算成本
-        //
-
-        View::assign('globalStatMsgList', $globalStatMsgList);
         View::assign('belongMonth', $belongMonth);
         View::assign('warningMsgList', $warningMsgList);
         View::assign('totalCharsListLastMonth', $totalCharsListLastMonth);
