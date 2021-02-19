@@ -228,6 +228,7 @@ class books extends SinhoBaseController
         $totalRows = $this->model('sinhoWorkload')->found_rows();
         $bookIds   = array_column($itemList, 'id');
         $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
+        $booksWorkloadNotPayed = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, array(sinhoWorkloadModel::STATUS_RECORDING, sinhoWorkloadModel::STATUS_VERIFYING) );
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
 
         $this->crumb(Application::lang()->_t('书稿列表'), 'admin/books/index/');
@@ -272,6 +273,7 @@ class books extends SinhoBaseController
         //$categoryList = $this->model('category')->getAllCategories('id');
         View::assign('itemsList', $itemList);
         View::assign('booksWorkload', $booksWorkload);
+        View::assign('booksWorkloadNotPayed', $booksWorkloadNotPayed);
 
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));

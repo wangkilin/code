@@ -45,14 +45,24 @@
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr class="<?php
-                                      if(! $this->booksWorkload[$itemInfo['id']] || ($this->booksWorkload[$itemInfo['id']]['content_table_pages']==0 &&
+                                      // 书稿未结算过
+                                      if(! $this->booksWorkload[$itemInfo['id']]) {
+                                          if ($this->booksWorkloadNotPayed[$itemInfo['id']]) { // 分配人员了
+                                              echo 'success';
+                                          } else { // 没有分配人员
+
+                                          }
+
+                                       // 书稿分配人， 没有填充数据的结算。 理论不应该有这样的数据
+                                      } else if ($this->booksWorkload[$itemInfo['id']]['content_table_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['text_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['answer_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['test_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['test_answer_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['exercise_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['function_book']==0 &&
-                                            $this->booksWorkload[$itemInfo['id']]['function_answer']==0)) {
+                                            $this->booksWorkload[$itemInfo['id']]['function_answer']==0) {
+                                        echo 'book_is_payed danger';
 
                                       } else if($this->booksWorkload[$itemInfo['id']]['content_table_pages']>=$itemInfo['content_table_pages']
                                        &&       $this->booksWorkload[$itemInfo['id']]['text_pages']>=$itemInfo['text_pages']
@@ -63,7 +73,7 @@
                                        &&       $this->booksWorkload[$itemInfo['id']]['function_book']>=$itemInfo['function_book']
                                        &&       $this->booksWorkload[$itemInfo['id']]['function_answer']>=$itemInfo['function_answer']
                                        ) {
-                                          echo 'book_is_payed success';
+                                          echo 'book_is_payed info';
                                       } else {
                                           echo 'warning';
                                       }
