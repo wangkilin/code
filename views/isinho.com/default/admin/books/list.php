@@ -11,6 +11,20 @@
 
         <div class="mod-body tab-content">
             <div class="tab-pane active" id="index">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                         <td>列表颜色说明：</td>
+                         <td class="success">已分配责编</td>
+                         <td class="info">结算完成</td>
+                         <td class="warning">部分结算</td>
+                         <td>未分配责编</td>
+                        </tr>
+                    </table>
+                </div>
+                <br/>
+
                 <?php if ($_GET['action'] == 'search') { ?>
                 <div class="alert alert-info"><?php _e('找到 %s 条符合条件的内容', intval($this->totalRows)); ?></div>
                 <?php } ?>
@@ -119,6 +133,7 @@
 
                     <a class="btn btn-danger" id="deleteBatchBtn"><?php _e('删除书稿'); ?></a>
                 </div>
+
             </div>
             <?php View::output('admin/books/search_inc.php');?>
 
