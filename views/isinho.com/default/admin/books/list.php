@@ -45,7 +45,14 @@
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr class="<?php
-                                      if(! $this->booksWorkload[$itemInfo['id']]) {
+                                      if(! $this->booksWorkload[$itemInfo['id']] || ($this->booksWorkload[$itemInfo['id']]['content_table_pages']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['text_pages']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['answer_pages']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['test_pages']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['test_answer_pages']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['exercise_pages']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['function_book']==0 &&
+                                            $this->booksWorkload[$itemInfo['id']]['function_answer']==0)) {
 
                                       } else if($this->booksWorkload[$itemInfo['id']]['content_table_pages']>=$itemInfo['content_table_pages']
                                        &&       $this->booksWorkload[$itemInfo['id']]['text_pages']>=$itemInfo['text_pages']
