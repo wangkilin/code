@@ -167,12 +167,14 @@ class main extends SinhoBaseController
         }
 
         View::assign('belongMonth', $belongMonth);
+        View::assign('belongMinMonth', $belongMinMonth);
         View::assign('warningMsgList', $warningMsgList);
         View::assign('totalCharsListLastMonth', $totalCharsListLastMonth);
         //View::assign('totalCharsWithoutWeightListLastMonth', $totalCharsWithoutWeightListLastMonth);
         View::assign('userList', $userList);
 
 
+        View::import_js('js/functions.js');
         View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
         View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
         View::import_js('js/icb_template_isinho.com.js');

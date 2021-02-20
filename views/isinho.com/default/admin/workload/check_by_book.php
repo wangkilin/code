@@ -7,6 +7,18 @@
                 <?php } ?>
 
                 <div class="table-responsive">
+                    <table class="table table-bordered workload-list">
+                        <tr>
+                         <td>列表颜色说明：</td>
+                         <!-- <td class="success">工作量记录中，没有提交到核算</td> -->
+                         <td class="info">工作量结算完成，绩效已支付</td>
+                         <td class="warning">工作量正在核算，绩效正在核算</td>
+                        </tr>
+                    </table>
+                </div>
+                <br/>
+
+                <div class="table-responsive">
                 <form id="workload_verify_form" action="admin/ajax/workload/confirm/" method="post">
                     <input type="hidden" id="action" name="action" value="" />
                 <?php if ($this->itemsList) { ?>

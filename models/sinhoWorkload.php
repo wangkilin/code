@@ -534,7 +534,17 @@ class sinhoWorkloadModel extends Model
             $whereList[] = 'status = ' . intval($status);
         }
         if ($belongMonth) {
-            $whereList[] = 'belong_month IN (' . join(',', $belongMonth)  . ')';
+            if (isset($belongMonth['start']) || isset($belongMonth['end'])) {
+                if (isset($belongMonth['start'])) {
+                    $whereList[] = 'belong_month >= ' . intval($belongMonth['start']);
+                }
+
+                if (isset($belongMonth['end'])) {
+                    $whereList[] = 'belong_month <= ' . intval($belongMonth['end']);
+                }
+            } else {
+                $whereList[] = 'belong_month IN (' . join(',', $belongMonth)  . ')';
+            }
         }
 
         $where = null;

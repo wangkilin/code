@@ -179,44 +179,82 @@ class workload extends SinhoBaseController
         }
     }
 
+    /**
+     * 根据起止月份，统计员工的工作量。 得到员工的工作量榜单
+     */
     public function statistic_total_chars_action ()
     {
         $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
 
-        if (isset($_GET['start'])) {
+        if ($_POST['start_month']) {
+            $_POST['start_month'] = str_replace('-', '', $_POST['start_month']);
+        } else {
+            $_POST['start_month'] = $this->model('sinhoWorkload')->min(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month');
+        }
+        $_POST['start_month'] > 202001 OR $_POST['start_month'] = 202001;
 
+        if ($_POST['end_month']) {
+            $_POST['end_month'] = str_replace('-', '', $_POST['end_month']);
+        } else {
+            $_POST['end_month'] = $this->model('sinhoWorkload')->max(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month');
         }
+        $_POST['end_month']> 202001 OR $_POST['end_month'] = 202001;
 
-        // 获取工作量表中的半年内记录的最大月份， 获取半年内记录的最小月份。 将这段数据展示出来
-        $belongMonth = $this->model('sinhoWorkload')->max(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month', 'belong_month >= ' . date('Ym', strtotime('-6month')));
-        $belongMinMonth = $this->model('sinhoWorkload')->min(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month', 'belong_month >= ' . date('Ym', strtotime('-6month')));
-        if (! $belongMonth) { // 如果没有工作量， 将上个月的月份作为记录最大月份
-            $belongMonth = date('Ym', strtotime('-1month'));
-        }
-        if (! $belongMinMonth) {// 没有工作量记录， 将上个月作为记录的最小月份
-            $belongMinMonth = $belongMonth;
-        }
-        // 当前记录中的年月份， 用记录的最大月份后延一个月
-        $currentYearMonth = date('Ym', strtotime("{$belongMonth}01 +1month"));
+        $start = $_POST['start_month'] >= $_POST['end_month'] ? $_POST['end_month'] : $_POST['start_month'];
+        $end   = $_POST['start_month'] >= $_POST['end_month'] ? $_POST['start_month'] : $_POST['end_month'];
 
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
-        // 按月获取每个人的工作量
-        $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), null, $belongMonth);
-        $totalCharsListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
-        //$totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
-        arsort($totalCharsListLastMonth, SORT_NUMERIC);
+        // 获取每个人的工作量
+        $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, array('start'=>$start, 'end'=>$end));
+        $totalCharsList = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
+        arsort($totalCharsList);
+        foreach ($totalCharsList as $_userId=> & $_item) {
+            $_item = array('name'=>$userList[$_userId]['user_name'],'total'=>$_item);
+        }
 
+        H::ajax_json_output(Application::RSM(array_values($totalCharsList)));
+    }
 
-        $startMonth = $belongMinMonth;
+    /**
+     * 按照月度， 汇总责编的工作量
+     */
+    public function statistic_monthly_chars_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userIds  = array_column($userList, 'uid');
+        $userList = array_combine($userIds, array_column($userList, 'user_name') );
+
+        $minMonth = $this->model('sinhoWorkload')->min(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month');
+        $maxMonth = $this->model('sinhoWorkload')->max(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month');
+        $minMonth > 0 OR $minMonth = date('Ym', strtotime('-1month'));
+        $maxMonth > 0 OR $maxMonth = $minMonth;
+        if ($_POST['start_month']) {
+            $_POST['start_month'] = str_replace('-', '', $_POST['start_month']);
+        } else {
+            $_POST['start_month'] = $minMonth;
+        }
+        $_POST['start_month'] > $minMonth OR $_POST['start_month'] = $minMonth;
+
+        if ($_POST['end_month']) {
+            $_POST['end_month'] = str_replace('-', '', $_POST['end_month']);
+        } else {
+            $_POST['end_month'] = $maxMonth;
+        }
+        $_POST['end_month'] > $maxMonth AND $_POST['end_month'] = $maxMonth;
+
+        $start = $_POST['start_month'] >= $_POST['end_month'] ? $_POST['end_month'] : $_POST['start_month'];
+        $end   = $_POST['start_month'] >= $_POST['end_month'] ? $_POST['start_month'] : $_POST['end_month'];
+
         $itemList = array();
         $workloadUserIds = array();
-        while ($startMonth <= $belongMonth) {
-            $itemList[$startMonth] = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, $startMonth);
-            $workloadUserIds = array_merge($workloadUserIds, array_column($itemList[$startMonth], 'user_id' ) ) ;
-            //$itemList[$startMonth] = array_sum(array_column($itemList[$startMonth], 'total_chars'));
-            $startMonth = date('Ym', strtotime("{$startMonth}01 +1month"));
+        while ($start <= $end) {
+            $itemList[$start] = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, $start);
+            $workloadUserIds = array_merge($workloadUserIds, array_column($itemList[$start], 'user_id' ) ) ;
+            $start = date('Ym', strtotime("{$start}01 +1month"));
         }
         $employeeWorkloadList = array();
         $employeeWorkloadList = array_fill_keys($workloadUserIds, array());
@@ -236,11 +274,8 @@ class workload extends SinhoBaseController
                 $employeeWorkloadList[$_userId][$_month] = $allTotalChars[] = $_statInfo['total_chars'];
             }
         }
-    }
 
-    public function statistic_monthly_chars_action ()
-    {
-        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+        H::ajax_json_output(Application::RSM(array('stat'=>$employeeWorkloadList, 'employee'=>$userList)));
     }
 }
 

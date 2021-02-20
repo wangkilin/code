@@ -19,45 +19,50 @@
     <div class="row">
         <div class="col-md-12">
             <div class="row">
-                <?php if (property_exists($this, 'personalWorkloadList')) { ?>
+                <?php if (property_exists($this, 'personalWorkloadList')) { // 有个人工作量数据展示个人数据统计图表 ?>
                 <div class="col-md-12 form-group">
                     <div id="statistic_chart" class="echart_stat"></div>
                 </div>
                 <?php } ?>
-                <?php if (property_exists($this, 'employeeWorkloadList')) { ?>
+                <?php if (property_exists($this, 'employeeWorkloadList')) {// 展示员工统计图表 ?>
                 <div class="col-md-12 form-group">
                     <div id="workload_chart" class="echart_stat"></div>
                     <div class="form-group echart-date col-xs-offset-1">
-                        <label class="col-sm-2 col-xs-3 control-label nopadding">统计时间段:</label>
-                        <div class="col-sm-8 col-xs-9">
-                            <div class="row">
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control mod-data date-start">
-                                    <i class="icon icon-date"></i>
-                                </div>
-                               <span class="mod-symbol col-xs-1 col-sm-1">
-                                   -
-                               </span>
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control mod-data date-end">
-                                    <i class="icon icon-date"></i>
+                        <form action="admin/ajax/workload/statistic_monthly_chars/" method="post" onsubmit="return false">
+                            <label class="col-sm-2 col-xs-3 control-label nopadding">统计时间段:</label>
+                            <div class="col-sm-4 col-xs-5">
+                                <div class="row">
+                                    <div class="col-sm-6 mod-double icon-date-container">
+                                        <input type="text" name="start_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMinMonth.'01'));?>">
+                                        <i class="icon icon-date"></i>
+                                        <i class="icon icon-date-delete icon-delete"></i>
+                                    </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                    -
+                                </span>
+                                    <div class="col-sm-6 mod-double icon-date-container">
+                                        <input type="text" name="end_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMonth.'01'));?>">
+                                        <i class="icon icon-date"></i>
+                                        <i class="icon icon-date-delete icon-delete"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-1">
-                            <a href="javascript:;" class="btn btn-primary btn-sm date-seach">确认查询</a>
-                        </div>
+                            <div class="col-sm-2 text-right">
+                                <a href="javascript:;" class="btn btn-primary btn-sm date-seach js-load-employee-workload">确认查询</a>
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <?php } ?>
             </div>
         </div>
 
-        <?php if ($this->totalCharsListLastMonth) { ?>
+        <?php if ($this->totalCharsListLastMonth) {// 展示工作量榜单 ?>
         <div class="col-md-6">
             <div class="mod">
 
-            <div class="form-group echart-date mod-head">
+                <div class="form-group echart-date mod-head">
+                    <form action="admin/ajax/workload/statistic_total_chars/" method="post" onsubmit="return false">
                         <div class="col-sm-3 nopadding">
                         <h3>
                         <span class="pull-left"><?php _e('工作量榜单'); ?></span>
@@ -65,25 +70,28 @@
                         </div>
                         <div class="col-sm-7">
                             <div class="row">
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control icon-indent  js-monthpicker">
+                                <div class="col-sm-6 mod-double icon-date-container">
+                                    <input type="text" name="start_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMonth.'01'));?>">
                                     <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
                                 </div>
                                <span class="mod-symbol col-xs-1 col-sm-1">
                                    -
                                </span>
-                                <div class="col-sm-6 mod-double">
-                                    <input type="text" class="form-control icon-indent  js-monthpicker">
+                                <div class="col-sm-6 mod-double icon-date-container">
+                                    <input type="text" name="end_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMonth.'01'));?>">
                                     <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-1">
-                            <a href="javascript:;" class="btn btn-primary  btn-sm date-seach">确认查询</a>
+                            <a href="javascript:;" class="btn btn-primary  btn-sm js-load-workload-top-list">确认查询</a>
                         </div>
-                    </div>
+                    </form>
+                </div>
                 <div class="tab-content mod-content">
-                    <table  class="table table-striped">
+                    <table  class="table table-striped" id="total-chars-list">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -227,6 +235,115 @@ $(function () {
                 minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
             });
 
+    var echartOptions = {
+        backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
+        animation: false,
+        addDataAnimation: false,
+        grid: {
+            //backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
+            borderColor: '#fff', //  borderColor = '#ccc'注意：此配置项生效的前提是，设置了 show: true
+            show : true, // 网格的边框颜色。
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        title: {
+            text:  '我的工作量'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        calculable: false,
+        legend: { // 是否在图标中显示每个员工名称。 点击员工名称，可以显示/隐藏对应员工数据
+                //data: employeeList,//[],
+                padding: 8,
+                x: 'right',
+        },
+        series: [
+            {
+                name: '',
+                type: 'line',
+                //stack: '总量',
+                data: []
+            }
+        ],
+        xAxis: [{
+            type: 'category',
+            splitLine: {
+                show: false,
+            },
+
+            axisLine: {
+                show: true
+            },
+            axisTick: {
+                show: false,
+            },
+            data: []
+        }],
+        yAxis: [{// Y轴左侧坐标
+            type: 'value',
+            max: null,
+            min: null,
+            splitLine: {
+                show: false,
+            },
+
+            axisLine: {
+                show: true
+            },
+
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: 'rgba(0,0,0,0.1)',
+                    type: 'dashed',
+                    width: 1
+                }
+            }
+        }
+        // ,
+        // {// Y轴右侧坐标
+        //     type: 'value',
+        //     max: 1200,
+        //     min: 0,
+        //     splitLine: {
+        //         show: false,
+        //     },
+
+        //     axisLine: {
+        //         show: true
+        //     },
+
+        //     splitLine: {
+        //         show: true,
+        //         lineStyle: {
+        //             color: 'rgba(0,0,0,0.1)',
+        //             type: 'dashed',
+        //             width: 1
+        //         }
+        //     }
+        // }
+        ],
+        graphic: [
+        {
+            type: 'image',
+            id: 'logo',
+            right: 20,
+            top: 20,
+            z: -1,
+            bounding: 'raw',
+            origin: [75, 75],
+            style: {
+                image: 'http://www.icodebang.cn/static/css/default/img/icodebang_white_face_logo@2x.png',
+                width: 150,
+                height: 150,
+                opacity: 0
+            }
+        }],
+    };
+
 
 <?php if (property_exists($this, 'personalWorkloadList')) { ?>
     var dates = JSON.parse('<?php echo json_encode(array_keys($this->personalWorkloadList));?>');
@@ -234,118 +351,21 @@ $(function () {
     var maxLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalWorkloadList));?>) +50);
     var minLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalWorkloadList));?>) -50);
     minLeft = minLeft < 0 ? 0 : minLeft;
-    console && console.info(shares, minLeft, maxLeft);
-    var echartOptions = {
-            backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
-            animation: false,
-            addDataAnimation: false,
-            grid: {
-                //backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
-                borderColor: '#fff', //  borderColor = '#ccc'注意：此配置项生效的前提是，设置了 show: true
-                show : true, // 网格的边框颜色。
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            title: {
-                text:  '我的工作量'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            calculable: false,
-            series: [
-                {
-                    name: '',
-                    type: 'line',
-                    //stack: '总量',
-                    data: shares
-                }
-            ],
-            xAxis: [{
-                type: 'category',
-                splitLine: {
-                    show: false,
-                },
-
-                axisLine: {
-                    show: true
-                },
-                axisTick: {
-                    show: false,
-                },
-                data: dates //[]
-            }],
-            yAxis: [{// Y轴左侧坐标
-                type: 'value',
-                max: maxLeft,
-                min: minLeft,
-                splitLine: {
-                    show: false,
-                },
-
-                axisLine: {
-                    show: true
-                },
-
-                splitLine: {
-                    show: true,
-                    lineStyle: {
-                        color: 'rgba(0,0,0,0.1)',
-                        type: 'dashed',
-                        width: 1
-                    }
-                }
-            }
-            // ,
-            // {// Y轴右侧坐标
-            //     type: 'value',
-            //     max: 1200,
-            //     min: 0,
-            //     splitLine: {
-            //         show: false,
-            //     },
-
-            //     axisLine: {
-            //         show: true
-            //     },
-
-            //     splitLine: {
-            //         show: true,
-            //         lineStyle: {
-            //             color: 'rgba(0,0,0,0.1)',
-            //             type: 'dashed',
-            //             width: 1
-            //         }
-            //     }
-            // }
-        ],
-            graphic: [
-            {
-                type: 'image',
-                id: 'logo',
-                right: 20,
-                top: 20,
-                z: -1,
-                bounding: 'raw',
-                origin: [75, 75],
-                style: {
-                    image: 'http://www.icodebang.cn/static/css/default/img/icodebang_white_face_logo@2x.png',
-                    width: 150,
-                    height: 150,
-                    opacity: 0
-                }
-            }],
-        };
+    //console && console.info(shares, minLeft, maxLeft);
+    var echartOptions1 = Object.assign({}, echartOptions); // 克隆对象
+    echartOptions1.title.text =  '我的工作量';
+    echartOptions1.series[0].data = shares;
+    echartOptions1.xAxis[0].data =  dates;
+    echartOptions1.yAxis[0].max = maxLeft;
+    echartOptions1.yAxis[0].min = minLeft;
 
     var chart = echarts.init($('#statistic_chart')[0]);
-    chart.setOption(echartOptions);
+    chart.setOption(echartOptions1);
 
     window.addEventListener("orientationchange", function ()
     {
         var chart = echarts.init($('#statistic_chart'));
-        chart.setOption(echartOptions);
+        chart.setOption(echartOptions1);
     }, false);
 
     // 左侧菜单收缩重新渲染图表
@@ -363,33 +383,11 @@ $(function () {
     var maxLeft2 = parseInt(Math.max(<?php echo join(',', $this->allTotalChars);?>) +50);
     var minLeft2 = parseInt(Math.min(<?php echo join(',', $this->allTotalChars);?>) -50);
     minLeft2 = minLeft2 < 0 ? 0 : minLeft2;
-    console && console.info(shares, minLeft2, maxLeft2);
-    var echartOptions2 = {
-            backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
-            animation: false,
-            addDataAnimation: false,
-            grid: {
-                //backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
-                borderColor: '#fff', //  borderColor = '#ccc'注意：此配置项生效的前提是，设置了 show: true
-                show : true, // 网格的边框颜色。
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
-            title: {
-                text:  '近期工作量'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                //data: employeeList,//[],
-                padding: 8,
-                x: 'right',
-            },
-            calculable: false,
-            series: [ // 显示的数据。
+    //console && console.info(shares, minLeft2, maxLeft2);
+
+    var echartOptions2 = Object.assign({}, echartOptions);
+    echartOptions2.title.text =  '近期工作量';
+    echartOptions2.series = [ // 显示的数据。
                 <?php
                 $length = count($this->employeeWorkloadList);
                 $i = 1;
@@ -413,61 +411,10 @@ $(function () {
                 //     data: data
                 // }
                 // ...
-            ],
-            xAxis: [{
-                type: 'category',
-                splitLine: {
-                    show: false,
-                },
-
-                axisLine: {
-                    show: true
-                },
-                axisTick: {
-                    show: false,
-                },
-                data: JSON.parse('<?php echo json_encode(array_values($this->monthList));?>') //[]
-            }],
-            yAxis: [{// Y轴左侧坐标
-                type: 'value',
-                //max: maxLeft2,
-                //min: minLeft2,
-                splitLine: {
-                    show: false,
-                },
-
-                axisLine: {
-                    show: true
-                },
-
-                splitLine: {
-                    show: true,
-                    lineStyle: {
-                        color: 'rgba(0,0,0,0.1)',
-                        type: 'dashed',
-                        width: 1
-                    }
-                }
-            }
-        ],
-            graphic: [
-            {
-                type: 'image',
-                id: 'logo',
-                right: 20,
-                top: 20,
-                z: -1,
-                bounding: 'raw',
-                origin: [75, 75],
-                style: {
-                    image: 'http://www.icodebang.cn/static/css/default/img/icodebang_white_face_logo@2x.png',
-                    width: 150,
-                    height: 150,
-                    opacity: 0
-                }
-            }],
-        };
-
+            ];
+    echartOptions2.xAxis[0].data =  JSON.parse('<?php echo json_encode(array_values($this->monthList));?>');
+    echartOptions2.yAxis[0].max = null;
+    echartOptions2.yAxis[0].min = null;
     var chart2 = echarts.init($('#workload_chart')[0]);
     chart2.setOption(echartOptions2);
 
@@ -484,7 +431,86 @@ $(function () {
 
 
 <?php } ?>
+    /**
+     * 工作量榜单。 根据起止月份，获取员工工作量统计榜。
+     */
+    $('.js-load-workload-top-list').click(function () {
+        var $form = $(this).closest('form');
+        var successCallback = function (response) {
+            $('#total-chars-list > tbody > tr').remove();
+            $('#total-chars-list > tfoot > tr').remove();
+            var html = '';
+            var total = 0;
+            for(var i = 0; i<response.rsm.length; i++) {
+                if (! response.rsm[i].name) {
+                    continue;
+                }
+                total += response.rsm[i].total;
+                html = '<tr><td>' + (i+1)
+                      + '</td><td>' + response.rsm[i].name
+                      + '</td><td>' + response.rsm[i].total
+                      + '</td><td>' + float(response.rsm[i].total*2, 2)
+                      + '</td></tr>';
+                $('#total-chars-list > tbody').append(html);
+            }
+            html = '<tr class="info">' +
+                        '<td colspan="2">合计</td>' +
+                        '<td>' + float(total, 4) + '</td>' +
+                        '<td>'+ float(total*2, 2) +'</td>' +
+                    '</tr>';
+            $('#total-chars-list > tfoot').append(html);
+        };
+        ICB.ajax.requestJson($form.attr('action'), $form.serialize(), successCallback);
+    });
 
+    /**
+     * 根据起止月份，获取员工每月的工作量， 刷新工作量图表
+     */
+    $('.js-load-employee-workload').click(function () {
+        var $form = $(this).closest('form');
+        var successCallback = function (response) {
+            //console.info(response);
+            echartOptions2.title.text =  '近期工作量';
+            echartOptions2.series = []; // 显示的数据。
+            var xAxis = [];
+
+            for(var key in response.rsm.stat) {
+                if (! key) {
+                    continue;
+                }
+                if (xAxis.length==0) {
+                    for (var xAxisKey in response.rsm.stat[key]) {
+                        xAxis.push(xAxisKey);
+                    }
+                }
+                echartOptions2.series.push(
+                    {
+                        name: response.rsm.employee[key],
+                        type: 'line',
+                        data: []
+                    }
+                );
+                for(var _tmpKey in response.rsm.stat[key]) {
+                    echartOptions2.series[echartOptions2.series.length-1].data.push(response.rsm.stat[key][_tmpKey]);
+                }
+            }
+            //console.info(echartOptions2.series);
+            echartOptions2.xAxis[0].data =  xAxis;
+            echartOptions2.yAxis[0].max = null;
+            echartOptions2.yAxis[0].min = null;
+            var chart2 = echarts.init($('#workload_chart')[0]);
+            chart2.setOption(echartOptions2);
+        };
+        ICB.ajax.requestJson($form.attr('action'), $form.serialize(), successCallback);
+
+    });
+
+    /**
+     * 日期输入框， 点击清除图标，将输入框内容清除
+     */
+    $('.icon-delete.icon-date-delete').click (function () {
+        $(this).siblings('.js-date-input').val('');
+    });
 
 });
 
