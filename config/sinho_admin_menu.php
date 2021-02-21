@@ -44,5 +44,26 @@ $config[] = array(
         ),
     )
 );
+$config[] = array(
+    'id'    => 'admin/administration',
+    'title' => '行政&人事',
+    'cname' => 'users',
+    'children' => array(
+        array (
+            'id'        => 'admin/administration/ask_leave',
+            'title'     => _t('请假管理'),
+            'cname'     => 'order',
+            'url'       => 'admin/administration/ask_leave/',
+            'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
+        array(
+            'id'        => 'admin/administration/holiday',
+            'title'     => _t('作息安排'),
+            'cname'     => 'ol',
+            'url'       => 'admin/administration/holiday/',
+            'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
+    )
+);
 
 /* EOF */

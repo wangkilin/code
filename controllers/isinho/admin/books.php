@@ -208,8 +208,6 @@ SELECT `icb_sinho_company_workload`.* FROM `icb_sinho_company_workload` WHERE (i
 
 defined('iCodeBang_Com') OR die('Access denied!');
 
-require_once __DIR__ . '/../SinhoBaseController.php';
-
 class books extends SinhoBaseController
 {
     /**

@@ -422,7 +422,8 @@
 				</tr>
 				<?php } ?>
                 <!-- 新禾网站权限  -->
-                <?php if (check_extension_package('sinhoWorkload')) { ?>
+                <?php if (check_extension_package('sinhoWorkload')) {
+                    ?>
                 <tr class="js-sinho">
                     <td>
                         <div class="form-group">
@@ -489,6 +490,24 @@
 
                                     <label type="button" class="btn mod-btn-color">
                                         <input type="radio" value="0" name="<?php echo SinhoBaseController::PERMISSION_CHECK_WORKLOAD;?>"<?php if (!$this->group_pms[SinhoBaseController::PERMISSION_CHECK_WORKLOAD]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="js-sinho">
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('允许管理行政&人事'); ?>:</span>
+                            <div class="col-sm-6 col-xs-8">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="1" name="<?php echo SinhoBaseController::PERMISSION_ADMINISTRATION;?>"<?php if ($this->group_pms[SinhoBaseController::PERMISSION_ADMINISTRATION]) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" value="0" name="<?php echo SinhoBaseController::PERMISSION_ADMINISTRATION;?>"<?php if (!$this->group_pms[SinhoBaseController::PERMISSION_ADMINISTRATION]) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
                                     </label>
                                 </div>
                             </div>

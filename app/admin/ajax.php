@@ -1794,6 +1794,7 @@ class ajax extends AdminController
             SinhoBaseController::PERMISSION_VERIFY_WORKLOAD,            // 是否允许核算工作量
             SinhoBaseController::PERMISSION_FILL_WORKLOAD,              // 是否允许添加个人工足量
             SinhoBaseController::PERMISSION_CHECK_WORKLOAD,              // 是否允许添加个人工足量
+            SinhoBaseController::PERMISSION_ADMINISTRATION,             // 是否允许管理 行政&人事
         );
 
         if (check_extension_package('ticket'))

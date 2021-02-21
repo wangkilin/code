@@ -16,8 +16,6 @@ update icb_sinho_company_workload set delivery_date =  FROM_UNIXTIME(unix_timest
 defined('iCodeBang_Com') OR die('Access denied!');
 define('IN_AJAX', TRUE);
 
-require_once __DIR__ . '/../../SinhoBaseController.php';
-
 class books extends SinhoBaseController
 {
     public function setup()

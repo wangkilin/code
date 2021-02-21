@@ -1,8 +1,6 @@
 <?php
 defined('iCodeBang_Com') OR die('Access denied!');
 
-require_once __DIR__ . '/../SinhoBaseController.php';
-
 class main extends SinhoBaseController
 {
     const PERMISSION_BOOKLIST = 'sinho_book_list';

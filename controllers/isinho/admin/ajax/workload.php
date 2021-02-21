@@ -13,8 +13,6 @@
 defined('iCodeBang_Com') OR die('Access denied!');
 define('IN_AJAX', TRUE);
 
-require_once __DIR__ . '/../../SinhoBaseController.php';
-
 class workload extends SinhoBaseController
 {
     public function setup()

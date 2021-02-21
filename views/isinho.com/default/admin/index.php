@@ -167,11 +167,16 @@
                 <tr>
                     <th><span class="col-sm-12 no-padding text-right"><?php echo $year,'-',$month;?></span><span class="col-sm-12 no-padding cell-rotate-separator"></span><span class="col-sm-12 no-padding">姓名</span></th>
                     <?php $totalDaysInMonth = date('t');
+                    $weekNameList = array('日','一','二','三','四','五','六');
                     for($i=1; $i<=$totalDaysInMonth; $i++) {
                         $_weekIndex = date('w', strtotime($year.$month.sprintf('%02d', $i)));
                         $class = $_weekIndex%6==0 ? 'bg-warning' : '';
+                        $class = date('j')==$i ? 'bg-danger' : $class;
                     ?>
-                      <th style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>"><?php echo $i;?></th>
+                      <th style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>"><?php
+                      echo '<span>', $i, '</span><br/》';
+                      echo '<span>', $weekNameList[$_weekIndex%7], '</span>';
+                      ?></th>
                     <?php }?>
                 </tr>
             </thead>
@@ -183,8 +188,9 @@
                     for($i=1; $i<=$totalDaysInMonth; $i++) {
                         $_weekIndex = date('w', strtotime($year.$month.sprintf('%02d', $i)));
                         $class = $_weekIndex%6==0 ? 'bg-warning' : '';
+                        $class = date('j')==$i ? 'bg-danger' : $class;
                     ?>
-                      <td style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>" title="<?php echo $i;?>" data-toggle="tooltip"></td>
+                      <td style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>" title="<?php echo intval($month) , '月', $i, '日/星期', $weekNameList[$_weekIndex%7];?>" data-toggle="tooltip"></td>
                     <?php }?>
                 </tr>
                 <?php } ?>

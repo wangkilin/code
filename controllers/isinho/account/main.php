@@ -1,8 +1,6 @@
 <?php
 defined('iCodeBang_Com') OR die('Access denied!');
 
-include_once __DIR__ . '/../SinhoBaseController.php';
-
 class main extends SinhoBaseController
 {
 

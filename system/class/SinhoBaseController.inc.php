@@ -19,7 +19,7 @@ class SinhoBaseController extends BaseController
 
     const PERMISSION_VERIFY_WORKLOAD    = 'sinho_verify_workload';
     const PERMISSION_FILL_WORKLOAD      = 'sinho_fill_workload';
-    const PERMISSION_BOOKLIST = 'sinho_modify_manuscript_param';
+    const PERMISSION_BOOKLIST           = 'sinho_modify_manuscript_param';
     const PERMISSION_CHECK_WORKLOAD     = 'sinho_check_workload';
     const PERMISSION_ADMINISTRATION     = 'sinho_administration';
     const SINHO_PERMISSION_LIST = array(
@@ -48,7 +48,7 @@ class SinhoBaseController extends BaseController
         self::IS_SINHO_VERIFY_WORKLOAD   => self::PERMISSION_VERIFY_WORKLOAD,
         self::IS_SINHO_FILL_WORKLOAD     => self::PERMISSION_FILL_WORKLOAD,
         self::IS_SINHO_CHECK_WORKLOAD    => self::PERMISSION_CHECK_WORKLOAD,
-
+        self::IS_SINHO_ADMIN             => self::PERMISSION_ADMINISTRATION,
     );
 
     public $user_id;
