@@ -20,6 +20,9 @@ $(function()
 
 	</script>
 </div>
+
+<!-- 百度统计 -->
+<?php View::output('global/baidu_stat.php'); ?>
 <?php
 if (Application::config()->get('system')->debug && Application::config()->get('system')->sites[$_SERVER['HTTP_HOST']]['debug']) {
      View::output('global/debuger.php');

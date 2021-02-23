@@ -1033,16 +1033,8 @@ var G_STATIC_URL = './static/isinho.com/';
 
     <!-- Main JS -->
     <script type="text/javascript" src="./static/isinho.com/main.js"></script>
-    <script>
-    var _hmt = _hmt || [];
-    (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?e2535fbbe9f76cd20cc04c20223118b2";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-
+    <!-- 百度统计 -->
+    <?php View::output('global/baidu_stat.php'); ?>
 
     <a id="scrollUp" href="./#top" style="position: fixed; z-index: 2147483647; display: none;"><i class="fa fa-angle-up"></i></a>
 

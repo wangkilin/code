@@ -84,14 +84,6 @@ $('div.code>div,div.content div.sample-code-container').each(function(i, block) 
     hljs.highlightBlock(block);
 });
 
-// 百度统计
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?681fc9b1c75c25b5868d6bfdea94f7df";
-  var s = document.getElementsByTagName("script")[0];
-  s.parentNode.insertBefore(hm, s);
-})();
 
 // 百度自动推送
 (function(){
@@ -108,6 +100,8 @@ var _hmt = _hmt || [];
 })();
 </script>
 
+<!-- 百度统计 -->
+<?php View::output('global/baidu_stat.php'); ?>
 
 <script src="https://translate.google.cn/translate_a/element.js?cb=googleTranslateCallback"></script>
 
