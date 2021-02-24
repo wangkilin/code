@@ -16,14 +16,7 @@ $(function()
 
 <div style="display:none;" id="__crond">
 	<script type="text/javascript">
-		$(document).ready(function () {
-            /*====================================
-            //	防止手机浏览器在页面后面加入垃圾广告
-            ======================================*/
-            $(document).scroll(function () {
-                $("#last-one-flag").nextAll(':not(#scrollUp)').remove();
-            });
-        });
+		$(document).ready(function () {});
 
 	</script>
 </div>
@@ -36,7 +29,16 @@ if (Application::config()->get('system')->debug && Application::config()->get('s
 }
 ?>
 <!-- / DO NOT REMOVE -->
-
+<script type="text/javascript">
+$(function () {
+    /*====================================
+    //	防止手机浏览器在页面后面加入垃圾广告
+    ======================================*/
+    $(document).scroll(function () {
+        $("#last-one-flag").nextAll(':not(#scrollUp)').remove();
+    });
+});
+</script>
 <!-- 防止手机浏览器在页面后面加入垃圾广告, 放置一个标志性的元素。 所有必须的元素， 都要放到这个标识元素前面  -->
 <div id="last-one-flag"></div>
 </body>
