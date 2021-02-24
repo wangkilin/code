@@ -247,9 +247,10 @@ class books extends SinhoBaseController
                     // 去空格， 替换全角空格
                     $dataLine[$_key] = trim(str_replace(' ', ' ', $_value));
                 }
+                error_log(print_r($dataLine, true) . "\r\n", 3, '/tmp/debug.log');
                 // 总字数为0， 权重为0 ， 不合法数据
                 if (is_null($dataLine[$total_chars_key ]) || is_null($dataLine[$weight_key]) ||    // 权重为空
-                     ($dataLine[$total_chars_key ] ==='' && $dataLine[$weight_key] === '')  ||
+                     //($dataLine[$total_chars_key ] ==='' && $dataLine[$weight_key] === '')  ||
                      ($dataLine[$serial_key]==='' && $dataLine[$book_name_key]==='' && $dataLine[$proofreading_times_key]==='' ) ||  // 系列，书名，校次均为空
                      ($dataLine[$serial_key]==='系列' && $dataLine[$book_name_key]==='书名' && $dataLine[$proofreading_times_key]==='校次')
                 ) {
