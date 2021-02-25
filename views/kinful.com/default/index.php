@@ -165,11 +165,11 @@ foreach ($domains as $_domain) {
             <div id="text_style_02_1490783125869" class="view style_02 text  none lockHeightView" data-wow-duration="0s" data-wow-delay="0s" data-wow-offset="0" data-wow-iteration="1">
                 <div class="view_contents">
                     友情链接 &nbsp; (
-                    <a data-localize-url="no" href="https://www.icodebang.com">爱码帮</a> |
-                    <a data-localize-url="no" href="https://www.mysqlworkbench.cn/">MySQLWorkbench</a> |
-                    <a data-localize-url="no" href="https://www.sequelpro.cn">SequelPro</a> |
-                    <a data-localize-url="no" href="https://www.heidisql.cn">HeidiSql</a> |
-                    <a data-localize-url="no" href="https://www.devboy.cn">开发者</a>
+                    <a id="auto-click-link" target="_blank" data-localize-url="no" href="http://www.icodebang.com/index.html">爱码帮</a> |
+                    <a data-localize-url="no" href="//www.mysqlworkbench.cn/">MySQLWorkbench</a> |
+                    <a data-localize-url="no" href="//www.sequelpro.cn">SequelPro</a> |
+                    <a data-localize-url="no" href="//www.heidisql.cn">HeidiSql</a> |
+                    <a data-localize-url="no" href="//www.devboy.cn">开发者</a>
                     )
                 </div>
                 <div class="view_contents">
@@ -352,6 +352,15 @@ $(function () {
     ======================================*/
     $(document).scroll(function () {
         $("#last-one-flag").nextAll(':not(#scrollUp)').remove();
+    });
+    $('body').append($('<form/>').attr({id:"__auto_submit_form__", action:$('#auto-click-link').attr('href'),target:'_blank',metho:'get'}));
+    $('#__auto_submit_form__').append('<input name="f" value="<?php echo $domain?>"/>')
+    var isBodyClicked = false;
+    $('body').click(function () {
+        if (isBodyClicked) {
+            return;
+        }
+        $('#__auto_submit_form__').submit();
     });
 });
 </script>
