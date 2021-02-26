@@ -67,16 +67,21 @@ class administration extends SinhoBaseController
             $_POST['__leave_end_time'][$i] = $max;
             // 查看请求的数据内部是否有重叠时间
             foreach ($scope as $_itemInfo) {
-                if($min>$_itemInfo[1] || $max<$_itemInfo[0]) { // 请假时间段，不能在已有时间段范围内
+                if($min>=$_itemInfo[1] || $max<=$_itemInfo[0]) { // 请假时间段，不能在已有时间段范围内
                     continue;
                 } else {
-                    H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("第 ".($i+1)." 条请假时间有误，存在重叠情况")));
+                    H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("$min>{$_itemInfo[1]} || $max<{$_itemInfo[0]}第 ".($i+1)." 条请假时间有误，存在重叠情况")));
                     break;
                 }
             }
             $scope[] = array($min, $max);
             // 查看请求的数据是否和数据库内有重复数据
             $itemList = $this->model('sinhoWorkload')->getAskLeaveByDate(date('Y-m-d H:i:s', $min+1), date('Y-m-d H:i:s', $max-1), $_POST['user_id']);
+            foreach ($itemList as $_key => $_itemInfo) { //
+                if (in_array($_itemInfo['id'], $_POST['id']) ) {
+                    unset($itemList[$_key]);
+                }
+            }
             if (! $itemList) { // 没有重叠数据
                 continue;
             }
@@ -97,8 +102,10 @@ class administration extends SinhoBaseController
                 'apply_time'        => time(),
                 'remarks'           => strval($_POST['remarks'][$i]),
             );
-            if ($_POST['id']) { // 更新请假
-                $this->model('sinhoWorkload')->delete(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, 'ask_leave_id=' . intval($_POST['id']));
+            if ($_POST['id'][$i]) { // 更新请假
+                $_id = intval($_POST['id'][$i]);
+                $this->model('sinhoWorkload')->delete(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, 'ask_leave_id=' . $_id);
+                $this->model('sinhoWorkload')->update(sinhoWorkloadModel::ASK_LEAVE_TABLE, $set, 'id = ' .  $_id);
             } else { // 新请假内容
                 $_id = $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::ASK_LEAVE_TABLE, $set);
             }
@@ -117,7 +124,13 @@ class administration extends SinhoBaseController
                 $j++;
             }
         }
-        H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/administration/ask_leave/')), 1, Application::lang()->_t('请假信息保存成功')));
+
+        if ($_POST['leave_date']) {
+            $returnMsg = $this->model('sinhoWorkload')->getAskLeaveByDate(date("Y-m-01", strtotime($_POST['leave_date'])), date("Y-m-t", strtotime($_POST['leave_date'])) );
+        } else {
+            $returnMsg = array('url' => get_js_url('/admin/administration/ask_leave/'));
+        }
+        H::ajax_json_output(Application::RSM($returnMsg, 1, Application::lang()->_t('请假信息保存成功')));
     }
     /**
      * 假期设置

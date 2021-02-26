@@ -134,7 +134,7 @@ $(function () {
     });
 
     /**
-     * 设置书稿日期
+     * 点击单元格， 设置考勤
      */
     $('body').on('click', '#js-sinho-leave-table > tbody > tr > td:not(.weekend)', function() {
         var userId    = $(this).parent().data('user-id');
@@ -195,6 +195,8 @@ $(function () {
                         if (response.errno==-1) {
                             $('.js-ajax-feedback').text(response.err).addClass('fade in bg-warning text-danger');
                         } else {
+                            $('#js-sinho-leave-table tbody tr').find('td:not(:first)').html('');
+                            loadLeaveDataIntoTable(response.rsm);
                             $('.icb-alert-box').modal('hide');
                         }
                     };
