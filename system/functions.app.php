@@ -440,6 +440,9 @@ function curlRequest($url, $method, $headers = null, $body = null)
             curl_setopt($ch, CURLOPT_INFILE, $body);
             curl_setopt($ch, CURLOPT_INFILESIZE, $length);
         } else {
+            if (is_array($body)) {
+                $body = http_build_query($body);
+            }
             $length = @strlen($body);
             array_push($_headers, "Content-Length: {$length}");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $body);

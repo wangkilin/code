@@ -20,6 +20,14 @@ class sinhoWorkloadModel extends Model
      * 工作量表
      */
     const WORKLOAD_TABLE = 'sinho_employee_workload';
+    /**
+     * 请假表
+     */
+    const ASK_LEAVE_TABLE = 'users_ask_leave';
+    /**
+     * 请假日期跨度表
+     */
+    const ASK_LEAVE_DATE_TABLE = 'users_ask_leave_date';
 
     // /**
     //  * 新禾各种权限常量
@@ -607,6 +615,34 @@ class sinhoWorkloadModel extends Model
         $keys = array_column($list, 'book_id');
 
         return array_combine($keys, $list);
+    }
+
+    /**
+     * 根据日期获取请假数据
+     * @param date $startDate 开始日期YYYY-mm-dd
+     * @param date $endDate   结束日期YYYY-mm-dd
+     * @param array $userIds  用户id列表。 将根据用户ID列表获取数据
+     *
+     * @return array
+     */
+    public function getAskLeaveByDate($startDate, $endDate, $userIds=array())
+    {
+        // 转换时间戳
+        $startDate = strpos($startDate, ' ')>0 ? $startDate : ($startDate . ' 00:00:00'); // 没有小时数据， 补充对应小时
+        $endDate   = strpos($endDate, ' ')>0 ? $endDate : ($endDate . ' 23:59:59'); // 没有小时数据， 补充对应小时
+        $startTime = strtotime($startDate);
+        $endTime   = strtotime($endDate);
+        // 时间范围限制
+        $where = array('leave_start_time <=' . $endTime . ' AND leave_end_time >=' .$startTime );
+        if ($userIds) {
+            $userIds = is_array($userIds) ? $userIds : array($userIds);
+            $where[] = 'user_id IN (' . join(',', $userIds) . ')';
+        }
+
+        $itemList = $this->model('sinhoWorkload')
+                         ->fetch_all(sinhoWorkloadModel::ASK_LEAVE_TABLE, join(' AND ', $where) );
+
+        return $itemList;
     }
 
 
