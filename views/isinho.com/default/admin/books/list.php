@@ -152,7 +152,7 @@ $(function(){
     $('#deleteBatchBtn').click(function () {
         if($('.icheckbox_square-blue.checked').length){
     	    ICB.domEvents.deleteShowConfirmModal(
-            	   _t('确认删除？'),
+            	   _t('确认删除？ 书稿工作量也会一起删除。 请通知责编！'),
             	   function(){
         	           $('#action').val('remove');
         	           ICB.ajax.postForm($('#batchs_form'));

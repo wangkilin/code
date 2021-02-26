@@ -269,7 +269,7 @@ function compute_chars_ammount ()
 function deleteItem(id)
 {
     ICB.domEvents.deleteShowConfirmModal(
-  	   _t('确认删除书稿？'),
+  	   _t('确认删除书稿？书稿工作量也会一起删除。 请通知责编！'),
   	   function(){
       	   var url = G_BASE_URL + '/admin/ajax/books/remove/',
       	       params = {'ids[]':id, 'action':'remove', '_post_type':'ajax'};
