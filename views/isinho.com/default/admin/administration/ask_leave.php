@@ -14,6 +14,23 @@
 
         <div class="mod-body tab-content padding5px">
             <div class="tab-pane active" id="index">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                         <td>图标说明：</td>
+                         <td><i class="icon icon-sick-leave"></i>病假</td>
+                         <td><i class="icon icon-annual-leave"></i>年假</td>
+                         <td><i class="icon icon-wedding-leave"></i>婚假</td>
+                         <td><i class="icon icon-maternity-leave"></i>产假</td>
+                         <td><i class="icon icon-period-leave"></i>生理假</td>
+                         <td><i class="icon icon-funeral-leave"></i>丧假</td>
+                         <td><i class="icon icon-private-leave"></i>事假</td>
+                         <td><i class="icon icon-leave"></i>旷工</td>
+                        </tr>
+                    </table>
+                </div>
+                <br/>
                 <div class="row">
                     <div class="col-sm-2"><a href="/admin/administration/ask_leave/year_month-<?php echo date('Ym', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>">上一月(<?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>)</a></div>
                     <div class="col-sm-8"></div>
@@ -86,15 +103,29 @@ function loadLeaveDataIntoTable (leaveList) {
             }
             tmpTdId = '#td_' + userId + '_' + tmpDate.getDate();
             switch(leaveList[i].leave_type) {
-                case 2:
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-bulb"/>');
+                case 2: // 病假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-sick-leave"/>');
                     break;
-                case 3:
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-log"/>');
+                case 3: // 年假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-annual-leave"/>');
                     break;
-                case 1:
+                case 4: // 婚假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-wedding-leave"/>');
+                    break;
+                case 5: // 产假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-maternity-leave"/>');
+                    break;
+                case 6: // 生理假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-period-leave"/>');
+                    break;
+                case 7: // 丧假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-funeral-leave"/>');
+                    break;
+                case 1: // 事假
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-private-leave"/>');
+                    break;
                 default:
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-report"/>');
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-leave"/>');
                     break;
             }
             tmpStartTime += 24 * 60 * 60;
