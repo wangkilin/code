@@ -10,6 +10,7 @@ LOCAL_STORE_DIR=/tmp         # 本地保存地址
 DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload"  #要备份的表名列表
 
 NOW_DATE=`date "+%Y-%m-%d"`                     # 当前日期，用于生成数据库备份文件名称
+NOW_HOUR=`date "+%H"`
 if [[ "$OSTYPE" =~ "linux" ]]; then
     ONE_WEEK_AGO_DATE=`date -d "-7day"  "+%Y-%m-%d"`      # 7天前日期， 用于生成数据库备份文件名， 执行删除文件操作， 释放空间
 else
