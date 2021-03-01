@@ -9,13 +9,23 @@ DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload"  #要备份�
 DIR_STORE=/tmp
 
 NOW_DATE=`date "+%Y-%m-%d"`                     # 当前日期，用于生成数据库备份文件名称
+NOW_HOUR=`date "+%H"`
+AM_PM=""
 CWD=`pwd`
+if [[ $NOW_HOUR -ge 12 ]]; then
+    AM_PM="PM"
+else
+    AM_PM="AM"
+fi
 
 if [[ "$OSTYPE" =~ "linux" ]]; then
     ONE_WEEK_AGO_DATE=`date -d "-7day"  "+%Y-%m-%d"`      # 7天前日期， 用于生成数据库备份文件名， 执行删除文件操作， 释放空间
 else
     ONE_WEEK_AGO_DATE=`date -v-7d "+%Y-%m-%d"`      # 7天前日期， 用于生成数据库备份文件名， 执行删除文件操作， 释放空间
 fi
+
+NOW_DATE="${NOW_DATE}_${AM_PM}"
+ONE_WEEK_AGO_DATE="${ONE_WEEK_AGO_DATE}_${AM_PM}"
 
 if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份
