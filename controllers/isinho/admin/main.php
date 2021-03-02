@@ -295,6 +295,7 @@ class main extends SinhoBaseController
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/verify_list', 'sinho_admin_menu')  ) );
 
 
+        View::import_js('js/functions.js');
         View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
         View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
         View::import_js('js/icb_template_isinho.com.js');

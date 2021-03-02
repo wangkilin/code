@@ -26,7 +26,7 @@
                     <form id="workload_verify_form" action="admin/ajax/workload/confirm/" method="post">
                         <input type="hidden" id="action" name="action" value="" />
 
-                        <table class="table table-striped px10 no-padding no-margin workload-list">
+                        <table class="table table-striped px10 no-padding no-margin workload-list" id="workload_list_for_verify">
                             <thead>
                                 <tr>
                                     <th class="text-left"><?php _e('日期'); ?></th>
@@ -71,24 +71,24 @@
                                             <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                             <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                             <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
-                                            <td><?php echo $itemInfo['category']; ?></td>
-                                            <td><?php echo $itemInfo['working_times']; ?></td>
-                                            <td><?php echo $itemInfo['content_table_pages']; ?></td>
-                                            <td><?php echo $itemInfo['text_pages']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['text_table_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['answer_pages']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['answer_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['test_pages']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['test_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['test_answer_pages']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['test_answer_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['exercise_pages']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['exercise_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['function_book']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['function_book_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['function_answer']; ?></td>
-                                            <td class="red-right-border"><?php echo $itemInfo['function_answer_chars_per_page']; ?></td>
-                                            <td><?php echo $itemInfo['weight']; ?></td>
+                                            <td data-td-name="category" ><?php echo $itemInfo['category']; ?></td>
+                                            <td data-td-name="working_times" ><?php echo $itemInfo['working_times']; ?></td>
+                                            <td data-td-name="content_table_pages" ><?php echo $itemInfo['content_table_pages']; ?></td>
+                                            <td data-td-name="text_pages" ><?php echo $itemInfo['text_pages']; ?></td>
+                                            <td data-td-name="text_table_chars_per_page"  class="red-right-border"><?php echo $itemInfo['text_table_chars_per_page']; ?></td>
+                                            <td data-td-name="answer_pages" ><?php echo $itemInfo['answer_pages']; ?></td>
+                                            <td data-td-name="answer_chars_per_page"  class="red-right-border"><?php echo $itemInfo['answer_chars_per_page']; ?></td>
+                                            <td data-td-name="test_pages" ><?php echo $itemInfo['test_pages']; ?></td>
+                                            <td data-td-name="test_chars_per_page"  class="red-right-border"><?php echo $itemInfo['test_chars_per_page']; ?></td>
+                                            <td data-td-name="test_answer_pages" ><?php echo $itemInfo['test_answer_pages']; ?></td>
+                                            <td data-td-name="test_answer_chars_per_page"  class="red-right-border"><?php echo $itemInfo['test_answer_chars_per_page']; ?></td>
+                                            <td data-td-name="exercise_pages" ><?php echo $itemInfo['exercise_pages']; ?></td>
+                                            <td data-td-name="exercise_chars_per_page"  class="red-right-border"><?php echo $itemInfo['exercise_chars_per_page']; ?></td>
+                                            <td data-td-name="function_book" ><?php echo $itemInfo['function_book']; ?></td>
+                                            <td data-td-name="function_book_chars_per_page"  class="red-right-border"><?php echo $itemInfo['function_book_chars_per_page']; ?></td>
+                                            <td data-td-name="function_answer"><?php echo $itemInfo['function_answer']; ?></td>
+                                            <td data-td-name="function_answer_chars_per_page"  class="red-right-border"><?php echo $itemInfo['function_answer_chars_per_page']; ?></td>
+                                            <td data-td-name="weight" ><?php echo $itemInfo['weight']; ?></td>
                                             <td><?php echo $itemInfo['total_chars']; ?></td>
                                             <td>&nbsp;</td>
                                             <td><?php echo $itemInfo['remarks']; ?></td>
@@ -152,6 +152,8 @@
                 </div>
                 <?php if ($this->itemsList) { ?>
                     <div class="mod-table-foot text-center">
+                        <a class="btn btn-large btn-danger" onclick="highlight_issue();"><?php _e('疑义标红'); ?></a>
+                        &nbsp;
                         <a class="btn btn-large btn-primary" onclick="confirm_workload();"><?php _e('确认核算'); ?></a>
                         &nbsp;
                         <a class="btn btn-large btn-warning" onclick="send_warning();"><?php _e('弹回错误'); ?></a>
@@ -227,6 +229,72 @@
 </div>
 
 <script type="text/javascript">
+    /**
+     * 自动计算书稿， 将疑义部分自动标红
+     */
+    function highlight_issue () {
+        // 获取所有待计算的行
+        var $lines = $('#workload_list_for_verify >tbody >tr');
+        var bookId, baseRef={}, workload={}, $tds, keyName;
+        // 将书稿行参数， 存放； 将工作量的参数，根据不同列计算存放；
+        for (var i=0; i<$lines.length; i++) {
+            bookId = $lines.eq(i).data('book-id');
+            $tds   = $lines.eq(i).find('td[data-td-name]');
+            isBook = $lines.eq(i).hasClass('book-line');
+            // 初始化书稿行的数据存放
+            if (undefined === baseRef[bookId]) {
+                baseRef[bookId] = {};
+            }
+            // 初始化工作量的数据存放
+            if (undefined === workload[bookId]) {
+                workload[bookId] = {};
+            }
+            // 每行中， 找到需要计算的单元格， 获取数据，处理后存放
+            for(var j=0; j<$tds.length; j++) {
+                keyName = $tds.eq(j).data('td-name');
+                if(isBook) { // 存放书稿行数据
+                    baseRef[bookId][keyName] = float($tds.eq(j).text(), 4);
+                } else if (undefined === workload[bookId][keyName]) {// 存放工作量数据
+                    if (keyName=='weight' || keyName.substr(-9)=='_per_page') { // 系数和每页字数， 需要每个单元格的数都存放。 后面判断每个单元格是否和基数相同
+                        workload[bookId][keyName] = {};
+                        workload[bookId][keyName][i] = float($tds.eq(j).text(), 4);
+                    } else {// 页码数
+                        workload[bookId][keyName] = float($tds.eq(j).text(), 4);
+                    }
+                } else {
+                    if (keyName=='weight' || keyName.substr(-9)=='_per_page') {// 系数和每页字数， 全都存储
+                        workload[bookId][keyName][i] = float($tds.eq(j).text(), 4);
+                    } else {// 会从页码数
+                        workload[bookId][keyName] += float($tds.eq(j).text(), 4);
+                    }
+                }
+            }
+        }
+        // 基于存放的书稿参数， 比较工作量对应的数据。 不相同的地方，标红
+        for (bookId in baseRef) {
+            for(keyName in baseRef[bookId]) {
+                if(baseRef[bookId][keyName] === workload[bookId][keyName]) {// 和基数相同，继续比较下一个
+                    continue;
+                }
+
+                if (keyName=='weight' || keyName.substr(-9)=='_per_page') {// 系数和每页字数，比较每个单元格的数
+                    for(i in workload[bookId][keyName]) {
+                        if (baseRef[bookId][keyName] != workload[bookId][keyName][i] && $lines.eq(i).hasClass('verifying-line')) {
+
+                            $lines.eq(i).find('td[data-td-name="'+keyName+'"]').addClass('sinho-red-background');
+                        }
+                    }
+                } else {// 页码数， 汇总求和的数比较， 不一样， 要把对应的单元格都标红
+                    $('tr.verifying-line[data-book-id="'+bookId+'"] td[data-td-name="'+keyName+'"]').addClass('sinho-red-background');
+                }
+                //for (i=0; i<$lines.length; i++) {
+
+                //}
+            }
+        }
+
+        console.info(workload);
+    }
     /**
      * 按时间查询工作量, 通过URL跳转方式，传递时间参数
      */
