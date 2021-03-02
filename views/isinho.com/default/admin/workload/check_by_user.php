@@ -118,7 +118,35 @@
                                 <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
                                 <td data-td-name="belong_month" class=""><a><?php echo $workloadInfo['belong_month']; ?></a></td>
                             </tr>
-                                <?php } ?>
+                                <?php }
+                                if ($this->totalCharsList) {
+                                ?>
+
+                            <tr class="active" >
+                                <td class="text-left">合计</td>
+                                <td class="no-word-break"></td>
+                                <td class="js-serial"></td>
+                                <td class="js-bookname"></td>
+                                <td class="js-proofreading-times"></td>
+                                <td data-td-name="category" class="js-allow-mark"></td>
+                                <td data-td-name="working_times" class="js-allow-mark"></td>
+                                <td data-td-name="content_table_pages" class="js-allow-mark"></td>
+                                <td data-td-name="text_pages" class="js-allow-mark"><a><?php echo $this->totalCharsList['text_pages']; ?></a></td>
+                                <td data-td-name="answer_pages" class="js-allow-mark"><a><?php echo $this->totalCharsList['answer_pages']; ?></a></td>
+                                <td data-td-name="test_pages" class="js-allow-mark"><a><?php echo $this->totalCharsList['test_pages']; ?></a></td>
+                                <td data-td-name="test_answer_pages" class="js-allow-mark"><a><?php echo $this->totalCharsList['test_answer_pages']; ?></a></td>
+                                <td data-td-name="exercise_pages" class="js-allow-mark"><a><?php echo $this->totalCharsList['exercise_pages']; ?></a></td>
+                                <td data-td-name="function_book" class="js-allow-mark"><a><?php echo $this->totalCharsList['function_book']; ?></a></td>
+                                <td data-td-name="function_answer" class="js-allow-mark"><a><?php echo $this->totalCharsList['function_answer']; ?></a></td>
+                                <td data-td-name="weight" class="js-allow-mark"></td>
+                                <td data-td-name="total_chars" class=""><a><?php echo $this->totalCharsList['total_chars']; ?></a></td>
+                                <td data-td-name="payable_amount" class=""><a><?php echo number_format(round($this->totalCharsList['total_chars']*2,2), 2); ?></a></td>
+                                <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"></td>
+                                <td data-td-name="belong_month" class=""><a></td>
+                            </tr>
+                                <?php
+                                }
+                                ?>
                             <?php } //end if ?>
                         </tbody>
                     </table>

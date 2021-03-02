@@ -161,18 +161,6 @@
 </div>
 <script type="text/javascript">
 $(function () {
-    // 月份输入框
-    $( ".js-monthpicker" ).datetimepicker({
-                format  : 'yyyy-mm',
-                language:  'zh-CN',
-                weekStart: 1, // 星期一 为一周开始
-                todayBtn:  1, // 显示今日按钮
-                autoclose: 1,
-                todayHighlight: 1,
-                startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
-                forceParse: 0,
-                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
-            });
 
     var echartOptions = {
         backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
@@ -450,6 +438,19 @@ $(function () {
     $('.icon-delete.icon-date-delete').click (function () {
         $(this).siblings('.js-date-input').val('');
     });
+
+    // 月份输入框
+    $( ".js-monthpicker" ).datetimepicker({
+                format  : 'yyyy-mm',
+                language:  'zh-CN',
+                weekStart: 1, // 星期一 为一周开始
+                todayBtn:  1, // 显示今日按钮
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
+                forceParse: 0,
+                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+            });
 
 });
 

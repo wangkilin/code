@@ -443,10 +443,13 @@ class sinhoWorkloadModel extends Model
      *
      * @return float
      */
-    public function getWorkloadStatByUserIds ($userIds = array(), $status = null, $belongMonth = null)
+    public function getWorkloadStatByUserIds ($userIds = array(), $status = null, $belongMonth = null, $groupBy='user_id')
     {
         if (isset($belongMonth) && ! is_array($belongMonth)) {
             $belongMonth = array($belongMonth);
+        }
+        if(isset($status) && ! is_array($status)) {
+            $status = array($status);
         }
         // ( (目录+正文)*目录正文字数+答案*答案字数...) * 系数
         $sql = 'SELECT
@@ -539,12 +542,16 @@ class sinhoWorkloadModel extends Model
             $whereList[] = 'user_id IN (' . join(',', $userIds) . ')';
         }
         if ($status) {
-            $whereList[] = 'status = ' . intval($status);
+            $whereList[] = 'status IN ( ' . join(',', $status) . ')';
         }
         if ($belongMonth) {
             if (isset($belongMonth['start']) || isset($belongMonth['end'])) {
                 if (isset($belongMonth['start'])) {
-                    $whereList[] = 'belong_month >= ' . intval($belongMonth['start']);
+                    if ($status && in_array(sinhoWorkloadModel::STATUS_VERIFYING, $status)) {
+                        $whereList[] = '(belong_month >= ' . intval($belongMonth['start'])  . ' OR belong_month IS NULL )';
+                    } else {
+                        $whereList[] = 'belong_month >= ' . intval($belongMonth['start']);
+                    }
                 }
 
                 if (isset($belongMonth['end'])) {
@@ -560,7 +567,7 @@ class sinhoWorkloadModel extends Model
             $where = join(' AND ', $whereList);
         }
 
-        $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, 'user_id');
+        $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, $groupBy);
         $keys = array_column($list, 'user_id');
 
         return array_combine($keys, $list);

@@ -335,21 +335,24 @@ class main extends SinhoBaseController
     protected function check_by_user (& $userList, & $bookList)
     {
         $this->per_page = 30;
-        $userIds = array();
+        $queryUserIds = array();
         $where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING;
         if ($_GET['id']) {
-            $userIds = explode(',', $_GET['id']);
-            foreach ($userIds as & $_id) {
+            $queryUserIds = explode(',', $_GET['id']);
+            foreach ($queryUserIds as & $_id) {
                 $_id = intval($_id);
             }
 
-            $where .= ' AND user_id IN ( ' . join(', ',  $userIds). ') ';
+            $where .= ' AND user_id IN ( ' . join(', ',  $queryUserIds). ') ';
         }
+        $belongMonth = array();
         if ($_GET['start_month']) {
             $where .= ' AND (belong_month >= ' . intval($_GET['start_month']) . ' OR belong_month IS NULL )';
+            $belongMonth['start'] = intval($_GET['start_month']);
         }
         if ($_GET['end_month']) {
             $where .= ' AND belong_month <= ' . intval($_GET['end_month']);
+            $belongMonth['end'] = intval($_GET['end_month']);
         }
 
         $allList = $this->model('sinhoWorkload')
@@ -375,7 +378,7 @@ class main extends SinhoBaseController
         // 获取用户信息列表,
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
 
-        View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $userIds ) );
+        View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
 
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
@@ -394,9 +397,23 @@ class main extends SinhoBaseController
             'per_page'   => $this->per_page
         ))->create_links());
 
+        $totalCharsList = array();
+        if ($allList && ($totalRows / $this->per_page) <= $_GET['page'] || ($totalRows / $this->per_page)<=1) {
+            $totalCharsList = $this->model('sinhoWorkload')
+                                    ->getWorkloadStatByUserIds (
+                                        $queryUserIds,
+                                        array(sinhoWorkloadModel::STATUS_VERIFIED,
+                                                sinhoWorkloadModel::STATUS_VERIFYING
+                                                ),
+                                        $belongMonth,
+                                        null  // 不按照user_id分组
+                                    );
+            //var_dump($totalCharsList);
+        }
         View::assign('itemsList', $allList);
         View::assign('workloadList', $allList);
         View::assign('totalRows', $totalRows);
+        View::assign('totalCharsList', array_pop($totalCharsList));
 
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
         View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
