@@ -6,10 +6,162 @@ define('CONF_PATH', ROOT_PATH . 'config' . DIRECTORY_SEPARATOR);
 
 
 isset($config) OR $config = array();
+
+// 金属json解析
+$config['stock_rank'] = array(
+    'header' => array(
+        'Accept'                => 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Encoding'       => 'gzip, deflate, br',
+        'Accept-Language'       => 'zh-CN,zh;q=0.9',
+        'Cache-Control'         => 'no-cache',
+        'Connection'            => 'keep-alive',
+        'Content-Type'          => 'application/x-www-form-urlencoded; charset=UTF-8',
+        #'Origin'                => 'http://guba.eastmoney.com',
+        'Pragma'                => 'no-cache',
+        #'Referer'               => 'http://guba.eastmoney.com/list,%s,f.html',
+        'Sec-Fetch-Dest'        => 'empty',
+        'Sec-Fetch-Mode'        => 'cors',
+        'Sec-Fetch-Site'        => 'same-site',
+        'User-Agent'            => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+    ),
+    #'url'    => 'http://guba.eastmoney.com/interface/GetData.aspx',
+    'param'  => array(
+        "param"  => "code=%s",
+        "path"   => "webarticlelist/api/guba/gubainfo",
+        "env"    => "2"
+    ),
+);
 // 金属解析
 $config['metal'] = array(
-    'url_prefix'    => 'https://hq.smm.cn',
-    'host'          => 'hq.smm.cn',
+    #'url_prefix'    => 'https://hq.smm.cn',
+    #'host'          => 'hq.smm.cn',
+);
+// 金属json解析
+$config['metal_json'] = array(
+    'header' => array(
+        'Accept'                => 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Encoding'       => 'gzip, deflate, br',
+        'Accept-Language'       => 'zh-CN,zh;q=0.9',
+        'Cache-Control'         => 'no-cache',
+        'Connection'            => 'keep-alive',
+        'Content-Type'          => 'application/x-www-form-urlencoded; charset=UTF-8',
+        #'Origin'                => 'https://www.ccmn.cn',
+        'Pragma'                => 'no-cache',
+        #'Referer'               => 'https://www.ccmn.cn',
+        'Sec-Fetch-Dest'        => 'empty',
+        'Sec-Fetch-Mode'        => 'cors',
+        'Sec-Fetch-Site'        => 'same-site',
+        'User-Agent'            => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
+    ),
+    #'url'    => 'https://mall.ccmn.cn/shop/quotaData/getQuotaData',
+    'list' => array (
+        array(
+            'name' => '铜',
+            'params' => array (
+                'colName'   => 'cu',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '铝',
+            'params' => array (
+                'colName'   => 'al',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '锌',
+            'params' => array (
+                'colName'   => 'zn',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '铅',
+            'params' => array (
+                'colName'   => 'pb',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '锡',
+            'params' => array (
+                'colName'   => 'sn',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '镍',
+            'params' => array (
+                'colName'   => 'ni',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '小金属',
+            'params' => array (
+                'colName'   => 'xjs',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '贵金属',
+            'params' => array (
+                'colName'   => 'gjs',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '稀土金属',
+            'params' => array (
+                'colName'   => 'xtjs',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '金属矿产',
+            'params' => array (
+                'colName'   => 'jskc',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '金属化合物',
+            'params' => array (
+                'colName'   => 'jshhw',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        array(
+            'name' => '废旧金属',
+            'params' => array (
+                'colName'   => 'fjjs',
+                'pageSize'  => 20,
+                'pageNo'    => 1
+            )
+        ),
+        // array(
+        //     'name' => '不锈钢',
+        //     'url'  => 'https://www.ccmn.cn/historyprice/getQuotationsList',
+        //     'params' => array (
+        //         'productSortName'   => '不锈钢',
+        //         'cityCode'          => 520200,
+        //         'pageSize'  => 20,
+        //         'pageNo'    => 1
+        //     )
+        // ),
+    ),
 );
 
 // 文章解析
@@ -967,5 +1119,10 @@ $config['lugutong'] = array(
     'lugutong_sz_url'       => 'https://sc.hkexnews.hk/TuniS/www.hkexnews.hk/sdw/search/mutualmarket_c.aspx?t=sz',
     'lugutong_sh_url'       => 'https://sc.hkexnews.hk/TuniS/www.hkexnews.hk/sdw/search/mutualmarket_c.aspx?t=sh',
 );
+
+$commonConfig = $config;
+$privateConfig = require_once(__DIR__ . '/parseConfig.inc.php');
+
+$config = array_merge_recursive($commonConfig, $privateConfig);
 
 return $config;
