@@ -177,7 +177,7 @@ class books extends SinhoBaseController
     }
 
     /**
-     *
+     * 导入书稿
      */
     public function import_action ()
     {
@@ -421,7 +421,7 @@ class books extends SinhoBaseController
 
 
     /**
-     * 批量删除数据
+     * 批量删除书稿数据. 删除书稿同时， 将对应的工作量信息也删除
      */
     public function remove_action()
     {
