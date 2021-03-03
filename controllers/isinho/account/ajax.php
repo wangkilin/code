@@ -53,7 +53,7 @@ class ajax extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('抱歉, 你的账号已经被禁止登录')));
         }
         // 设置cookie过期时间
-        $expire = 60 * 60 * 24;
+        $expire = 60 * 60 * 12;
         if ($_POST['net_auto_login']) {
             $expire = 60 * 60 * 24 * 360;
         }
