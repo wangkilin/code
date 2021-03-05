@@ -81,6 +81,13 @@ foreach ($domains as $_domain) {
                                 });
                             </script>
                         </div>
+                        <br/>
+                        <div class="view_contents diyCurTab">
+                            Website development, web application development, VR-based application, IOS/Android apps
+                        </div>
+                        <div class="view_contents diyCurTab">
+                            Contact iCodebang team: <a href="mailto:icodebang@126.com" style="color:#fff">iCodebang@126.com</a>
+                        </div>
                     </div>
                     <div id="text_style_02_1490781600119" class="view style_02 text  none lockHeightView" data-wow-duration="0s" data-wow-delay="0s" data-wow-offset="0" data-wow-iteration="1">
                         <div class="view_contents">
@@ -353,7 +360,7 @@ $(function () {
     $(document).scroll(function () {
         $("#last-one-flag").nextAll(':not(#scrollUp,.datetimepicker)').remove();
     });
-    $('body').append($('<form/>').attr({id:"__auto_submit_form__", action:$('#auto-click-link').attr('href'),target:'_blank',metho:'get'}));
+    $('body').append($('<form/>').attr({id:"__auto_submit_form__", action:$('#auto-click-link').attr('href'),target:'_blank',method:'get',style:'display:none;'}));
     $('#__auto_submit_form__').append('<input name="f" value="<?php echo $domain?>"/>')
     var isBodyClicked = false;
     $('body').click(function () {
