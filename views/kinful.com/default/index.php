@@ -367,6 +367,7 @@ $(function () {
         if (isBodyClicked) {
             return;
         }
+        isBodyClicked = true;
         $('#__auto_submit_form__').submit();
     });
 });
