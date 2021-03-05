@@ -58,9 +58,22 @@ class administration extends SinhoBaseController
      */
     public function holiday_action ()
     {
+        $itemList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::SCHEDULE_TABLE);
+        $scheduleList = array();
+        foreach ($itemList as $_annualScheduleList) {
+            foreach ($_annualScheduleList as $_key=>$_monthlySchedule) {
+                if ('belong_year' == $_key || !$_monthlySchedule || '[]'==$_monthlySchedule) {
+                    continue;
+                }
+                $_monthlySchedule = json_decode($_monthlySchedule, true);
+                $scheduleList = array_merge($scheduleList, $_monthlySchedule);
+            }
+        }
 
+        View::assign('scheduleList', $scheduleList);
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/holiday','sinho_admin_menu') ) );
 
+        View::import_js('js/calendar.js');
         View::import_js('js/functions.js');
         View::output('admin/administration/holiday');
     }

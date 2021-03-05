@@ -28,6 +28,10 @@ class sinhoWorkloadModel extends Model
      * 请假日期跨度表
      */
     const ASK_LEAVE_DATE_TABLE = 'users_ask_leave_date';
+    /**
+     * 作息时间安排表
+     */
+    const SCHEDULE_TABLE = 'sinho_schedule';
 
     // /**
     //  * 新禾各种权限常量

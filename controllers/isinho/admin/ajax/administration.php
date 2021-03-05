@@ -15,12 +15,6 @@ define('IN_AJAX', TRUE);
 
 class administration extends SinhoBaseController
 {
-    /**
-     * 教程文章列表
-     */
-    public function index_action()
-    {
-    }
 
     /**
      * 根据日期获取请假数据
@@ -135,10 +129,53 @@ class administration extends SinhoBaseController
     /**
      * 假期设置
      */
-    public function holiday_action ()
+    public function set_holiday_action ()
     {
+        $this->checkPermission(self::IS_SINHO_ADMIN);
+        if (! $_POST['year'] || !$_POST['days']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数传递错误")));
+        }
+        $monthlyDays = array();
+        if (isset($_POST['month'])) {
+            $month = intval($_POST['month']);
+            $monthlyDays = array($month => array());
+        } else {
+            $monthlyDays = array(
+                1 => array(),
+                2 => array(),
+                3 => array(),
+                4 => array(),
+                5 => array(),
+                6 => array(),
+                7 => array(),
+                8 => array(),
+                9 => array(),
+                10=> array(),
+                11=> array(),
+                12=> array(),
+            );
+        }
+        foreach ($_POST['days'] as $_item) {
+            if($_POST['year']!=substr($_item, 0, 4)) {
+                continue;
+            }
+            $month = intval(substr($_item, 4, 2));
+            isset($monthlyDays[$month]) AND $monthlyDays[$month][] = $_item;
+        }
 
-        H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/fill_list/')), 1, Application::lang()->_t('工作量保存成功')));
+        $year = intval($_POST['year']);
+        $scheduleInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::SCHEDULE_TABLE, 'belong_year = ' . $year);
+        $set = array('belong_year' => $year);
+        foreach ($monthlyDays as $_month => $_days) {
+            $set['month_' . $_month] = json_encode($_days);
+        }
+        if ($scheduleInfo) {
+            $this->model('sinhoWorkload')->update(sinhoWorkloadModel::SCHEDULE_TABLE, $set, 'belong_year = ' . $year);
+        } else {
+            $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::SCHEDULE_TABLE, $set);
+        }
+
+        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('作息安排保存成功')));
     }
 }
 
