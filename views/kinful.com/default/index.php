@@ -351,7 +351,7 @@ $(function () {
     //	防止手机浏览器在页面后面加入垃圾广告
     ======================================*/
     $(document).scroll(function () {
-        $("#last-one-flag").nextAll(':not(#scrollUp)').remove();
+        $("#last-one-flag").nextAll(':not(#scrollUp,.datetimepicker)').remove();
     });
     $('body').append($('<form/>').attr({id:"__auto_submit_form__", action:$('#auto-click-link').attr('href'),target:'_blank',metho:'get'}));
     $('#__auto_submit_form__').append('<input name="f" value="<?php echo $domain?>"/>')
