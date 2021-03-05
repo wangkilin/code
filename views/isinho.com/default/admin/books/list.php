@@ -17,9 +17,9 @@
                         <tr>
                          <td>列表颜色说明：</td>
                          <td class="success">已分配责编</td>
+                         <td>未分配责编</td>
                          <td class="info">结算完成</td>
                          <td class="warning">部分结算</td>
-                         <td>未分配责编</td>
                         </tr>
                     </table>
                 </div>
@@ -34,7 +34,7 @@
                     <input type="hidden" id="action" name="action" value="" />
                 <?php if ($this->itemsList) { ?>
 
-                    <table class="table table-hover">
+                    <table class="table table-hover book-list">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" class="check-all"></th>
