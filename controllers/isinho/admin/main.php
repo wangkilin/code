@@ -26,11 +26,28 @@ class main extends SinhoBaseController
         $dayAmount = date('t', strtotime("{$currentYearMonth}01")); // 获取当前记录月份中的天数
         $workingDaysAmount = 0;// 工作日天数
         // 获取系统设置的工作日和休假安排， 将用于计算当前记录月份的工作日天数
-        $workdayHolidays = Application::config()->get('system')->sites[$_SERVER['HTTP_HOST']]['workday_holiday'];
+        //$workdayHolidays = Application::config()->get('system')->sites[$_SERVER['HTTP_HOST']]['workday_holiday'];
 
         // 计算当月的工作日天数
         $nowMonth = date('n');
         $nowDay   = date('j');
+        $scheduleList = $this->model('sinhoWorkload')->fetch_one(sinhoWorkloadModel::SCHEDULE_TABLE, 'month_'.$nowMonth, 'belong_year = ' . $currentYear);
+        $workdayHolidays = array(
+            $currentYear => array (
+                'holiday' => array($nowMonth => array()),
+                'workday' => array($nowMonth => array())
+            )
+        );
+        // 将设置的作息时间， 归纳到 假日和工作日当中
+        if ($scheduleList) {
+            $scheduleList = json_decode($scheduleList);
+            foreach ($scheduleList as $_dateString) {
+                $weekIndex = date('N', strtotime($_dateString) );
+                $workdayOrHoliday = ($weekIndex==6 OR $weekIndex==7) ? 'workday' : 'holiday';
+                $workdayHolidays[$currentYear][$workdayOrHoliday][$nowMonth][] = date('j', strtotime($_dateString) );
+            }
+        }
+
         $nowPassedDays = 0;
         for($i=1; $i<=$dayAmount; $i++) {
             $_isWorkingDay = 0;
