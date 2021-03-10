@@ -999,8 +999,9 @@ class Model
      *
      * 面向对象数据库操作, 表名无需加表前缀, 数据也无需使用 $this->quote 进行过滤 ($where 条件除外)
      *
-     * @param    string
-     * @param    string
+     * @param    string $table 表名
+     * @param    string $where 查询条件
+     * @param    string $column 列名称。 支持 distinct
      * @return    int
      */
     public function count($table, $where = '', $column='*')

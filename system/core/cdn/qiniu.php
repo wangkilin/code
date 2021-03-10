@@ -98,7 +98,7 @@ class core_cdn_qiniu
         //return $uploadMgr->putFile($token, $qiniuPath, $localFilePath);
 
         list($ret, $err) = $uploadMgr->putFile($token, $qiniuPath, $localFilePath);
-        echo "\n====> putFile result: \n";
+        //echo "\n====> putFile result: \n";
         if ($err !== null) {
             /**
              * object(Qiniu\Http\Error)#35 (2) {

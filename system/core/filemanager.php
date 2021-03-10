@@ -44,7 +44,7 @@ class core_filemanager
 
     }
 
-    static public function getDirContentByPage ($dirPath, $startPage = 1, $number = 20)
+    static public function getDirContentByPage ($dirPath, $startPage = 1, $number = 20, $getType=null)
     {
         if ( ! is_dir($dirPath) ) {
             throw new Exception('Dir is not exist:' . $dirPath);
@@ -61,27 +61,34 @@ class core_filemanager
         $end   = $startPage * $number;
         $returnList = $fileList = $dirList = array();
         while (false !== ($filename=readdir($dirResourse)) ) {
-            if ('.'==$filename || '..'==$filename) {
+            if ('.'==$filename[0] || '..'==$filename || '.DS_Store'==$filename) {
                 continue;
             }
             $_tmpName = $dirPath . DIRECTORY_SEPARATOR . $filename;
+            $fileInfo = stat($_tmpName);
             if (is_file($_tmpName)) {
-                $fileList[] = $filename;
+                if($getType && $getType!='file') {
+                    continue;
+                }
+                $fileList[$filename] = array('name' => $filename,'type' => 'file', 'stat'=>$fileInfo);
             } else if (is_dir($_tmpName)) {
-                $dirList[] = $filename;
+                if($getType && $getType!='dir') {
+                    continue;
+                }
+                $dirList[$filename] = array('name' => $filename, 'type' => 'dir', 'stat'=>$fileInfo);
             }
             $total++;
         }
-        sort($fileList);
-        sort($dirList);
+        ksort($fileList);
+        ksort($dirList);
         $fileList = array_merge($dirList, $fileList);
         $_pos = 0;
-        foreach ($fileList as $_filename) {
+        foreach ($fileList as $_fileinfo) {
             if ($_pos >= $end) {
                 break;
             }
             if ($_pos >=$start) {
-                $returnList[] = $_filename;
+                $returnList[] = $_fileinfo;
             }
 
             $_pos++;
@@ -133,6 +140,8 @@ class core_filemanager
         }
         switch ($cdnName) {
             case 'qiniu':
+            case '七牛':
+            case '七牛云':
             default:
                 $className = 'core_cdn_qiniu';
                 break;
