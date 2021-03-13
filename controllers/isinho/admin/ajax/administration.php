@@ -177,6 +177,47 @@ class administration extends SinhoBaseController
 
         H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('作息安排保存成功')));
     }
+
+    /**
+     * 保存编辑信息
+     */
+    public function editor_edit_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_ADMIN);
+
+        if (! $_POST['group_id'] || !$_POST['id']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数传递错误")));
+        }
+
+        if (! ($userInfo = $this->model('account')->getUserById($_POST['id']) ) ) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数无效") ) );
+        }
+        if (! ($groupInfo = $this->model('account')->get_user_group_by_id($_POST['group_id']) ) ) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数无效") ) );
+        }
+
+        $this->model('account')->setAccountInfos(array('group_id'=>$_POST['group_id']), $_POST['id']);
+        if (! $_POST['more_subject']) {
+            $_POST['more_subject'] = array();
+        }
+        if ($this->model()->fetch_row('users_attribute', 'uid='.$userInfo['uid'] . ' AND attr_key ="sinho_more_subject"') ) {
+            $this->model()->update('users_attribute',
+                                   array('attr_value'=>json_encode($_POST['more_subject'])),
+                                   'uid='.$userInfo['uid'] . ' AND attr_key ="sinho_more_subject"'
+                            );
+        } else {
+            $this->model()->insert('users_attribute',
+                                    array(
+                                        'attr_value'            => json_encode($_POST['more_subject']),
+                                        'uid'                   => $userInfo['uid'],
+                                        'attr_key'              => "sinho_more_subject",
+                                        'remark'                => '设置的责编的副科。在稿子分配时，根据主副科优先选择对应的责编'
+                                    )
+            );
+        }
+
+        H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/administration/editor/')), 1, Application::lang()->_t('保存成功')));
+    }
 }
 
 /* EOF */

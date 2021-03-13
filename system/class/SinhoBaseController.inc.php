@@ -16,18 +16,35 @@ defined('iCodeBang_Com') OR die('Access denied!');
  */
 class SinhoBaseController extends BaseController
 {
+    const SUBJECT_LIST = array(
+        1 => "语文",
+        2 => "数学",
+        3 => "英语",
+        4 => "物理",
+        5 => "化学",
+        6 => "地理",
+        7 => "政治",
+        8 => "历史",
+        9 => "生物",
+    );
+    const SUBJECT_CATEGORIZE = array (
+        array(1,3,6,7,8), array(2,4,5,9)
+
+    );
 
     const PERMISSION_VERIFY_WORKLOAD    = 'sinho_verify_workload';
     const PERMISSION_FILL_WORKLOAD      = 'sinho_fill_workload';
     const PERMISSION_BOOKLIST           = 'sinho_modify_manuscript_param';
     const PERMISSION_CHECK_WORKLOAD     = 'sinho_check_workload';
     const PERMISSION_ADMINISTRATION     = 'sinho_administration';
+    const PERMISSION_SUBJECT            = 'sinho_subject';
     const SINHO_PERMISSION_LIST = array(
         self::PERMISSION_FILL_WORKLOAD,
         self::PERMISSION_BOOKLIST,
         self::PERMISSION_VERIFY_WORKLOAD,
         self::PERMISSION_CHECK_WORKLOAD,
         self::PERMISSION_ADMINISTRATION,
+        self::PERMISSION_SUBJECT,
     );
 
     // const PERMISSION_BOOKLIST        = SinhoBaseController::PERMISSION_MODIFY_MANUSCRIPT_PARAM;

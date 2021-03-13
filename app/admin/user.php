@@ -180,6 +180,36 @@ class user extends AdminController
             H::redirect_msg(Application::lang()->_t('用户组不存在'), '/admin/user/group_list/');
         }
 
+        $booleanParamList = array (
+            'default'   => array (
+                'is_administortar'  => Application::lang()->_t('系统管理员'),
+                'is_moderator'  => Application::lang()->_t('前台管理员'),
+                'publish_question'  => Application::lang()->_t('允许发布问题'),
+                'publish_article'  => Application::lang()->_t('允许发布文章'),
+                'publish_comment'  => Application::lang()->_t('允许发布评论'),
+                'publish_approval'  => Application::lang()->_t('发布内容需要审核'),
+                'edit_question'  => Application::lang()->_t('允许编辑所有问题'),
+                'edit_article'  => Application::lang()->_t('允许编辑所有文章'),
+                'edit_topic'  => Application::lang()->_t('允许编辑所有话题'),
+                'manage_topic'  => Application::lang()->_t('允许管理所有话题'),
+                'create_topic'  => Application::lang()->_t('允许创建话题'),
+                'redirect_question'  => Application::lang()->_t('允许使用问题重定向'),
+                'upload_attach'  => Application::lang()->_t('允许使用附件功能'),
+                'publish_url'  => Application::lang()->_t('允许发布站外链接'),
+                'human_valid'  => Application::lang()->_t('开启发文验证码限制'),
+                'edit_question_topic'  => Application::lang()->_t('允许编辑问题话题'),
+            ),
+            'sinho'     => array (
+                SinhoBaseController::PERMISSION_BOOKLIST  => Application::lang()->_t('允许管理稿件'),
+                SinhoBaseController::PERMISSION_FILL_WORKLOAD  => Application::lang()->_t('允许添加个人工作量'),
+                SinhoBaseController::PERMISSION_VERIFY_WORKLOAD  => Application::lang()->_t('允许核算工作量'),
+                SinhoBaseController::PERMISSION_CHECK_WORKLOAD  => Application::lang()->_t('允许查阅工作量'),
+                SinhoBaseController::PERMISSION_ADMINISTRATION  => Application::lang()->_t('允许管理行政&人事'),
+
+            ),
+        );
+
+        View::assign('booleanParamList', $booleanParamList);
         View::assign('group', $group);
         View::assign('group_pms', $group['permission']);
         View::assign('menu_list', $this->model('admin')->fetch_menu_list('user/group_list'));

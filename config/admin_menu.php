@@ -104,6 +104,11 @@ $config[] = array(
             'title' => _t('页面管理'),
             'url' => 'admin/page/'
         ),
+        array(
+            'id' => 'admin/cdn',
+            'title' => _t('CDN同步'),
+            'url' => 'admin/cdn/'
+        ),
 
 //         array(
 //             'id' => 'tag',

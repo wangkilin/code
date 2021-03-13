@@ -63,6 +63,13 @@ $config[] = array(
             'url'       => 'admin/administration/holiday/',
             'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
         ),
+        array(
+            'id'        => 'admin/administration/editor',
+            'title'     => _t('编辑设置'),
+            'cname'     => 'user',
+            'url'       => 'admin/administration/editor/',
+            'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
     )
 );
 
