@@ -224,7 +224,7 @@ $(function(){
                 $("#sinho_editor").multiselect({
         			nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
                     maxHeight       : 200,
-                    buttonWidth     : 400,
+                    buttonWidth     : 300,
                     allSelectedText : '<?php _e('已选择所有人');?>',
                     numberDisplayed : 7, // 选择框最多提示选择多少个人名
         		});
