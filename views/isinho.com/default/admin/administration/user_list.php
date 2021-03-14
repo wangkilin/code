@@ -27,8 +27,8 @@
                     <table class="table table-striped table-hover book-list">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" class="check-all"></th>
-                                <th class="text-left"><?php _e('名称'); ?></th>
+                                <th><!--<input type="checkbox" class="check-all">--></th>
+                                <th class="text-left"><?php _e('责编'); ?></th>
                                 <th><?php _e('属组'); ?></th>
                                 <th><?php _e('主科'); ?></th>
                                 <th><?php _e('副科'); ?></th>
@@ -38,7 +38,7 @@
                         <tbody>
                             <?php  foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr >
-                                <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['uid']; ?>"></td>
+                                <td><!--<input type="checkbox" name="ids[]" value="<?php echo $itemInfo['uid']; ?>">--></td>
                                 <td class="text-left">
 
                                     <a class="md-tip"  title="" data-toggle="tooltip"><?php echo $itemInfo['user_name']; ?></a>

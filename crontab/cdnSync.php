@@ -149,7 +149,7 @@ class CdnSync
                     if ($setLocal['modify_time']>$dbFileInfo['modify_time']) { // 检查文件是否有更新，没有更新将状态设置成上传过
                         $setCdn['status'] = 2;
                         unset($setCdn['upload_time']);
-                        $this->model->update('cdn_file_map', $setCdn, 'local_file_id = ' . $dbFileInfo['id'] .' AND cdn_bucket_id = ' . $localRootInfo['cdn_bucket_id']);
+                        $this->model->update('cdn_file_map', $setCdn, 'local_file_id = ' . $dbFileInfo['id'] .' AND cdn_bucket_id = ' . $localRootInfo[$dbRootId]['cdn_bucket_id']);
                     }
                 } else { // 没有对应文件信息， 添加新记录
 

@@ -15,7 +15,7 @@
 
         <div class="mod-body tab-content">
             <div class="tab-pane active" id="book">
-                <div class="table-responsive">
+                <div class="">
 
 					<form action="admin/ajax/administration/editor_edit/" method="post" id="item_form" onsubmit="return false;">
 						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
@@ -63,7 +63,6 @@
 
                 </div>
             </div>
-            <?php View::output('admin/books/search_inc.php');?>
         </div>
     </div>
 </div>
