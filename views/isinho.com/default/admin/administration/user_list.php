@@ -36,7 +36,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($this->itemsList AS $itemInfo) { ?>
+                            <?php  foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr >
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['uid']; ?>"></td>
                                 <td class="text-left">
@@ -44,8 +44,8 @@
                                     <a class="md-tip"  title="" data-toggle="tooltip"><?php echo $itemInfo['user_name']; ?></a>
                                 </td>
                                 <td><?php echo $this->groupList[$itemInfo['group_id']]['group_name']; ?></td>
-                                <td><?php echo SinhoBaseController::SUBJECT_LIST[$this->groupList[$itemInfo['group_id']]['permission']['sinho_subject']]; ?></td>
-                                <td><?php echo $this->groupList[$itemInfo['group_id']]['group_name']; ?></td>
+                                <td><?php echo SinhoBaseController::SUBJECT_LIST[$this->groupList[$itemInfo['group_id']]['permission']['sinho_subject']]['name']; ?></td>
+                                <td><?php if ($this->moreSubjects[$itemInfo['uid']]) echo join('、', $this->moreSubjects[$itemInfo['uid']]); else echo '-'; ?></td>
 
                                 <td>
                                   <a href="admin/administration/editor_edit/id-<?php echo $itemInfo['uid']; ?>.html" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>

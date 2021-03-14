@@ -17,15 +17,15 @@ defined('iCodeBang_Com') OR die('Access denied!');
 class SinhoBaseController extends BaseController
 {
     const SUBJECT_LIST = array(
-        1 => "语文",
-        2 => "数学",
-        3 => "英语",
-        4 => "物理",
-        5 => "化学",
-        6 => "地理",
-        7 => "政治",
-        8 => "历史",
-        9 => "生物",
+        1 => array('name'=>"语文", 'keyword'=>array('语文','7语','8语','9语','七语','八语','九语','语',)),
+        2 => array('name'=>"数学", 'keyword'=>array('数学','7数','8数','9数','七数','八数','九数','数',)),
+        3 => array('name'=>"英语", 'keyword'=>array('英语','7英','8英','9英','七英','八英','九英','英',)),
+        4 => array('name'=>"物理", 'keyword'=>array('物理','7物','8物','9物','七物','八物','九物','物',)),
+        5 => array('name'=>"化学", 'keyword'=>array('化学','7化','8化','9化','七化','八化','九化','化',)),
+        6 => array('name'=>"地理", 'keyword'=>array('地理','7地','8地','9地','七地','八地','九地','地',)),
+        7 => array('name'=>"政治", 'keyword'=>array('政治','7政','8政','9政','七政','八政','九政','政','7道','8道','9道','七道','八道','九道','道法')),
+        8 => array('name'=>"历史", 'keyword'=>array('历史','7历','8历','9历','七历','八历','九历','历',)),
+        9 => array('name'=>"生物", 'keyword'=>array('生物','7生','8生','9生','七生','八生','九生','生',)),
     );
     const SUBJECT_CATEGORIZE = array (
         array(1,3,6,7,8), array(2,4,5,9)

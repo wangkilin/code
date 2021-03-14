@@ -117,7 +117,7 @@
                                   <a href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/books/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
-                                  <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
+                                  <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-subject-code="<?php echo $itemInfo['subject_code'];?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -146,6 +146,7 @@
 
 <script>
 $(function(){
+
     /**
      * 点击批量删除按钮
      */
@@ -169,10 +170,35 @@ $(function(){
      */
     $('.jsAssign').click(function() {
         var bookId = $(this).data('book-id');
+        var subjectCode = '' + $(this).data('subject-code');
         var url = "admin/ajax/books/assigned/id"+"-"+bookId;
         var onshowCallback = function () {
             // 组装下拉列表需要的数据， 获取默认选择.
             $.each($('.modal-dialog .js_select_transform'), function () {
+                // 根据科目代码，将编辑按照科目代码顺序。 让相同组的编辑，显示在一块
+                var maxSubjectCode = <?php echo max(array_keys(SinhoBaseController::SUBJECT_LIST));?>;
+                var minSubjectCode = <?php echo min(array_keys(SinhoBaseController::SUBJECT_LIST));?>;
+                for (var i=minSubjectCode; i<=maxSubjectCode; i++) {
+                    $('#template-assign-options').prepend($('#template-assign-options option[data-main_subject="'+i+'"]'));
+                }
+                // 按照文理科排序
+                $('#template-assign-options').prepend($('#template-assign-options option[data-subject_category="1"]'));
+                $('#template-assign-options').prepend($('#template-assign-options option[data-subject_category="0"]'));
+                // 书稿能够识别出来科目，将具有对应科目的编辑，排在列表上面
+                if (subjectCode) {
+                    var $options = $('#template-assign-options option');
+                    var moreSubjects;
+                    // 先将具有副科能力的编辑， 排前面
+                    for(var i=0; i<$options.length; i++) {
+                        //console.info($options.eq(i).data('more_subject'),subjectCode,$options.eq(i).data('more_subject').indexOf(subjectCode));
+                        if ($options.eq(i).data('more_subject').indexOf(subjectCode)>-1) {
+                            //console.info($options.eq(i));
+                            $('#template-assign-options').prepend($options.eq(i));
+                        }
+                    }
+                    // 最后将主科编辑排在前面
+                    $('#template-assign-options').prepend($('#template-assign-options option[data-main_subject="'+subjectCode+'"]'));
+                }
                 $("#sinho_editor").html($('#template-assign-options').html());
                 $.ajax({
                     url:url,
@@ -194,6 +220,7 @@ $(function(){
                         }
                     }
                 });
+                // 复选框变形
                 $("#sinho_editor").multiselect({
         			nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
                     maxHeight       : 200,
@@ -202,7 +229,7 @@ $(function(){
                     numberDisplayed : 7, // 选择框最多提示选择多少个人名
         		});
             });
-
+            // 分配编辑
             $('#js-submit-assign').click(function() {
                 ICB.ajax.requestJson($(this).closest('form').attr('action'), $(this).closest('form').serialize());
             });

@@ -201,8 +201,8 @@
 							<div class="col-sm-2 col-xs-4">
                                 <select name="sinho_subject" class="form-control">
                                      <option>-- 选择学科 --</option>
-                                     <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectName) {?>
-                                        <option value="<?php echo $_subjectKey;?>" <?php if ( $_subjectKey == $this->group_pms['sinho_subject']) { ?> selected<?php } ?>><?php echo $_subjectName;?></option>
+                                     <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectInfo) {?>
+                                        <option value="<?php echo $_subjectKey;?>" <?php if ( $_subjectKey == $this->group_pms['sinho_subject']) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
                                      <?php }?>
                                 </select>
 							</div>

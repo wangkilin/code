@@ -129,6 +129,17 @@ class administration extends SinhoBaseController
         foreach ($groupList as & $_item) {
             $_item['permission'] = unserialize($_item['permission']);
         }
+        $moreSubjectList = $this->model()->fetch_all('users_attribute', 'attr_key ="sinho_more_subject"');
+        $userIds = array_column($moreSubjectList, 'uid');
+        $moreSubjectList = array_combine($userIds, $moreSubjectList);
+        foreach ($moreSubjectList as & $_item) {
+            $_item = json_decode($_item['attr_value']);
+            foreach ($_item as & $_subject) {
+                $_subject = SinhoBaseController::SUBJECT_LIST[$_subject]['name'];
+            }
+        }
+
+        View::assign('moreSubjects', $moreSubjectList);
         View::assign('itemsList', $userList);
         View::assign('groupList', $groupList);
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );

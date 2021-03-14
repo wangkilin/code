@@ -264,12 +264,57 @@ class books extends SinhoBaseController
         } else {
             $where = null;
         }
+        $keywordSubjectList = array();
+        $keywordSubjectList1 = array();
+        foreach (SinhoBaseController::SUBJECT_LIST as $_subjectCode => $_itemInfo) {
+            foreach ($_itemInfo['keyword'] as $_keyword) {
+                if (mb_strlen($_keyword)==1) {
+                    $keywordSubjectList1[$_keyword] = $_subjectCode;
+                } else {
+                    $keywordSubjectList[$_keyword] = $_subjectCode;
+                }
+            }
+        }
+        $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
+
         $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+        foreach ($itemList as & $_itemInfo) {
+            $_itemInfo['subject_code'] = '';
+            foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
+                if (strpos($_itemInfo['book_name'], $_keyword)!==false) {
+                    $_itemInfo['subject_code'] = $_subjectCode;
+                    break;
+                }
+            }
+        }
         $totalRows = $this->model('sinhoWorkload')->found_rows();
         $bookIds   = array_column($itemList, 'id');
         $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
         $booksWorkloadNotPayed = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, array(sinhoWorkloadModel::STATUS_RECORDING, sinhoWorkloadModel::STATUS_VERIFYING) );
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $groupList = $this->model('account')->get_user_group_list(0, 1);
+        foreach ($groupList as & $_item) {
+            $_item['permission'] = unserialize($_item['permission']);
+        }
+        $userMoreSubjects = $this->model()->fetch_all('users_attribute', 'attr_key = "sinho_more_subject"');
+        $userIds = array_column($userMoreSubjects, 'uid');
+        $userMoreSubjects = array_column($userMoreSubjects, 'attr_value');
+        $userMoreSubjects = array_combine($userIds, $userMoreSubjects);
+        foreach ($userList as & $_item) {
+            if (isset($userMoreSubjects[$_item['uid']])) {
+                $_item['more_subject'] = $userMoreSubjects[$_item['uid']];
+            } else {
+                $_item['more_subject'] = '[]';
+            }
+            $_item['main_subject'] = $groupList[$_item['group_id']]['permission']['sinho_subject'];
+            if (in_array($_item['main_subject'], SinhoBaseController::SUBJECT_CATEGORIZE[0]) ) {
+                $_item['subject_category'] = 0;
+            } else if (in_array($_item['main_subject'], SinhoBaseController::SUBJECT_CATEGORIZE[1]) ) {
+                $_item['subject_category'] = 1;
+            } else {
+                $_item['subject_category'] = '';
+            }
+        }
 
         $this->crumb(Application::lang()->_t('书稿列表'), 'admin/books/index/');
 
@@ -300,7 +345,20 @@ class books extends SinhoBaseController
         View::assign('booksWorkload', $booksWorkload);
         View::assign('booksWorkloadNotPayed', $booksWorkloadNotPayed);
 
-        View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
+        View::assign('itemOptions',
+                     buildSelectOptions(
+                         $userList,
+                         'user_name',
+                         'uid',
+                         null,
+                         array(
+                             'group_id'             => 'data-group_id',
+                             'more_subject'         => 'data-more_subject',
+                             'main_subject'         => 'data-main_subject',
+                             'subject_category'     => 'data-subject_category'
+                         )
+                    )
+                );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('totalRows', $totalRows);
         View::assign('amountPerPage', $this->per_page);

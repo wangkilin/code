@@ -669,7 +669,11 @@ function buildSelectOptions (array $dataList, $textKey, $valueKey, $defaultValue
 
         foreach ($_item as $_key=>$_value) {
             if (isset($bindAttributes[$_key])) {
-                $attributes .= ' ' . $bindAttributes[$_key] .'="' . $_value . '"';
+                if (strpos($_value, '"')!==false) {
+                    $attributes .= ' ' . $bindAttributes[$_key] ."='" . $_value . "'";
+                } else {
+                    $attributes .= ' ' . $bindAttributes[$_key] .'="' . $_value . '"';
+                }
             } else if ($_key==$textKey || $_key==$valueKey) {
                 continue;
             } else {

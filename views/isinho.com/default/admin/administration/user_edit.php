@@ -46,8 +46,8 @@
                                 </div>
                                 <div class="col-sm-4 icb-item-title text-left">
                                     <select id="more_subject" name="more_subject[]" class="form-control" multiple>
-                                        <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectName) {?>
-                                            <option value="<?php echo $_subjectKey;?>" <?php if ( in_array($_subjectKey, $this->moreSubjects) ) { ?> selected<?php } ?>><?php echo $_subjectName;?></option>
+                                        <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectInfo) {?>
+                                            <option value="<?php echo $_subjectKey;?>" <?php if ( in_array($_subjectKey, $this->moreSubjects) ) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
                                         <?php }?>
                                     </select>
                                 </div>
