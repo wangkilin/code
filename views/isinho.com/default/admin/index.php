@@ -29,10 +29,10 @@
                     <div id="workload_chart" class="echart_stat"></div>
                     <div class="form-group echart-date col-xs-offset-1">
                         <form action="admin/ajax/workload/statistic_monthly_chars/" method="post" onsubmit="return false">
-                            <label class="col-sm-2 col-xs-3 control-label nopadding">统计时间段:</label>
-                            <div class="col-sm-4 col-xs-5">
+                            <label class="col-sm-2 col-xs-2 control-label nopadding">统计时间:</label>
+                            <div class="col-sm-4 col-xs-8 nopadding">
                                 <div class="row">
-                                    <div class="col-sm-6 mod-double icon-date-container">
+                                    <div class="col-sm-6 col-xs-6 mod-double icon-date-container">
                                         <input type="text" name="start_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMinMonth.'01'));?>">
                                         <i class="icon icon-date"></i>
                                         <i class="icon icon-date-delete icon-delete"></i>
@@ -40,14 +40,14 @@
                                 <span class="mod-symbol col-xs-1 col-sm-1">
                                     -
                                 </span>
-                                    <div class="col-sm-6 mod-double icon-date-container">
+                                    <div class="col-sm-6 col-xs-6 mod-double icon-date-container">
                                         <input type="text" name="end_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMonth.'01'));?>">
                                         <i class="icon icon-date"></i>
                                         <i class="icon icon-date-delete icon-delete"></i>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-2 text-right">
+                            <div class="col-sm-2 col-xs-2  text-right">
                                 <a href="javascript:;" class="btn btn-primary btn-sm date-seach js-load-employee-workload">确认查询</a>
                             </div>
                         </form>
@@ -63,14 +63,14 @@
 
                 <div class="form-group echart-date mod-head">
                     <form action="admin/ajax/workload/statistic_total_chars/" method="post" onsubmit="return false">
-                        <div class="col-sm-3 nopadding">
+                        <div class="col-sm-3 col-xs-2 nopadding">
                         <h3>
-                        <span class="pull-left"><?php _e('工作量榜单'); ?></span>
+                        <span class="pull-left nopadding nomargin"><?php _e('工作榜单'); ?></span>
                         </h3>
                         </div>
-                        <div class="col-sm-7">
+                        <div class="col-sm-7 col-xs-8 nopadding">
                             <div class="row">
-                                <div class="col-sm-6 mod-double icon-date-container">
+                                <div class="col-sm-6 col-xs-6 mod-double icon-date-container">
                                     <input type="text" name="start_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMonth.'01'));?>">
                                     <i class="icon icon-date"></i>
                                     <i class="icon icon-date-delete icon-delete"></i>
@@ -78,15 +78,15 @@
                                <span class="mod-symbol col-xs-1 col-sm-1">
                                    -
                                </span>
-                                <div class="col-sm-6 mod-double icon-date-container">
+                                <div class="col-sm-6 col-xs-6 mod-double icon-date-container">
                                     <input type="text" name="end_month" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo date('Y-m', strtotime($this->belongMonth.'01'));?>">
                                     <i class="icon icon-date"></i>
                                     <i class="icon icon-date-delete icon-delete"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-1">
-                            <a href="javascript:;" class="btn btn-primary  btn-sm js-load-workload-top-list">确认查询</a>
+                        <div class="col-sm-2 col-xs-12 nopadding nomargin">
+                            <a href="javascript:;" class="btn btn-primary  btn-sm js-load-workload-top-list pull-right">确认查询</a>
                         </div>
                     </form>
                 </div>

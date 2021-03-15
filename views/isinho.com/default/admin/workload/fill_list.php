@@ -13,11 +13,11 @@
                     </li>
                     <li class="bg-warning sinho-stat-total-chars">
                         <a><?php
-                        echo _e('核算中工作量：');
+                        echo _e('核算中：');
                         echo isset($this->totalChars[$this->thisUserId]) ? $this->totalChars[$this->thisUserId] : 0;
                         echo _e('千字');
                         echo ' &nbsp; &nbsp; ';
-                        echo _e('核算金额：');
+                        echo _e(' 金额：');
                         echo isset($this->totalChars[$this->thisUserId]) ? round($this->totalChars[$this->thisUserId]*2,2) : 0;
                         ?></a>
                     </li>
