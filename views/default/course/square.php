@@ -605,7 +605,7 @@
                         <li class="col-sm-6 col-md-4 col-lg-3">
                             <a class="clearfix-item" href="/course/Kotlin/id-kotlin_tutorial__table_id-27.html" title="Kotlin 教程">
                                 <div class="course_img col-sm-3 col-md-3 col-lg-3">
-                                    <img src="//www.icodebang.cn/uploads/nav_menu/Kotlin.png" alt="Kotlin 教程">
+                                    <img src="//www.icodebang.cn/uploads/nav_menu/kotlin.png" alt="Kotlin 教程">
                                 </div>
                                 <div class="course_info col-sm-9 col-md-9 col-lg-9">
                                     <h4 class="table-title">Kotlin 教程</h4>
