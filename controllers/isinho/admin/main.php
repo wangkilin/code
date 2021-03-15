@@ -354,7 +354,8 @@ class main extends SinhoBaseController
     {
         $this->per_page = 30;
         $queryUserIds = array();
-        $where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING;
+        //$where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING;
+        $where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE ;
         if ($_GET['id']) {
             $queryUserIds = explode(',', $_GET['id']);
             foreach ($queryUserIds as & $_id) {
@@ -421,7 +422,8 @@ class main extends SinhoBaseController
                                     ->getWorkloadStatByUserIds (
                                         $queryUserIds,
                                         array(sinhoWorkloadModel::STATUS_VERIFIED,
-                                                sinhoWorkloadModel::STATUS_VERIFYING
+                                              sinhoWorkloadModel::STATUS_VERIFYING,
+                                              sinhoWorkloadModel::STATUS_RECORDING
                                                 ),
                                         $belongMonth,
                                         null  // 不按照user_id分组

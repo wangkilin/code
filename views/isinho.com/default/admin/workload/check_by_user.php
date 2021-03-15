@@ -10,6 +10,7 @@
                          <!-- <td class="success">工作量记录中，没有提交到核算</td> -->
                          <td class="info">工作量结算完成，绩效已支付</td>
                          <td class="warning">工作量正在核算，绩效正在核算</td>
+                         <td class="success">记录中的工作量，待提交核算</td>
                         </tr>
                     </table>
                 </div>
@@ -78,7 +79,7 @@
                             <?php if ($this->workloadList) { ?>
 
                                 <?php foreach ($this->workloadList AS $workloadInfo) { ?>
-                            <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line':' verifying-line'; ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
+                            <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line':($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
                                 <td class="text-left">
                                     <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>"/>
                                     <a class="md-tip" title="<?php _e('发稿日期');
