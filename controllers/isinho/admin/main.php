@@ -459,7 +459,7 @@ class main extends SinhoBaseController
             $bookIdList = $this->model('sinhoWorkload')
                                ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
                                         $this->per_page,
-                                        $this->per_page * intval($_GET['page'])-1,
+                                        $this->per_page * intval($_GET['page']-1),
                                         '`status`<>'.sinhoWorkloadModel::STATUS_DELETE.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING,
                                         null,
                                         '`status` desc, belong_month desc'
