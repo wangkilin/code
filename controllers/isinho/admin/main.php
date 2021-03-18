@@ -460,14 +460,16 @@ class main extends SinhoBaseController
                                ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
                                         $this->per_page,
                                         $this->per_page * intval($_GET['page']-1),
-                                        '`status`<>'.sinhoWorkloadModel::STATUS_DELETE.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING,
+                                        '`status`<>'.sinhoWorkloadModel::STATUS_DELETE
+                                          //.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING
+                                         ,
                                         null,
                                         '`status` desc, belong_month desc'
                                     );  // ($sql, $limit = null, $offset = null, $where = null, $group_by = null, $order_by = '');
             $bookIds = array_column($bookIdList, 'book_id');
             $totalRows = $this->model('sinhoWorkload')
                               ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
-                                      '`status`<>'.sinhoWorkloadModel::STATUS_DELETE.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING,
+                                      '`status`<>'.sinhoWorkloadModel::STATUS_DELETE,
                                       'DISTINCT  book_id'
                                 );
             //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
@@ -479,7 +481,8 @@ class main extends SinhoBaseController
                             ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE,
                                         'book_id IN ( ' . join(', ',  $bookIds). ') '
                                         . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
-                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING,
+                                        //. ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING
+                                        ,
                                     'book_id,category,working_times'
                                 );
         }
