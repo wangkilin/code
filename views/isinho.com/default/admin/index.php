@@ -319,6 +319,9 @@ $(function () {
                 $length = count($this->employeeWorkloadList);
                 $i = 1;
                 foreach ($this->employeeWorkloadList as $_userId=>$_stats) {
+                    if (! $_userId) {
+                        continue;
+                    }
                 ?>
                 {
                     name: '<?php echo $this->userList[$_userId]['user_name'];?>',

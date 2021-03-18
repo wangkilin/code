@@ -259,6 +259,9 @@ class workload extends SinhoBaseController
         if (isset($employeeWorkloadList[''])) {
             unset($employeeWorkloadList['']);
         }
+        if (isset($employeeWorkloadList[0])) {
+            unset($employeeWorkloadList[0]);
+        }
         $allTotalChars = array();
         foreach ($itemList as $_month=>$_statList) {
             foreach ($employeeWorkloadList as $_userId=>$_v) {
