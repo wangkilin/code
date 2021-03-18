@@ -314,7 +314,7 @@ class main extends SinhoBaseController
             $totalCharsList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds ($queryUserIds, null, array('start'=>$belongMonth,'end'=>$endBelongMonth), 'user_id,belong_month');
         }
         $this->assign('belongMonth', substr($belongMonth,0,4).'-'.sprintf('%02d', substr($belongMonth,4)) );
-        $this->assign('endBelongMonth', substr($belongMonth,0,4).'-'.sprintf('%02d', substr($endBelongMonth,4)) );
+        $this->assign('endBelongMonth', substr($endBelongMonth,0,4).'-'.sprintf('%02d', substr($endBelongMonth,4)) );
 
         View::assign('userList', $userList);
         View::assign('itemsList', $bookList);
