@@ -58,7 +58,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if ($this->itemsList) { ?>
+                                <?php if ($this->itemsList) {  $totalChars = 0; ?>
                                     <?php foreach ($this->itemsList as $itemInfo) { ?>
                                         <tr data-book-id="<?php echo $itemInfo['id']; ?>" class="book-line">
                                             <td class="text-left">
@@ -96,7 +96,7 @@
                                         </tr>
                                         <?php if (isset($this->workloadList[$itemInfo['id']])) { ?>
 
-                                            <?php foreach ($this->workloadList[$itemInfo['id']] as $workloadInfo) { ?>
+                                            <?php foreach ($this->workloadList[$itemInfo['id']] as $workloadInfo) { $totalChars += $workloadInfo['total_chars'] ;?>
                                                 <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php echo $workloadInfo['status'] == 1 ? ' verified-line' : ' verifying-line'; ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
                                                     <td class="text-left">
                                                         <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>" />
@@ -140,6 +140,14 @@
                                         <?php } //end if
                                         ?>
                                     <?php } ?>
+
+                                                <tr class="book-line">
+                                                    <td ><strong>合计</strong></td>
+                                                    <td colspan="22"></td>
+                                                    <td>&nbsp;<strong><?php echo $totalChars; ?></strong>&nbsp;</td>
+                                                    <td>&nbsp;<strong><?php echo round($totalChars * 2, 2); ?></strong>&nbsp;</td>
+                                                    <td ></td>
+                                                </tr>
                                 <?php } else { ?>
                                     <tr>
                                         <td colspan="26">没有待核算工作量数据</td>
