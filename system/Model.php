@@ -716,9 +716,12 @@ class Model
             $sql .= ' WHERE ' . $where;
         }
 
-        if ($group_by)
-        {
-            $sql .= " GROUP BY `" . $this->quote($group_by) . "`";
+        if ($group_by) {
+            $group_by = explode(',', $group_by);
+            foreach($group_by as & $_item) {
+                $_item = $this->quote($_item);
+            }
+            $sql .= " GROUP BY `" . join('`,`', $group_by) . "`";
         }
 
         if ($order_by) {

@@ -572,6 +572,8 @@ class sinhoWorkloadModel extends Model
         }
 
         $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, $groupBy);
+
+        return $list;
         $keys = array_column($list, 'user_id');
 
         return array_combine($keys, $list);

@@ -170,7 +170,28 @@
             </div>
             <div class="tab-pane <?php if ($_GET['belong_month']) echo 'active'; ?>" id="amount_stat">
 
-                <div class="">
+            <div class="">
+                    <div class="col-sm-5 text-right">
+                        <!-- <label class="line-height-25">责编:</label> -->
+                        <select id="sinho_editor" multiple><?php echo $this->itemOptions;?></select>
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        <label class="line-height-25">月份:</label>
+                    </div>
+                    <div class="col-sm-2 text-right icon-date-container">
+                        <input id="belongMonth" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="开始月份" value="<?php echo $this->belongMonth; ?>" readonly>
+                        <i class="icon icon-date"></i>
+                    </div>
+                    <span class="mod-symbol col-xs-1 col-sm-1">-</span>
+                    <div class="col-sm-2 text-right icon-date-container">
+                        <input id="endBelongMonth" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="结束月份" value="<?php echo $this->endBelongMonth; ?>" readonly>
+                        <i class="icon icon-date"></i>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <a href="javascript:query_workload();" class="btn btn-primary btn-sm date-seach">确认查询</a>
+                    </div>
+                </div>
+                <!-- <div class="">
                     <div class="col-sm-9 text-right">
                         <label class="line-height-25">选择查询月份:</label>
                     </div>
@@ -181,7 +202,7 @@
                     <div class="col-sm-1">
                         <a href="javascript:query_workload();" class="btn btn-primary btn-sm date-seach">确认查询</a>
                     </div>
-                </div>
+                </div> -->
                 <div class="table-responsive">
 
                     <table class="table table-striped no-padding no-margin table-bordered ">
@@ -203,16 +224,16 @@
                         </thead>
                         <tbody>
                             <?php if ($this->totalCharsList) { ?>
-                                <?php foreach ($this->totalCharsList as $userId => $workloadInfo) { ?>
+                                <?php foreach ($this->totalCharsList as $workloadInfo) { ?>
                                     <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $workloadInfo['id']; ?>" class="workload-line<?php
                                             //if ($workloadInfo['status']==sinhoWorkloadModel::STATUS_VERIFIED) echo ' verified-line';
                                             if ($workloadInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) echo ' verifying-line';
                                             //if ($workloadInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line';
                                         ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
-                                        <td class="no-word-break"><a href="admin/check_list/by-user__id-<?php echo $userId; ?>__start_month-<?php echo str_replace('-','',$this->belongMonth);?>__end_month-<?php echo str_replace('-','',$this->belongMonth);?>" class="md-tip" title="<?php _e('查看');
-                                            echo $this->userList[$userId]['user_name'];
+                                        <td class="no-word-break"><a href="admin/check_list/by-user__id-<?php echo $workloadInfo['user_id']; ?>__start_month-<?php echo str_replace('-','',$this->belongMonth);?>__end_month-<?php echo str_replace('-','',$this->belongMonth);?>" class="md-tip" title="<?php _e('查看');
+                                            echo $this->userList[$workloadInfo['user_id']]['user_name'];
                                             _e('的工作量');
-                                        ?>" data-toggle="tooltip"><?php echo $this->userList[$userId]['user_name']; ?></a></td>
+                                        ?>" data-toggle="tooltip"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></a></td>
                                         <td data-td-name="content_table_pages" class="js-allow-mark"><a><?php echo $workloadInfo['content_table_pages']; ?></a></td>
                                         <td data-td-name="text_pages" class="js-allow-mark"><a><?php echo $workloadInfo['text_pages']; ?></a></td>
                                         <td data-td-name="answer_pages" class="js-allow-mark"><a><?php echo $workloadInfo['answer_pages']; ?></a></td>
@@ -307,8 +328,18 @@
      * 按时间查询工作量, 通过URL跳转方式，传递时间参数
      */
     function query_workload() {
-        var url = G_BASE_URL + '/admin/verify_list/?belong_month=' + $('#belongMonth').val().replace('-', '');
+
+        var userIds = [];
+        var $selectUsers = $('#sinho_editor>option:selected');
+        for(var i = 0; i<$selectUsers.length; i++) {
+            userIds.push($selectUsers.eq(i).val());
+        }
+        var startMonth = $('#belongMonth').val().replace('-','');
+        var endMonth = $('#endBelongMonth').val().replace('-','');
+        var url = G_BASE_URL + '/admin/verify_list/user_id'+'-' + userIds.join(',') + '__'+'belong_month'+'-' + startMonth +'__'+'end_month'+'-'+endMonth;
         window.location.href = url;
+
+        return false;
     }
     /**
      * 确认工作量核算。
@@ -441,6 +472,7 @@
     }
 
     $(function() {
+
         // 月份输入框
         $(".js-monthpicker").datetimepicker({
             format: 'yyyy-mm',
@@ -452,6 +484,14 @@
             startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
             forceParse: 0,
             minView: 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+        });
+
+        $("#sinho_editor").multiselect({
+                        nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
+                        maxHeight       : 200,
+                        buttonWidth     : 400,
+                        allSelectedText : '<?php _e('已选择所有人');?>',
+                        numberDisplayed : 7, // 选择框最多提示选择多少个人名
         });
         /**
          * 双击单元格，将单元格设置成背景标识出错误

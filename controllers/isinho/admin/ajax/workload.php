@@ -265,11 +265,11 @@ class workload extends SinhoBaseController
                 $employeeWorkloadList[$_userId][$_month] = 0;
             }
 
-            foreach ($_statList as $_userId=>$_statInfo) {
-                if (!$_userId) {
+            foreach ($_statList as $_statInfo) {
+                if (!$_statInfo['user_id']) {
                     continue;
                 }
-                $employeeWorkloadList[$_userId][$_month] = $allTotalChars[] = $_statInfo['total_chars'];
+                $employeeWorkloadList[$_statInfo['user_id']][$_month] = $allTotalChars[] = $_statInfo['total_chars'];
             }
         }
 

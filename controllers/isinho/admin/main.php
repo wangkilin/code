@@ -88,6 +88,7 @@ class main extends SinhoBaseController
             if (! $personalWorkloadList) {
                 $personalWorkloadList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array($this->user_id), sinhoWorkloadModel::STATUS_RECORDING);
             }
+
             View::assign('currentWorkload', array_sum(array_column($personalWorkloadList, 'total_chars')));
             $startMonth = $belongMinMonth;
             $personalWorkloadList = array();
@@ -136,10 +137,10 @@ class main extends SinhoBaseController
                 }
 
                 foreach ($_statList as $_userId=>$_statInfo) {
-                    if (!$_userId) {
+                    if (!$_statInfo['user_id']) {
                         continue;
                     }
-                    $employeeWorkloadList[$_userId][$_month] = $allTotalChars[] = $_statInfo['total_chars'];
+                    $employeeWorkloadList[$_statInfo['user_id']][$_month] = $allTotalChars[] = $_statInfo['total_chars'];
                 }
             }
             // 各项全局统计信息
@@ -290,19 +291,30 @@ class main extends SinhoBaseController
         }
 
 
+        $queryUserIds = array();
+        if ($_GET['user_id']) {
+            $queryUserIds = explode(',', $_GET['user_id']);
+            foreach ($queryUserIds as & $_id) {
+                $_id = intval($_id);
+            }
+        }
         $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+
+        View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
 
-
+        $queryUserIds = empty($queryUserIds) ? $userIds : $queryUserIds;
         $belongMonth = $this->model('sinhoWorkload')->max(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month', 'belong_month >= ' . date('Ym', strtotime('-3month')));
+        $endBelongMonth = isset($_GET['end_month']) ? $_GET['end_month'] : $belongMonth;
         if (!$_GET['belong_month'] || $_GET['belong_month'] > $belongMonth || $_GET['belong_month']<200001) { // 获取待核算月份的数据
-            $totalCharsList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds ($userIds, null, $belongMonth);
+            $totalCharsList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds ($queryUserIds, null, array('start'=>$belongMonth,'end'=>$endBelongMonth), 'user_id,belong_month');
         } else {// 获取指定月份的数据
-            $totalCharsList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds ($userIds, null, $_GET['belong_month']);
             $belongMonth = $_GET['belong_month'];
+            $totalCharsList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds ($queryUserIds, null, array('start'=>$belongMonth,'end'=>$endBelongMonth), 'user_id,belong_month');
         }
         $this->assign('belongMonth', substr($belongMonth,0,4).'-'.sprintf('%02d', substr($belongMonth,4)) );
+        $this->assign('endBelongMonth', substr($belongMonth,0,4).'-'.sprintf('%02d', substr($endBelongMonth,4)) );
 
         View::assign('userList', $userList);
         View::assign('itemsList', $bookList);
@@ -313,9 +325,12 @@ class main extends SinhoBaseController
 
 
         View::import_js('js/functions.js');
+        View::import_js('js/icb_template_isinho.com.js');
+
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
         View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
         View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
-        View::import_js('js/icb_template_isinho.com.js');
         View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
 
         View::output('admin/workload/verify');
