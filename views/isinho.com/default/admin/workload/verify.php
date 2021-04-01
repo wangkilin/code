@@ -68,9 +68,9 @@
                                                                                                                                 echo $itemInfo['return_date']; ?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5); ?></a>
                                             </td>
                                             <td><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></td>
-                                            <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
-                                            <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
-                                            <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
+                                            <td class="js-serial"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['serial']; ?></a></td>
+                                            <td class="js-bookname"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['book_name']; ?></a></td>
+                                            <td class="js-proofreading-times"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['proofreading_times']; ?></a></td>
                                             <td data-td-name="category" ><?php echo $itemInfo['category']; ?></td>
                                             <td data-td-name="working_times" ><?php echo $itemInfo['working_times']; ?></td>
                                             <td data-td-name="content_table_pages" ><?php echo $itemInfo['content_table_pages']; ?></td>
