@@ -591,7 +591,7 @@
         });
 
 
-        $('.icon').click (function(event){
+        $('.theme-switch .icon').click (function(event){
             event.preventDefault();
             if( $ (this).hasClass('inOut')  ){
                 $('.theme-switch').stop().animate({right:'0px'},500 );
