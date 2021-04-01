@@ -179,7 +179,11 @@ class CdnSync
         $localFileList = $this->model->fetch_all('cdn_local_file', 'id IN ("' .join('","', $localFileIds) .'")');
         $localFileIds  = array_column($localFileList, 'id');
         $localFileList = array_combine($localFileIds, $localFileList);
+        $timesLimit = 30000;
         foreach ($list as $_item) {
+            if ($timesLimit++ > $timesLimit) {
+                break;
+            }
             $_filePath = WEB_ROOT_DIR . $localFileList[$_item['local_file_id']]['file_path'] . DS . $localFileList[$_item['local_file_id']]['file_name'];
             $_cdnName = $bucketList[$_item['cdn_bucket_id']]['cdn_name'];
             $_bucketName = $bucketList[$_item['cdn_bucket_id']]['bucket_name'];
@@ -217,15 +221,31 @@ defined('ROOT_PATH') OR define('ROOT_PATH', realpath(dirname(__DIR__)) . DIRECTO
 // 配置文件路径
 define('CONF_PATH', ROOT_PATH . 'config' . DIRECTORY_SEPARATOR);
 
+
 //sleep(rand(1,1000)); // 随机中断
 $cdnSyncModel = new CdnSync();
-$localDirList = $cdnSyncModel->getModel()->fetch_all('cdn_local_root');
-// 将文件载入上传队列
-foreach ($localDirList as $_item) {
-    $cdnSyncModel->loadFileIntoDb($_item['id'], WEB_ROOT_DIR . $_item['local_root_path'], WEB_ROOT_DIR);
+
+
+// 执行更新文章来源网址和作者内容
+if (isset($argv[1]) && $argv[1]=='upload') {
+    $cdnSyncModel->uploadFileToCdn();
+} else if (isset($argv[1]) && $argv[1]=='load') {
+
+    $localDirList = $cdnSyncModel->getModel()->fetch_all('cdn_local_root');
+    // 将文件载入上传队列
+    foreach ($localDirList as $_item) {
+        $cdnSyncModel->loadFileIntoDb($_item['id'], WEB_ROOT_DIR . $_item['local_root_path'], WEB_ROOT_DIR);
+    }
+} else {
+
+    $localDirList = $cdnSyncModel->getModel()->fetch_all('cdn_local_root');
+    // 将文件载入上传队列
+    foreach ($localDirList as $_item) {
+        $cdnSyncModel->loadFileIntoDb($_item['id'], WEB_ROOT_DIR . $_item['local_root_path'], WEB_ROOT_DIR);
+    }
+    // 将队列中的文件上传
+    $cdnSyncModel->uploadFileToCdn();
 }
-// 将队列中的文件上传
-$cdnSyncModel->uploadFileToCdn();
 //exit;
 
 $endTime = microtime(true);
