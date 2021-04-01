@@ -1,6 +1,16 @@
 <?php View::output('admin/global/header.php'); ?>
 <?php View::output('admin/global/nav_menu.php'); ?>
 
+<!-- Theme switcher -->
+<div class="theme-switch">
+    <div class="icon inOut"><i class="rotate icon-setting"></i></div>
+    <a class="btn btn-large btn-danger row" onclick="highlight_issue();"><?php _e('疑义标红'); ?></a>
+    <br/><br/>
+                        <a class="btn btn-large btn-primary row" onclick="confirm_workload();"><?php _e('确认核算'); ?></a>
+                        <br/><br/>
+                        <a class="btn btn-large btn-warning row" onclick="send_warning();"><?php _e('弹回错误'); ?></a>
+</div>
+
 <div class="icb-content-wrap">
     <div class="mod">
         <div class="mod-head">
@@ -579,6 +589,19 @@
             }
             //console.info(verifyRemark);
         });
+
+
+        $('.icon').click (function(event){
+            event.preventDefault();
+            if( $ (this).hasClass('inOut')  ){
+                $('.theme-switch').stop().animate({right:'0px'},500 );
+            } else{
+                $('.theme-switch').stop().animate({right:'-120px'},500 );
+            }
+            $(this).toggleClass('inOut');
+            return false;
+
+        }  );
     });
 
 
