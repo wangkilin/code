@@ -332,6 +332,7 @@ class main extends SinhoBaseController
         View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
         View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
         View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+        View::import_css('isinho.com/animate.min.css');
 
         View::output('admin/workload/verify');
     }
