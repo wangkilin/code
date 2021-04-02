@@ -39,6 +39,7 @@
                         <table class="table table-striped px10 no-padding no-margin workload-list" id="workload_list_for_verify">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th class="text-left"><?php _e('日期'); ?></th>
                                     <th><?php _e('责编'); ?></th>
                                     <th><?php _e('系列'); ?></th>
@@ -68,11 +69,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if ($this->itemsList) {  $totalChars = 0; ?>
-                                    <?php foreach ($this->itemsList as $itemInfo) { ?>
+                                <?php if ($this->itemsList) {  $totalChars = 0; $_index=0;?>
+                                    <?php foreach ($this->itemsList as $itemInfo) { $_index++; ?>
                                         <tr data-book-id="<?php echo $itemInfo['id']; ?>" class="book-line">
+                                            <td><?php echo $_index;?></td>
                                             <td class="text-left">
-
                                                 <a class="md-tip" title="<?php _e('发稿日期');
                                                                             echo $itemInfo['delivery_date']; ?> <?php _e('回稿日期');
                                                                                                                                 echo $itemInfo['return_date']; ?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5); ?></a>
@@ -104,10 +105,11 @@
                                             <td><?php echo $itemInfo['remarks']; ?></td>
                                             </td>
                                         </tr>
-                                        <?php if (isset($this->workloadList[$itemInfo['id']])) { ?>
+                                        <?php if (isset($this->workloadList[$itemInfo['id']])) { $_indexWorkload = 1; ?>
 
                                             <?php foreach ($this->workloadList[$itemInfo['id']] as $workloadInfo) { $totalChars += $workloadInfo['total_chars'] ;?>
                                                 <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php echo $workloadInfo['status'] == 1 ? ' verified-line' : ($workloadInfo['status'] == 3 ? ' recording-line':' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
+                                                    <td><?php echo $_index,'.',$_indexWorkload++;?></td>
                                                     <td class="text-left">
                                                         <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>" />
                                                         <a class="md-tip" title="<?php _e('发稿日期');
