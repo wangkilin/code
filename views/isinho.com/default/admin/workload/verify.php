@@ -107,7 +107,7 @@
                                         <?php if (isset($this->workloadList[$itemInfo['id']])) { ?>
 
                                             <?php foreach ($this->workloadList[$itemInfo['id']] as $workloadInfo) { $totalChars += $workloadInfo['total_chars'] ;?>
-                                                <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php echo $workloadInfo['status'] == 1 ? ' verified-line' : ' verifying-line'; ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
+                                                <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php echo $workloadInfo['status'] == 1 ? ' verified-line' : ($workloadInfo['status'] == 3 ? ' recording-line':' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
                                                     <td class="text-left">
                                                         <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>" />
                                                         <a class="md-tip" title="<?php _e('发稿日期');

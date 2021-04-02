@@ -275,7 +275,7 @@ class main extends SinhoBaseController
         // $allList = array_merge($toBeVerifiedList, $verifiedList);
         // 按照书稿，类别， 遍次排序。
         if ($bookIds) {
-            $allList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND (status = ' . sinhoWorkloadModel::STATUS_VERIFIED . ' OR status = ' . sinhoWorkloadModel::STATUS_VERIFYING . ')', 'book_id,category,working_times');
+            $allList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND (status != ' . sinhoWorkloadModel::STATUS_DELETE . ' )', 'book_id,category,working_times');
         }
 
         $workloadList = array();
