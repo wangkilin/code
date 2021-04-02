@@ -67,6 +67,7 @@ $('pre>code').each(function(index, element) {
 //console.info($('code.hljs').length);
 //$('pre>code, .content .codebody').each(function(i, block) { // 设置代码行号
 $('pre>code').each(function(i, block) { // 设置代码行号
+        $(this).removeAttr('class');// 移除原来的样式， 重新自动添加样式
         hljs.configure({useBR: $(this).find('br').length>0});
         hljs.highlightBlock(block);
         hljs.lineNumbersBlock(block, {singleLine:true});
