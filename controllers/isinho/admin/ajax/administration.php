@@ -200,20 +200,28 @@ class administration extends SinhoBaseController
         if (! $_POST['more_subject']) {
             $_POST['more_subject'] = array();
         }
-        if ($this->model()->fetch_row('users_attribute', 'uid='.$userInfo['uid'] . ' AND attr_key ="sinho_more_subject"') ) {
-            $this->model()->update('users_attribute',
-                                   array('attr_value'=>json_encode($_POST['more_subject'])),
-                                   'uid='.$userInfo['uid'] . ' AND attr_key ="sinho_more_subject"'
-                            );
-        } else {
-            $this->model()->insert('users_attribute',
-                                    array(
-                                        'attr_value'            => json_encode($_POST['more_subject']),
-                                        'uid'                   => $userInfo['uid'],
-                                        'attr_key'              => "sinho_more_subject",
-                                        'remark'                => '设置的责编的副科。在稿子分配时，根据主副科优先选择对应的责编'
-                                    )
-            );
+        foreach ($_POST['attributes'] as $_attrName => $_attrValue) {
+            $_methodName = '';
+            if (!is_numeric($_attrValue) &&  !is_string($_attrValue)) {
+                $_attrValue = json_encode($_attrValue);
+                $_methodName = 'json_decode';
+            }
+            if ($this->model()->fetch_row('users_attribute', 'uid='.$userInfo['uid'] . ' AND attr_key ="'.$_attrName.'"') ) {
+                $this->model()->update('users_attribute',
+                                    array('attr_value'=>$_attrValue, 'decode_method'=>$_methodName),
+                                    'uid='.$userInfo['uid'] . ' AND attr_key ="'.$_attrName.'"'
+                                );
+            } else {
+                $this->model()->insert('users_attribute',
+                                        array(
+                                            'attr_value'            => $_attrValue,
+                                            'uid'                   => $userInfo['uid'],
+                                            'attr_key'              => $_attrName,
+                                            'remark'                => $_POST['remark'][$_attrName],
+                                            'decode_method'         => $_methodName
+                                        )
+                );
+            }
         }
 
         H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/administration/editor/')), 1, Application::lang()->_t('保存成功')));

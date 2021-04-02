@@ -40,16 +40,39 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <!-- 是否组长 -->
+                                <div class="col-sm-2">
+                                    <label class="icb-label"><?php _e('是否组长'); ?>:</label>
+
+                                    <input type="hidden" name="remark[group_permission_is_team_leader]" value="是否为组长"/>
+                                </div>
+                                <div class="col-sm-4 icb-item-title">
+								  <div class="btn-group mod-btn col-sm-4 nopadding">
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" value="1" name="attributes[group_permission_is_team_leader]"<?php if ($this->userAttributes['group_permission_is_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+									</label>
+
+                                    </div>
+                                    <div class="btn-group mod-btn  col-sm-offset-4 col-sm-4 nopadding">
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" value="0" name="attributes[group_permission_is_team_leader]"<?php if (! $this->userAttributes['group_permission_is_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+									</label>
+								  </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <!-- 校次 -->
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('副科'); ?>:</label>
                                 </div>
                                 <div class="col-sm-4 icb-item-title text-left">
-                                    <select id="more_subject" name="more_subject[]" class="form-control" multiple>
+                                    <select id="more_subject" name="attributes[sinho_more_subject][]" class="form-control" multiple>
                                         <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectInfo) {?>
                                             <option value="<?php echo $_subjectKey;?>" <?php if ( in_array($_subjectKey, $this->moreSubjects) ) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
                                         <?php }?>
                                     </select>
+                                    <input type="hidden" name="remark[sinho_more_subject]" value="设置的责编的副科。在稿子分配时，根据主副科优先选择对应的责编"/>
                                 </div>
                             </div>
 

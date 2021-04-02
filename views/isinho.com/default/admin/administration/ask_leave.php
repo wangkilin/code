@@ -218,6 +218,7 @@ $(function () {
                     minView : 0, // 0:选择到分钟， 1：选择到小时， 2：选择到天
                     minuteStep:30,
                     initialDate : leaveDateDisplay,
+                    hoursDisabled : '0,1,2,3,4,5,6,7,18,19,20,21,22,23'
                 }) ;
 
                 $('#js-submit-form').click(function() {

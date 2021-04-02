@@ -30,6 +30,7 @@
                                 <th><!--<input type="checkbox" class="check-all">--></th>
                                 <th class="text-left"><?php _e('责编'); ?></th>
                                 <th><?php _e('属组'); ?></th>
+                                <th><?php _e('组长?'); ?></th>
                                 <th><?php _e('主科'); ?></th>
                                 <th><?php _e('副科'); ?></th>
                                 <th><?php _e('操作'); ?></th>
@@ -44,8 +45,9 @@
                                     <a class="md-tip"  title="" data-toggle="tooltip"><?php echo $itemInfo['user_name']; ?></a>
                                 </td>
                                 <td><?php echo $this->groupList[$itemInfo['group_id']]['group_name']; ?></td>
+                                <td><?php if($this->userAttributes[$itemInfo['uid']]['group_permission_is_team_leader']) echo '是'; else echo '-'; ?></td>
                                 <td><?php echo SinhoBaseController::SUBJECT_LIST[$this->groupList[$itemInfo['group_id']]['permission']['sinho_subject']]['name']; ?></td>
-                                <td><?php if ($this->moreSubjects[$itemInfo['uid']]) echo join('、', $this->moreSubjects[$itemInfo['uid']]); else echo '-'; ?></td>
+                                <td><?php if ($this->userAttributes[$itemInfo['uid']]['sinho_more_subject']) echo join('、', $this->userAttributes[$itemInfo['uid']]['sinho_more_subject']); else echo '-'; ?></td>
 
                                 <td>
                                   <a href="admin/administration/editor_edit/id-<?php echo $itemInfo['uid']; ?>.html" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>

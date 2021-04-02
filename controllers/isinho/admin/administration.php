@@ -110,6 +110,7 @@ class administration extends SinhoBaseController
             $where[] = "title LIKE '" . $this->model('course')->quote($_GET['keyword']) . "%'";
         }
         $userList = $this->model('sinhoWorkload')->getUserList($where, 'uid DESC', $this->per_page, $_GET['page']);
+        $userIds  = array_column($userList, 'uid');
         $totalRows = $this->model('sinhoWorkload')->found_rows();
 
         $url_param = array();
@@ -129,17 +130,30 @@ class administration extends SinhoBaseController
         foreach ($groupList as & $_item) {
             $_item['permission'] = unserialize($_item['permission']);
         }
-        $moreSubjectList = $this->model()->fetch_all('users_attribute', 'attr_key ="sinho_more_subject"');
-        $userIds = array_column($moreSubjectList, 'uid');
-        $moreSubjectList = array_combine($userIds, $moreSubjectList);
-        foreach ($moreSubjectList as & $_item) {
-            $_item = json_decode($_item['attr_value']);
-            foreach ($_item as & $_subject) {
-                $_subject = SinhoBaseController::SUBJECT_LIST[$_subject]['name'];
+        $userAttributes = array();
+        $itemList = array();
+        if ($userIds) {
+            $itemList = $this->model()->fetch_all('users_attribute', 'uid IN ('.join(',', $userIds).')');
+        }
+        foreach ($itemList as $_itemInfo) {
+            isset($userAttributes[$_itemInfo['uid']]) OR $userAttributes[$_itemInfo['uid']] = array();
+            if ($_itemInfo['decode_method'] && function_exists($_itemInfo['decode_method'])) {
+                if ($_itemInfo['decode_method']=='json_decode') {
+                    $_itemInfo['attr_value'] = json_decode($_itemInfo['attr_value'], true);
+                } else {
+                    $_itemInfo['attr_value'] = $_itemInfo['decode_method'] ($_itemInfo['attr_value']);
+                }
             }
+            if($_itemInfo['attr_key']=='sinho_more_subject') {
+                foreach ($_itemInfo['attr_value'] as & $_subject) {
+                    $_subject = SinhoBaseController::SUBJECT_LIST[$_subject]['name'];
+                }
+            }
+            $userAttributes[$_itemInfo['uid']][$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
         }
 
-        View::assign('moreSubjects', $moreSubjectList);
+        //View::assign('moreSubjects', $moreSubjectList);
+        View::assign('userAttributes', $userAttributes);
         View::assign('itemsList', $userList);
         View::assign('groupList', $groupList);
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
@@ -160,6 +174,9 @@ class administration extends SinhoBaseController
         View::output('admin/administration/user_list');
     }
 
+    /**
+     * 编辑员工信息
+     */
     public function editor_edit_action ()
     {
         if (!$this->user_info['permission'][self::PERMISSION_ADMINISTRATION]) {
@@ -168,13 +185,18 @@ class administration extends SinhoBaseController
 
         $userInfo = $this->model('account')->getUserById($_GET['id']);
         $groupList = $this->model('account')->get_user_group_list(0, 1);
-        $moreSubject = $this->model()->fetch_row('users_attribute', 'uid='.$_GET['id'] . ' AND attr_key ="sinho_more_subject"');
-        if ($moreSubject) {
-            $moreSubject = json_decode($moreSubject['attr_value']);
-        } else {
-            $moreSubject = array();
+        $itemList = $this->model()->fetch_all('users_attribute', 'uid='.$_GET['id']);
+        $userAttributes = array();
+        $moreSubject = array();
+        foreach ($itemList as $_itemInfo) {
+            if ($_itemInfo['attr_key']  =="sinho_more_subject") {
+                $moreSubject = json_decode($_itemInfo['attr_value']);
+            } else {
+                $userAttributes[$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
+            }
         }
 
+        View::assign('userAttributes', $userAttributes);
         View::assign('moreSubjects', $moreSubject);
         View::assign('userInfo', $userInfo);
         View::assign('groupList', $groupList);
