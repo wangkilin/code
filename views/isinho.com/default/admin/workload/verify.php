@@ -155,7 +155,7 @@
 
                                                 <tr class="book-line">
                                                     <td ><strong>合计</strong></td>
-                                                    <td colspan="22"></td>
+                                                    <td colspan="23"></td>
                                                     <td>&nbsp;<strong><?php echo $totalChars; ?></strong>&nbsp;</td>
                                                     <td>&nbsp;<strong><?php echo round($totalChars * 2, 2); ?></strong>&nbsp;</td>
                                                     <td ></td>
