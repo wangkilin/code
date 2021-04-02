@@ -102,7 +102,10 @@
                                             <td data-td-name="weight" ><?php echo $itemInfo['weight']; ?></td>
                                             <td><?php echo $itemInfo['total_chars']; ?></td>
                                             <td>&nbsp;</td>
-                                            <td><?php echo $itemInfo['remarks']; ?></td>
+                                            <!-- <td><?php echo $itemInfo['remarks']; ?></td> -->
+                                            <td>
+                                                <a target="_blank" href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
+                                                <a target="_blank" href="admin/books/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                             </td>
                                         </tr>
                                         <?php if (isset($this->workloadList[$itemInfo['id']])) { $_indexWorkload = 1; ?>
