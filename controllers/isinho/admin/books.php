@@ -211,11 +211,10 @@ defined('iCodeBang_Com') OR die('Access denied!');
 class books extends SinhoBaseController
 {
     /**
-     * 教程文章列表
+     * 书稿列表
      */
     public function index_action()
     {
-
         if ($this->is_post()) {
             foreach ($_POST as $key => $val) {
                 if ($key == 'start_date' OR $key == 'end_date') {
@@ -424,6 +423,98 @@ class books extends SinhoBaseController
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
         View::import_js('js/fileupload.js');
         View::output('admin/books/import');
+    }
+
+    /**
+     * 组长分配书稿
+     */
+    public function leader_assign_book_action ()
+    {
+        if (!$this->user_info['permission'][self::PERMISSION_TEAM_LEADER]) {
+            H::redirect_msg(Application::lang()->_t('你没有访问权限'), 'admin/');
+        }
+
+        if ($this->is_post()) {
+            foreach ($_POST as $key => $val) {
+                if ($key == 'start_date' OR $key == 'end_date') {
+                    $val = base64_encode($val);
+                } else  {
+                    $val = rawurlencode($val);
+                }
+
+                $param[] = $key . '-' . $val;
+            }
+
+            H::ajax_json_output(Application::RSM(array(
+                'url' => get_js_url('/admin/books/leader_assign_book/' . implode('__', $param))
+            ), 1, null));
+        }
+
+        $this->per_page = 30;
+        $this->crumb(Application::lang()->_t('书稿分配'), 'admin/books/leader_assign_book');
+        //$this->user_info['uid'] = 10017;
+        $bookIdList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE, 'user_id = '.$this->user_info['uid'], 'id DESC', $_GET['page'], $this->per_page, true, 'book_id', true);
+        $totalRows   = $this->model('sinhoWorkload')->found_rows();
+        $itemList = array();
+        $bookIds   = array_column($bookIdList,'book_id');
+        if ($bookIdList) {
+            $itemList  = $this->model('sinhoWorkload')->getBookList('id IN (' . join(',', $bookIds) . ')', 'delivery_date DESC, id DESC', $this->per_page);
+        }
+        $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
+        $_tmpList = $this->model('sinhoWorkload')->fetch_all (sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND `status` <>' . sinhoWorkloadModel::STATUS_DELETE  );
+        $booksWorkloadAll = array();
+        foreach ($_tmpList as $_info) {
+            isset($booksWorkloadAll[$_info['book_id']]) OR $booksWorkloadAll[$_info['book_id']] = array();
+            $booksWorkloadAll[$_info['book_id']][$_info['user_id']] = $_info['user_id'];
+        }
+        $userList = $this->model('sinhoWorkload')->getUserList('group_id = ' . $this->user_info['group_id'], 'uid DESC', PHP_INT_MAX);
+
+        $url_param = array();
+        foreach($_GET as $key => $val) {
+            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
+                $url_param[] = $key . '-' . $val;
+            }
+        }
+
+        View::assign('pagination', Application::pagination()->initialize(array(
+            'base_url'   => get_js_url('/admin/books/leader_assign_book/') . implode('__', $url_param),
+            'total_rows' => $totalRows,
+            'per_page'   => $this->per_page
+        ))->create_links());
+        //$categoryList = $this->model('category')->getAllCategories('id');
+        View::assign('itemsList', $itemList);
+        View::assign('booksWorkload', $booksWorkload);
+        View::assign('booksWorkloadAll', $booksWorkloadAll);
+
+        View::assign('itemOptions',
+                     buildSelectOptions(
+                         $userList,
+                         'user_name',
+                         'uid',
+                         null,
+                         array(
+                             'group_id'             => 'data-group_id',
+                             'more_subject'         => 'data-more_subject',
+                             'main_subject'         => 'data-main_subject',
+                             'subject_category'     => 'data-subject_category'
+                         )
+                    )
+                );
+        //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
+        View::assign('totalRows', $totalRows);
+        View::assign('amountPerPage', $this->per_page);
+
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
+        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
+        View::import_js('js/icb_template_isinho.com.js');
+        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
+
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/leader_assign_book','sinho_admin_menu')  ) );
+
+
+        View::output('admin/books/leader_assign');
     }
 }
 

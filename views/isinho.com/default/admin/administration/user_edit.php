@@ -44,18 +44,18 @@
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('是否组长'); ?>:</label>
 
-                                    <input type="hidden" name="remark[group_permission_is_team_leader]" value="是否为组长"/>
+                                    <input type="hidden" name="remark[sinho_permission_team_leader]" value="是否为组长"/>
                                 </div>
                                 <div class="col-sm-4 icb-item-title">
 								  <div class="btn-group mod-btn col-sm-4 nopadding">
 									<label type="button" class="btn mod-btn-color">
-										<input type="radio" value="1" name="attributes[group_permission_is_team_leader]"<?php if ($this->userAttributes['group_permission_is_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+										<input type="radio" value="1" name="attributes[sinho_permission_team_leader]"<?php if ($this->userAttributes['sinho_permission_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
 									</label>
 
                                     </div>
                                     <div class="btn-group mod-btn  col-sm-offset-4 col-sm-4 nopadding">
 									<label type="button" class="btn mod-btn-color">
-										<input type="radio" value="0" name="attributes[group_permission_is_team_leader]"<?php if (! $this->userAttributes['group_permission_is_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+										<input type="radio" value="0" name="attributes[sinho_permission_team_leader]"<?php if (! $this->userAttributes['sinho_permission_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
 									</label>
 								  </div>
                                 </div>

@@ -45,7 +45,7 @@
                                     <a class="md-tip"  title="" data-toggle="tooltip"><?php echo $itemInfo['user_name']; ?></a>
                                 </td>
                                 <td><?php echo $this->groupList[$itemInfo['group_id']]['group_name']; ?></td>
-                                <td><?php if($this->userAttributes[$itemInfo['uid']]['group_permission_is_team_leader']) echo '是'; else echo '-'; ?></td>
+                                <td><?php if($this->userAttributes[$itemInfo['uid']]['sinho_permission_team_leader']) echo '是'; else echo '-'; ?></td>
                                 <td><?php echo SinhoBaseController::SUBJECT_LIST[$this->groupList[$itemInfo['group_id']]['permission']['sinho_subject']]['name']; ?></td>
                                 <td><?php if ($this->userAttributes[$itemInfo['uid']]['sinho_more_subject']) echo join('、', $this->userAttributes[$itemInfo['uid']]['sinho_more_subject']); else echo '-'; ?></td>
 

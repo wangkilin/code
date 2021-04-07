@@ -16,6 +16,16 @@ $config[] = array(
     'children'  => array(),
     'permission'=> SinhoBaseController::PERMISSION_BOOKLIST,
 );
+
+$config[] = array(
+    'id'        => 'admin/leader_assign_book',
+    'title'     => _t('分配书稿'),
+    'cname'     => 'reader',
+    'url'       => 'admin/books/leader_assign_book/',
+    'children'  => array(),
+    'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
+);
+
 $config[] = array(
     'id'    => 'admin/workload',
     'title' => '工作量',

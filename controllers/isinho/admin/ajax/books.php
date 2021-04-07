@@ -66,7 +66,7 @@ class books extends SinhoBaseController
      */
     public function assign_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN | self::IS_SINHO_TEAM_LEADER);
 
         if (! $_GET['id'] || $_POST['action']!='assign') {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
@@ -125,7 +125,7 @@ class books extends SinhoBaseController
      */
     public function assigned_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN | self::IS_SINHO_TEAM_LEADER);
 
         if (! $_GET['id']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));

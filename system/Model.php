@@ -785,13 +785,16 @@ class Model
      * @param    boolean
      * @return    array
      */
-    public function fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
+    public function fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true, $column='*', $distinct=false)
     {
         $this->slave();
 
         $select = $this->select();
 
-        $select->from($this->get_table($table), '*');
+        $select->from($this->get_table($table), $column);
+        if ($distinct) {
+            $select->distinct(true);
+        }
         //$select->from($this->get_table($table), array(new Zend_Db_Expr('SQL_CALC_FOUND_ROWS *')));
 
         if ($where)
@@ -848,14 +851,18 @@ class Model
 
         if ($rows_cache)
         {
-            $cache_key = 'db_rows_cache_' . md5($table . '_' . $where);
+            $cache_key = 'db_rows_cache_' . md5($table . '_' . $where . '_' .$column . '_' . intval($distinct));
 
             $db_found_rows = Application::cache()->get($cache_key);
         }
 
         if (!$db_found_rows)
         {
-            $db_found_rows = $this->count($table, $where);
+            if ($distinct) {
+                $db_found_rows = $this->count($table, $where, 'distinct ' . $column);
+            } else {
+                $db_found_rows = $this->count($table, $where);
+            }
         }
 
         if ($rows_cache AND $db_found_rows)

@@ -38,12 +38,14 @@ class SinhoBaseController extends BaseController
     const PERMISSION_CHECK_WORKLOAD     = 'sinho_check_workload';
     const PERMISSION_ADMINISTRATION     = 'sinho_administration';
     const PERMISSION_SUBJECT            = 'sinho_subject';
+    const PERMISSION_TEAM_LEADER        = 'sinho_permission_team_leader';
     const SINHO_PERMISSION_LIST = array(
         self::PERMISSION_FILL_WORKLOAD,
         self::PERMISSION_BOOKLIST,
         self::PERMISSION_VERIFY_WORKLOAD,
         self::PERMISSION_CHECK_WORKLOAD,
         self::PERMISSION_ADMINISTRATION,
+        self::PERMISSION_SUBJECT,
         self::PERMISSION_SUBJECT,
     );
 
@@ -57,6 +59,7 @@ class SinhoBaseController extends BaseController
     const IS_SINHO_VERIFY_WORKLOAD = 0x10; // 核对工作量
     const IS_SINHO_CHECK_WORKLOAD  = 0x20; // 查看工作量
     const IS_SINHO_ADMIN           = 0x40; // 行政管理
+    const IS_SINHO_TEAM_LEADER     = 0x80; // 是否是组长
 
     const PERMISSION_MAP = array (
         self::IS_ROLE_ADMIN         => parent::PERMISSION_MAP[parent::IS_ROLE_ADMIN],
@@ -66,6 +69,7 @@ class SinhoBaseController extends BaseController
         self::IS_SINHO_FILL_WORKLOAD     => self::PERMISSION_FILL_WORKLOAD,
         self::IS_SINHO_CHECK_WORKLOAD    => self::PERMISSION_CHECK_WORKLOAD,
         self::IS_SINHO_ADMIN             => self::PERMISSION_ADMINISTRATION,
+        self::IS_SINHO_TEAM_LEADER       => self::PERMISSION_TEAM_LEADER,
     );
 
     public $user_id;
@@ -76,6 +80,15 @@ class SinhoBaseController extends BaseController
     public function __construct($process_setup=true)
     {
         parent::__construct(false);
+
+        if ($this->user_info['uid']) {
+            $userAttributes = $this->model()->fetch_all('users_attribute', 'uid = ' . $this->user_info['uid']);
+            foreach($userAttributes as $_tmpInfo) {
+                if (strpos($_tmpInfo['attr_key'], 'sinho_permission') === 0) {
+                    $this->user_info['permission'][$_tmpInfo['attr_key']] = $_tmpInfo['attr_value'];
+                }
+            }
+        }
 
         if ($_GET['app'] != 'admin')
         {
