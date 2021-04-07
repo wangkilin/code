@@ -456,12 +456,14 @@ class books extends SinhoBaseController
         $bookIdList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE, 'user_id = '.$this->user_info['uid'], 'id DESC', $_GET['page'], $this->per_page, true, 'book_id', true);
         $totalRows   = $this->model('sinhoWorkload')->found_rows();
         $itemList = array();
+        $booksWorkload = array();
+        $_tmpList = array();
         $bookIds   = array_column($bookIdList,'book_id');
         if ($bookIdList) {
             $itemList  = $this->model('sinhoWorkload')->getBookList('id IN (' . join(',', $bookIds) . ')', 'delivery_date DESC, id DESC', $this->per_page);
+            $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
+            $_tmpList = $this->model('sinhoWorkload')->fetch_all (sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND `status` <>' . sinhoWorkloadModel::STATUS_DELETE  );
         }
-        $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
-        $_tmpList = $this->model('sinhoWorkload')->fetch_all (sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND `status` <>' . sinhoWorkloadModel::STATUS_DELETE  );
         $booksWorkloadAll = array();
         foreach ($_tmpList as $_info) {
             isset($booksWorkloadAll[$_info['book_id']]) OR $booksWorkloadAll[$_info['book_id']] = array();
