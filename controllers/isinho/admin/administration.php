@@ -37,11 +37,17 @@ class administration extends SinhoBaseController
         }
 
         $leaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date("$year-$month-01"), date("$year-$month-t"));
+        $userLeaveList = array();
+        foreach ($leaveList as $_itemInfo) {
+            isset($userLeaveList[$_itemInfo['user_id']]) OR $userLeaveList[$_itemInfo['user_id']] = array();
+            $userLeaveList[$_itemInfo['user_id']][] = $_itemInfo;
+        }
 
         View::assign('leaveYear', $year);
         View::assign('leaveMonth', $month);
         View::assign('userList', $userList);
         View::assign('leaveList', $leaveList);
+        View::assign('userLeaveList', $userLeaveList);
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/ask_leave','sinho_admin_menu') ) );
 
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');

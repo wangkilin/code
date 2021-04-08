@@ -6,14 +6,15 @@
         <div class="mod-head">
             <h3>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#index"><?php _e('请假管理'); ?></a></li>
+                    <li class="<?php echo $_GET['tab']=='report'? '':'active';?>"><a href="#index"  data-toggle="tab"><?php _e('请假管理'); ?></a></li>
+                    <li class="<?php echo $_GET['tab']=='report'? 'active':'';?>"><a href="#monthly-report" data-toggle="tab"><?php _e('月度报告'); ?></a></li>
                 </ul>
             </h3>
         </div>
 
 
         <div class="mod-body tab-content padding5px">
-            <div class="tab-pane active" id="index">
+            <div class="tab-pane <?php echo $_GET['tab']=='report'? '':'active';?>" id="index">
 
                 <div class="table-responsive">
                     <table class="table table-bordered">
@@ -33,7 +34,7 @@
                 <br/>
                 <div class="row">
                     <div class="col-sm-2"><a href="/admin/administration/ask_leave/year_month-<?php echo date('Ym', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>">上一月(<?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>)</a></div>
-                    <div class="col-sm-8"></div>
+                    <div class="col-sm-8 text-center"><strong><?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01'));?></strong></div>
                     <div class="col-sm-2 text-right"><a href="/admin/administration/ask_leave/year_month-<?php echo date('Ym', strtotime($this->leaveYear.$this->leaveMonth.'01 +1month'));?>">(<?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01 +1month'));?>)下一月</a></div>
                 </div>
                 <div class="table-responsive">
@@ -50,7 +51,7 @@
                                         $class = date('Ymd', strtotime($year.$month.sprintf('%02d', $i)))==date('Ymd') ? 'bg-danger' : $class;
                                     ?>
                                     <th style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>"><?php
-                                    echo '<span>', $i, '</span><br/》';
+                                    echo '<span>', $i, '</span><br/>';
                                     echo '<span>', $weekNameList[$_weekIndex%7], '</span>';
                                     ?></th>
                                     <?php }?>
@@ -69,6 +70,90 @@
                                     <td id="td_<?php echo $_userInfo['uid'],'_',$i;?>" style="width:<?php echo round(1/($totalDaysInMonth+2), 5)*100;?>%" class="<?php echo $class;?>" title="<?php echo intval($month) , '月', $i, '日/星期', $weekNameList[$_weekIndex%7];?>" data-toggle="tooltip" data-date="<?php echo $year.$month.sprintf('%02d', $i);?>"></td>
                                     <?php
                                     }?>
+                                </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+
+            <div class="tab-pane<?php echo $_GET['tab']=='report'? 'active':'';?>" id="monthly-report">
+
+                <div class="row">
+                    <div class="col-sm-2"><a href="/admin/administration/ask_leave/tab-report__year_month-<?php echo date('Ym', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>">上一月(<?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>)</a></div>
+                    <div class="col-sm-8 text-center"><strong><?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01'));?></strong></div>
+                    <div class="col-sm-2 text-right"><a href="/admin/administration/ask_leave/tab-report__year_month-<?php echo date('Ym', strtotime($this->leaveYear.$this->leaveMonth.'01 +1month'));?>">(<?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01 +1month'));?>)下一月</a></div>
+                </div>
+                <div class="table-responsive">
+                    <?php $year = $this->leaveYear; $month = $this->leaveMonth;?>
+                        <table  class="table table-striped table-bordered" >
+                            <thead>
+                                <tr>
+                                    <th style="width:20px">#</th>
+                                    <th class="col-sm-1"><span class="col-sm-12 no-padding">姓名</span></th>
+                                    <th>请假月度报告</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $i=1;
+                                $startMonthTime = strtotime($this->leaveYear.$this->leaveMonth.'01');
+                                $endMonthTime = strtotime($this->leaveYear.$this->leaveMonth.'01 +1month');
+                                foreach ($this->userList as $_userInfo) {  ?>
+                                <tr data-user-id="<?php echo $_userInfo['uid'];?>" data-user-name="<?php echo $_userInfo['user_name'];?>">
+                                    <td style="width:20px"><?php echo $i++;?></td>
+                                    <td class="col-sm-1"><?php echo $_userInfo['user_name'];?></td>
+                                    <td><?php
+                                    foreach ($this->userLeaveList[$_userInfo['uid']] as $_itemInfo) {
+
+                                        if ($_itemInfo['leave_start_time'] < $startMonthTime) {
+                                            echo date('m-d', $startMonthTime);
+                                        } else {
+                                            echo date('m/d H:i', $_itemInfo['leave_start_time']);
+                                        }
+                                        echo '~';
+                                        if ($_itemInfo['leave_end_time'] >= $endMonthTime) {
+                                            echo date('m-d', $endMonthTime);
+                                        } else {
+                                            if (date('Y-m-d', $_itemInfo['leave_start_time']) == date('Y-m-d', $_itemInfo['leave_end_time'])) {
+                                                $_dateFormat = 'H:i';
+                                            } else {
+                                                $_dateFormat = 'm/d H:i';
+                                            }
+                                            echo date($_dateFormat, $_itemInfo['leave_end_time']);
+                                        }
+                                        echo ' ';
+                                        switch($_itemInfo['leave_type']) {
+                                            case 2: // 病假
+                                                _e('病假');
+                                                break;
+                                            case 3: // 年假
+                                                _e('年假');
+                                                break;
+                                            case 4: // 婚假
+                                                _e('婚假');
+                                                break;
+                                            case 5: // 产假
+                                                _e('产假');
+                                                break;
+                                            case 6: // 生理假
+                                                _e('生理假');
+                                                break;
+                                            case 7: // 丧假
+                                                _e('丧假');
+                                                break;
+                                            case 1: // 事假
+                                                _e('事假');
+                                                break;
+                                            default:
+                                                _e('旷工');
+                                                break;
+                                        }
+                                        if ($_itemInfo['leave_start_time'] >= $startMonthTime && $_itemInfo['leave_end_time'] < $endMonthTime) {
+                                            echo ' ', $_itemInfo['leave_period'], '小时';
+                                        }
+                                        echo '; &nbsp; ';
+                                    }
+                                    ?></td>
                                 </tr>
                                 <?php } ?>
                             </tbody>
