@@ -306,6 +306,9 @@ class main extends SinhoBaseController
 
         $queryUserIds = empty($queryUserIds) ? $userIds : $queryUserIds;
         $belongMonth = $this->model('sinhoWorkload')->max(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month', 'belong_month >= ' . date('Ym', strtotime('-3month')));
+        if (! $belongMonth) { // 如果没有工作量， 将上个月的月份作为记录最大月份
+            $belongMonth = date('Ym', strtotime('-1month'));
+        }
         $endBelongMonth = isset($_GET['end_month']) ? $_GET['end_month'] : $belongMonth;
         if (!$_GET['belong_month'] || $_GET['belong_month'] > $belongMonth || $_GET['belong_month']<200001) { // 获取待核算月份的数据
             $totalCharsList = $this->model('sinhoWorkload')->getWorkloadStatByUserIds ($queryUserIds, null, array('start'=>$belongMonth,'end'=>$endBelongMonth), 'user_id,belong_month');
