@@ -168,10 +168,7 @@ class administration extends SinhoBaseController
         View::assign('amountPerPage', $this->per_page);
 
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
-        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
-        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
         View::import_js('js/icb_template_isinho.com.js');
-        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
 
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list(null,'sinho_admin_menu')  ) );
@@ -215,6 +212,52 @@ class administration extends SinhoBaseController
 
         View::output('admin/administration/user_edit');
     }
+
+    /**
+     * 组列表
+     */
+    public function group_list_action()
+    {
+        $this->crumb(Application::lang()->_t('组管理'), "admin/administration/group_list/");
+
+        $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
+
+        View::assign('custom_group', $this->model('account')->get_user_group_list(0, 1));
+        View::assign('menu_list', $this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu'));
+        View::output('admin/administration/group_list');
+    }
+
+    /**
+     * 编辑组信息
+     */
+    public function group_edit_action()
+    {
+        $this->crumb(Application::lang()->_t('修改组'), "admin/administration/group_list/");
+
+        $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
+
+        if (! $group = $this->model('account')->get_user_group_by_id($_GET['group_id'])) {
+            H::redirect_msg(Application::lang()->_t('用户组不存在'), '/admin/administration/group_list/');
+        }
+
+        $booleanParamList = array (
+            'sinho'     => array (
+                SinhoBaseController::PERMISSION_BOOKLIST        => Application::lang()->_t('允许管理稿件'),
+                SinhoBaseController::PERMISSION_FILL_WORKLOAD   => Application::lang()->_t('允许添加个人工作量'),
+                SinhoBaseController::PERMISSION_VERIFY_WORKLOAD => Application::lang()->_t('允许核算工作量'),
+                SinhoBaseController::PERMISSION_CHECK_WORKLOAD  => Application::lang()->_t('允许查阅工作量'),
+                SinhoBaseController::PERMISSION_ADMINISTRATION  => Application::lang()->_t('允许管理行政&人事'),
+            ),
+        );
+
+        View::assign('booleanParamList', $booleanParamList);
+        View::assign('group', $group);
+        View::assign('group_pms', $group['permission']);
+        View::assign('menu_list', $this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu'));
+        View::output('admin/administration/group_edit');
+    }
+
+
 }
 
 /* EOF */

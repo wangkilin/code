@@ -28,6 +28,20 @@
                                 </div>
 
                             </div>
+
+                            <div class="row">
+                                <!-- 校次 -->
+                                <div class="col-sm-2">
+                                    <label class="icb-label"><?php _e('密码'); ?>:</label>
+                                </div>
+                                <div class="col-sm-4 icb-item-title">
+                                    <input class="form-control" name="password" type="password" value="" />
+
+                                    <span class="help-block"><?php _e('不更改请留空'); ?></span>
+                                </div>
+                            </div>
+
+
                             <div class="row">
                                 <!-- 校次 -->
                                 <div class="col-sm-2">

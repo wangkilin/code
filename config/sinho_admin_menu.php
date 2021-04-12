@@ -80,6 +80,13 @@ $config[] = array(
             'url'       => 'admin/administration/editor/',
             'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
         ),
+        array(
+            'id'        => 'admin/administration/group_list',
+            'title'     => _t('组管理'),
+            'cname'     => 'users',
+            'url'       => 'admin/administration/group_list/',
+            'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
     )
 );
 

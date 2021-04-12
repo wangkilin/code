@@ -191,7 +191,11 @@ class BaseController extends Controller
 	protected function checkPermission ($checkingRoleFlags)
 	{
 		if (! $this->hasRolePermission($checkingRoleFlags)) {
-		    H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有访问权限, 请重新登录')));
+            if (defined('IN_AJAX') && IN_AJAX) {
+		        H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有访问权限, 请重新登录')));
+            } else {
+                H::redirect_msg(Application::lang()->_t('你没有访问权限, 请重新登录'), '/');
+            }
 		}
 	}
 

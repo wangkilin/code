@@ -178,6 +178,12 @@ class administration extends SinhoBaseController
         H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('作息安排保存成功')));
     }
 
+
+    public function save_user_action()
+    {
+        $this->editor_edit_action();
+    }
+
     /**
      * 保存编辑信息
      */
@@ -185,18 +191,68 @@ class administration extends SinhoBaseController
     {
         $this->checkPermission(self::IS_SINHO_ADMIN);
 
-        if (! $_POST['group_id'] || !$_POST['id']) {
+        $_POST['password'] = trim($_POST['password']);
+        $_POST['group_id'] = intval($_POST['group_id']);
+
+        if (! $_POST['group_id']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数传递错误")));
         }
 
-        if (! ($userInfo = $this->model('account')->getUserById($_POST['id']) ) ) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数无效") ) );
-        }
-        if (! ($groupInfo = $this->model('account')->get_user_group_by_id($_POST['group_id']) ) ) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数无效") ) );
+        if ($_POST['id']) {
+
+            if (! ($userInfo = $this->model('account')->getUserById($_POST['id']) ) ) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数无效") ) );
+            }
+            if (! ($groupInfo = $this->model('account')->get_user_group_by_id($_POST['group_id']) ) ) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("参数无效") ) );
+            }
+
+            $this->model('account')->setAccountInfos(array('group_id'=>$_POST['group_id']), $_POST['id']);
+
+        } else {
+
+            $_POST['user_name'] = trim($_POST['user_name']);
+            $_POST['email'] = trim($_POST['email']);
+
+            if (!$_POST['user_name']) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入用户名')));
+            }
+
+            if ($this->model('account')->check_username($_POST['user_name'])) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('用户名已经存在')));
+            }
+
+            if ($this->model('account')->check_email($_POST['email'])) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('E-Mail 已经被使用, 或格式不正确')));
+            }
+
+            if (strlen($_POST['password']) < 6 or strlen($_POST['password']) > 16) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('密码长度不符合规则')));
+            }
+
+            $uid = $this->model('account')->user_register($_POST['user_name'], $_POST['password'], $_POST['email']);
+
+            $this->model('active')->set_user_email_valid_by_uid($uid);
+            $this->model('active')->active_user_by_uid($uid);
+
+            if ($_POST['group_id'] == 1 AND !$this->user_info['permission']['is_administortar']) {
+                $_POST['group_id'] = 4;
+            }
+
+            if ($_POST['group_id'] != 4) {
+                $this->model('account')->update('users', array(
+                    'group_id' => $_POST['group_id'],
+                ), 'uid = ' . $uid);
+            }
+
+            $userInfo = $this->model('account')->getUserById($uid);
+
         }
 
-        $this->model('account')->setAccountInfos(array('group_id'=>$_POST['group_id']), $_POST['id']);
+        if ($_POST['password']) {
+            $this->model('account')->update_user_password_ingore_oldpassword($_POST['password'], $userInfo['uid'], fetch_salt(4));
+        }
+
         if (! $_POST['more_subject']) {
             $_POST['more_subject'] = array();
         }
@@ -225,6 +281,95 @@ class administration extends SinhoBaseController
         }
 
         H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/administration/editor/')), 1, Application::lang()->_t('保存成功')));
+    }
+
+    /**
+     * 保存组信息
+     */
+    public function save_group_action()
+    {
+        $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
+
+        if ('save'==$_POST['action']) {
+            if ($_POST['group']) { // 更新组
+                foreach ($_POST['group'] as $key => $val) {
+                    if (!$val['group_name']) {
+                        H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入用户组名称')));
+                    }
+
+                    $this->model('account')->update_user_group_data($key, $val);
+                }
+            }
+
+            if ($group_new = $_POST['group_new']) { // 添加新组
+                foreach ($group_new['group_name'] as $key => $val) {
+                    if (trim($group_new['group_name'][$key]))
+                    {
+                        $this->model('account')->add_user_group($group_new['group_name'][$key], 0);
+                    }
+                }
+            }
+        } else if ('delete'==$_POST['action']) { // 删除组
+
+            if ($group_ids = $_POST['group_ids']) {
+                foreach ($group_ids as $key => $id) {
+                    $group_info = $this->model('account')->get_user_group_by_id($id);
+
+                    if ($group_info['custom'] == 1) {
+                        $this->model('account')->delete_user_group_by_id($id);
+                    } else {
+                        H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('系统用户组不可删除')));
+                    }
+                }
+            }
+        }
+
+        Application::cache()->cleanGroup('users_group');
+
+        if ($group_new OR $group_ids) {
+            $rsm = array(
+                'url' => get_js_url('/admin/administration/group_list/r-' . rand(1, 999) . '#custom')
+            );
+
+            H::ajax_json_output(Application::RSM($rsm, 1, null));
+        }
+    }
+
+
+    /**
+     * 保存组权限
+     */
+    public function save_group_permission_action()
+    {
+        $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
+
+        $group_setting = array();
+        if ($_POST['permission']) {
+            $group_setting = $_POST['permission'];
+        }
+
+        $this->model('account')->update_user_group_data($_POST['group_id'], array(
+            'permission' => serialize($group_setting)
+        ));
+
+        Application::cache()->cleanGroup('users_group');
+
+        $rsm = array(
+            'url' => get_js_url('/admin/administration/group_list/')
+        );
+        H::ajax_json_output(Application::RSM($rsm, 1, Application::lang()->_t('用户组权限已更新')));
+    }
+
+    /**
+     * 封禁/解封
+     */
+    public function forbidden_user_action()
+    {
+        $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
+
+        $this->model('account')->forbidden_user_by_uid($_POST['uid'], $_POST['status'], $this->user_id);
+
+        H::ajax_json_output(Application::RSM(null, 1, null));
     }
 }
 

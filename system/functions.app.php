@@ -203,7 +203,7 @@ function get_feature_pic_url($size = null, $pic_file = null)
  *
  * @return array
  */
-function doUploadAttach ($module, $batchKey, $filename, $dataStream=null)
+function doUploadAttach ($module, $batchKey, $filename, $dataStream=null, $imgSrcUrl='')
 {
     $settings = Application::$settings = Application::model('setting')->get_settings();
     Application::upload()->initialize(array(
@@ -272,7 +272,8 @@ function doUploadAttach ($module, $batchKey, $filename, $dataStream=null)
                               basename($upload_data['full_path']),
                               $upload_data['is_image'],
                               $upload_data['file_type'],
-                              $cssClass
+                              $cssClass,
+                              $imgSrcUrl
                         );
 
     $output = array(
@@ -421,7 +422,7 @@ function curlRequest($url, $method, $headers = null, $body = null)
     $ch  = curl_init($url);
 
     $_headers = array('Expect:');
-    if (!is_null($headers) && is_array($headers)){
+    if (is_array($headers)){
         foreach($headers as $k => $v) {
             array_push($_headers, "{$k}: {$v}");
         }
@@ -454,15 +455,19 @@ function curlRequest($url, $method, $headers = null, $body = null)
     // array_push($_headers, 'Authorization: ' . $this->sign($method, $uri, $date, $length));
     array_push($_headers, "Date: {$date}");
 
+    $_urlInfo = parse_url($url);
+    $scheme = $_urlInfo['scheme'];
+    $_headers['host'] = $_urlInfo['host'];
+
     curl_setopt($ch, CURLOPT_HTTPHEADER, $_headers);
     curl_setopt($ch, CURLOPT_TIMEOUT, 20);
     curl_setopt($ch, CURLOPT_HEADER, 1);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+
     // https 请求， 忽略验证
-    if ( (is_string($url) && stripos($url, 'https://')===0)
-        || (isset($_headers['scheme']) && strtolower($_headers['scheme'])=='https') ) {
+    if ( $scheme=='https') {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     }
