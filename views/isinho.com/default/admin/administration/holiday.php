@@ -6,16 +6,15 @@
         <div class="mod-head">
             <h3>
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#index"><?php _e('假期设置'); ?></a></li>
+                    <li class="active"><a href="#index" data-toggle="tab"><?php _e('假期设置'); ?></a></li>
+                    <li><a href="#time" data-toggle="tab"><?php _e('作息时间'); ?></a></li>
                 </ul>
             </h3>
         </div>
 
 
-        <div class="mod-body tab-content padding5px">
+        <div class="mod-body tab-content ">
             <div class="tab-pane active" id="index">
-
-
                 <div class="table-responsive">
                     <table class="table table-bordered calendar-container">
                         <tr>
@@ -127,11 +126,70 @@
                     </tbody>
                 </table>
 
+                <div class="row"><div class="col-sm-12">&nbsp;</div></div>
+                <div class="row">
+                    <div class="col-sm-6 text-right"><input type="button" class="btn btn-success" onclick="setSchedule(hDays, dateSelection.currYear, dateSelection.currMonth+1);" value="保存当月设置"/></div>
+                    <div class="col-sm-6 text-left"><input type="button" class="btn btn-primary" onclick="setSchedule(hDays, dateSelection.currYear);" value="保存全年设置"/></div>
+                </div>
             </div>
-            <div class="row"><div class="col-sm-12">&nbsp;</div></div>
-            <div class="row">
-                <div class="col-sm-6 text-right"><input type="button" class="btn btn-success" onclick="setSchedule(hDays, dateSelection.currYear, dateSelection.currMonth+1);" value="保存当月设置"/></div>
-                <div class="col-sm-6 text-left"><input type="button" class="btn btn-primary" onclick="setSchedule(hDays, dateSelection.currYear);" value="保存全年设置"/></div>
+
+
+            <div class="tab-pane " id="time">
+
+					<form action="admin/ajax/administration/set_workingtime/" method="post" id="item_form">
+						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
+						<div class="icb-mod icb-book-infos">
+
+                            <div class="row">
+                                <!-- 上班时间 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('上班时间'); ?></label>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 mod-double icon-date-container">
+                                    <input type="text" name="workingtime[startMorning]" class="form-control icon-indent js-datepicker" value="" autocomplete="off">
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                    -
+                                </span>
+                                <div class="col-sm-2 col-xs-6 mod-double icon-date-container">
+                                    <input type="text" name="workingtime[endMorning]" class="form-control icon-indent js-datepicker" value="" autocomplete="off">
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                                <div class="col-sm-4 col-xs-12"><span class="help-block">当前上班时间：<?php echo $this->workingtime['startMorning'];?>~<?php echo $this->workingtime['endMorning'];?></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- 午休时间 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('午休时间'); ?></label>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 mod-double icon-date-container">
+                                    <input type="text" name="workingtime[startAfternoon]" class="form-control icon-indent js-datepicker" value="" autocomplete="off">
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                    -
+                                </span>
+                                <div class="col-sm-2 col-xs-6 mod-double icon-date-container">
+                                    <input type="text" name="workingtime[endAfternoon]" class="form-control icon-indent js-datepicker" value="" autocomplete="off">
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                                <div class="col-sm-4 col-xs-12"><span class="help-block">当前午休时间：<?php echo $this->workingtime['startAfternoon'];?>~<?php echo $this->workingtime['endAfternoon'];?></span>                            </div>
+                            </div>
+                            <div class="row"><div class="col-sm-12">&nbsp;</div></div>
+                            <div class="row">
+                                <div class="col-sm-6 text-left"><input type="button" class="btn btn-primary" onclick="ICB.ajax.postForm($('#item_form')); return false;" value="保存作息时间"/></div>
+                            </div>
+
+						</div>
+					</form>
+
             </div>
         </div>
     </div>
@@ -206,6 +264,23 @@ $(function () {
     var schedule = JSON.parse('<?php echo json_encode($this->scheduleList);?>');
     // 初始化日历
     loadCalendarData(schedule);
+
+
+    $(".js-datepicker").datetimepicker({
+                format  : 'hh:ii',
+                language:  'zh-CN',
+                weekStart: 1, // 星期一 为一周开始
+                todayBtn:  0, // 显示今日按钮
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 1,
+                forceParse: 0,
+                minView : 0, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+                minuteStep:30,
+                initialDate : '<?php echo date('Y-m-d');?>',
+                hoursDisabled : '0,1,2,3,4,5,6,7,18,19,20,21,22,23',
+                //pickerPosition: 'bottom-left'
+        }) ;
 });
 
 </script>

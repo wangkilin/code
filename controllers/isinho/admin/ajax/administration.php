@@ -371,6 +371,24 @@ class administration extends SinhoBaseController
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }
+
+    /**
+     * 设置作息时间
+     */
+    public function set_workingtime_action()
+    {
+        $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
+
+        if ($this->model()->fetch_row('sinho_key_value', 'varname = "workingtime"')) {
+            $this->model()->update('sinho_key_value', array('value'=>json_encode($_POST['workingtime'], JSON_UNESCAPED_UNICODE)), 'varname = "workingtime"');
+        } else {
+            $this->model()->insert('sinho_key_value', array('value'=>json_encode($_POST['workingtime'], JSON_UNESCAPED_UNICODE), 'varname' => 'workingtime'));
+        }
+
+        H::ajax_json_output(Application::RSM(null, 1, '作息时间保存成功'));
+    }
+
+
 }
 
 /* EOF */

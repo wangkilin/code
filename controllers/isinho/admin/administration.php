@@ -76,11 +76,23 @@ class administration extends SinhoBaseController
             }
         }
 
+        $workingtime = $this->model()->fetch_one('sinho_key_value', 'value', 'varname = "workingtime"');
+        if ($workingtime) {
+            $workingtime = @json_decode($workingtime, true);
+        } else {
+            $workingtime = array();
+        }
+
+        View::assign('workingtime', $workingtime);
         View::assign('scheduleList', $scheduleList);
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/holiday','sinho_admin_menu') ) );
 
         View::import_js('js/calendar.js');
         View::import_js('js/functions.js');
+        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
+        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
+        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+
         View::output('admin/administration/holiday');
     }
 
