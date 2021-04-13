@@ -182,10 +182,10 @@ function loadLeaveDataIntoTable (leaveList) {
         //console.info(tmpStartTime, tmpEndTime);
         while(tmpStartTime < tmpEndTime) {
             tmpDate = new Date(tmpStartTime * 1000);
-            if (tmpDate.getDay() % 6 == 0) { // 周六日不显示请假状态
-                tmpStartTime += 24 * 60 * 60;
-                continue;
-            }
+            // if (tmpDate.getDay() % 6 == 0) { // 周六日不显示请假状态
+            //     tmpStartTime += 24 * 60 * 60;
+            //     continue;
+            // }
             tmpTdId = '#td_' + userId + '_' + tmpDate.getDate();
             switch(leaveList[i].leave_type) {
                 case 2: // 病假
