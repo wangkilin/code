@@ -5,7 +5,7 @@ DB_HOST=localhost               # 数据库主机地址
 DB_USERNAME=root		# 数据库用户名
 DB_PASSWORD=""            # 数据库密码
 DB_DATABASE=WeCenter            # 数据库名
-DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload icb_users_ask_leave icb_users_ask_leave_date icb_users_attribute icb_sinho_schedule"  #要备份的表名列表
+DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload icb_users_ask_leave icb_users_ask_leave_date icb_users_attribute icb_sinho_schedule icb_sinho_key_value"  #要备份的表名列表
 DIR_STORE=/tmp
 
 NOW_DATE=`date "+%Y-%m-%d"`                     # 当前日期，用于生成数据库备份文件名称
