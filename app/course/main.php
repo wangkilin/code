@@ -234,7 +234,7 @@ class main extends BaseController
 
         // 手机端请求
         if (is_mobile()) {
-            HTTP::redirect('/m/course/' . $_GET['id']);
+            //HTTP::redirect('/m/course/' . $_GET['id']);
         }
         if (is_numeric($_GET['id'])) {
             $itemInfo = $this->model('course')->getById($_GET['id']);
@@ -336,7 +336,7 @@ class main extends BaseController
     {
         if (is_mobile())
         {
-            HTTP::redirect('/m/article/');
+            //HTTP::redirect('/m/article/');
         }
 
         $this->crumb(Application::lang()->_t('教程'), '/course/');

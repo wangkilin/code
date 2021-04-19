@@ -704,20 +704,23 @@ function getListInTreeList ($lists, $titleKey='title', $idKey='id', $parentIdKey
 {
     $tmpSortList = array();
     foreach ($lists as & $_item) {
+        $_item['__ tmpTitle __'] = $_item[$titleKey];
         $_tmpId = $_item[$parentIdKey];
         $_tmpKey = '/' . $_tmpId;
         if (! isset($lists[$_tmpId])) {
-            $tmpSortList[$_tmpKey  . '/' . $_item[$idKey] .'/'] = $_item;
+            $tmpSortList[$_tmpKey  . '/' . $_item['__ tmpTitle __'] .'/'] = $_item;
             continue;
         }
         $_item[$titleKey] = '|__' . $_item[$titleKey];
         while(isset($lists[$_tmpId])) {
-            $_item[$titleKey] = '&nbsp; &nbsp; ' . $_item[$titleKey];
+            $_title = isset($lists[$_tmpId]['__ tmpTitle __']) ? $lists[$_tmpId]['__ tmpTitle __'] : $lists[$_tmpId][$titleKey];
             $_tmpId = $lists[$_tmpId][$parentIdKey];
-            $_tmpKey = '/' . $_tmpId . $_tmpKey;
+            $_tmpKey = '/' . $_tmpId. '/' . $_title  . $_tmpKey;
+            $_item[$titleKey] = '&nbsp; &nbsp; ' . $_item[$titleKey];
         }
-        $tmpSortList[$_tmpKey  . '/' . $_item[$idKey] .'/' ] = $_item;
+        $tmpSortList[$_tmpKey  . '/' . $_item['__ tmpTitle __'] .'/' ] = $_item;
     }
+    //echo print_r($tmpSortList,true);
     ksort($tmpSortList);
     $lists = array_values($tmpSortList);
 

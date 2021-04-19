@@ -167,16 +167,16 @@ $(document).ready(function () {
         <?php } ?>
     <?php } ?>
     <?php } ?>
-    $('#type_id').attr('disabled', 'disabled');
+    //$('#type_id').attr('disabled', 'disabled');
     $('#module_id').change(function () {
-        var moduleId = $(this).val();
-        if (moduleId>0) {
-            $('#type_id').find('option[data-module="'+moduleId+'"]').show();
-            $('#type_id').find('option[data-module!="'+moduleId+'"]').hide();
-            $('#type_id').removeAttr('disabled');
-        } else {
-            $('#type_id').attr('disabled', 'disabled');
-        }
+        // var moduleId = $(this).val();
+        // if (moduleId>0) {
+        //     $('#type_id').find('option[data-module="'+moduleId+'"]').show();
+        //     $('#type_id').find('option[data-module!="'+moduleId+'"]').hide();
+        //     $('#type_id').removeAttr('disabled');
+        // } else {
+        //     $('#type_id').attr('disabled', 'disabled');
+        // }
     });
 });
 </script>

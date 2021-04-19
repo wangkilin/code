@@ -296,20 +296,36 @@ class categoryModel extends Model
      * @param int $categoryId 分类id
      * @return array 分类id列表
      */
-    public function getCategoryAndChildIds($categoryId)
+    public function getCategoryAndChildIds($categoryId=null)
     {
-        $ids= array(intval($categoryId));
+        //$ids= array(intval($categoryId));
         $categoryList = $this->getAllCategories('id');
-        if(isset($categoryList[$categoryId])) {
-            $path = $categoryList[$categoryId]['path'] . $categoryId . '/';
-            foreach ($categoryList as $_item) {
-                if (strpos($_item['path'], $path)===0) {
-                    $ids [] = $_item['id'];
-                }
+        foreach ($categoryList as & $_itemInfo) {
+            isset($_itemInfo['childIds']) OR $_itemInfo['childIds'] = array($_itemInfo['id']);
+            $_parentId = $_itemInfo['parent_id'];
+            while(isset($categoryList[$_parentId])) {
+                isset($categoryList[$_parentId ]['childIds'])
+                    OR $categoryList[$_parentId ]['childIds'] = array();
+                $categoryList[$_parentId ]['childIds'][] = $_itemInfo['id'];
+
+                $_parentId = $categoryList[$_parentId ]['parent_id'];
             }
         }
+        // if(isset($categoryList[$categoryId])) {
+        //     $path = $categoryList[$categoryId]['path'] . $categoryId . '/';
+        //     foreach ($categoryList as $_item) {
+        //         if (strpos($_item['path'], $path)===0) {
+        //             $ids [] = $_item['id'];
+        //         }
+        //     }
+        // }
 
-        return $ids;
+        if ($categoryId) {
+
+            return $categoryList[$categoryId]['childIds'];
+        } else {
+            return $categoryList;
+        }
     }
 
 

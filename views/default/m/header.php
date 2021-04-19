@@ -1,7 +1,7 @@
 <?php View::output('m/header_meta.php'); ?>
 <!-- header -->
 <div class="header">
-	<a class="logo" href="m/"><img src="<?php echo G_STATIC_URL; ?>/mobile/img/logo.png" alt="" width="52" /></a>
+	<a class="logo" href="m/"><img src="<?php echo G_STATIC_URL; ?>/mobile/img/icodebang_white_face_logo@2x.png" alt="" width="48" /></a>
 	<span class="pull-right">
 		<?php if ($this->user_id) { ?>
 			<a href="m/user/<?php echo $this->user_info['url_token']; ?>">

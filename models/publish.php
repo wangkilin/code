@@ -492,7 +492,7 @@ class publishModel extends Model
      * @param string $css_class
      * @return number
      */
-    public function add_attach($item_type, $file_name, $attach_access_key, $add_time, $file_location, $is_image = false, $file_mime=null, $css_class=null)
+    public function add_attach($item_type, $file_name, $attach_access_key, $add_time, $file_location, $is_image = false, $file_mime=null, $css_class=null, $img_src_url='')
     {
         if ($is_image) {
             $is_image = 1;
@@ -506,7 +506,8 @@ class publishModel extends Model
             'is_image'      => $is_image,
             'item_type'     => $item_type,
             'file_mime'     => $file_mime,
-            'css_class'     => $css_class
+            'css_class'     => $css_class,
+            'img_src_url'   => $img_src_url,
         ));
     }
 

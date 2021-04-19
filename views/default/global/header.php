@@ -20,10 +20,10 @@
 				<nav role="navigation" class="collapse navbar-collapse bs-navbar-collapse">
 				  <ul class="nav navbar-nav">
 					<li><a href="<?php echo base_url(); ?>" class="<?php if (!$_GET['app'] OR $_GET['app'] == 'index') { ?>active<?php } ?>"><i class="icon icon-home"></i><?php _e('首页'); ?></a></li>
-                    <?php if(Application::config()->get('system')->model['course']['status']) {
-                    ?><li><a href="course/" class="<?php if ($_GET['app'] == 'course') { ?>active<?php } ?>"><?php _e('教程'); ?></a></li><?php } ?>
                     <?php if(Application::config()->get('system')->model['article']['status']) {
                     ?><li><a href="article/" class="<?php if ($_GET['app'] == 'article') { ?>active<?php } ?>"><?php _e('文章'); ?></a></li><?php } ?>
+                    <?php if(Application::config()->get('system')->model['course']['status']) {
+                    ?><li><a href="course/" class="<?php if ($_GET['app'] == 'course') { ?>active<?php } ?>"><?php _e('教程'); ?></a></li><?php } ?>
                     <?php if(Application::config()->get('system')->model['asked']['status']) {
                     ?><li><a href="asked/" class="<?php if ($_GET['app'] == 'asked') { ?>active<?php } ?>"><?php _e('面试题'); ?></a></li><?php } ?>
                     <?php if(Application::config()->get('system')->model['manual']['status']) {

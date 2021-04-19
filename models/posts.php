@@ -172,9 +172,12 @@ class postsModel extends Model
                 $where[] = 'is_recommend = 1';
             }
 
-            if ($category_id)
-            {
-                $where[] = 'category_id IN(' . implode(',', $this->model('system')->get_category_with_child_ids(null, $category_id)) . ')';
+            if ($category_id) {
+                if (is_array($category_id)) {
+                    $where[] = 'category_id IN(' . implode(',', $category_id ) . ')';
+                } else {
+                    $where[] = 'category_id IN(' . implode(',', $this->model('system')->get_category_with_child_ids(null, $category_id)) . ')';
+                }
             }
 
             if ($post_type)
