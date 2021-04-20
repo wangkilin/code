@@ -300,8 +300,9 @@ class categoryModel extends Model
     {
         //$ids= array(intval($categoryId));
         $categoryList = $this->getAllCategories('id');
-        foreach ($categoryList as & $_itemInfo) {
-            isset($_itemInfo['childIds']) OR $_itemInfo['childIds'] = array($_itemInfo['id']);
+        foreach ($categoryList as $_k => $_itemInfo) {
+            isset($categoryList[$_k]['childIds']) OR $categoryList[$_k]['childIds'] = array($_itemInfo['id']);
+            in_array($_itemInfo['id'], $categoryList[$_k]['childIds']) OR $categoryList[$_k]['childIds'][] = $_itemInfo['id'];
             $_parentId = $_itemInfo['parent_id'];
             while(isset($categoryList[$_parentId])) {
                 isset($categoryList[$_parentId ]['childIds'])
@@ -319,7 +320,7 @@ class categoryModel extends Model
         //         }
         //     }
         // }
-
+        //var_dump($categoryList);
         if ($categoryId) {
 
             return $categoryList[$categoryId]['childIds'];

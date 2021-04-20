@@ -1,6 +1,6 @@
 <?php
 if ($this->posts_list) {
-?><ul><?php
+?><ul class="row"><?php
     foreach ($this->posts_list AS $key => $val) { ?>
         <li class="clearfix <?php echo $this->listColClass;
         if ($val['question_id']) {

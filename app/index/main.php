@@ -77,7 +77,7 @@ class main extends BaseController
             if ($_itemInfo['category_ids']) {
                 $_itemInfo['category_ids'] = array_unique($_itemInfo['category_ids']);
 
-                View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 22, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
+                View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 24, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
                 $_itemInfo['posts_list'] = View::output('block/post_title_list_with_category', false);
                 $_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
             }

@@ -362,22 +362,23 @@ if ($('#J_dotLine').length) {
                           <div>
                             <ul class="">
                             <?php
-                            $_tmpIndex = 1;
+                            $_tmpIndex = 0;
                             foreach ($_itemInfo['course_table_list'] as $_courseTableInfo) {
+                                if (($_tmpIndex % 4 == 0) && $_tmpIndex>0 ) { echo '</ul><ul class="">';}
+                                $_tmpIndex++;
                             ?>
                                 <li class="nopadding col-sm-12 col-xs-12 col-md-12 col-lg-12">
                                     <a class="clearfix-item" href="/course/html5/id-html_tutorial__table_id-25.html" title="<?php echo $_courseTableInfo['title'];?>">
-                                        <div class="course_img  padding5 hidden-xs col-sm-2 col-md-2 col-lg-2">
+                                        <div class="course_img  padding5 col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <img src="//www.icodebang.cn/uploads/nav_menu/<?php echo $_courseTableInfo['icon'];?>" alt="<?php echo $_courseTableInfo['title'];?>教程">
                                         </div>
-                                        <div class="course_info padding-5 col-xs-12 col-sm-10 col-md-10 col-lg-10">
+                                        <div class="course_info padding-5 col-xs-10 col-sm-10 col-md-10 col-lg-10">
                                             <h4 class="table-title nomargin"><?php echo $_courseTableInfo['title'];?></h4>
-                                            <p class="table-desc hidden-xs text-color-999 nomargin"><?php echo $_courseTableInfo['description'];?></p>
+                                            <p class="table-desc text-color-999 nomargin"><?php echo $_courseTableInfo['description'];?></p>
                                         </div>
                                     </a>
                                 </li>
                             <?php
-                                if ($_tmpIndex++ % 4 == 0) { echo '</ul><ul class="">';}
 
                             } ?>
                             </ul>
