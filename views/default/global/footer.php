@@ -1,17 +1,17 @@
 <div class="container margin20"></div>
 <div class="icb-footer-wrap">
     <div class="container text-center">
-            <div class="margin10">
+            <div class="margin20">
                 <a href="">关于我们</a>
-                |
+                •
                 <a href="">投稿指南</a>
-                |
+                •
                 <a href="">站点地图</a>
-                |
+                •
                 <a href="">联系我们</a>
-                |
+                •
                 <a href="">合作网站</a>
-                |
+                •
                 <a href="">免责声明</a>
             </div>
             <div class="margin10">
