@@ -24,6 +24,46 @@ class main extends BaseController
         }
     }
 
+    public function showDataInCategory ($categoryInfo)
+    {
+        $this->per_page = 24;
+        $allCategoryList = $this->model('category')->getCategoryAndChildIds();
+        $categoryList = array($categoryInfo['id'] => $allCategoryList[$categoryInfo['id']]);
+        //var_dump($categoryList);
+
+        View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
+        View::assign('show_image', true);
+        foreach ($categoryList as & $_itemInfo) {
+            $_itemInfo['category_ids'] = $_itemInfo['childIds'];
+            if ($_itemInfo['category_ids']) {
+                $_itemInfo['category_ids'] = array_unique($_itemInfo['category_ids']);
+                View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + $this->per_page, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
+                $_itemInfo['posts_list'] = View::output('block/post_title_list_with_category', false);
+                $_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
+            }
+        }
+//var_dump($categoryInfo);
+        $pagination = Application::pagination()->initialize(array(
+            'base_url' => get_js_url('/category-' . $categoryInfo['url_token']),
+            'total_rows' => $this->model('posts')->get_posts_list_total(),
+            'per_page' => $this->per_page,
+        ))->create_links();
+
+
+        View::assign('itemList', $categoryList);
+        View::assign('categoryList', $allCategoryList);
+        View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
+        View::assign('show_image', true);
+
+        View::import_css('isinho.com/owl.theme.default.css');
+        View::import_css('isinho.com/owl.carousel.min.css');
+        View::import_js('isinho.com/owl.carousel.min.js');
+
+        View::assign('pagination', $pagination);
+        View::output('index/show_data_in_category');
+        return;
+    }
+
     public function index_action()
     {
         // 移动端请求， 重定向到移动页面
@@ -52,21 +92,30 @@ class main extends BaseController
             $this->crumb($category_info['title'], '/category-' . $category_info['id']);
             // 组装meta关键字
             $meta_description = $category_info['title'];
-            if ($category_info['description']){
-                $meta_description .= ' - ' . $category_info['description'];
+            if ($category_info['meta_words']){
+                $meta_description .= ' - ' . $category_info['meta_words'];
             }
 
             View::set_meta('description', $meta_description);
+
+            return $this->showDataInCategory($category_info);
         }
         // 没设置排序， 也没有设置推荐， 按照最新排序
         $_GET['sort_type'] = 'new';
 
         // 查看并准备模版中用到的块数据
         $this->_prepareDataByCheckingTplFile('index/index');
-        $categoryList = $this->model('category')->getCategoryAndChildIds();
+        $allCategoryList = $this->model('category')->getCategoryAndChildIds();
+        if ($category_info) {
+            $categoryList = array($category_info['id'] => $allCategoryList[$category_info['id']]);
+        } else {
+            $categoryList = $allCategoryList;
+        }
+        //var_dump($categoryList);
 
         View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
         View::assign('show_image', true);
+
         foreach (View::$view->content_nav_menu as & $_itemInfo) {
             $_itemInfo['category_ids'] = array();
             foreach ($_itemInfo['child'] as $_childInfo) {
@@ -76,7 +125,6 @@ class main extends BaseController
             }
             if ($_itemInfo['category_ids']) {
                 $_itemInfo['category_ids'] = array_unique($_itemInfo['category_ids']);
-
                 View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 24, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
                 $_itemInfo['posts_list'] = View::output('block/post_title_list_with_category', false);
                 $_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
@@ -125,7 +173,7 @@ class main extends BaseController
             $attachList[$_item['item_type']][$_item['item_id']] = array_pop($attachList[$_item['item_type']][$_item['item_id']]);
         }
 
-        View::assign('categoryList', $categoryList);
+        View::assign('categoryList', $allCategoryList);
         View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
         View::assign('show_image', true);
         View::assign('attach_list', $attachList);

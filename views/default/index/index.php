@@ -345,7 +345,7 @@ if ($('#J_dotLine').length) {
                         echo $_itemInfo['title']
                          ?></h2></li><?php
                         foreach ($_itemInfo['category_ids'] as $_categoryId) { ?>
-                        <a class="text-color-999 icb-padding10"><?php echo $this->categoryList[$_categoryId]['title']; ?></a>
+                        <a class="text-color-999 icb-padding10" href="/index/category-<?php echo $this->categoryList[$_categoryId]['url_token']=='' ? $this->categoryList[$_categoryId]['id'] :$this->categoryList[$_categoryId]['url_token'];?>"><?php echo $this->categoryList[$_categoryId]['title']; ?></a>
                         <?php } ?>
 					</ul>
 					<!-- end tab切换 -->
@@ -469,36 +469,41 @@ if ($('#J_dotLine').length) {
         // owl.goTo 跳到第几个
         // owl.jumpTo 不使用动画跳到第几个
 	======================================*/
-	$(".js-scrollup > div").owlCarousel({
-        itemsScaleUp : true,// 布尔值false
-		loop:true,
-		autoplay:true,
-		autoplayHoverPause:true,
-		smartSpeed: 10000,
-		autoplayTimeout:10000,
-		mouseDrag: true,
-		items:1,
-		animateIn: 'fadeIn',
-		animateOut: 'fadeOut',
-		nav:false,
-		dots:true,
-        navText:['',''],
-		//navText: ['<i class="fa fa-angle-left icon icon-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right icon icon-left" aria-hidden="true"></i>'],
-		responsive:{
-			300: {
-                items:1,
-            },
-            480: {
-                items:1,
-            },
-            768: {
-                items:1,
-            },
-            1170: {
-                nav:false,
-                items:1,
-            },
-		}
-	});
+$(".js-scrollup > div").each(function () {
+    if ($(this).find('ul').length <2) {
+        return;
+    }
+        $(".js-scrollup > div").owlCarousel({
+            itemsScaleUp : true,// 布尔值false
+            loop:true,
+            autoplay:true,
+            autoplayHoverPause:true,
+            smartSpeed: 10000,
+            autoplayTimeout:10000,
+            mouseDrag: true,
+            items:1,
+            animateIn: 'fadeIn',
+            animateOut: 'fadeOut',
+            nav:false,
+            dots:true,
+            navText:['',''],
+            //navText: ['<i class="fa fa-angle-left icon icon-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right icon icon-left" aria-hidden="true"></i>'],
+            responsive:{
+                300: {
+                    items:1,
+                },
+                480: {
+                    items:1,
+                },
+                768: {
+                    items:1,
+                },
+                1170: {
+                    nav:false,
+                    items:1,
+                },
+            }
+        });
+});
 </script>
 <?php View::output('global/footer.php'); ?>
