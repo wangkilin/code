@@ -2,17 +2,17 @@
 <div class="icb-footer-wrap">
     <div class="container text-center">
             <div class="margin20">
-                <a href="">关于我们</a>
+                <a href="/page/website_aboutus.html">关于我们</a>
                 •
-                <a href="">投稿指南</a>
+                <a href="/page/website_donate.html">赞助与捐赠</a>
                 •
                 <a href="">站点地图</a>
                 •
-                <a href="">联系我们</a>
+                <a href="/page/website_contact_us.html">联系我们</a>
                 •
-                <a href="">网站合作</a>
+                <a href="/page/website_cooperation.html">网站合作</a>
                 •
-                <a href="">免责声明</a>
+                <a href="/page/website_disclaimer.html">免责声明</a>
             </div>
             <div class="margin10">
                 <div style="color:#fff">本站为个人网站，部分内容来自于互联网，版权归原作者所有。如本站内容有侵权，敬请来信联系我们，我们将及时删除清理。</div>
