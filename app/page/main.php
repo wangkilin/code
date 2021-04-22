@@ -30,7 +30,8 @@ class main extends Controller
 
     public function index_action()
     {
-        if (!$page_info = $this->model('page')->getPageByToken($_GET['id']) OR $page_info['enabled'] == 0)
+        $page_info = $this->model('page')->getPageByToken($_GET['id']);
+        if (!$page_info OR $page_info['enabled'] == 0)
         {
             HTTP::error_404();
         }
@@ -48,6 +49,9 @@ class main extends Controller
         if ($page_info['description'])
         {
             View::set_meta('description', $page_info['description']);
+        }
+        if ($page_info['category_id']) {
+            View::assign('page_list', $this->model()->fetch_all('pages', 'category_id = ' . $page_info['category_id']));
         }
 
         View::assign('page_info', $page_info);

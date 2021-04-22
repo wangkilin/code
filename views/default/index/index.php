@@ -343,10 +343,10 @@ if ($('#J_dotLine').length) {
 					<ul class="nav nav-tabs icb-nav-tabs right padding-10">
 					    <li class="nav-tabs-title"><h2 class=""><i class="icon icon-list"></i><?php
                         echo $_itemInfo['title']
-                         ?></h2></li><?php
+                         ?></h2></li><span class=" "><?php
                         foreach ($_itemInfo['category_ids'] as $_categoryId) { ?>
                         <a class="text-color-999 icb-padding10" href="/index/category-<?php echo $this->categoryList[$_categoryId]['url_token']=='' ? $this->categoryList[$_categoryId]['id'] :$this->categoryList[$_categoryId]['url_token'];?>"><?php echo $this->categoryList[$_categoryId]['title']; ?></a>
-                        <?php } ?>
+                        <?php } ?></span>
 					</ul>
 					<!-- end tab切换 -->
 					<div class="icb-mod icb-article-list  clearfix margin10">
@@ -357,9 +357,9 @@ if ($('#J_dotLine').length) {
                         <div class="col-sm-9 nopadding">
 						    <?php echo $_itemInfo['posts_list']; ?>
                         </div>
-                        <div class="col-sm-3 homepage-course-table-list js-scrollup nopadding">
+                        <div class="col-sm-3 homepage-course-table-list nopadding">
                           <h3 class="padding-10"><i class="icon-reader"></i> <?php echo $_itemInfo['title'];?> 教程</h3>
-                          <div>
+                          <div class="js-scrollup ">
                             <ul class="">
                             <?php
                             $_tmpIndex = 0;
@@ -469,17 +469,18 @@ if ($('#J_dotLine').length) {
         // owl.goTo 跳到第几个
         // owl.jumpTo 不使用动画跳到第几个
 	======================================*/
-$(".js-scrollup > div").each(function () {
-    if ($(this).find('ul').length <2) {
+$(".js-scrollup").each(function () {
+    if ($(this).children().length <2) {
         return;
     }
-        $(".js-scrollup > div").owlCarousel({
+    var timeScroll = parseInt(Math.random() * 10000);
+        $(this).owlCarousel({
             itemsScaleUp : true,// 布尔值false
             loop:true,
             autoplay:true,
             autoplayHoverPause:true,
-            smartSpeed: 10000,
-            autoplayTimeout:10000,
+            smartSpeed: 10000 + timeScroll,
+            autoplayTimeout:10000 + timeScroll,
             mouseDrag: true,
             items:1,
             animateIn: 'fadeIn',

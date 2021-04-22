@@ -25,12 +25,16 @@ class page extends AdminController
      */
     public function index_action()
     {
-        View::assign('page_list', $this->model('page')->fetch_page_list($_GET['page'], 20));
+        $categoryList = $this->model()->fetch_all('page_category');
+        $categoryIds = array_column($categoryList, 'id');
+        $categoryList= array_combine($categoryIds, $categoryList);
+        View::assign('categoryList', $categoryList);
+        View::assign('page_list', $this->model('page')->fetch_page_list($_GET['page'], $this->per_page));
 
         View::assign('pagination', Application::pagination()->initialize(array(
             'base_url'   => get_js_url('/admin/page/'),
             'total_rows' => $this->model('page')->found_rows(),
-            'per_page'   => 20
+            'per_page'   => $this->per_page
         ))->create_links());
 
         View::output('admin/page/list');
@@ -43,6 +47,8 @@ class page extends AdminController
     {
         $this->crumb(Application::lang()->_t('添加页面'), "admin/page/add/");
 
+        $categoryList = $this->model()->fetch_all('page_category');
+        View::assign('categoryList', $categoryList);
         View::import_js('js/fileupload.js');
         if (get_setting('advanced_editor_enable') == 'Y') {
             import_editor_static_files();
@@ -61,6 +67,8 @@ class page extends AdminController
         if (!$page_info = $this->model('page')->getPageById($_GET['id'])) {
             H::redirect_msg(Application::lang()->_t('页面不存在'), '/admin/page/');
         }
+        $categoryList = $this->model()->fetch_all('page_category');
+        View::assign('categoryList', $categoryList);
 
         View::assign('page_info', $page_info);
 

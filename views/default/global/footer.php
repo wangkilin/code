@@ -15,12 +15,13 @@
                 <a href="">免责声明</a>
             </div>
             <div class="margin10">
-                <div class="">本站为个人网站，部分内容来自于互联网，版权归原作者所有。如本站内容有侵权，敬请来信联系我们，我们将及时删除清理。</div>
+                <div style="color:#fff">本站为个人网站，部分内容来自于互联网，版权归原作者所有。如本站内容有侵权，敬请来信联系我们，我们将及时删除清理。</div>
+                <div class="margin5">
                 © <?php echo date('Y'); ?> <?php echo get_setting('site_name');?><?php if(get_setting('icp_beian')){ ?><span class="hidden-xs"> - <?php echo get_setting('icp_beian'); ?><?php } ?></span>
 
                 <span class="hidden-xs">Powered By <a href="//www.icodebang.com" target="blank">iCodebang.com <?php echo G_VERSION; ?></a></span>
                 <span class="hidden-xs">备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a></span>
-
+                </div>
             </div>
 		<?php if (is_mobile(true)) { ?>
 			<div class="container">

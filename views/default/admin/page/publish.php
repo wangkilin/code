@@ -40,6 +40,19 @@
 				<tr>
 					<td>
 						<div class="form-group">
+							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属分类'); ?>:</span>
+							<div class="col-sm-10 col-xs-9">
+                                <select name="category_id" class="form-control" >
+                                    <option value="0">--选择分类--</option>
+                                    <?php echo buildSelectOptions($this->categoryList, 'title', 'id', $this->page_info['category_id']);?>
+                                </select>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('页面描述'); ?>:</span>
 							<div class="col-sm-10 col-xs-9">
 								<input type="text" name="description" class="form-control" value="<?php echo $this->page_info['description']; ?>" />

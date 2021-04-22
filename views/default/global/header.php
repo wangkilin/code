@@ -66,7 +66,7 @@
 
 					<?php if (get_setting('enable_help_center') == 'Y') { ?><!--<li><a href="help/"<?php if ($_GET['app'] == 'help') { ?> class="active"<?php } ?>><i class="icon icon-bulb"></i> <?php _e('帮助'); ?></a></li>--><?php } ?>
 
-                    <li><a href="test/" class="<?php if ($_GET['app'] == 'test') { ?>active<?php } ?>"><?php _e('测试'); ?></a></li>
+                    <!-- <li><a href="test/" class="<?php if ($_GET['app'] == 'test') { ?>active<?php } ?>"><?php _e('测试'); ?></a></li> -->
                   </ul>
 				</nav>
 			</div>
@@ -74,7 +74,7 @@
             <!-- 搜索框 -->
             <div class="icb-search-box  hidden-xs hidden-sm">
                 <form class="navbar-search" action="search/" id="global_search_form" method="post">
-                    <input class="form-control search-query" type="text" placeholder="<?php _e('搜索问题、话题或人'); ?>" autocomplete="off" name="q" id="icb-search-query" data-dropdown-type="tip"/>
+                    <input class="form-control search-query" type="text" placeholder="<?php _e('输入关键字搜索文章，教程'); ?>" autocomplete="off" name="q" id="icb-search-query" data-dropdown-type="tip"/>
                     <span title="<?php _e('搜索'); ?>" id="global_search_btns" onClick="$('#global_search_form').submit();"><i class="icon icon-search"></i></span>
                     <div class="icb-dropdown">
                         <div class="mod-body">

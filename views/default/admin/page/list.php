@@ -19,6 +19,7 @@
 					<thead>
 						<tr>
 							<th><?php _e('启用'); ?></th>
+							<th><?php _e('页面分类'); ?></th>
 							<th><?php _e('页面标题'); ?></th>
 							<th width="50%"><?php _e('页面描述'); ?></th>
 							<th><?php _e('操作'); ?></th>
@@ -31,6 +32,7 @@
 								<input type="hidden" name="page_ids[<?php echo $val['id']; ?>]" value="<?php echo $val['id']; ?>" />
 								<input type="checkbox" class="enabled-status" name="enabled_status[<?php echo $val['id']; ?>]" value="1"<?php if ($val['enabled']) { ?> checked="checked"<?php } ?> />
 							</td>
+                            <td><?php if($val['category_id']) echo $this->categoryList[$val['category_id']]['title'];?></td>
 							<td><a href="page/<?php echo $val['url_token']; ?>" target="_blank"><?php echo $val['title']; ?></a></td>
 							<td width="50%"><?php echo $val['description']; ?></td>
 							<td>
