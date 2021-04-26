@@ -5,7 +5,7 @@
 		<div class="container">
 			<!-- logo -->
 			<div class="icb-logo hidden-xs">
-				<a href="<?php echo base_url(); ?>"></a>
+				<a href="<?php echo base_url(); ?>"><span>爱码帮 <i class="text-color-999">&trade;</i><br/>icodebang.cn</span></a>
 			</div>
 			<!-- end logo -->
 			<!-- 导航 -->
