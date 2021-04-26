@@ -19,7 +19,7 @@ if (!defined('iCodeBang_Com'))
     die;
 }
 
-class ajax_weixin extends AdminController
+class weixin extends AdminController
 {
     public function setup()
     {

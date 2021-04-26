@@ -18,7 +18,7 @@ if (!defined('iCodeBang_Com'))
     die;
 }
 
-class main extends Controller
+class main extends BaseController
 {
     public function get_access_rule()
     {
@@ -162,23 +162,184 @@ class main extends Controller
         View::output('article/index');
     }
 
+    public function showDataInCategory ($categoryInfo)
+    {
+        View::assign('category_info', $categoryInfo);
+
+        $this->crumb($categoryInfo['title'], '/category-' . $categoryInfo['id']);
+        // 组装meta关键字
+        $meta_description = $categoryInfo['title'];
+        if ($categoryInfo['meta_words']){
+            $meta_description .= ' - ' . $categoryInfo['meta_words'];
+        }
+
+        View::set_meta('description', $meta_description);
+
+        $this->per_page = 24;
+        $allCategoryList = $this->model('category')->getCategoryAndChildIds();
+        $categoryList = array($categoryInfo['id'] => $allCategoryList[$categoryInfo['id']]);
+        //var_dump($categoryList);
+
+        View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
+        View::assign('show_image', true);
+        foreach ($categoryList as & $_itemInfo) {
+            $_itemInfo['category_ids'] = $_itemInfo['childIds'];
+            if ($_itemInfo['category_ids']) {
+                $_itemInfo['category_ids'] = array_unique($_itemInfo['category_ids']);
+                View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + $this->per_page, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
+                $_itemInfo['posts_list'] = View::output('block/post_title_list_with_category', false);
+                $_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
+            }
+        }
+
+        $pagination = Application::pagination()->initialize(array(
+            'base_url' => get_js_url('/category-' . $categoryInfo['url_token']),
+            'total_rows' => $this->model('posts')->get_posts_list_total(),
+            'per_page' => $this->per_page,
+        ))->create_links();
+
+
+        View::assign('itemList', $categoryList);
+        View::assign('categoryList', $allCategoryList);
+        View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
+        View::assign('show_image', true);
+
+        View::import_css('isinho.com/owl.theme.default.css');
+        View::import_css('isinho.com/owl.carousel.min.css');
+        View::import_js('isinho.com/owl.carousel.min.js');
+
+        View::assign('pagination', $pagination);
+        View::output('index/show_data_in_category');
+        return;
+    }
+
     public function index_square_action()
     {
-        if (is_mobile())
-        {
-            HTTP::redirect('/m/article/');
-        }
+        // 移动端请求， 重定向到移动页面
+        mobileRedirect('/m/article/');
 
         $this->crumb(Application::lang()->_t('文章'), '/article/');
 
-        if ($_GET['category'])
-        {
-            if (is_digits($_GET['category']))
-            {
+        // 获取指定分类下的文章数据
+        if ($_GET['category']) {
+            if (is_digits($_GET['category'])) {
                 $category_info = $this->model('system')->get_category_info($_GET['category']);
             }
-            else
+            else {
+                $category_info = $this->model('system')->get_category_info_by_url_token($_GET['category']);
+            }
+            $this->categoryInfo = $category_info;
+
+            return $this->showDataInCategory($category_info);
+        } else {
+            $siteConfig = Application::config()->get($_SERVER['HTTP_HOST'].'.inc');
+            $topCategoryList = $siteConfig->top5_language_ids;
+            $showCategoryList = $siteConfig->show_category_list;
+
+            $allCategoryList = $this->model('category')->getCategoryAndChildIds();
+            $categoryList = array();
+            foreach ($topCategoryList as $_categoryId) {
+                $categoryList[$_categoryId] = $allCategoryList[$_categoryId];
+            }
+            //var_dump($categoryList);
+            View::assign('listColClass', 'col-sm-12 col-xs-12 nopadding');
+            View::assign('show_image', true);
+
+            foreach ($categoryList as & $_itemInfo) {
+                $_itemInfo['category_ids'] = $_itemInfo['childIds'];
+                $_itemInfo['category_ids'] = array_unique($_itemInfo['category_ids']);
+                View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 12, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
+                $_itemInfo['posts_list'] = View::output('block/post_title_list_with_category', false);
+                $_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
+            }
+
+            View::assign('showCategoryList', $showCategoryList);
+            View::assign('categoryList', $allCategoryList);
+            View::assign('itemList', $categoryList);
+
+
+            //$posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
+            $posts_list = $this->model('article')->getListInDiffCategory($showCategoryList, 'id DESC', 14);
+            foreach ($posts_list as & $_itemInfo) {
+                $_itemInfo['category_info'] = $allCategoryList[$_itemInfo['category_id']];
+            }
+
+            $where = array();
+            $articleIds = array_column($posts_list, 'id');
+            $where[] = '(item_type="article" AND item_id IN (' . join(',', $articleIds) . ') )';
+            $itemList = $this->model('attach')->fetch_all('', join(' OR ', $where));
+            $attachList = array();
+            foreach($itemList as $_item) {
+                isset($attachList[$_item['item_type']]) OR $attachList[$_item['item_type']] = array();
+                $attachList[$_item['item_type']][$_item['item_id']] = $this->model('publish')->parse_attach_data(array($_item), $_item['item_type']);
+                $attachList[$_item['item_type']][$_item['item_id']] = array_pop($attachList[$_item['item_type']][$_item['item_id']]);
+            }
+            View::assign('show_image', false);
+            View::assign('showArticleCategory', true);
+            View::assign('showArticleTime', true);
+            View::assign('attach_list', $attachList);
+            View::assign('posts_list', $posts_list);
+            //View::assign('posts_list_html', View::output('block/post_list_with_article_thumb', false));
+            View::assign('posts_list_html', View::output('block/post_title_list_with_category', false));
+
+
+
+        }
+
+        $article_list = $this->model('article')->get_articles_list($category_info['id'], $_GET['page'], get_setting('contents_per_page'), 'add_time DESC');
+
+
+        if ($article_list) {
+            foreach ($article_list AS $key => $val) {
+                $article_ids[] = $val['id'];
+                $article_uids[$val['uid']] = $val['uid'];
+            }
+
+            $article_topics = $this->model('topic')->get_topics_by_item_ids($article_ids, 'article');
+            $article_users_info = $this->model('account')->getUsersByIds($article_uids);
+
+            foreach ($article_list AS $key => $val)
             {
+                $article_list[$key]['user_info'] = $article_users_info[$val['uid']];
+            }
+        }
+
+
+        // 查看并准备模版中用到的块数据
+        $this->_prepareDataByCheckingTplFile('article/square', 'article');
+
+        View::assign('article_list', $article_list);
+        View::assign('article_topics', $article_topics);
+
+        View::assign('hot_articles', $this->model('article')->get_articles_list(null, 1, 16, 'votes DESC', 30));
+
+        View::assign('pagination', Application::pagination()->initialize(array(
+            'base_url' => get_js_url('/article/category_id-' . $_GET['category_id'] . '__feature_id-' . $_GET['feature_id']),
+            'total_rows' => $article_list_total,
+            'per_page' => get_setting('contents_per_page')
+        ))->create_links());
+
+
+
+        View::import_css('isinho.com/owl.theme.default.css');
+        View::import_css('isinho.com/owl.carousel.min.css');
+        View::import_js('isinho.com/owl.carousel.min.js');
+
+        View::output('article/article_home');
+    }
+
+    public function index_square_action_bak()
+    {
+        // 移动端请求， 重定向到移动页面
+        mobileRedirect('/m/article/');
+
+        $this->crumb(Application::lang()->_t('文章'), '/article/');
+
+        if ($_GET['category']) {
+            if (is_digits($_GET['category'])) {
+                $category_info = $this->model('system')->get_category_info($_GET['category']);
+            }
+            else {
                 $category_info = $this->model('system')->get_category_info_by_url_token($_GET['category']);
             }
         }
@@ -260,6 +421,7 @@ class main extends Controller
             'per_page' => get_setting('contents_per_page')
         ))->create_links());
 
-        View::output('article/square');
+        View::output('article/article_home');
     }
 }
+

@@ -190,6 +190,18 @@ class articleModel extends Model
         return true;
     }
 
+    public function getListInDiffCategory (array $categoryIdList, $sort = 'id DESC', $limit=null)
+    {
+        $sql = '(SELECT * FROM ' . $this->get_table() . ' WHERE category_id = %d ORDER BY ' . $sort . ' LIMIT 1)';
+        $sqlList = array();
+        foreach ($categoryIdList as $_id) {
+            $sqlList[] = sprintf($sql, $_id);
+        }
+        $sql = 'SELECT * FROM ('.join(' UNION ', $sqlList) . ') AS table1 ORDER BY ' . $sort;
+
+        return $this->query_all($sql, $limit, 0, null, null, null);
+    }
+
     public function get_articles_list($category_id, $page, $per_page, $order_by, $day = null)
     {
         $where = array();

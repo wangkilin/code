@@ -26,6 +26,18 @@ class main extends BaseController
 
     public function showDataInCategory ($categoryInfo)
     {
+
+        View::assign('category_info', $categoryInfo);
+
+        $this->crumb($categoryInfo['title'], '/category-' . $categoryInfo['id']);
+        // 组装meta关键字
+        $meta_description = $categoryInfo['title'];
+        if ($categoryInfo['meta_words']){
+            $meta_description .= ' - ' . $categoryInfo['meta_words'];
+        }
+
+        View::set_meta('description', $meta_description);
+
         $this->per_page = 24;
         $allCategoryList = $this->model('category')->getCategoryAndChildIds();
         $categoryList = array($categoryInfo['id'] => $allCategoryList[$categoryInfo['id']]);
@@ -87,16 +99,6 @@ class main extends BaseController
         }
         // 获取到分类信息， 将分类信息传递到前端
         if ($category_info) {
-            View::assign('category_info', $category_info);
-
-            $this->crumb($category_info['title'], '/category-' . $category_info['id']);
-            // 组装meta关键字
-            $meta_description = $category_info['title'];
-            if ($category_info['meta_words']){
-                $meta_description .= ' - ' . $category_info['meta_words'];
-            }
-
-            View::set_meta('description', $meta_description);
 
             return $this->showDataInCategory($category_info);
         }
@@ -115,6 +117,7 @@ class main extends BaseController
 
         View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
         View::assign('show_image', true);
+        View::assign('showArticleCategory', true);
 
         foreach (View::$view->content_nav_menu as & $_itemInfo) {
             $_itemInfo['category_ids'] = array();
@@ -131,65 +134,16 @@ class main extends BaseController
             }
         }
 
-        $posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 22, $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
-
-        $articleIds = array();
-        $courseIds  = array();
-        $questionIds = array();
-        $postIds = array();
-        if ($posts_list) {
-            foreach ($posts_list AS $key => $val) {
-                if ($val['answer_count']) {
-                    $posts_list[$key]['answer_users'] = $this->model('question')->get_answer_users_by_question_id($val['question_id'], 2, $val['published_uid']);
-                }
-                switch ($val['post_type']) {
-                    case 'article':
-                    case 'course':
-                    case 'question':
-                        ${$val['post_type'] . 'Ids'} = isset($val['question_id']) ? $val['question_id']:intval($val['id']);
-                        break;
-                    default:
-                        break;
-                }
-                isset($postIds[$val['post_type']]) OR $postIds[$val['post_type']] = array();
-                $postIds[$val['post_type']][] = isset($val['question_id']) ? $val['question_id']:intval($val['id']);
-            }
-        }
-        $pagination = Application::pagination()->initialize(array(
-            'base_url' => get_js_url('/sort_type-' . preg_replace("/[\(\)\.;']/", '', $_GET['sort_type']) . '__category-' . $category_info['id'] . '__day-' . intval($_GET['day']) . '__is_recommend-' . intval($_GET['is_recommend'])),
-            'total_rows' => $this->model('posts')->get_posts_list_total(),
-            'per_page' => get_setting('contents_per_page')
-        ))->create_links();
-
-        $where = array();
-        foreach($postIds as $_itemType=>$_ids) {
-            $where[] = '(item_type="'.$_itemType.'" AND item_id IN (' . join(',', $_ids) . ') )';
-        }
-        $itemList = $this->model('attach')->fetch_all('', join(' OR ', $where));
-        $attachList = array();
-        foreach($itemList as $_item) {
-            isset($attachList[$_item['item_type']]) OR $attachList[$_item['item_type']] = array();
-            $attachList[$_item['item_type']][$_item['item_id']] = $this->model('publish')->parse_attach_data(array($_item), $_item['item_type']);
-            $attachList[$_item['item_type']][$_item['item_id']] = array_pop($attachList[$_item['item_type']][$_item['item_id']]);
-        }
-
         View::assign('categoryList', $allCategoryList);
-        View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
-        View::assign('show_image', true);
-        View::assign('attach_list', $attachList);
-        View::assign('posts_list', $posts_list);
-        View::assign('posts_list_front', View::output('block/post_title_list_with_category', false));
-        View::assign('posts_list_front', View::output('block/post_title_list_with_category', false));
 
         View::import_css('isinho.com/owl.theme.default.css');
         View::import_css('isinho.com/owl.carousel.min.css');
         View::import_js('isinho.com/owl.carousel.min.js');
 
-        View::assign('pagination', $pagination);
         View::output('index/index');
     }
 
-    public function index_action_bak()
+    public function index_bak_action()
     {
         // 移动端请求， 重定向到移动页面
         mobileRedirect('/m/index/' . $_GET['id']);
@@ -304,6 +258,6 @@ class main extends BaseController
 
 
         View::assign('pagination', $pagination);
-        View::output('index/index');
+        View::output('index/index.php.bak');
     }
 }

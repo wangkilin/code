@@ -28,14 +28,6 @@ defined('DS') OR define('DS', DIRECTORY_SEPARATOR);
 defined('ROOT_PATH') OR define('ROOT_PATH', dirname(dirname(__FILE__)) . DS);
 defined('INC_PATH')  OR define('INC_PATH', dirname(__FILE__) . DS);
 defined('CONF_PATH') OR define('CONF_PATH', ROOT_PATH . 'config' . DS);
-if (isset($_SERVER['HTTP_HOST']) && file_exists(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php')) {// 包含网站独立的配置参数
-    include_once(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php');
-}
-
-defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache'. DS);
-defined('VIEW_PATH') OR define('VIEW_PATH', ROOT_PATH . 'views' . DS);
-// 定义控制器文件存放的顶级目录
-defined('CONTROLLER_DIR') OR define('CONTROLLER_DIR', 'app');
 
 if (function_exists('memory_get_usage')) {
     define('MEMORY_USAGE_START', memory_get_usage());
@@ -114,6 +106,7 @@ if (@ini_get('register_globals'))
     }
 }
 
+
 require_once(INC_PATH . 'functions.app.php');
 
 if (file_exists(INC_PATH . 'config.inc.php')) {
@@ -124,6 +117,19 @@ loadClass('core_autoload');
 
 date_default_timezone_set('Etc/GMT-8');
 
+require_once INC_PATH . 'Application.php';
+require_once INC_PATH . 'Controller.php';
+require_once INC_PATH . 'Model.php';
+
+if (isset($_SERVER['HTTP_HOST']) && file_exists(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php')) {// 包含网站独立的配置参数
+    //include_once(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php');
+    Application::config()->load_config($_SERVER['HTTP_HOST'] .'.inc');
+}
+
+defined('CACHE_PATH') OR define('CACHE_PATH', ROOT_PATH . 'cache'. DS);
+defined('VIEW_PATH') OR define('VIEW_PATH', ROOT_PATH . 'views' . DS);
+// 定义控制器文件存放的顶级目录
+defined('CONTROLLER_DIR') OR define('CONTROLLER_DIR', 'app');
 
 if (defined('G_GZIP_COMPRESS') AND G_GZIP_COMPRESS === true
     && @ini_get('zlib.output_compression') == false
@@ -132,7 +138,3 @@ if (defined('G_GZIP_COMPRESS') AND G_GZIP_COMPRESS === true
 ) {
     ob_start('ob_gzhandler');
 }
-
-require_once INC_PATH . 'Application.php';
-require_once INC_PATH . 'Controller.php';
-require_once INC_PATH . 'Model.php';

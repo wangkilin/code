@@ -31,6 +31,8 @@ class BaseController extends Controller
         self::IS_ROLE_MODERATOR     => 'is_moderator',
     );
 
+    protected $categoryInfo = null;
+
 	/**
 	 * 移动端访问， 跳转到相应链接
 	 * @param unknown $url
@@ -69,7 +71,7 @@ class BaseController extends Controller
 
 		// 边栏热门话题
 		if (View::is_output('block/sidebar_hot_topics.php', $tplFile)) {
-			View::assign('sidebar_hot_topics', $this->model('system')->sidebar_hot_topics($category_info['id']));
+			View::assign('sidebar_hot_topics', $this->model('system')->sidebar_hot_topics($this->categoryInfo['id']));
 		}
 
 		// 边栏专题

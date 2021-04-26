@@ -19,7 +19,7 @@ if (!defined('iCodeBang_Com'))
     die;
 }
 
-class ajax_help extends AdminController
+class help extends AdminController
 {
     public function setup()
     {
