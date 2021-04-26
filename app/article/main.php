@@ -237,11 +237,12 @@ class main extends BaseController
             $showCategoryList = $siteConfig->show_category_list;
 
             $allCategoryList = $this->model('category')->getCategoryAndChildIds();
-            $categoryList = array();
+            $categoryList = array(); $categoryIds = array();
             foreach ($topCategoryList as $_categoryId) {
                 $categoryList[$_categoryId] = $allCategoryList[$_categoryId];
+                $categoryIds = array_merge($categoryIds, $allCategoryList[$_categoryId]['childIds']);
             }
-            //var_dump($categoryList);
+            //var_dump(array_diff(array_keys($allCategoryList), $categoryIds ) ) ;
             View::assign('listColClass', 'col-sm-12 col-xs-12 nopadding');
             View::assign('show_image', true);
 
@@ -256,6 +257,7 @@ class main extends BaseController
             View::assign('showCategoryList', $showCategoryList);
             View::assign('categoryList', $allCategoryList);
             View::assign('itemList', $categoryList);
+
 
 
             //$posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
@@ -282,6 +284,16 @@ class main extends BaseController
             //View::assign('posts_list_html', View::output('block/post_list_with_article_thumb', false));
             View::assign('posts_list_html', View::output('block/post_title_list_with_category', false));
 
+
+
+            View::assign('listColClass', 'col-sm-4 col-xs-6 nopadding');
+            View::assign('show_image', false);
+            View::assign('showArticleTime', false);
+            View::assign('showArticleCategory', true);
+            $moreCategoryIds = array_diff(array_keys($allCategoryList), $categoryIds );
+            View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 45, $_GET['sort_type'], null, $moreCategoryIds) );
+            View::assign('more_posts_list', View::output('block/post_title_list_with_category', false) );
+            View::assign('moreCategoryIds', $moreCategoryIds);
 
 
         }
@@ -311,7 +323,7 @@ class main extends BaseController
         View::assign('article_list', $article_list);
         View::assign('article_topics', $article_topics);
 
-        View::assign('hot_articles', $this->model('article')->get_articles_list(null, 1, 16, 'votes DESC', 30));
+        View::assign('hot_articles', $this->model('article')->get_articles_list(null, 1, 15, 'votes DESC', 30));
 
         View::assign('pagination', Application::pagination()->initialize(array(
             'base_url' => get_js_url('/article/category_id-' . $_GET['category_id'] . '__feature_id-' . $_GET['feature_id']),

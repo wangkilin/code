@@ -65,7 +65,7 @@
 				<!-- end 侧边栏 -->
 
 
-				<div class="col-sm-12 col-md-12 icb-main-content">
+				<div class="col-sm-12 col-md-12 nopadding">
 					<div class="icb-mod icb-article-list  clearfix">
 
                     <?php foreach ($this->itemList as $_itemInfo) {
@@ -87,6 +87,44 @@
                     </div>
 					<!-- end 文章列表 -->
 				</div>
+
+				<div class="col-sm-12 col-md-12 nopadding">
+
+					<!-- tab切换 -->
+					<ul class="nav nav-tabs icb-nav-tabs right padding-10">
+					    <li class="nav-tabs-title"><h2 class=""><i class="icon icon-list"></i>其他开发</h2></li>
+					</ul>
+					<!-- end tab切换 -->
+					<div class="icb-mod icb-article-list prefix-dot padding-10 clearfix">
+                    <?php echo $this->more_posts_list; ?>
+                    </div>
+					<!-- end 文章列表 -->
+				</div>
+
+                <div class="col-sm-12 col-md-12">
+
+					<!-- tab切换 -->
+					<ul class="nav nav-tabs icb-nav-tabs right padding-10">
+					    <li class="nav-tabs-title"></li>
+					</ul>
+                    <div class="col-sm-1 padding20"> <span class="btn bg-primary">全部分类</span></div>
+
+                    <!-- tab切换 -->
+                    <div class="col-sm-11">
+
+							<ul class="col-sm-12">
+								<?php
+                                foreach($this->categoryList as $_categoryInfo) {?>
+								<li class="pull-left margin-5 padding5">
+                                <a class="text-color-999" href="article/index/category-<?php echo $_categoryInfo['url_token']; ?>"><?php
+                                if ($_categoryInfo['icon']) {
+                                ?><img style="max-width:30px; max-height:18px; width:auto;display:inline-block;" src="//www.icodebang.cn/uploads/nav_menu/<?php echo $_categoryInfo['icon'] ;?>" alt="<?php echo $_categoryInfo['title'];?>"><?php
+                                 }?><?php echo $_categoryInfo['title']; ?></a>
+                                </li>
+                                <?php }?>
+							</ul>
+                        </div>
+                    <!-- end tab切换 -->
 			</div>
 		</div>
 	</div>
