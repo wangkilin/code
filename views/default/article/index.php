@@ -279,16 +279,16 @@
                     <?php } ?>
                     <!-- end 发起人 -->
 
-                    <?php if ($this->recommend_posts) { ?>
-                    <!-- 推荐内容 -->
+                    <?php if ($this->latestArticleList) { ?>
+                    <!-- 同类下最新文章 -->
                     <div class="icb-mod">
                         <div class="mod-head">
-                            <h3><?php _e('相似文章'); ?></h3>
+                            <h3><?php _e('最新文章'); ?></h3>
                         </div>
                         <div class="mod-body">
                             <ul class="prefix-dot">
-                                <?php foreach($this->recommend_posts AS $key => $val) { ?>
-                                <li class="title nooverflow">
+                                <?php foreach($this->latestArticleList AS $key => $val) { ?>
+                                <li class="title ft14">
                                     <?php if ($val['question_id']) { ?>
                                     <a href="question/<?php echo $val['question_id']; ?>"><?php echo $val['question_content']; ?></a>
                                     <?php } else { ?>
@@ -299,7 +299,7 @@
                             </ul>
                         </div>
                     </div>
-                    <!-- end 推荐内容 -->
+                    <!-- end 同类下最新文章 -->
                     <?php } ?>
 
                     <?php if ($this->question_related_list) { ?>

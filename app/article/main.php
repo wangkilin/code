@@ -203,6 +203,9 @@ class main extends BaseController
         $relatedList = $this->model('article')->getRelatedList($article_info['title'], 20, $article_info['id'], $article_info['category_id']);
         View::assign('recommend_posts', $relatedList);
 
+        $latestArticleList = $this->model('article')->get_articles_list($article_info['category_id'], 1, 20, 'add_time DESC');
+        View::assign('latestArticleList', $latestArticleList);
+
         View::output('article/index');
     }
 
