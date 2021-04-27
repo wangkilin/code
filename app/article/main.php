@@ -33,7 +33,7 @@ class main extends BaseController
         return $rule_action;
     }
 
-    public function index_action()
+    public function index_action_bak()
     {
         if ($_GET['notification_id'])
         {
@@ -162,6 +162,53 @@ class main extends BaseController
         View::output('article/index');
     }
 
+    public function index_action()
+    {
+        // 移动端请求， 重定向到移动页面
+        mobileRedirect('/m/article/'. $_GET['id']);
+
+        if(is_numeric($_GET['id'])) {
+            $article_info = $this->model('article')->get_article_info_by_id($_GET['id']);
+            if ($article_info && $article_info['url_token']!=='') {
+                $article_info = null;
+            }
+        } else {
+            $article_info = $this->model('article')->getRow(array('url_token'=>$_GET['id']));
+        }
+
+        if (! $article_info) {
+            HTTP::error_404();
+        }
+        $_GET['id'] = $article_info['id'];
+
+        if ($article_info['has_attach']) {
+            $article_info['attachs'] = $this->model('publish')->getAttachListByItemTypeAndId('article', $article_info['id'], 'min');
+
+            $article_info['attachs_ids'] = FORMAT::parse_attachs($article_info['message'], true);
+        }
+
+        View::assign('article_info', $article_info);
+
+        $this->model('article')->update_views($article_info['id']);
+
+        View::assign('human_valid', human_valid('answer_valid_hour'));
+
+        View::set_meta('keywords', implode(',', $this->model('system')->analysis_keyword($article_info['title'])));
+
+        View::set_meta('description', $article_info['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($article_info['message'])), 0, 128, 'UTF-8', '...'));
+
+        View::assign('attach_access_key', md5($this->user_id . time()));
+
+        // 根据标题搜索相关文章
+        $relatedList = $this->model('article')->getRelatedList($article_info['title'], 20, $article_info['id'], $article_info['category_id']);
+        View::assign('recommend_posts', $relatedList);
+
+        View::output('article/index');
+    }
+
+    /**
+     * 显示分类文章列表
+     */
     public function showDataInCategory ($categoryInfo)
     {
         View::assign('category_info', $categoryInfo);

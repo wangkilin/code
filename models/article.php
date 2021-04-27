@@ -18,7 +18,12 @@ class articleModel extends Model
      */
     public function get_article_info_by_id($article_id)
     {
-        return $this->getById($article_id, 'article');
+        $articleInfo = $this->getById($article_id, 'article');
+        if ($articleInfo) {
+            $postInfo = $this->fetch_row('posts_index', 'post_type="article" AND post_id =' . $article_id  );
+            is_array($postInfo) AND $articleInfo = array_merge($postInfo, $articleInfo);
+        }
+        return $articleInfo;
     }
 
     public function get_article_info_by_ids($article_ids)
@@ -454,6 +459,48 @@ class articleModel extends Model
         }
 
         return $accounts;
+    }
+    /**
+     *
+     */
+    public function getRelatedList($title, $limit = 10, $filterOutId=null, $categoryId=null)
+    {
+        $cache_key = 'article_related_list_' . md5($title) . '_' . $limit;
+
+        if ($list = Application::cache()->get($cache_key)) {
+            return $list;
+        }
+
+        if ($keywords = $this->model('system')->analysis_keyword($title)) {
+            if (sizeof($keywords) <= 1) {
+                return false;
+            }
+
+            if ($list = $this->query_all($this->model('search_fulltext')->bulid_query('article', 'title', $keywords, 'category_id =' . $categoryId), 3000))
+            {
+                $list = aasort($list, 'score', 'DESC');
+
+                $list = array_slice($list, 0, ($limit + 1));
+
+                foreach ($list as $key => & $val) {
+                    if ($val['id'] == $filterOutId) {
+                        unset($list[$key]);
+                        break;
+                    }
+
+                    $val = array(
+                        'id'            => $val['id'],
+                        'title'         => $val['title'],
+                        'category_id'   => $val['category_id'],
+                        'url_token'     => $val['url_token']
+                    );
+                }
+            }
+        }
+
+        Application::cache()->set($cache_key, $list, get_setting('cache_level_low'));
+
+        return $list;
     }
 
     public function update_views($article_id)

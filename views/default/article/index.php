@@ -75,12 +75,37 @@
                                 <?php } ?>
                             </div>
 
+                            <div class="meta clearfix">
+                                <?php if ($this->article_info['author']!=='') echo '<span>作者:', $this->article_info['author'],'</span>';?>
+                                <?php if ($this->article_info['source_url']!=='') echo '<span>原文地址:', $this->article_info['source_url'],'</span>';?>
+                                <?php if ($this->article_info['copy_from']!=='' && ($this->user_info['permission']['edit_article'] OR $this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) ) echo '<br/><span>来源:<a href="'.$this->article_info['copy_from'].'" target="blank">', $this->article_info['copy_from'],'</a></span>';?>
+                            </div>
 
-                    <div class="meta clearfix">
-                        <?php if ($this->article_info['author']!=='') echo '<span>作者:', $this->article_info['author'],'</span>';?>
-                        <?php if ($this->article_info['source_url']!=='') echo '<span>原文地址:', $this->article_info['source_url'],'</span>';?>
-                        <?php if ($this->article_info['copy_from']!=='' && ($this->user_info['permission']['edit_article'] OR $this->user_info['permission']['is_administortar'] OR $this->user_info['permission']['is_moderator']) ) echo '<br/><span>来源:<a href="'.$this->article_info['copy_from'].'" target="blank">', $this->article_info['copy_from'],'</a></span>';?>
-                    </div>
+
+                            <?php if ($this->recommend_posts) { ?>
+                                    <!-- 推荐内容 -->
+                                    <div class="icb-mod clearfix">
+                                        <div class="mod-head">
+                                            <h3><?php _e('爱码帮推荐相关阅读'); ?></h3>
+                                        </div>
+                                        <div class="mod-body">
+                                            <ul class="prefix-dot">
+                                                <?php foreach($this->recommend_posts AS $key => $val) { ?>
+                                                <li class="title nooverflow col-sm-6 col-md-6">
+                                                    <?php if ($val['question_id']) { ?>
+                                                    <a href="question/<?php echo $val['question_id']; ?>"><?php echo $val['question_content']; ?></a>
+                                                    <?php } else { ?>
+                                                    <a href="article/<?php echo $val['id']; ?>"><?php echo $val['title']; ?></a>
+                                                    <?php } ?>
+                                                </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- end 推荐内容 -->
+                                    <?php } ?>
+
+
                             <div class="meta clearfix">
                                 <div class="icb-article-vote pull-left<?php if (!$this->user_id OR $this->user_id == $this->article_info['uid']) { ?> disabled<?php } ?>">
                                     <a href="javascript:;" class="agree<?php if ($this->article_info['vote_info']['rating'] == 1) { ?> active<?php } ?>" onclick="AWS.User.article_vote($(this), <?php echo $this->article_info['id']; ?>, 1);"><i class="icon icon-agree"></i> <b><?php echo $this->article_info['votes']; ?></b></a>
@@ -147,6 +172,7 @@
                                             <?php echo nl2br($val['message']); ?>
                                         </div>
                                     </div>
+
                                     <div class="mod-footer">
                                         <div class="meta">
                                             <span class="pull-right text-color-999"><?php echo date_friendly($val['add_time']); ?></span>
@@ -210,7 +236,7 @@
                 <!-- 侧边栏 -->
                 <div class="col-sm-12 col-md-3 icb-side-bar hidden-sm hidden-xs">
                     <!-- 发起人 -->
-                    <?php if ($this->article_info['anonymous'] == 0) { ?>
+                    <?php if ($this->article_info['anonymous'] == 0 && $this->article_info['user_info']) { ?>
                     <div class="icb-mod user-detail">
                         <div class="mod-head">
                             <h3><?php _e('发起人'); ?></h3>
@@ -257,12 +283,12 @@
                     <!-- 推荐内容 -->
                     <div class="icb-mod">
                         <div class="mod-head">
-                            <h3><?php _e('推荐内容'); ?></h3>
+                            <h3><?php _e('相似文章'); ?></h3>
                         </div>
                         <div class="mod-body">
-                            <ul>
+                            <ul class="prefix-dot">
                                 <?php foreach($this->recommend_posts AS $key => $val) { ?>
-                                <li>
+                                <li class="title nooverflow">
                                     <?php if ($val['question_id']) { ?>
                                     <a href="question/<?php echo $val['question_id']; ?>"><?php echo $val['question_content']; ?></a>
                                     <?php } else { ?>
