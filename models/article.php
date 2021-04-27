@@ -476,7 +476,7 @@ class articleModel extends Model
                 return false;
             }
 
-            if ($list = $this->query_all($this->model('search_fulltext')->bulid_query('article', 'title', $keywords, 'category_id =' . $categoryId), 3000))
+            if ($list = $this->query_all($this->model('search_fulltext')->bulid_query('article', 'title', $keywords, 'category_id =' . $categoryId), 500))
             {
                 $list = aasort($list, 'score', 'DESC');
 
