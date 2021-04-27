@@ -559,7 +559,7 @@
                     <h3 class="course-table-name">移动开发</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="" title="Android 教程">
+                            <a class="clearfix-item" href="/course/Android/id-android_tutorial_intro__table_id-70.html" title="Android 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/android.png" alt="Android 教程">
                                 </div>
