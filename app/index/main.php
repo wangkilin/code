@@ -119,6 +119,10 @@ class main extends BaseController
         View::assign('show_image', true);
         View::assign('showArticleCategory', true);
 
+        $courseFirstPageList = $this->model('course')->fetch_all('course_content_table', '`sort` IN (0,1)', 'sort DESC');
+        $tableIds = array_column($courseFirstPageList, 'table_id');
+        $courseFirstPageList = array_combine($tableIds, $courseFirstPageList);
+        View::assign('courseFirstPageList', $courseFirstPageList);
         foreach (View::$view->content_nav_menu as & $_itemInfo) {
             $_itemInfo['category_ids'] = array();
             foreach ($_itemInfo['child'] as $_childInfo) {
