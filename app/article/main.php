@@ -286,9 +286,9 @@ class main extends BaseController
             echo $pageContent;
             return;
         } else {
-            $cache_key = 'website_channel_page_article';
+            $cache_key = $_SERVER['HTTP_HOST'] . 'website_channel_page_article';
             if ($pageContent = Application::cache()->get($cache_key)) {
-                echo  $pageContent;
+                echo  $pageContent . '<!-- cache -->';
                 return;
             }
 
