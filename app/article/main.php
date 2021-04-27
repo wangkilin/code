@@ -179,6 +179,7 @@ class main extends BaseController
         if (! $article_info) {
             HTTP::error_404();
         }
+
         $_GET['id'] = $article_info['id'];
 
         if ($article_info['has_attach']) {
@@ -259,7 +260,8 @@ class main extends BaseController
         View::import_js('isinho.com/owl.carousel.min.js');
 
         View::assign('pagination', $pagination);
-        View::output('index/show_data_in_category');
+
+        return View::output('index/show_data_in_category', false);
         return;
     }
 
@@ -280,8 +282,16 @@ class main extends BaseController
             }
             $this->categoryInfo = $category_info;
 
-            return $this->showDataInCategory($category_info);
+            $pageContent = $this->showDataInCategory($category_info);
+            echo $pageContent;
+            return;
         } else {
+            $cache_key = 'website_channel_page_article';
+            if ($pageContent = Application::cache()->get($cache_key)) {
+                echo  $pageContent;
+                return;
+            }
+
             $siteConfig = Application::config()->get($_SERVER['HTTP_HOST'].'.inc');
             $topCategoryList = $siteConfig->top5_language_ids;
             $showCategoryList = $siteConfig->show_category_list;
@@ -388,7 +398,10 @@ class main extends BaseController
         View::import_css('isinho.com/owl.carousel.min.css');
         View::import_js('isinho.com/owl.carousel.min.js');
 
-        View::output('article/article_home');
+        $pageContent = View::output('article/article_home', false);
+        Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_low'));
+
+        echo $pageContent;
     }
 
     public function index_square_action_bak()

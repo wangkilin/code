@@ -102,6 +102,12 @@ class main extends BaseController
 
             return $this->showDataInCategory($category_info);
         }
+
+        $cache_key = 'website_homepage';
+        if ($pageContent = Application::cache()->get($cache_key)) {
+            echo  $pageContent . '<!-- cache -->';
+            return;
+        }
         // 没设置排序， 也没有设置推荐， 按照最新排序
         $_GET['sort_type'] = 'new';
 
@@ -144,7 +150,10 @@ class main extends BaseController
         View::import_css('isinho.com/owl.carousel.min.css');
         View::import_js('isinho.com/owl.carousel.min.js');
 
-        View::output('index/index');
+        $pageContent = View::output('index/index', false);
+        Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_normal'));
+
+        echo $pageContent;
     }
 
     public function index_bak_action()
