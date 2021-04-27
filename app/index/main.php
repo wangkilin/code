@@ -103,7 +103,7 @@ class main extends BaseController
             return $this->showDataInCategory($category_info);
         }
 
-        $cache_key = $_SERVER['HTTP_HOST'] . 'website_homepage';
+        $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_homepage';
         if ($pageContent = Application::cache()->get($cache_key)) {
             echo  $pageContent . '<!-- cache -->';
             return;
