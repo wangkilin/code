@@ -15,7 +15,7 @@
 								<?php
                                 $_tmpI = 1;
                                 foreach($this->showCategoryList AS $_categoryName=>$_categoryId) {?>
-								<li class="pull-left padding10">
+								<li class="pull-left margin-5 padding10">
                                     <img style="max-width:30px; max-height:19px; width:auto;display:inline-block;" src="//www.icodebang.cn/uploads/nav_menu/<?php echo $this->categoryList[$_categoryId]['icon'] ;?>" alt="<?php echo $this->categoryList[$_categoryId]['title'];?>"> <a href="article/index/category-<?php echo $this->categoryList[$_categoryId]['url_token']; ?>"><?php echo $this->categoryList[$_categoryId]['title']; ?></a>
                                 </li>
                                 <?php
