@@ -272,6 +272,12 @@ class main extends BaseController
 
         $this->crumb(Application::lang()->_t('文章'), '/article/');
 
+
+
+        View::import_css('isinho.com/owl.theme.default.css');
+        View::import_css('isinho.com/owl.carousel.min.css');
+        View::import_js('isinho.com/owl.carousel.min.js');
+
         // 获取指定分类下的文章数据
         if ($_GET['category']) {
             if (is_digits($_GET['category'])) {
@@ -288,7 +294,8 @@ class main extends BaseController
         } else {
             $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_channel_page_article';
             if ($pageContent = Application::cache()->get($cache_key)) {
-                echo  $pageContent . '<!-- cache -->';
+                View::assign('mainContent', $pageContent.'<!-- cache -->');
+                View::output('global/cache_show.php');
                 return;
             }
 
@@ -393,15 +400,10 @@ class main extends BaseController
         ))->create_links());
 
 
-
-        View::import_css('isinho.com/owl.theme.default.css');
-        View::import_css('isinho.com/owl.carousel.min.css');
-        View::import_js('isinho.com/owl.carousel.min.js');
-
-        $pageContent = View::output('article/article_home', false);
-        Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_low'));
-
-        echo $pageContent;
+        $pageContent = View::output('article/article_home_no_head_foot', false);
+        Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_normal'));
+        View::assign('mainContent', $pageContent);
+        View::output('global/cache_show.php');
     }
 
     public function index_square_action_bak()

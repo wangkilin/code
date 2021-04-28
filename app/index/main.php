@@ -89,6 +89,12 @@ class main extends BaseController
                 HTTP::redirect('/account/complete_profile/');
             }
         }
+
+
+        View::import_css('isinho.com/owl.theme.default.css');
+        View::import_css('isinho.com/owl.carousel.min.css');
+        View::import_js('isinho.com/owl.carousel.min.js');
+
         // 查看分类下的列表。 先获取分类信息
         if ($_GET['category']) {
             if (is_digits($_GET['category'])) {
@@ -105,14 +111,15 @@ class main extends BaseController
 
         $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_homepage';
         if ($pageContent = Application::cache()->get($cache_key)) {
-            echo  $pageContent . '<!-- cache -->';
+            View::assign('mainContent', $pageContent.'<!-- cache -->');
+            View::output('global/cache_show.php');
             return;
         }
         // 没设置排序， 也没有设置推荐， 按照最新排序
         $_GET['sort_type'] = 'new';
 
         // 查看并准备模版中用到的块数据
-        $this->_prepareDataByCheckingTplFile('index/index');
+        $this->_prepareDataByCheckingTplFile('index/index_no_head_foot');
         $allCategoryList = $this->model('category')->getCategoryAndChildIds();
         if ($category_info) {
             $categoryList = array($category_info['id'] => $allCategoryList[$category_info['id']]);
@@ -146,14 +153,10 @@ class main extends BaseController
 
         View::assign('categoryList', $allCategoryList);
 
-        View::import_css('isinho.com/owl.theme.default.css');
-        View::import_css('isinho.com/owl.carousel.min.css');
-        View::import_js('isinho.com/owl.carousel.min.js');
-
-        $pageContent = View::output('index/index', false);
+        $pageContent = View::output('index/index_no_head_foot', false);
         Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_normal'));
-
-        echo $pageContent;
+        View::assign('mainContent', $pageContent);
+        View::output('global/cache_show.php');
     }
 
     public function index_bak_action()
