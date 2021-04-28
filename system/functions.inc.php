@@ -8,7 +8,7 @@
  *
  * @return string
  */
-function base_url($withScheme=true)
+function base_url($withScheme=false)
 {
     $clean_url = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : NULL;
     $clean_url = dirname(substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - strlen($clean_url)));
