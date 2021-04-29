@@ -293,7 +293,7 @@ class main extends BaseController
             return;
         } else {
             $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_channel_page_article';
-            if ($pageContent = Application::cache()->get($cache_key)) {
+            if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key) )) {
                 View::assign('mainContent', $pageContent.'<!-- cache -->');
                 View::output('global/cache_show.php');
                 return;
@@ -318,7 +318,7 @@ class main extends BaseController
                 $_itemInfo['category_ids'] = array_unique($_itemInfo['category_ids']);
                 View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 12, $_GET['sort_type'], null, $_itemInfo['category_ids']) );
                 $_itemInfo['posts_list'] = View::output('block/post_title_list_with_category', false);
-                $_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
+                //$_itemInfo['course_table_list'] = $this->model('course')->fetch_all('course_table', 'category_id IN ('.join(',', $_itemInfo['category_ids']).')');
             }
 
             View::assign('showCategoryList', $showCategoryList);
@@ -401,7 +401,7 @@ class main extends BaseController
 
 
         $pageContent = View::output('article/article_home_no_head_foot', false);
-        Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_normal'));
+        empty($_GET['doGenerateCache']) OR Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_normal'));
         View::assign('mainContent', $pageContent);
         View::output('global/cache_show.php');
     }
