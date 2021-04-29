@@ -31,7 +31,10 @@ class main extends BaseController
     public function default_action()
     {
         // 只有管理员权限， 才可以通过id访问
-        if (is_numeric($_GET['id']) && $this->hasRolePermission (parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR)) {
+        if (is_numeric($_GET['id']) ) {
+            if (! $this->hasRolePermission (parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR)) {
+                $_GET['table_id'] = 0;
+            }
             $itemInfo = $this->model('course')->getById($_GET['id']);
         } else {
             $itemInfo = $this->model('course')->getCourseByToken($_GET['id']);
