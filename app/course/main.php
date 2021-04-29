@@ -33,7 +33,7 @@ class main extends BaseController
         // 只有管理员权限， 才可以通过id访问
         if (is_numeric($_GET['id']) ) {
             if (! $this->hasRolePermission (parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR)) {
-                $_GET['table_id'] = 0;
+                $_GET['table_id'] = intval($_GET['table_id']);
             }
             $itemInfo = $this->model('course')->getById($_GET['id']);
         } else {
