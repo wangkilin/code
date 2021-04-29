@@ -111,7 +111,7 @@ class main extends BaseController
 
         $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_homepage';
         if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key)) ) {
-            View::assign('mainContent', $pageContent.'<!-- cache -->');
+            View::assign('mainContent', $pageContent);
             View::output('global/cache_show.php');
             return;
         }
@@ -154,7 +154,7 @@ class main extends BaseController
         View::assign('categoryList', $allCategoryList);
 
         $pageContent = View::output('index/index_no_head_foot', false);
-        empty($_GET['doGenerateCache']) OR Application::cache()->set($cache_key, $pageContent, get_setting('cache_level_normal'));
+        empty($_GET['doGenerateCache']) OR Application::cache()->set($cache_key, $pageContent .'<!-- cached ' . date('Y-m-d H:i:s') . ' -->', get_setting('cache_level_normal'));
         View::assign('mainContent', $pageContent);
         View::output('global/cache_show.php');
     }
