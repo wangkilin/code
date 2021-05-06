@@ -235,7 +235,7 @@ class administration extends SinhoBaseController
         $this->checkPermission(self::IS_SINHO_ADMIN | self::IS_ROLE_ADMIN);
 
         View::assign('custom_group', $this->model('account')->get_user_group_list(0, 1));
-        View::assign('menu_list', $this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu'));
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu')) );
         View::output('admin/administration/group_list');
     }
 
@@ -265,7 +265,7 @@ class administration extends SinhoBaseController
         View::assign('booleanParamList', $booleanParamList);
         View::assign('group', $group);
         View::assign('group_pms', $group['permission']);
-        View::assign('menu_list', $this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu'));
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu')) );
         View::output('admin/administration/group_edit');
     }
 
