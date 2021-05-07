@@ -201,7 +201,8 @@ class main extends BaseController
         View::assign('attach_access_key', md5($this->user_id . time()));
 
         // 根据标题搜索相关文章
-        $relatedList = $this->model('article')->getRelatedList($article_info['title'], 20, $article_info['id'], $article_info['category_id']);
+        //$relatedList = $this->model('article')->getRelatedList($article_info['title'], 20, $article_info['id'], $article_info['category_id']);
+        $relatedList = array();
         View::assign('recommend_posts', $relatedList);
 
         $latestArticleList = $this->model('article')->get_articles_list($article_info['category_id'], 1, 20, 'add_time DESC');
