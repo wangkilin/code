@@ -286,7 +286,7 @@ function editWorkload (id)
                 return;
             }
             compute_chars_ammount();
-            if (parseFloat($(this).val()) > parseFloat($(this).data('default')) ) {
+            if (parseFloat($(this).val()) > parseFloat(+$(this).data('default')) ) {
                 $(this).parent().addClass('has-error');
             } else {
                 $(this).parent().removeClass('has-error');
