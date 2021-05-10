@@ -113,6 +113,7 @@ class main extends SinhoBaseController
             $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), null, $belongMonth);
             $totalCharsListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
             $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
+            $totalCharsWeightLt1ListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_weight_lt_1'));
             arsort($totalCharsListLastMonth, SORT_NUMERIC);
 
 
@@ -187,6 +188,7 @@ class main extends SinhoBaseController
         View::assign('warningMsgList', $warningMsgList);
         View::assign('totalCharsListLastMonth', $totalCharsListLastMonth);
         View::assign('totalCharsWithoutWeightListLastMonth', $totalCharsWithoutWeightListLastMonth);
+        View::assign('totalCharsWeightLt1ListLastMonth', $totalCharsWeightLt1ListLastMonth);
         View::assign('userList', $userList);
 
 

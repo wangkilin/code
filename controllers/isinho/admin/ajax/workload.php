@@ -208,9 +208,15 @@ class workload extends SinhoBaseController
         $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, array('start'=>$start, 'end'=>$end));
         $totalCharsList = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
         $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
+        $totalCharsWeightLt1ListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_weight_lt_1'));
         arsort($totalCharsList);
         foreach ($totalCharsList as $_userId=> & $_item) {
-            $_item = array('name'=>$userList[$_userId]['user_name'],'total'=>$_item, 'totalWithoutWeight'=>$totalCharsWithoutWeightListLastMonth[$_userId]);
+            $_item = array(
+                'name'                  => $userList[$_userId]['user_name'],
+                'total'                 => $_item,
+                'totalWithoutWeight'    => $totalCharsWithoutWeightListLastMonth[$_userId],
+                'totalCharsWeightLt1'   => $totalCharsWeightLt1ListLastMonth[$_userId]
+            );
         }
 
         H::ajax_json_output(Application::RSM(array_values($totalCharsList)));

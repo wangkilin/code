@@ -527,6 +527,43 @@ class sinhoWorkloadModel extends Model
                                     *
                                     CASE `function_answer_chars_per_page` IS NULL OR `function_answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `function_answer_chars_per_page` END
                             )
+                            *
+                            CASE `weight` IS NULL OR `weight`="" WHEN 1 THEN 0 ELSE   ( CASE `weight` > 1 WHEN 1 THEN 1 ELSE `weight` END ) END
+                        ), 4
+                    ) AS total_chars_weight_lt_1,
+                    ROUND (
+                        SUM(
+                            (
+                                    ( CASE `content_table_pages` IS NULL OR `content_table_pages`="" WHEN 1 THEN 0 ELSE `content_table_pages` END
+                                    + CASE `text_pages` IS NULL OR `text_pages`="" WHEN 1 THEN 0 ELSE `text_pages` END
+                                    )
+                                    *
+                                    CASE `text_table_chars_per_page` IS NULL OR `text_table_chars_per_page`="" WHEN 1 THEN 0 ELSE `text_table_chars_per_page` END
+                                +
+                                    CASE `answer_pages` IS NULL OR `answer_pages`="" WHEN 1 THEN 0 ELSE `answer_pages` END
+                                    *
+                                    CASE `answer_chars_per_page` IS NULL OR `answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `answer_chars_per_page` END
+                                +
+                                    CASE `test_pages` IS NULL OR `test_pages`="" WHEN 1 THEN 0 ELSE `test_pages` END
+                                    *
+                                    CASE `test_chars_per_page` IS NULL OR `test_chars_per_page`="" WHEN 1 THEN 0 ELSE `test_chars_per_page` END
+                                +
+                                    CASE `test_answer_pages` IS NULL OR `test_answer_pages`="" WHEN 1 THEN 0 ELSE `test_answer_pages` END
+                                    *
+                                    CASE `test_answer_chars_per_page` IS NULL OR `test_answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `test_answer_chars_per_page` END
+                                +
+                                    CASE `exercise_pages` IS NULL OR `exercise_pages`="" WHEN 1 THEN 0 ELSE `exercise_pages` END
+                                    *
+                                    CASE `exercise_chars_per_page` IS NULL OR `exercise_chars_per_page`="" WHEN 1 THEN 0 ELSE `exercise_chars_per_page` END
+                                +
+                                    CASE `function_book` IS NULL OR `function_book`="" WHEN 1 THEN 0 ELSE `function_book` END
+                                    *
+                                    CASE `function_book_chars_per_page` IS NULL OR `function_book_chars_per_page`="" WHEN 1 THEN 0 ELSE `function_book_chars_per_page` END
+                                +
+                                    CASE `function_answer` IS NULL OR `function_answer`="" WHEN 1 THEN 0 ELSE `function_answer` END
+                                    *
+                                    CASE `function_answer_chars_per_page` IS NULL OR `function_answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `function_answer_chars_per_page` END
+                            )
                         ), 4
                     ) AS total_chars_without_weight,
                     SUM(content_table_pages             ) AS content_table_pages           ,

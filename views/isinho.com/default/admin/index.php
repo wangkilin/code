@@ -96,7 +96,7 @@
                             <tr>
                                 <th>#</th>
                                 <th><?php _e('责编');?></th>
-                                <th><?php _e('字数');?></th>
+                                <th ><b class="js-tooltip" data-toggle="tooltip" title="大于1的系数转换成系数为1"><?php _e('字数X转换系数?');?></b></th>
                                 <th><?php _e('字数X系数');?></th>
                                 <th><?php _e('绩效');?></th>
                             </tr>
@@ -106,7 +106,7 @@
                             <tr>
                                 <td><?php echo $i++;?></td>
                                 <td><?php echo $this->userList[$_userId]['user_name']; ?></td>
-                                <td><?php echo $this->totalCharsWithoutWeightListLastMonth[$_userId]; ?></td>
+                                <td><?php echo $this->totalCharsWeightLt1ListLastMonth[$_userId]; ?></td>
                                 <td><?php echo $_totalChars; ?></td>
                                 <td><?php echo round($_totalChars*2,2);?></td>
                             </tr>
@@ -164,6 +164,8 @@
 </div>
 <script type="text/javascript">
 $(function () {
+
+    $('.js-tooltip').tooltip();
 
     var echartOptions = {
         backgroundColor: '#fff', // 背景色， 默认无颜色 ‘transparent’
@@ -374,17 +376,17 @@ $(function () {
             $('#total-chars-list > tfoot > tr').remove();
             var html = '';
             var total = 0;
-            var totalWithoutWeight = 0;
+            var totalCharsWeightLt1 = 0;
             for(var i = 0; i<response.rsm.length; i++) {
                 if (! response.rsm[i].name) {
                     continue;
                 }
                 total += response.rsm[i].total;
-                totalWithoutWeight += response.rsm[i].total;
+                totalCharsWeightLt1 += response.rsm[i].totalCharsWeightLt1;
 
                 html = '<tr><td>' + (i+1)
                       + '</td><td>' + response.rsm[i].name
-                      + '</td><td>' + response.rsm[i].totalWithoutWeight
+                      + '</td><td>' + response.rsm[i].totalCharsWeightLt1
                       + '</td><td>' + response.rsm[i].total
                       + '</td><td>' + float(response.rsm[i].total*2, 2)
                       + '</td></tr>';
@@ -392,7 +394,7 @@ $(function () {
             }
             html = '<tr class="info">' +
                         '<td colspan="2">合计</td>' +
-                        '<td>' + float(totalWithoutWeight, 4) + '</td>' +
+                        '<td>' + float(totalCharsWeightLt1, 4) + '</td>' +
                         '<td>' + float(total, 4) + '</td>' +
                         '<td>'+ float(total*2, 2) +'</td>' +
                     '</tr>';
