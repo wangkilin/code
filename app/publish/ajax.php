@@ -164,6 +164,8 @@ class ajax extends BaseController
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('你没有权限编辑这个附件列表')));
         }
 
+        $this->getAttachListByItemTypeAndId('article', $_POST['article_id']);
+        return;
         if ($article_attach = $this->model('publish')->getAttachListByItemTypeAndId('article', $_POST['article_id']))
         {
             foreach ($article_attach as $attach_id => $val)
@@ -250,8 +252,12 @@ class ajax extends BaseController
         ), 1, null));
     }
 
+    /**
+     * 移除附件
+     */
     public function remove_attach_action()
     {
+        // $this->checkPermission(parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR);
         if ($attach_info = json_decode(Application::crypt()->decode($_GET['attach_id']), true))
         {
             $this->model('publish')->remove_attach($attach_info['attach_id'], $attach_info['access_key']);

@@ -31,8 +31,7 @@ class main extends Controller
     public function index_action()
     {
         $page_info = $this->model('page')->getPageByToken($_GET['id']);
-        if (!$page_info OR $page_info['enabled'] == 0)
-        {
+        if (!$page_info OR $page_info['enabled'] == 0) { // 页面信息没找到， 或者页面没有启用， 显示404
             HTTP::error_404();
         }
 

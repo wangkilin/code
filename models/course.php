@@ -40,7 +40,7 @@ class courseModel extends Model
      * @param unknown $id
      * @return boolean|Ambigous <>
      */
-    public function getById ($id)
+    public function getById ($id, $colName='')
     {
         return $this->getCourseById($id);
     }

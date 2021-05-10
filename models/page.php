@@ -7,6 +7,7 @@ defined('iCodeBang_Com') OR die('Access denied!');
  */
 class pageModel extends Model
 {
+    protected $table = 'pages';
     /**
      * 根据token获取页面嘻嘻
      * @param string $token

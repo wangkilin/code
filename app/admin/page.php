@@ -53,6 +53,7 @@ class page extends AdminController
         if (get_setting('advanced_editor_enable') == 'Y') {
             import_editor_static_files();
         }
+        View::assign('batchKey', $this->getBatchUploadAccessKey());
 
         View::output('admin/page/publish');
     }

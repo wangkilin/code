@@ -238,22 +238,22 @@ class BaseController extends Controller
             H::ajax_json_output(Application::RSM(null, '-1', Application::lang()->_t('你没有权限编辑这个附件列表')));
         }
 
-        if ($article_attach = $this->model('publish')->getAttachListByItemTypeAndId($type, $id)) {
-            foreach ($article_attach as $attach_id => $val) {
-                $article_attach[$attach_id]['class_name'] = $this->model('publish')->getCssClassByFileName($val['file_name']);
+        if ($attachList = $this->model('publish')->getAttachListByItemTypeAndId($type, $id)) {
+            foreach ($attachList as $attach_id => $val) {
+                $attachList[$attach_id]['class_name'] = $this->model('publish')->getCssClassByFileName($val['file_name']);
 
-                $article_attach[$attach_id]['delete_link'] = get_js_url('/publish/ajax/remove_attach/attach_id-' . Application::crypt()->encode(json_encode(array(
+                $attachList[$attach_id]['delete_link'] = get_js_url('/publish/ajax/remove_attach/attach_id-' . Application::crypt()->encode(json_encode(array(
                     'attach_id' => $attach_id,
                     'access_key' => $val['access_key']
                 ))));
 
-                $article_attach[$attach_id]['attach_id'] = $attach_id;
-                $article_attach[$attach_id]['attach_tag'] = 'attach';
+                $attachList[$attach_id]['attach_id'] = $attach_id;
+                $attachList[$attach_id]['attach_tag'] = 'attach';
             }
         }
 
         H::ajax_json_output(Application::RSM(array(
-            'attachs' => $article_attach
+            'attachs' => $attachList
         ), 1, null));
     }
 
@@ -427,6 +427,8 @@ class BaseController extends Controller
     {
     	$this->jsonMsgExit(null, -1, $msg);
     }
+
+
 
 }
 

@@ -1412,19 +1412,30 @@ class ajax extends AdminController
         $pageId = $this->model('page')->add_page($_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
         $this->model()->update('pages', array('category_id'=>$_POST['category_id']), 'id = ' . $pageId);
 
+            // 设置了附件， 绑定附件和文章关系
+            if ($_POST['attach_ids']) {
+                $this->model('attach')->update('attach', array('item_id'=>$pageId), 'id IN(' . join(',', $_POST['attach_ids']) . ')');
+            }
+
         H::ajax_json_output(Application::RSM(array(
             'url' => get_js_url('/admin/page/')
         ), 1, null));
     }
 
+    /**
+     * 移除页面
+     */
     public function remove_page_action()
     {
-        if (!$this->user_info['permission']['is_administortar'])
-        {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有访问权限, 请重新登录')));
-        }
-
+        // 检查权限
+        $this->checkPermission(parent::IS_ROLE_ADMIN);
+        // 移除页面数据
         $this->model('page')->remove_page($_POST['id']);
+        // 删除附件
+        $attachList = $this->model('publish')->getAttachListByItemTypeAndId('page', $_POST['id']);
+        foreach ($attachList as $_itemInfo) {
+            $this->model('publish')->remove_attach($_itemInfo['id'], $_itemInfo['access_key'], false);
+        }
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }

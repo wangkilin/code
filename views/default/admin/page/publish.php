@@ -122,13 +122,29 @@ $(function () {
 		} else {
 			var editorSetting = {'editor' : $('.article-content')};
 		}
-		var fileupload = new FileUpload(
-		    	'file',
+		var fileupload = new FileUploader(
+		    	//'file',
 		    	'.icb-editor-box .icb-upload-wrap .btn',
 		    	'.icb-editor-box .icb-upload-wrap .upload-container',
-		    	G_BASE_URL + '/publish/ajax/attach_upload/id-page',
+		    	G_BASE_URL + '/publish/ajax/attach_upload/id-page__type-page__batchKey-<?php echo $this->batchKey;?>',
 		    	editorSetting
 		    );
+
+
+        <?php if ($this->page_info['id']) {  ?>
+            $.post(G_BASE_URL + '/admin/ajax/page/get_attach_list/', 'id=' + <?php echo $this->page_info['id']?>, function (data) {
+                if (data['err']) {
+                    return false;
+                } else {
+                	if (data['rsm']['attachs'])
+                	{
+                		$.each(data['rsm']['attachs'], function (i, v) {
+                			fileupload.setFileList(v);
+	                    });
+                	}
+                }
+            }, 'json');
+        <?php } ?>
 	}
 
 

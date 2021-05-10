@@ -524,7 +524,8 @@ class publishModel extends Model
         {
             switch ($attach['item_type'])
             {
-                default:
+                case 'question':
+                case 'answer':
                     $update_key = $attach['item_type'] . '_id';
 
                     break;
@@ -533,6 +534,8 @@ class publishModel extends Model
                 case 'weibo_msg':
                 case 'project':
                 case 'course' :
+
+                default:
                     $update_key = 'id';
 
                     break;
