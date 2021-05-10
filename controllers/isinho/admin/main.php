@@ -112,7 +112,7 @@ class main extends SinhoBaseController
             // 按月获取每个人的工作量
             $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), null, $belongMonth);
             $totalCharsListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
-            //$totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
+            $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
             arsort($totalCharsListLastMonth, SORT_NUMERIC);
 
 
@@ -186,7 +186,7 @@ class main extends SinhoBaseController
         View::assign('belongMinMonth', $belongMinMonth);
         View::assign('warningMsgList', $warningMsgList);
         View::assign('totalCharsListLastMonth', $totalCharsListLastMonth);
-        //View::assign('totalCharsWithoutWeightListLastMonth', $totalCharsWithoutWeightListLastMonth);
+        View::assign('totalCharsWithoutWeightListLastMonth', $totalCharsWithoutWeightListLastMonth);
         View::assign('userList', $userList);
 
 

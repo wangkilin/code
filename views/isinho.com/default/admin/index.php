@@ -96,7 +96,8 @@
                             <tr>
                                 <th>#</th>
                                 <th><?php _e('责编');?></th>
-                                <th><?php _e('字数（乘系数）');?></th>
+                                <th><?php _e('字数');?></th>
+                                <th><?php _e('字数X系数');?></th>
                                 <th><?php _e('绩效');?></th>
                             </tr>
                         </thead>
@@ -105,6 +106,7 @@
                             <tr>
                                 <td><?php echo $i++;?></td>
                                 <td><?php echo $this->userList[$_userId]['user_name']; ?></td>
+                                <td><?php echo $this->totalCharsWithoutWeightListLastMonth[$_userId]; ?></td>
                                 <td><?php echo $_totalChars; ?></td>
                                 <td><?php echo round($_totalChars*2,2);?></td>
                             </tr>
@@ -113,6 +115,7 @@
                         <tfoot>
                             <tr class="info">
                                 <td colspan="2">合计</td>
+                                <td><?php echo array_sum($this->totalCharsWithoutWeightListLastMonth);?></td>
                                 <td><?php echo array_sum($this->totalCharsListLastMonth);?></td>
                                 <td><?php echo round(array_sum($this->totalCharsListLastMonth)*2, 2);?></td>
                             </tr>
@@ -371,13 +374,17 @@ $(function () {
             $('#total-chars-list > tfoot > tr').remove();
             var html = '';
             var total = 0;
+            var totalWithoutWeight = 0;
             for(var i = 0; i<response.rsm.length; i++) {
                 if (! response.rsm[i].name) {
                     continue;
                 }
                 total += response.rsm[i].total;
+                totalWithoutWeight += response.rsm[i].total;
+
                 html = '<tr><td>' + (i+1)
                       + '</td><td>' + response.rsm[i].name
+                      + '</td><td>' + response.rsm[i].totalWithoutWeight
                       + '</td><td>' + response.rsm[i].total
                       + '</td><td>' + float(response.rsm[i].total*2, 2)
                       + '</td></tr>';
@@ -385,6 +392,7 @@ $(function () {
             }
             html = '<tr class="info">' +
                         '<td colspan="2">合计</td>' +
+                        '<td>' + float(totalWithoutWeight, 4) + '</td>' +
                         '<td>' + float(total, 4) + '</td>' +
                         '<td>'+ float(total*2, 2) +'</td>' +
                     '</tr>';

@@ -207,9 +207,10 @@ class workload extends SinhoBaseController
         // 获取每个人的工作量
         $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, array('start'=>$start, 'end'=>$end));
         $totalCharsList = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
+        $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
         arsort($totalCharsList);
         foreach ($totalCharsList as $_userId=> & $_item) {
-            $_item = array('name'=>$userList[$_userId]['user_name'],'total'=>$_item);
+            $_item = array('name'=>$userList[$_userId]['user_name'],'total'=>$_item, 'totalWithoutWeight'=>$totalCharsWithoutWeightListLastMonth[$_userId]);
         }
 
         H::ajax_json_output(Application::RSM(array_values($totalCharsList)));
