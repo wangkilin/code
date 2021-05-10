@@ -115,7 +115,7 @@
                         <tfoot>
                             <tr class="info">
                                 <td colspan="2">合计</td>
-                                <td><?php echo array_sum($this->totalCharsWithoutWeightListLastMonth);?></td>
+                                <td><?php echo array_sum($this->totalCharsWeightLt1ListLastMonth);?></td>
                                 <td><?php echo array_sum($this->totalCharsListLastMonth);?></td>
                                 <td><?php echo round(array_sum($this->totalCharsListLastMonth)*2, 2);?></td>
                             </tr>
