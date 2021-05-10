@@ -2,8 +2,8 @@
 <html class="no-js" lang="zh-cn">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="keywords" content="新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司">
-    <meta name="description" content="新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司">
+    <meta name="keywords" content="isinho&reg;新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司">
+    <meta name="description" content="isinho&reg;新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>[官网]沈阳新禾文化传媒有限公司：图书出版,编辑校对,软件开发,网站建设</title>
