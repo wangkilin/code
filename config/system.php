@@ -6,7 +6,7 @@ $config['sites'] = array(
         'debug'=>false
     ),
     'www1.isinho.com'    => array(
-        'debug'=>false,
+        'debug'=>true,
         'workday_holiday' => array ( // 工作日和假期设置。
             2021 => array (
                 'holiday' => array (
