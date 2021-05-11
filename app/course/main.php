@@ -344,6 +344,9 @@ class main extends BaseController
 
         $this->crumb(Application::lang()->_t('教程'), '/course/');
 
+        View::output('course/square');
+        return;
+
         if ($_GET['category']) { // 通过开发语言分类， 查找教程
             $category_info = $this->getCategoryInfoByIdOrToken($_GET['category']);
         }
