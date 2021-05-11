@@ -188,6 +188,7 @@ class main extends BaseController
             $article_info['attachs_ids'] = FORMAT::parse_attachs($article_info['message'], true);
         }
 
+        $this->crumb($article_info['title'], '/article/' . $article_info['id']);
         View::assign('article_info', $article_info);
 
         $this->model('article')->update_views($article_info['id']);

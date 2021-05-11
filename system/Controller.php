@@ -216,10 +216,10 @@ class Controller
 
         $title = '';
         foreach ($this->crumb as $crumb) {
-            $title = $crumb['name'] . ' - ' . $title;
+            $title = trim($crumb['name']) . ' - ' . $title;
         }
 
-        View::assign('page_title', htmlspecialchars(rtrim($title, ' - ')));
+        View::assign('page_title', str_replace(array('&amp;trade;', '&amp;reg;'), array('&trade;', '&reg;'), htmlspecialchars(rtrim($title, ' - '))) );
 
         return $this;
     }
