@@ -360,6 +360,7 @@ class main extends BaseController
             View::assign('show_image', false);
             View::assign('showArticleTime', false);
             View::assign('showArticleCategory', true);
+            View::assign('categoryCssClass', 'pull-right');
             $moreCategoryIds = array_diff(array_keys($allCategoryList), $categoryIds );
             View::assign('posts_list', $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page') * 0 + 45, $_GET['sort_type'], null, $moreCategoryIds) );
             View::assign('more_posts_list', View::output('block/post_title_list_with_category', false) );

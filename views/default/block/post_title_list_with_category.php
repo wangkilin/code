@@ -17,7 +17,7 @@ if ($this->posts_list) {
 
                         <?php
                         if ($_GET['category'] != $val['category_id'] AND $_GET['category'] != $val['category_info']['title']) { ?>
-                        <a class="col-sm-2 col-xs-2 <?php echo $this->showArticleCategory==true ? '' : 'hidden';?> text-color-999 nooverflow nobg nopadding text-center" href="<?php echo MODULE; ?>/category-<?php
+                        <a class="col-sm-2 col-xs-2 <?php echo $this->showArticleCategory==true ? '' : 'hidden';?> text-color-999 nooverflow nobg nopadding text-center <?php echo $this->categoryCssClass;?>" href="<?php echo MODULE; ?>/category-<?php
                         echo $val['category_info']['url_token']; ?>"><?php
                         echo $val['category_info']['title']; ?></a>
                         <?php
@@ -38,7 +38,7 @@ if ($this->posts_list) {
                                 <?php } ?>
                             </h4>
 
-                    <span class="pull-right <?php echo $this->showArticleTime==true ? '' : 'hidden';?> col-sm-2 text-color-999 text-right">
+                    <span class="pull-right <?php echo $this->showArticleTime==true ? '' : 'hidden';?> col-sm-2 text-color-999 text-right <?php echo $this->timeCssClass;?>">
                     <?php
                     if ($val['question_id']) { ?>
                         <?php
