@@ -301,7 +301,7 @@ class main extends BaseController
                 return;
             }
 
-            $siteConfig = Application::config()->get($_SERVER['HTTP_HOST'].'.inc');
+            $siteConfig = Application::config()->get('www.icodebang.com.inc');
             $topCategoryList = $siteConfig->top5_language_ids;
             $showCategoryList = $siteConfig->show_category_list;
 
