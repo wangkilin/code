@@ -95,6 +95,12 @@ $config[] = array(
         ),
 
         array(
+            'id' => 'manual',
+            'title' => _t('手册管理'),
+            'url' => 'admin/manual/manual_list/'
+        ),
+
+        array(
             'id' => 'category/list',
             'title' => _t('分类管理'),
             'url' => 'admin/category/list/'

@@ -169,7 +169,7 @@ class Controller
      *
      * @access    public
      * @param    string
-     * @return    object
+     * @return    Model $object
      */
     public function model($model = null, $options = null)
     {

@@ -2,6 +2,9 @@
 class Application
 {
     private static $config;
+    /**
+     * @var core_db $db DB instance
+     */
     private static $db;
     private static $form;
     private static $upload;
@@ -276,7 +279,7 @@ class Application
      * 调用 core/config.php
      *
      * @access    public
-     * @return    object
+     * @return    core_config object
      */
     public static function config()
     {
@@ -419,7 +422,7 @@ class Application
      * 此功能基于 Zend_Session 类库
      *
      * @access    public
-     * @return    object
+     * @return    Zend_Session_Namespace object
      */
     public static function session()
     {
@@ -433,7 +436,7 @@ class Application
      *
      * @access    public
      * @param    string
-     * @return    object
+     * @return    core_db object
      */
     public static function db($db_object_name = 'master')
     {
@@ -482,9 +485,9 @@ class Application
      *
      * 根据命名规则调用相应的 Model 并初始化类库保存于 self::$models 数组, 防止重复初始化
      *
-     * @access    public
+     * @access   public
      * @param    string
-     * @return    object
+     * @return   Model object
      */
     public static function model($model_class = null, $options=null)
     {

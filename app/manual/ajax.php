@@ -1,33 +1,25 @@
 <?php
-/*
-+--------------------------------------------------------------------------
-|   WeCenter [#RELEASE_VERSION#]
-|   ========================================
-|   by Tatfook Network Team
-|   © 2011 - 2014 WeCenter. All Rights Reserved
-|   http://www.wecenter.com
-|   ========================================
-|   Support: WeCenter@qq.com
-|
-+---------------------------------------------------------------------------
+/**
++-------------------------------------------+
+|   iCodeBang CMS [#RELEASE_VERSION#]       |
+|   by iCodeBang.com Team                   |
+|   © iCodeBang.com. All Rights Reserved    |
+|   ------------------------------------    |
+|   Support: icodebang@126.com              |
+|   WebSite: http://www.icodebang.com       |
++-------------------------------------------+
 */
+
+defined('iCodeBang_Com') OR die('Access denied!');
 
 define('IN_AJAX', TRUE);
 
-if (!defined('iCodeBang_Com'))
-{
-    die;
-}
-
-class ajax extends Controller
+class ajax extends BaseController
 {
     public function get_access_rule()
     {
         $rule_action['rule_type'] = 'white';
-
-        $rule_action['actions'] = array(
-            'list'
-        );
+        $rule_action['actions'] = array();
 
         return $rule_action;
     }
@@ -35,6 +27,26 @@ class ajax extends Controller
     public function setup()
     {
         HTTP::setHeaderNoCache();
+    }
+
+    /**
+     * 处理上传的教程附件
+     */
+    public function upload_attach_action ()
+    {
+        $filename = 'upload_file';
+        $batchKey = $_GET['batchKey'];
+        $module   = isset($_GET['type']) ? $_GET['type'] : 'course';
+
+        return $this->processUploadAttach($module, $batchKey, $filename);
+    }
+
+    /**
+     * 获取教程附件
+     */
+    public function get_course_attach_list_action ()
+    {
+        $this->getAttachListByItemTypeAndId('course', $_POST['id']);
     }
 
     public function save_comment_action()
