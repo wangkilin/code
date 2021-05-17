@@ -116,7 +116,7 @@
                             <tbody>
                                 <?php $i=1;
                                 $startMonthTime = strtotime($this->leaveYear.$this->leaveMonth.'01');
-                                $endMonthTime = strtotime($this->leaveYear.$this->leaveMonth.'01 +1month');
+                                $endMonthTime = strtotime($_GET['end_year_month'].'01 +1month');
                                 foreach ($this->userList as $_userInfo) {  ?>
                                 <tr data-user-id="<?php echo $_userInfo['uid'];?>" data-user-name="<?php echo $_userInfo['user_name'];?>">
                                     <td style="width:20px"><?php echo $i++;?></td>
