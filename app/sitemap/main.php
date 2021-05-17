@@ -36,7 +36,7 @@ class main extends BaseController
         //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true, $column='*', $distinct=false)
         $articleList = $this->model()->fetch_page('article', null, null, intval($_GET['pageId']), 10000, false, 'id');
         foreach ($articleList as $_itemInfo) {
-            echo base_url(true) . '/article/' . $_itemInfo['id'] . "\r\n";
+            echo base_url(true) . '/article/' . $_itemInfo['id'] . ".html\r\n";
         }
         $courseList = $this->model()->fetch_page('course_content_table', 'article_id > 0 ', null, intval($_GET['pageId']), 10000, false, '*');
         $courseIds = array_column($courseList, 'article_id');
@@ -50,7 +50,7 @@ class main extends BaseController
             foreach ($courseList as $_itemInfo) {
                 echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['title'] . '/'
                    . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : $courseArticleList[$_itemInfo['article_id']]['url_token'])
-                   . "\r\n";
+                   . ".html\r\n";
             }
         }
     }
