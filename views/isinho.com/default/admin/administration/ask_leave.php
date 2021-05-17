@@ -7,7 +7,7 @@
             <h3>
                 <ul class="nav nav-tabs">
                     <li class="<?php echo $_GET['tab']=='report'? '':'active';?>"><a href="#index"  data-toggle="tab"><?php _e('请假管理'); ?></a></li>
-                    <li class="<?php echo $_GET['tab']=='report'? 'active':'';?>"><a href="#monthly-report" data-toggle="tab"><?php _e('月度报告'); ?></a></li>
+                    <li class="<?php echo $_GET['tab']=='report'? 'active':'';?>"><a href="#monthly-report" data-toggle="tab"><?php _e('统计报告'); ?></a></li>
                 </ul>
             </h3>
         </div>
@@ -78,7 +78,26 @@
             </div>
 
             <div class="tab-pane<?php echo $_GET['tab']=='report'? 'active':'';?>" id="monthly-report">
-
+                <div class="clearfix padding20">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-1 text-right">
+                        <label class="line-height-25">报告月份:</label>
+                    </div>
+                    <div class="col-sm-2 text-right icon-date-container">
+                        <input id="year_month" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="开始月份" value="<?php echo preg_replace('/^(\d{4})/', '\1-', $_GET['year_month']) ; ?>" readonly>
+                        <i class="icon icon-date"></i>
+                        <i class="icon icon-date-delete icon-delete"></i>
+                    </div>
+                    <span class="mod-symbol col-xs-1 col-sm-1">-</span>
+                    <div class="col-sm-2 text-right icon-date-container">
+                        <input id="end_year_month" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="结束月份" value="<?php echo preg_replace('/^(\d{4})/', '\1-', $_GET['end_year_month']) ; ?>" readonly>
+                        <i class="icon icon-date"></i>
+                        <i class="icon icon-date-delete icon-delete"></i>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <a href="javascript:window.location.href='/admin/administration/ask_leave/tab-report__year'+'_'+'month'+'-'+$('#year_month').val().replace('-','')+'__end_year'+'_'+'month'+'-'+$('#end_year_month').val().replace('-','');" class="btn btn-primary btn-sm date-seach">确认查询</a>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-2"><a href="/admin/administration/ask_leave/tab-report__year_month-<?php echo date('Ym', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>">上一月(<?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01 -1month'));?>)</a></div>
                     <div class="col-sm-8 text-center"><strong><?php echo date('Y-m', strtotime($this->leaveYear.$this->leaveMonth.'01'));?></strong></div>
@@ -91,7 +110,7 @@
                                 <tr>
                                     <th style="width:20px">#</th>
                                     <th class="col-sm-1"><span class="col-sm-12 no-padding">姓名</span></th>
-                                    <th>请假月度报告</th>
+                                    <th>请假统计报告:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -247,6 +266,24 @@ $(function () {
     $('body').on('change', '.ask-leave-single-item input', function () {
 
         $('.js-ajax-feedback').removeClass('fade in bg-warning text-danger').text(''); // 移除错误提醒信息
+    });
+
+
+    // 月份输入框
+    $( ".js-monthpicker" ).datetimepicker({
+                format  : 'yyyy-mm',
+                language:  'zh-CN',
+                weekStart: 1, // 星期一 为一周开始
+                todayBtn:  1, // 显示今日按钮
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
+                forceParse: 0,
+                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+            });
+
+    $('.icon-delete.icon-date-delete').click (function () {
+        $(this).siblings('.js-date-input').val('');
     });
 
     /**

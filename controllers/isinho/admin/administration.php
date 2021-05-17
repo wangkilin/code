@@ -34,9 +34,13 @@ class administration extends SinhoBaseController
         if ($_GET['year_month']) {
             $year = substr($_GET['year_month'], 0, 4);
             $month = substr($_GET['year_month'], 4);
+        } else {
+            $_GET['year_month'] = $year . $month;
         }
-
-        $leaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date("$year-$month-01"), date("$year-$month-t"));
+        if(! $_GET['end_year_month'] || $_GET['end_year_month'] < $_GET['year_month']) {
+            $_GET['end_year_month'] = $_GET['year_month'];
+        }
+        $leaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date("$year-$month-01"), date("Y-m-t", strtotime($_GET['end_year_month'] . '01')));
         $userLeaveList = array();
         foreach ($leaveList as $_itemInfo) {
             isset($userLeaveList[$_itemInfo['user_id']]) OR $userLeaveList[$_itemInfo['user_id']] = array();
