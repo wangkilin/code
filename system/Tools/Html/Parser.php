@@ -104,6 +104,12 @@ class Tools_Html_Parser
         return $this->dom;
     }
 
+    /**
+     * 载入HTML字符串
+     * @param string $content 字符串
+     * @param string $charset 用来解析字符串的编码
+     * @return Tools_Html_Parser self instance
+     */
     public function loadDomHTML ($content, $charset='')
     {
         $this->htmlContent = $content;
@@ -269,7 +275,10 @@ class Tools_Html_Parser
             $index = 0;
             foreach ($domList as $_tmpDom) {
                 if ( $contentDomInfo['class'] && (! $_tmpDom->hasAttribute('class')
-                 || strpos($_tmpDom->getAttribute('class'),$contentDomInfo['class']) ===false ) ) {
+                 || (strpos($_tmpDom->getAttribute('class'), $contentDomInfo['class'].' ') ===false
+                     && strpos($_tmpDom->getAttribute('class'),' '.$contentDomInfo['class']) ===false
+                     && $_tmpDom->getAttribute('class')!==$contentDomInfo['class']
+                    ) ) ) {
                     continue;
                 }
                 if (is_numeric($contentDomInfo['index']) && $index == $contentDomInfo['index']) { // 找到了对应的dom
@@ -298,7 +307,10 @@ class Tools_Html_Parser
                 $index = 0;
                 foreach ($domList as $_tmpDom) {
                     if ( $contentDomInfo['sub_class'] && (! $_tmpDom->hasAttribute('class')
-                    || strpos($_tmpDom->getAttribute('class'),$contentDomInfo['sub_class']) ===false ) ) {
+                    || (strpos($_tmpDom->getAttribute('class'),' '.$contentDomInfo['sub_class']) ===false
+                       && strpos($_tmpDom->getAttribute('class'),$contentDomInfo['sub_class'].' ') ===false
+                       && $_tmpDom->getAttribute('class')!==$contentDomInfo['sub_class']
+                       ) ) ) {
                         continue;
                     }
 
