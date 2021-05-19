@@ -294,7 +294,7 @@ class main extends BaseController
             echo $pageContent;
             return;
         } else {
-            $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_channel_page_article';
+            $cache_key = str_replace(array('.',':'), '_',$_SERVER['HTTP_HOST']) . 'website_channel_page_article';
             if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key) )) {
                 View::assign('mainContent', $pageContent);
                 View::output('global/cache_show.php');
