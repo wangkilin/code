@@ -68,8 +68,8 @@ class core_autoload
             }
             // 没找到文件， 抛出异常
             else {
-                echo INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php';exit;
-                throw new Exception('Class file not found. Class:' . $class_name);
+                //echo INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php';exit;
+                //throw new Exception('Class file not found. Class:' . $class_name);
             }
 		}
 
