@@ -38,7 +38,7 @@
                     <?php foreach ($this->list AS $key => $val) { ?>
                     <tr>
                         <td>
-                            <?php echo $val['title']; ?>
+                            <a target="blank" href="/course/asp/table_id-<?php echo $val['id'];?>"><?php echo $val['title']; ?></a>
                         </td>
                         <td>
                             <div class="col-sm-12 clo-xs-12 col-lg-offset-1">

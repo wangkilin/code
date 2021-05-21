@@ -30,14 +30,22 @@ class main extends BaseController
      */
     public function default_action()
     {
+        if (! isset($_GET['id']) && isset($_GET['table_id']) && $this->hasRolePermission (parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR) ) {
+
+            $_GET['id'] = $this->model()->fetch_one('course_content_table', 'article_id', 'article_id > 0 AND table_id='.intval($_GET['table_id']), 'sort ASC');
+        }
+
         // 只有管理员权限， 才可以通过id访问
         if (is_numeric($_GET['id']) ) {
             if (! $this->hasRolePermission (parent::IS_ROLE_ADMIN | parent::IS_ROLE_MODERATOR)) {
                 $_GET['table_id'] = intval($_GET['table_id']);
             }
             $itemInfo = $this->model('course')->getById($_GET['id']);
-        } else {
+        } else if (is_string($_GET['id'])){
             $itemInfo = $this->model('course')->getCourseByToken($_GET['id']);
+        } else {
+
+            HTTP::error_404();
         }
         // 指定文章没有找到
         if (! $itemInfo) {

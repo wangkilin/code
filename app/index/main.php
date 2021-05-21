@@ -109,7 +109,7 @@ class main extends BaseController
             return $this->showDataInCategory($category_info);
         }
 
-        $cache_key = str_replace('.', '_',$_SERVER['HTTP_HOST']) . 'website_homepage';
+        $cache_key = str_replace(array('.',':'), '_',$_SERVER['HTTP_HOST']) . 'website_homepage';
         if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key)) ) {
             View::assign('mainContent', $pageContent);
             View::output('global/cache_show.php');
