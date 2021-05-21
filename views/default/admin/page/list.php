@@ -22,7 +22,7 @@
 							<th><?php _e('页面分类'); ?></th>
 							<th><?php _e('页面标题'); ?></th>
 							<th width="50%"><?php _e('页面描述'); ?></th>
-							<th><?php _e('操作'); ?></th>
+							<th width="80px"><?php _e('操作'); ?></th>
 						</tr>
 					</thead>
 					<tbody>

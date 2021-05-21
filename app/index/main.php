@@ -38,6 +38,11 @@ class main extends BaseController
 
         View::set_meta('description', $meta_description);
 
+        $courseFirstPageList = $this->model('course')->fetch_all('course_content_table', '`sort` IN (0,1)', 'sort DESC');
+        $tableIds = array_column($courseFirstPageList, 'table_id');
+        $courseFirstPageList = array_combine($tableIds, $courseFirstPageList);
+        View::assign('courseFirstPageList', $courseFirstPageList);
+
         $this->per_page = 24;
         $allCategoryList = $this->model('category')->getCategoryAndChildIds();
         $categoryList = array($categoryInfo['id'] => $allCategoryList[$categoryInfo['id']]);

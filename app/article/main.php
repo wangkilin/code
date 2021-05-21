@@ -252,6 +252,12 @@ class main extends BaseController
         ))->create_links();
 
 
+        $courseFirstPageList = $this->model('course')->fetch_all('course_content_table', '`sort` IN (0,1)', 'sort DESC');
+        $tableIds = array_column($courseFirstPageList, 'table_id');
+        $courseFirstPageList = array_combine($tableIds, $courseFirstPageList);
+        View::assign('courseFirstPageList', $courseFirstPageList);
+
+
         View::assign('itemList', $categoryList);
         View::assign('categoryList', $allCategoryList);
         View::assign('listColClass', 'col-sm-6 col-xs-12 nopadding');
