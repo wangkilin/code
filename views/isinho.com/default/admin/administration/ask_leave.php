@@ -256,13 +256,42 @@ $(function () {
                 minView : 0, // 0:选择到分钟， 1：选择到小时， 2：选择到天
                 minuteStep:30,
                 initialDate : $('#ask-leave-date').text(),
+                hoursDisabled : '0,1,2,3,4,5,6,7,18,19,20,21,22,23'
         }) ;
         $(this).closest('.ask-leave-single-item').after($item);
     });
+    /**
+     * 移除请假条目
+     */
     $('body').on('click', '.ask-leave-single-item .icon-delete', function () {
+        if ($(this).closest('.ask-leave-single-item').siblings('.ask-leave-single-item').length == 0) {
+            var $item = $(this).closest('.ask-leave-single-item').clone();
+            $item.find('input[name="id[]"]').remove();
+
+            $item.find('input').val('');
+            $item.find(".js-datepicker" ).datetimepicker({
+                    format  : 'yyyy-mm-dd h:ii',
+                    language:  'zh-CN',
+                    weekStart: 1, // 星期一 为一周开始
+                    todayBtn:  1, // 显示今日按钮
+                    autoclose: 1,
+                    todayHighlight: 1,
+                    startView: 1,
+                    forceParse: 0,
+                    minView : 0, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+                    minuteStep:30,
+                    initialDate : $('#ask-leave-date').text(),
+                    hoursDisabled : '0,1,2,3,4,5,6,7,18,19,20,21,22,23'
+            }) ;
+            $(this).closest('.ask-leave-single-item').before($item);
+        }
+        if ($(this).closest('.ask-leave-single-item').find('input[name="id[]"]').length ) {
+            $(this).closest('form').append($('<input type="hidden" name="delete_ids[]" value="'+$(this).closest('.ask-leave-single-item').find('input[name="id[]"]').val()+'"/>'));
+        }
         $('.js-ajax-feedback').removeClass('fade in bg-warning text-danger').text(''); // 移除错误提醒信息
         $(this).closest('.ask-leave-single-item').remove();
     });
+
     $('body').on('change', '.ask-leave-single-item input', function () {
 
         $('.js-ajax-feedback').removeClass('fade in bg-warning text-danger').text(''); // 移除错误提醒信息
@@ -279,11 +308,36 @@ $(function () {
                 todayHighlight: 1,
                 startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
                 forceParse: 0,
-                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天,
+                hoursDisabled : '0,1,2,3,4,5,6,7,18,19,20,21,22,23'
             });
 
     $('.icon-delete.icon-date-delete').click (function () {
         $(this).siblings('.js-date-input').val('');
+    });
+
+    $('body').on('click', '#js-remove-ask-leave', function () {
+
+        $('.js-ajax-feedback').removeClass('fade in bg-warning text-danger').text('');
+        var successCallback = function (response) {
+            if (response.errno==-1) {
+                $('.js-ajax-feedback').text(response.err).addClass('fade in bg-warning text-danger');
+            } else {
+                $('#js-sinho-leave-table tbody tr').find('td:not(:first)').html('');
+                loadLeaveDataIntoTable(response.rsm);
+                $('.icb-alert-box').modal('hide');
+            }
+        };
+        var errorCallback   = function (response) {
+            console.info(response);
+        };
+        ICB.ajax.requestJson(
+            $(this).closest('form').attr('action'),
+            $(this).closest('form').serialize(),
+            successCallback,
+            errorCallback
+        );
+
     });
 
     /**
@@ -377,6 +431,11 @@ $(function () {
                     //leave_date_end      : leaveDateDisplay.substr(5) +' ' + currentDate.getHours() + ':00',
                 });
             ICB.modal.dialog(html, onshowCallback);
+
+            // 如果是编辑请假， 显示删除按钮， 允许删除请假
+            if (response.rsm.length) {
+                $('#js-remove-ask-leave').removeClass('hidden');
+            }
         };
         ICB.ajax.requestJson(
                 G_BASE_URL + '/admin/ajax/administration/get_ask_leave/',

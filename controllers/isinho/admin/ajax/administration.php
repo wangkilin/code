@@ -15,7 +15,6 @@ define('IN_AJAX', TRUE);
 
 class administration extends SinhoBaseController
 {
-
     /**
      * 根据日期获取请假数据
      */
@@ -41,10 +40,10 @@ class administration extends SinhoBaseController
         $total = count($_POST['leave_type']);
         $scope = array();
         for($i=0; $i<$total; $i++) {
-            if (!$_POST['leave_type'][$i] || !$_POST['leave_start_time'][$i] || !$_POST['leave_end_time'][$i]
-              || !$_POST['leave_period'][$i] || !$_POST['user_id']) {
-
+            if ('' != $_POST['leave_type'][$i] + $_POST['leave_start_time'][$i] + $_POST['leave_end_time'][$i]+ $_POST['leave_period'][$i]) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("第 ".($i+1)." 条请假信息不完整")));
+            } else {
+                continue;
             }
 
             if (strtotime($_POST['leave_start_time'][$i]) >= strtotime($_POST['leave_end_time'][$i])) {
@@ -86,6 +85,9 @@ class administration extends SinhoBaseController
         }
 
         for($i=0; $i<$total; $i++) {
+            if ('' == $_POST['leave_type'][$i] + $_POST['leave_start_time'][$i] + $_POST['leave_end_time'][$i]+ $_POST['leave_period'][$i]) {
+                continue;
+            }
             $set = array(
                 'user_id'           => $_POST['user_id'],
                 'leave_type'        => $_POST['leave_type'][$i],
@@ -117,6 +119,11 @@ class administration extends SinhoBaseController
                 $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, $set2);
                 $j++;
             }
+        }
+
+        foreach ($_POST['delete_ids'] as $_id) {
+            $this->model('sinhoWorkload')->delete(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, 'ask_leave_id=' . $_id);
+            $this->model('sinhoWorkload')->delete(sinhoWorkloadModel::ASK_LEAVE_TABLE, 'id=' . $_id);
         }
 
         if ($_POST['leave_date']) {
