@@ -213,7 +213,7 @@ class ajax extends AdminController
         }
 
         if ($_POST['url_token']) {
-            if (!preg_match("/^(?!__)[a-zA-Z0-9_]+$/i", $_POST['url_token'])) {
+            if (!preg_match("/^(?!__)[a-zA-Z0-9_\.]+$/i", $_POST['url_token'])) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('别名只允许输入英文数字下划线')));
             }
 
