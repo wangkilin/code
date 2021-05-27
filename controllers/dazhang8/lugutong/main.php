@@ -24,7 +24,7 @@ class main extends BaseController
             HTTP::redirect('/lugutong/index_square/');
         }
         // 默认展示最后一天的数据
-        $list = $this->model()->fetch_all('stock_lugutong', 'code = "' . $this->model()->quote($_GET['id']) . '" AND belong_date > SUBDATE("'.$maxDate.'", INTERVAL 1 MONTH)', 'belong_date DESC');
+        $list = $this->model()->fetch_all('stock_lugutong', 'code = "' . $this->model()->quote($_GET['id']) . '" AND belong_date > SUBDATE("'.$maxDate.'", INTERVAL 4 MONTH)', 'belong_date DESC');
         if (! $list) {
             HTTP::redirect('/lugutong/index_square/');
         }
