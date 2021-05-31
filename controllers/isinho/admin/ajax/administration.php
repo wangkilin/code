@@ -40,7 +40,7 @@ class administration extends SinhoBaseController
         $total = count($_POST['leave_type']);
         $scope = array();
         for($i=0; $i<$total; $i++) {
-            if ('' != $_POST['leave_type'][$i] + $_POST['leave_start_time'][$i] + $_POST['leave_end_time'][$i]+ $_POST['leave_period'][$i]) {
+            if ('' == $_POST['leave_type'][$i] + $_POST['leave_start_time'][$i] + $_POST['leave_end_time'][$i]+ $_POST['leave_period'][$i]) {
                 H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("第 ".($i+1)." 条请假信息不完整")));
             } else {
                 continue;
