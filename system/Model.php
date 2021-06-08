@@ -266,8 +266,8 @@ class Model
      *
      * 面向对象数据库操作, 表名无需加表前缀, 数据也无需使用 $this->quote 进行过滤
      *
-     * @param    string
-     * @param    array
+     * @param    string $table
+     * @param    array $data
      * @return    int
      */
     public function insert($table, $data)

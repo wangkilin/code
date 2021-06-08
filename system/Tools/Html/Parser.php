@@ -164,6 +164,9 @@ class Tools_Html_Parser
             } else {
                 $_src = $scheme . '://' . $host . $refPath . '/' . $_src;
             }
+            $_srcExplodeInfo = explode('/', $_src);
+            $_srcExplodeInfo[count($_srcExplodeInfo)-1] = urlencode($_srcExplodeInfo[count($_srcExplodeInfo)-1]);
+            $_src = join('/', $_srcExplodeInfo);
             $tryTimes = 3;
             while($tryTimes-- > 0) {
                 //echo $_src , "\r\n";
@@ -189,6 +192,7 @@ class Tools_Html_Parser
                        // echo $_src , "+++++ image url.\r\n";
                     } catch (Exception $e) {
                         //var_dump($e);
+                        // echo $_src, '  ---------  ',  __LINE__, "\r\n";
                         throw $e;
                     }
                     if(is_array($_uploadInfo) && isset($_uploadInfo['url']))  {
@@ -196,6 +200,12 @@ class Tools_Html_Parser
                         //var_dump($_uploadInfo['url']);
                         $_result = true;
                     }
+                } else {
+                    if ($tryTimes == 0 && strpos($_src, 'http://')===0) {
+                        $_src = 'https' . substr($_src, 4);
+                        $tryTimes++;
+                    }
+                    // echo $_src, '  ---------  ',  __LINE__, "\r\n";
                 }
                 //echo __LINE__, "\r\n";
                 //echo $_tmpFile;
@@ -274,6 +284,10 @@ class Tools_Html_Parser
             $domList = $this->dom->getElementsByTagName($contentDomInfo['tag']);
             $index = 0;
             foreach ($domList as $_tmpDom) {
+                if ( $contentDomInfo['class'] && $_tmpDom->hasAttribute('class') ) {
+                    //echo $_tmpDom->getAttribute('class'), $contentDomInfo['class'], strpos($_tmpDom->getAttribute('class'),$contentDomInfo['class']) , "\r\n";
+                    //continue;
+                }
                 if ( $contentDomInfo['class'] && (! $_tmpDom->hasAttribute('class')
                  || (strpos($_tmpDom->getAttribute('class'), $contentDomInfo['class'].' ') ===false
                      && strpos($_tmpDom->getAttribute('class'),' '.$contentDomInfo['class']) ===false

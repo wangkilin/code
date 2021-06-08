@@ -174,7 +174,7 @@ class CdnSync
         $bucketList = $this->model->fetch_all('cdn_bucket');
         $ids = array_column($bucketList, 'id');
         $bucketList = array_combine($ids, $bucketList);
-        $list = $this->model->fetch_all('cdn_file_map', 'status = 1 OR status = 2', null, 10000);
+        $list = $this->model->fetch_all('cdn_file_map', 'status = 1 OR status = 2', 'id DESC', 30000);
         $localFileIds = array_column($list, 'local_file_id');
         $localFileList = $this->model->fetch_all('cdn_local_file', 'id IN ("' .join('","', $localFileIds) .'")');
         $localFileIds  = array_column($localFileList, 'id');
