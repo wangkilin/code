@@ -24,6 +24,7 @@
                          <td><i class="icon icon-annual-leave"></i>年假</td>
                          <td><i class="icon icon-wedding-leave"></i>婚假</td>
                          <td><i class="icon icon-maternity-leave"></i>产假</td>
+                         <td><i class="icon icon-body-check"></i>产检</td>
                          <td><i class="icon icon-period-leave"></i>生理假</td>
                          <td><i class="icon icon-funeral-leave"></i>丧假</td>
                          <td><i class="icon icon-private-leave"></i>事假</td>
@@ -160,6 +161,9 @@
                                             case 7: // 丧假
                                                 _e('丧假');
                                                 break;
+                                            case 8: // 产检
+                                                _e('产检');
+                                                break;
                                             case 1: // 事假
                                                 _e('事假');
                                                 break;
@@ -224,6 +228,9 @@ function loadLeaveDataIntoTable (leaveList) {
                     break;
                 case 7: // 丧假
                     $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-funeral-leave"/>');
+                    break;
+                case 8: // 产检
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-body-check"/>');
                     break;
                 case 1: // 事假
                     $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-private-leave"/>');
