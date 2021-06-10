@@ -197,6 +197,16 @@ class articleModel extends Model
 
     public function getListInDiffCategory (array $categoryIdList, $sort = 'id DESC', $limit=null)
     {
+        $itemList = array();
+        foreach ($categoryIdList as $_id) {
+            $_item = $this->fetch_row($this->table, 'category_id = ' . $_id, 'id DESC');
+            is_array($_item) && $itemList[$_item['id']] = $_item;
+        }
+        krsort($itemList);
+
+        return array_slice($itemList, 0, $limit);
+
+
         $sql = '(SELECT * FROM ' . $this->get_table() . ' WHERE category_id = %d ORDER BY ' . $sort . ' LIMIT 1)';
         $sqlList = array();
         foreach ($categoryIdList as $_id) {
