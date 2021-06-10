@@ -227,6 +227,9 @@
                                 <div class="col-sm-11 icb-item-title">
                                     <input type="text" name="remarks" value="<?php echo $this->itemInfo['remarks']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['remarks']; ?>" title="" data-toggle="tooltip" />
                                 </div>
+                                <div class="col-sm-11 icb-item-title text-left">
+                                    <?php echo $this->bookInfo['remarks']; ?>
+                                </div>
 
                             </div>
 
