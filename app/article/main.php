@@ -410,7 +410,7 @@ class main extends BaseController
 
 
         $pageContent = View::output('article/article_home_no_head_foot', false);
-        empty($_GET['doGenerateCache']) OR Application::cache()->set($cache_key, $pageContent .'<!-- cached ' . date('Y-m-d H:i:s') . ' -->', get_setting('cache_level_normal'));
+        empty($_GET['doGenerateCache']) OR Application::cache()->set($cache_key, $pageContent .'<!-- cached ' . date('Y-m-d H:i:s') . ' -->', get_setting('cache_level_low'));
         View::assign('mainContent', $pageContent);
         View::output('global/cache_show.php');
     }
