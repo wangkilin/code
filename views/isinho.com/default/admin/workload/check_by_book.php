@@ -1,4 +1,9 @@
 
+<!-- Theme switcher -->
+<div class="theme-switch" style="width:600px;right:-610px;">
+    <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
+    <?php View::output('admin/workload/verify_search_inc.php');?>
+</div>
 
         <div class="mod-body tab-content padding5px">
             <div class="tab-pane active" id="index">
@@ -167,6 +172,19 @@
 
 <script type="text/javascript">
 $(function(){
+
+    $('.theme-switch').width(600);
+    $('.theme-switch .icon').click (function(event){
+            event.preventDefault();
+            if( $ (this).hasClass('inOut')  ){
+                $('.theme-switch').stop().animate({right:'0px'},1000 );
+            } else{
+                $('.theme-switch').stop().animate({right:'-610px'},1000 );
+            }
+            $(this).toggleClass('inOut');
+            return false;
+
+        }  );
 });
 </script>
 

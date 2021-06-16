@@ -477,11 +477,38 @@ class main extends SinhoBaseController
         } else { // 查询全部书稿的工作量
             // 1. 获取到存在工作量的书稿id
             // 2. 根据书稿， 统计具有工作量书稿的总数
+            $where = array();
+            if ($_GET['start_date']) {
+                $where[] = 'delivery_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['start_date'])) ) . '"';
+            }
+            if ($_GET['end_date']) {
+                $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
+            }
+            if ($_GET['serial']) {
+                //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
+                $where[] = 'serial like "%' . $this->model()->quote(rawurldecode($_GET['serial'])) .'%"';
+            }
+            if ($_GET['book_name']) {
+                //$where[] = ' (MATCH(book_name) AGAINST("' . $this->model()->quote(rawurldecode($_GET['book_name'])) . '") )';
+                $where[] = 'book_name like "%' . $this->model()->quote(rawurldecode($_GET['book_name'])) .'%"';
+            }
+            if ($_GET['proofreading_times']) {
+                //$where[] = ' (MATCH(proofreading_times) AGAINST("' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) . '") )';
+                $where[] = 'proofreading_times like "%' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) .'%"';
+            }
+            if ($where) {
+                $where = join(' AND ', $where);
+            } else {
+                $where = null;
+            }
+
+            $booksList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::BOOK_TABLE, $where, 'delivery_date DESC, id DESC', null, PHP_INT_MAX, true, 'id');
             $bookIdList = $this->model('sinhoWorkload')
                                ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
                                         $this->per_page,
                                         $this->per_page * intval($_GET['page']-1),
                                         '`status`<>'.sinhoWorkloadModel::STATUS_DELETE
+                                         . ' AND book_id IN (0, ' . join(',', array_column($booksList, 'id')) . ')'
                                           //.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING
                                          ,
                                         null,
@@ -490,7 +517,8 @@ class main extends SinhoBaseController
             $bookIds = array_column($bookIdList, 'book_id');
             $totalRows = $this->model('sinhoWorkload')
                               ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
-                                      '`status`<>'.sinhoWorkloadModel::STATUS_DELETE,
+                                      '`status`<>'.sinhoWorkloadModel::STATUS_DELETE
+                                      . ' AND book_id IN (0, ' . join(',', array_column($booksList, 'id')) . ')',
                                       'DISTINCT  book_id'
                                 );
             //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
