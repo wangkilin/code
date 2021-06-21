@@ -1,9 +1,24 @@
 <div class="icb-footer-wrap">
 	<div class="icb-footer">
+        <div class="row">
 		<?php _e("版权所有");?> © <?php echo date('Y'); ?> </span>
 		<span class="hidden-xs">Powered By <a href="#" target="blank">大涨吧 dazhang8.com <?php echo G_VERSION; ?></a></span>
         <span class="hidden-xs">备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a></span>
-
+        </div>
+        <div class="row">
+		<?php _e("友情链接");?> ：</span>
+		<span class="hidden-xs"><a href="//www.icodebang.com" target="blank">爱码帮</a></span>
+        <span> | </span>
+        <span class="hidden-xs"><a href="//www.isinho.com" target="blank">新禾文化</a></span>
+        <span> | </span>
+        <span class="hidden-xs"><a href="//www.kinful.com" target="blank">Kinful</a></span>
+        <span> | </span>
+        <span class="hidden-xs"><a href="//www.devboy.cn" target="blank">开发者</a></span>
+        <span> | </span>
+        <span class="hidden-xs"><a href="//www.dazhang8.com" target="blank">大涨吧</a></span>
+        <span> | </span>
+        <span class="hidden-xs"><a href="//www.mysqlworkbench.cn" target="blank">MySQL Workbench</a></span>
+        </div>
 	</div>
 </div>
 
