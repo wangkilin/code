@@ -227,14 +227,14 @@ class Application
      * @access    public
      * @param    array
      * @param    integer
-     * @return    string
+     * @return    array('rsm'=>'数据内容','errno'=>'错误代码', 'err'=>'错误信息')
      */
     public static function RSM($rsm, $errno = 0, $err = '')
     {
         return array(
-            'rsm' => $rsm,
+            'rsm'   => $rsm,
             'errno' => (int)$errno,
-            'err' => $err,
+            'err'   => $err,
         );
     }
 

@@ -21,6 +21,10 @@ class sinhoWorkloadModel extends Model
      */
     const WORKLOAD_TABLE = 'sinho_employee_workload';
     /**
+     * 工作量质量奖惩表
+     */
+    const QUARLITY_TABLE = 'sinho_workload_quarlity';
+    /**
      * 请假表
      */
     const ASK_LEAVE_TABLE = 'users_ask_leave';

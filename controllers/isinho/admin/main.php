@@ -528,13 +528,22 @@ class main extends SinhoBaseController
         if ($bookIds) {
             $allList = $this->model('sinhoWorkload')
                             ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE,
-                                        'book_id IN ( ' . join(', ',  $bookIds). ') '
+                                        'book_id IN (' . join(', ',  $bookIds). ') '
                                         . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
                                         //. ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING
                                         ,
                                     'book_id,category,working_times'
                                 );
         }
+        // 根据工作量ids获取相应的质量奖惩信息表内容
+        $workloadIds = array_column($allList, 'id');
+        $quarlityList = $this->model('sinhoWorkload')
+                             ->fetch_all(sinhoWorkloadModel::QUARLITY_TABLE,
+                                        'workload_id IN (0, ' . join(',', $workloadIds) . ')'
+                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
+                                );
+        $workloadIds = array_column($quarlityList, 'workload_id');
+        $quarlityList = array_combine($workloadIds, $quarlityList); // 按照工作量id对质量考核信息归组
 
         // 获取用户信息列表,
         $userIds = array_column($allList, 'user_id');
@@ -552,6 +561,7 @@ class main extends SinhoBaseController
 
             $workloadList[$_itemInfo['book_id']][] = $_itemInfo;
         }
+
         // 根据书稿id列表获取书稿信息
         $bookList = array();
         if ($bookIds) {
@@ -576,6 +586,7 @@ class main extends SinhoBaseController
 
         View::assign('itemsList', $bookList);
         View::assign('workloadList', $workloadList);
+        View::assign('quarlityList', $quarlityList);
         View::assign('totalRows', $totalRows);
 
     }

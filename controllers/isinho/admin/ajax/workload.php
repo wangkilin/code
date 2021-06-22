@@ -285,6 +285,84 @@ class workload extends SinhoBaseController
 
         H::ajax_json_output(Application::RSM(array('stat'=>$employeeWorkloadList, 'employee'=>$userList)));
     }
+
+    /**
+     * 填充质量考核
+     */
+    public function fill_quarlity_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+
+        if (empty($_POST['workload_id'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+
+        $data = array(
+            'rate_num'     => $_POST['rate'],
+            'good_or_bad'  => $_POST['good_or_bad'],
+            'remarks'      => $_POST['remarks'],
+            'add_date'     => date('Y-m-d H:i:s'),
+            'workload_id'  => $_POST['workload_id'],
+        );
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
+        if ($itemInfo) {
+            if ($itemInfo['belong_month']) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('考核已经结算，不能修改！')));
+            }
+
+            Application::model('sinhoWorkload')->update(sinhoWorkloadModel::QUARLITY_TABLE, $data, 'workload_id = ' . intval($_POST['workload_id']));
+        } else {
+
+            Application::model('sinhoWorkload')->insert(sinhoWorkloadModel::QUARLITY_TABLE, $data);
+        }
+
+        H::ajax_json_output(Application::RSM(Application::lang()->_t('质量考核已记录'), 0));
+    }
+
+    /**
+     * 根绝workload_id 获取质量考核信息
+     *
+     * @return array
+     */
+    public function get_quarlity_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+
+        if (empty($_POST['workload_id'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
+        is_array($itemInfo) OR $itemInfo = array();
+        //$itemInfo = array('good_or_bad'=>-1, 'rate_num'=>5, 'remarks'=>'hello world');
+
+        H::ajax_json_output(Application::RSM($itemInfo, 0));
+    }
+
+    /**
+     * 删除质量考核
+     */
+    public function remove_quarlity_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+
+        if (empty($_POST['workload_id'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
+
+        if (! $itemInfo) {
+            H::ajax_json_output(Application::RSM(Application::lang()->_t('参数错误'), -1));
+        }
+        if ($itemInfo['belong_month'] > 0) {
+            H::ajax_json_output(Application::RSM(Application::lang()->_t('考核已经结算，不能删除'), -1));
+        }
+
+        Application::model('sinhoWorkload')->delete(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
+
+        H::ajax_json_output(Application::RSM(Application::lang()->_t('成功删除质量考核记录')));
+    }
 }
 
 /* EOF */

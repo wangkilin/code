@@ -58,6 +58,7 @@
                                 <th><?php _e('核算总<br/>字数(千)'); ?></th>
                                 <th><?php _e('应发<br/>金额'); ?></th>
                                 <th><?php _e('备注'); ?></th>
+                                <th><?php _e('操作'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -91,9 +92,10 @@
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo $itemInfo['total_chars']; ?></td>
                                 <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                                 <!-- <td><?php echo $itemInfo['remarks']; ?></td> -->
 
-                                <td>
+                                <td class="nowrap">
                                     <a target="_blank" href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                     <a target="_blank" href="admin/books/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                 </td>
@@ -144,9 +146,41 @@
                                 <td data-td-name="payable_amount" class=""><a><?php echo $workloadInfo['payable_amount']; ?></a></td>
                                 <!-- 存在js-allow-diff-book-mark, 允许跨书稿间计算单元格；js-can-not-compute表示单元格不可以参与计算 -->
                                 <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
+                                <td>
+                                    <a target="_blank"  onclick="show_quarlity(<?php echo $workloadInfo['id']; ?>); return false;" class="js-fill-quarlity icon icon-verify md-tip" href="admin/ajax/workload/fill_quarylity/workload_id-<?php echo $workloadInfo['id']; ?>" class="icon icon-order md-tip" title="<?php _e('质量考核'); ?>" data-toggle="tooltip"></a>
+                                </td>
                             </tr>
+                            <?php if (isset($this->quarlityList[$workloadInfo['id']])) { ?>
+                            <tr>
+                                <td class="text-left">
+                                    <?php
+                                    echo date('m-d', strtotime($this->quarlityList[$workloadInfo['id']]['add_date']));
+                                    ?>
+                                </td>
+                                <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
+                                <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
+                                <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
+                                <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
+                                <td data-td-name="category" class="js-allow-mark"><a><?php echo $workloadInfo['category']; ?></a></td>
+                                <td data-td-name="working_times" class="js-allow-mark"><a><?php echo $workloadInfo['working_times']; ?></a></td>
+
+                                <td colspan="3" class="text-right red-right-border">考核结果：</td>
+                                <td ><?php echo $this->quarlityList[$workloadInfo['id']]['good_or_bad'] == 1 ? '<a class="icon-good"></a>' : '<a class="icon-bad"></a>';?></td>
+                                <td></td>
+                                <td></td>
+                                <td colspan="3" class="text-right">比例：<?php echo $this->quarlityList[$workloadInfo['id']]['rate_num'];?></td>
+                                <td></td>
+                                <td></td>
+
+                                <td><a><?php echo  round($workloadInfo['payable_amount'] * $this->quarlityList[$workloadInfo['id']]['rate_num'] / 100, 2) ; ?></a></td>
+                                <td colspan="2"><?php echo $this->quarlityList[$workloadInfo['id']]['remarks'];?></td>
+
+                            </tr>
+                            <?php  } // end quarlity if ?>
                                 <?php } ?>
-                            <?php } //end if ?>
+
+                            <?php } //end workload if ?>
+
                             <?php } ?>
                         </tbody>
                     </table>
@@ -170,7 +204,165 @@
 
         </div>
 
+        <div id="fill-quarlity-template" class="">
+            <form action="admin/ajax/workload/fill_quarlity/" method="post" onsubmit="return false;">
+                <input type="hidden" name="workload_id" value=""/>
+                <div class="row">
+                    <div class="col-sm-1 text-right">
+                        <label class="radio-inline padding-20">
+                            <input type="radio" name="good_or_bad" value="1">奖
+                        </label>
+                        &nbsp;
+                        <label class="radio-inline">
+                            <input type="radio" name="good_or_bad" value="-1">惩
+                        </label>
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        <label class="icb-label"><?php _e('考核比例'); ?>:</label>
+                    </div>
+                    <div class="col-sm-1 input-group" style="float:left;">
+                        <input type="text" class="form-control text-right" name="rate" placeholder="">
+                        <div class="input-group-addon">&nbsp;%&nbsp;</div>
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        <label class="icb-label"><?php _e('备注'); ?>:</label>
+                    </div>
+                    <div class="col-sm-6 icb-item-title">
+                        <input type="text" name="remarks" value="" class="form-control" />
+                    </div>
+                    <div class="col-sm-2 ">
+                       <div class="row">
+                           <div class="col-sm-1"></div>
+                           <div class="col-sm-3">
+                                <a class="btn btn-large btn-success" id="publish_submit" onclick="fill_quarlity($(this).closest('form'));"><?php _e('保 存'); ?></a>
+                           </div>
+                           <div class="col-sm-1"></div>
+                           <div class="col-sm-3">
+                                <a class="btn btn-large btn-warning " onclick="$(this).closest('tr').remove();return false;"><?php _e('取 消'); ?></a>
+                           </div>
+                           <div class="col-sm-1"></div>
+                           <div class="col-sm-3">
+                                <a class="btn btn-large btn-danger " onclick="remove_quarlity($(this).closest('form'));return false;"><?php _e('删 除'); ?></a>
+                           </div>
+                       </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
 <script type="text/javascript">
+function show_quarlity (workloadId)
+{
+    ICB.modal.loading(true);
+    var url = G_BASE_URL + '/admin/ajax/workload/get_quarlity/';
+    var params = {'workload_id' : workloadId};
+    var $refTr = $('tr[data-db-id="'+workloadId+'"]');
+
+    ICB.ajax.requestJson(
+        url,
+        params,
+        function (response) {
+            ICB.modal.loading(false);
+
+            if (!response) {
+                return false;
+            }
+
+            if (response.err) {
+                ICB.modal.alert(response.err);
+            } else if (response.errno === 0) {
+                var rate = (typeof response.rsm.rate_num) === 'undefined' ? '' : response.rsm.rate_num;
+                var goodOrBad = (typeof response.rsm.good_or_bad) === 'undefined' ? '1' : response.rsm.good_or_bad;
+                var remarks = (typeof response.rsm.remarks) === 'undefined' ? '' : response.rsm.remarks;
+
+                $('#quarylity-edit-form-container').remove();
+                var html = $('#fill-quarlity-template').html();
+                $refTr.after('<tr id="quarylity-edit-form-container"><td colspan="'+$refTr.find('td').length+'">'+html + '</td></tr>');
+
+                $('#quarylity-edit-form-container').find('input[name="workload_id"]').val(workloadId);
+                $('#quarylity-edit-form-container').find('input[name="good_or_bad"][value="'+goodOrBad+'"]').attr('checked', 'checked');
+                $('#quarylity-edit-form-container').find('input[name="rate"]').val(rate);
+                $('#quarylity-edit-form-container').find('input[name="remarks"]').val(remarks);
+                // 选择框美化
+                $('.icb-content-wrap').find("input").iCheck({
+                    checkboxClass : 'icheckbox_square-blue',
+                    radioClass : 'iradio_square-blue',
+                    increaseArea : '20%'
+                });
+            } else {
+                ICB.modal.alert(_t('请求发生错误'));
+            }
+        }
+    );
+
+    return false;
+
+}
+
+function fill_quarlity ($form)
+{
+    ICB.modal.loading(true);
+    var url = G_BASE_URL + '/admin/ajax/workload/fill_quarlity/';
+    var params = $form.serialize();
+
+    ICB.ajax.requestJson(
+        url,
+        params,
+        function (response) {
+            ICB.modal.loading(false);
+
+            if (!response) {
+                ICB.modal.alert(_t('请求发生错误'));
+                return false;
+            }
+
+            if (response.err) {
+                ICB.modal.alert(response.err);
+            } else if (response.errno === 0) {
+                window.location.reload();
+            } else {
+                ICB.modal.alert(_t('请求发生错误'));
+            }
+        }
+    );
+}
+/**
+ * 点击删除按钮
+ */
+function remove_quarlity ($form)
+{
+    ICB.domEvents.deleteShowConfirmModal(
+        _t('确认删除质量考核？'),
+        function(){
+
+            var url = G_BASE_URL + '/admin/ajax/workload/remove_quarlity/';
+            var params = $form.serialize();
+
+            ICB.ajax.requestJson(
+                url,
+                params,
+                function (response) {
+                    if (!response) {
+                        ICB.modal.alert(_t('请求发生错误'));
+                        return false;
+                    }
+
+                    if (response.err) {
+                        ICB.modal.alert(response.err);
+                    } else if (response.errno === 0) {
+                        window.location.reload();
+                    } else {
+                        ICB.modal.alert(_t('请求发生错误'));
+                    }
+                }
+            );
+        }
+    );
+
+    return false;
+}
+
+
 $(function(){
 
     $('.theme-switch').width(600);
@@ -185,6 +377,9 @@ $(function(){
             return false;
 
         }  );
+
+    $('body').on('click', '.js-submit-quarlity', fill_quarlity);
+
 });
 </script>
 
