@@ -204,7 +204,7 @@
 
         </div>
 
-        <div id="fill-quarlity-template" class="">
+        <div id="fill-quarlity-template" class="hidden">
             <form action="admin/ajax/workload/fill_quarlity/" method="post" onsubmit="return false;">
                 <input type="hidden" name="workload_id" value=""/>
                 <div class="row">

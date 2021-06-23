@@ -2,7 +2,7 @@
             <div class="tab-pane" id="search">
 
                 <form method="post" action="admin/books/index/" onsubmit="return false;" id="search_form" class="form-horizontal" role="form">
-                    <input name="action" type="hidden" value="search" />
+                    <input name="action" id="input_action_name" type="hidden" value="search" />
 
                     <div class="form-group">
                         <label class="col-sm-2 col-xs-3 control-label"><?php _e('系列'); ?>:</label>
@@ -47,11 +47,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('所属阶段'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select id="sinho_grade_level" multiple name="grade_level[]">
+                               <option value="1" <?php echo in_array(1, $_GET['grade_level']) ? 'selected' : ''; ?>>小学</option>
+                               <option value="2" <?php echo in_array(2, $_GET['grade_level']) ? 'selected' : ''; ?>>初中</option>
+                               <option value="3" <?php echo in_array(3, $_GET['grade_level']) ? 'selected' : ''; ?>>高中</option>
+
+                               <option value="0" <?php echo in_array(0, $_GET['grade_level']) ? 'selected' : ''; ?>>其他</option>
+                            </select>
+                        </div>
+                    </div>
 
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-5 col-xs-8">
-                            <button type="button" onclick="ICB.ajax.postForm($('#search_form'));" class="btn btn-primary"><?php _e('搜索'); ?></button>
+                            <button type="button" onclick="$('#input_action_name').val('export');ICB.ajax.postForm($('#search_form'));" class="btn btn-info"><?php _e('导出'); ?></button>
+                            <button type="button" onclick="$('#input_action_name').val('search');ICB.ajax.postForm($('#search_form'));" class="btn btn-primary col-sm-offset-1"><?php _e('搜索'); ?></button>
                         </div>
                     </div>
                 </form>
@@ -65,6 +79,15 @@ $(function () {
      */
     $('.icon-delete.icon-date-delete').click (function () {
         $(this).siblings('.js-date-input').val('');
+    });
+
+
+    $("#sinho_grade_level").multiselect({
+        			nonSelectedText : '<?php _e('---- 选择书稿所属阶段 ----');?>',
+                    maxHeight       : 200,
+                    buttonWidth     : 400,
+                    allSelectedText : '<?php _e('已选择全部');?>',
+                    numberDisplayed : 7, // 选择框最多提示选择多少个人名
     });
 });
 </script>

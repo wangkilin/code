@@ -24,7 +24,7 @@ class books extends SinhoBaseController
     }
 
     /**
-     * 保存教程目录
+     * 保存书稿
      */
     public function save_action()
     {
@@ -433,6 +433,31 @@ class books extends SinhoBaseController
         Application::model()->delete(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN( ' . join(', ', $_POST['ids']) . ')' );
 
         H::ajax_json_output(Application::RSM(null, 1, null));
+    }
+
+
+    /**
+     * 设置书稿阶段属性
+     */
+    public function set_grade_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+
+        if (! $_POST['book_id'] || ! isset($_POST['grade_level'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
+        }
+        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_POST['book_id']) ) ) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
+        }
+
+        $set = array('grade_level'=>$_POST['grade_level']);
+        $this->model('sinhoWorkload')
+                ->update(sinhoWorkloadModel::BOOK_TABLE,
+                $set,
+                'id = ' . $bookInfo['id']
+        );
+        H::ajax_json_output(Application::RSM(null, 0, Application::lang()->_t('保存成功')));
+
     }
 }
 

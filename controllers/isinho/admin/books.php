@@ -219,7 +219,9 @@ class books extends SinhoBaseController
             foreach ($_POST as $key => $val) {
                 if ($key == 'start_date' OR $key == 'end_date') {
                     $val = base64_encode($val);
-                } else  {
+                } else if (is_array($_POST[$key])) {
+                    $val = rawurlencode(join(',', $_POST[$key]));
+                } else {
                     $val = rawurlencode($val);
                 }
 
@@ -256,6 +258,13 @@ class books extends SinhoBaseController
         if ($_GET['proofreading_times']) {
             //$where[] = ' (MATCH(proofreading_times) AGAINST("' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) . '") )';
             $where[] = 'proofreading_times like "%' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) .'%"';
+        }
+        if (isset($_GET['grade_level']) && $_GET['grade_level']!=='') {
+            $_GET['grade_level'] = explode(',', $_GET['grade_level']);
+            foreach($_GET['grade_level'] as & $_level) {
+                $_level = intval($_level);
+            }
+            $where[] = 'grade_level IN (' . join(',', $_GET['grade_level']) . ')';
         }
 
         if ($where) {
