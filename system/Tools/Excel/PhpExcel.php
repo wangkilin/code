@@ -138,7 +138,7 @@ class Tools_Excel_PhpExcel
      *
      * @return
      */
-    public function export($fileName, $headArr, $data)
+    public function export($fileName, $headArr, $data, $bindHeadKey=false)
     {
         //创建PHPExcel对象
         $objPHPExcel = new PHPExcel();
@@ -149,19 +149,28 @@ class Tools_Excel_PhpExcel
         foreach($headArr as $v){
             $colum = chr($key);
             $objPHPExcel->setActiveSheetIndex(0) ->setCellValue($colum.'1', $v);
-            $objPHPExcel->setActiveSheetIndex(0) ->setCellValue($colum.'1', $v);
+            //$objPHPExcel->setActiveSheetIndex(0) ->setCellValue($colum.'1', $v);
             $key += 1;
         }
 
         $column = 2;
         $objActSheet = $objPHPExcel->getActiveSheet();
 
-        foreach($data as $key => $rows){
+        foreach($data as $key => $row){
             $span = ord("A");
-            foreach($rows as $keyName=>$value){
-                $j = chr($span);
-                $objActSheet->setCellValue($j.$column, $value);
-                $span++;
+            if ($bindHeadKey) {
+                foreach ($headArr as $_k=>$_v) {
+                    $value = isset($row[$_k]) ? $row[$_k] : '';
+                    $j = chr($span);
+                    $objActSheet->setCellValue($j.$column, $value);
+                    $span++;
+                }
+            } else {
+                foreach($row as $keyName=>$value){
+                    $j = chr($span);
+                    $objActSheet->setCellValue($j.$column, $value);
+                    $span++;
+                }
             }
             $column++;
         }

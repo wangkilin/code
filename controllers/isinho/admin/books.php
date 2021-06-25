@@ -285,7 +285,41 @@ class books extends SinhoBaseController
         }
         $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
 
-        $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+        if ($_GET['action']=='export') {
+            $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+            $phpExcel = & loadClass('Tools_Excel_PhpExcel');
+            $headArr = array(
+                'id_number' => '序号',
+                'delivery_date' => '发稿日期',
+                'return_date' => '回稿日期',
+                'serial' => '系列',
+                'book_name' => '书名',
+                'proofreading_times' => '校次',
+                'content_table_pages' => '目录',
+                'text_pages' => '正文',
+                'text_table_chars_per_page' => '目录+正文千字/页',
+                'answer_pages' => '答案',
+                'answer_chars_per_page' => '答案千字/页',
+                'test_pages' => '试卷',
+                'test_chars_per_page' => '试卷千字/页',
+                'test_answer_pages' => '试卷答案',
+                'test_answer_chars_per_page' => '试卷答案千字/页',
+                'exercise_pages' => '课后作业',
+                'exercise_chars_per_page' => '课后作业千字/页',
+                'function_book' => '功能册',
+                'function_book_chars_per_page' => '功能册千字/页',
+                'function_answer' => '功能册答案',
+                'function_answer_chars_per_page' => '功能册答案千字/页',
+                'weight' => '难度系数',
+                'total_chars' => '字数（合计）',
+                'total_chars_without_weight' => '字数（未乘系数）',
+                'remarks' => '备注'
+            );
+            $fileName = '导出书稿-' . date('Y-m-d') . '.xls';
+            $phpExcel->export($fileName, $headArr, $itemList, true);
+        } else {
+            $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+        }
         foreach ($itemList as & $_itemInfo) {
             $_itemInfo['subject_code'] = '';
             foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
