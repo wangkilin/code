@@ -172,7 +172,7 @@
                                 <td></td>
                                 <td></td>
 
-                                <td><a><?php echo  round($workloadInfo['payable_amount'] * $this->quarlityList[$workloadInfo['id']]['rate_num'] / 100, 2) ; ?></a></td>
+                                <td><a><?php echo  round($this->quarlityList[$workloadInfo['id']]['good_or_bad'] * $workloadInfo['payable_amount'] * $this->quarlityList[$workloadInfo['id']]['rate_num'] / 100, 2) ; ?></a></td>
                                 <td colspan="2"><?php echo $this->quarlityList[$workloadInfo['id']]['remarks'];?></td>
 
                             </tr>
