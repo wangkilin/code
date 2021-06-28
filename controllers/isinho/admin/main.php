@@ -496,6 +496,16 @@ class main extends SinhoBaseController
                 //$where[] = ' (MATCH(proofreading_times) AGAINST("' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) . '") )';
                 $where[] = 'proofreading_times like "%' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) .'%"';
             }
+            if ($_GET['good_or_bad']) {
+                $tmpList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::QUARLITY_TABLE, 'good_or_bad IN ("' . join('","', $_GET['good_or_bad']) . '")');
+                $bookIds = array(-1);
+                if ($tmpList) {
+                    $tmpWorkloadIds = array_column($tmpList, 'workload_id');
+                    $tmpList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'id IN (' . join(',', $tmpWorkloadIds) . ')');
+                    count($tmpList) > 0 AND $bookIds = array_column($tmpList, 'book_id');
+                }
+                $where[] = 'id IN (' . join(',', $bookIds) . ')';
+            }
             if ($where) {
                 $where = join(' AND ', $where);
             } else {
@@ -503,25 +513,29 @@ class main extends SinhoBaseController
             }
 
             $booksList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::BOOK_TABLE, $where, 'delivery_date DESC, id DESC', null, PHP_INT_MAX, true, 'id');
-            $bookIdList = $this->model('sinhoWorkload')
-                               ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
-                                        $this->per_page,
-                                        $this->per_page * intval($_GET['page']-1),
+            $bookIds = array();
+            $totalRows = 0;
+            if ($booksList) {
+                $bookIdList = $this->model('sinhoWorkload')
+                                ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
+                                            $this->per_page,
+                                            $this->per_page * intval($_GET['page']-1),
+                                            '`status`<>'.sinhoWorkloadModel::STATUS_DELETE
+                                            . ' AND book_id IN (0, ' . join(',', array_column($booksList, 'id')) . ')'
+                                            //.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING
+                                            ,
+                                            null,
+                                            '`status` desc, belong_month desc'
+                                        );  // ($sql, $limit = null, $offset = null, $where = null, $group_by = null, $order_by = '');
+                $bookIds = array_column($bookIdList, 'book_id');
+                $totalRows = $this->model('sinhoWorkload')
+                                ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
                                         '`status`<>'.sinhoWorkloadModel::STATUS_DELETE
-                                         . ' AND book_id IN (0, ' . join(',', array_column($booksList, 'id')) . ')'
-                                          //.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING
-                                         ,
-                                        null,
-                                        '`status` desc, belong_month desc'
-                                    );  // ($sql, $limit = null, $offset = null, $where = null, $group_by = null, $order_by = '');
-            $bookIds = array_column($bookIdList, 'book_id');
-            $totalRows = $this->model('sinhoWorkload')
-                              ->count(sinhoWorkloadModel::WORKLOAD_TABLE,
-                                      '`status`<>'.sinhoWorkloadModel::STATUS_DELETE
-                                      . ' AND book_id IN (0, ' . join(',', array_column($booksList, 'id')) . ')',
-                                      'DISTINCT  book_id'
-                                );
-            //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
+                                        . ' AND book_id IN (0, ' . join(',', array_column($booksList, 'id')) . ')',
+                                        'DISTINCT  book_id'
+                                    );
+                //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true)
+            }
         }
         // 根据书稿id ， 获取到对应的工作量
         $allList = array();
@@ -537,13 +551,16 @@ class main extends SinhoBaseController
         }
         // 根据工作量ids获取相应的质量奖惩信息表内容
         $workloadIds = array_column($allList, 'id');
-        $quarlityList = $this->model('sinhoWorkload')
-                             ->fetch_all(sinhoWorkloadModel::QUARLITY_TABLE,
-                                        'workload_id IN (0, ' . join(',', $workloadIds) . ')'
-                                        . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
-                                );
-        $workloadIds = array_column($quarlityList, 'workload_id');
-        $quarlityList = array_combine($workloadIds, $quarlityList); // 按照工作量id对质量考核信息归组
+        $quarlityList = array();
+        if ($workloadIds) {
+            $quarlityList = $this->model('sinhoWorkload')
+                                ->fetch_all(sinhoWorkloadModel::QUARLITY_TABLE,
+                                            'workload_id IN (0, ' . join(',', $workloadIds) . ')'
+                                            . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
+                                    );
+            $workloadIds = array_column($quarlityList, 'workload_id');
+            $quarlityList = array_combine($workloadIds, $quarlityList); // 按照工作量id对质量考核信息归组
+        }
 
         // 获取用户信息列表,
         $userIds = array_column($allList, 'user_id');
@@ -589,6 +606,8 @@ class main extends SinhoBaseController
         View::assign('quarlityList', $quarlityList);
         View::assign('totalRows', $totalRows);
 
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
     }
 
 

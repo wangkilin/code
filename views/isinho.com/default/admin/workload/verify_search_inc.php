@@ -49,6 +49,31 @@
                     </div>
 
 
+                    <!-- <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('所属阶段'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select id="sinho_grade_level" multiple name="grade_level[]">
+                               <option value="1" <?php echo in_array(1, $_GET['grade_level']) ? 'selected' : ''; ?>>小学</option>
+                               <option value="2" <?php echo in_array(2, $_GET['grade_level']) ? 'selected' : ''; ?>>初中</option>
+                               <option value="3" <?php echo in_array(3, $_GET['grade_level']) ? 'selected' : ''; ?>>高中</option>
+
+                               <option value="0" <?php echo in_array(0, $_GET['grade_level']) ? 'selected' : ''; ?>>其他</option>
+                            </select>
+                        </div>
+                    </div> -->
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('质量考核'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select id="sinho_good_or_bad" multiple name="good_or_bad[]">
+                               <option value="1" <?php echo in_array(1, $_GET['good_or_bad']) ? 'selected' : ''; ?>>奖</option>
+                               <option value="-1" <?php echo in_array(-1, $_GET['good_or_bad']) ? 'selected' : ''; ?>>惩</option>
+                            </select>
+                        </div>
+                    </div>
+
+
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-4 col-xs-8">
                             <input type="submit" class="btn btn-primary" value="<?php _e('搜索书稿'); ?>"/>
@@ -65,6 +90,23 @@ $(function () {
      */
     $('.icon-delete.icon-date-delete').click (function () {
         $(this).siblings('.js-date-input').val('');
+    });
+
+
+    // $("#sinho_grade_level").multiselect({
+    //     nonSelectedText : '<?php _e('---- 选择书稿所属阶段 ----');?>',
+    //     maxHeight       : 200,
+    //     buttonWidth     : 400,
+    //     allSelectedText : '<?php _e('已选择全部');?>',
+    //     numberDisplayed : 7, // 选择框最多提示选择多少个人名
+    // });
+
+    $("#sinho_good_or_bad").multiselect({
+        nonSelectedText : '<?php _e('---- 选择质量考核奖惩 ----');?>',
+        maxHeight       : 200,
+        buttonWidth     : 400,
+        allSelectedText : '<?php _e('已选择全部');?>',
+        numberDisplayed : 7, // 选择框最多提示选择多少个人名
     });
 });
 </script>
