@@ -390,7 +390,7 @@ class main extends SinhoBaseController
             $where .= ' AND (belong_month >= ' . intval($_GET['start_month']) . ' OR belong_month IS NULL )';
             $belongMonth['start'] = intval($_GET['start_month']);
         }
-        if ($_GET['end_month']) {
+        if ($_GET['end_month'] && $_GET['end_month']!=date('Ym')) {
             $where .= ' AND belong_month <= ' . intval($_GET['end_month']);
             $belongMonth['end'] = intval($_GET['end_month']);
         }
