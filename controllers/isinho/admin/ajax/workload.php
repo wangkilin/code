@@ -296,6 +296,10 @@ class workload extends SinhoBaseController
         if (empty($_POST['workload_id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
         }
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id = ' . intval($_POST['workload_id']));
+        if (! $itemInfo) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误，对应的工作量不存在')));
+        }
 
         $data = array(
             'rate_num'     => $_POST['rate'],
@@ -303,6 +307,8 @@ class workload extends SinhoBaseController
             'remarks'      => $_POST['remarks'],
             'add_date'     => date('Y-m-d H:i:s'),
             'workload_id'  => $_POST['workload_id'],
+            'book_id'      => $itemInfo['book_id'],
+            'user_id'      => $itemInfo['user_id'],
         );
         $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
         if ($itemInfo) {
