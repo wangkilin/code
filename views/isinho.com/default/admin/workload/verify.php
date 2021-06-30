@@ -127,6 +127,7 @@
                                                         ?></a>
                                                     </td>
                                                     <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
+                                                    <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                                     <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                                     <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                                     <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
