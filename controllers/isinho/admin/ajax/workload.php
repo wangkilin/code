@@ -144,6 +144,14 @@ class workload extends SinhoBaseController
                         ),
                         'id IN(' .join(',', $_POST['id']) . ') AND status = ' . sinhoWorkloadModel::STATUS_VERIFYING
                     );
+            $this->model('sinhoWorkload')
+                    ->update(sinhoWorkloadModel::QUARLITY_TABLE,
+                        array(
+                            'status'        => sinhoWorkloadModel::STATUS_VERIFIED,
+                            'belong_month'  => date('Ym', strtotime('-1month'))
+                        ),
+                        'status = ' . sinhoWorkloadModel::STATUS_VERIFYING
+                    );
             H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/verify_list/')), 1, Application::lang()->_t('工作量核算已保存')));
         } else {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));

@@ -38,6 +38,15 @@ $config[] = array(
             'url'       => 'admin/fill_list/',
             'permission'=> SinhoBaseController::PERMISSION_FILL_WORKLOAD,
         ),
+        array (
+            'id'        => 'admin/workload/quarlity_list',
+            'title'     => _t('质量考核记录'),
+            'cname'     => 'order',
+            'url'       => 'admin/workload/quarlity_list/',
+            'permission'=> array(SinhoBaseController::PERMISSION_FILL_WORKLOAD,
+                                 SinhoBaseController::PERMISSION_CHECK_WORKLOAD
+                            ),
+        ),
         array(
             'id'        => 'admin/verify_list',
             'title'     => _t('核算工作量'),

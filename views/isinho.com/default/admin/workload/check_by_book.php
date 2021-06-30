@@ -1,6 +1,6 @@
 
 <!-- Theme switcher -->
-<div class="theme-switch" style="width:600px;right:-610px;">
+<div class="theme-switch" style="width:600px;right:-610px;top:35%;">
     <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
     <?php View::output('admin/workload/verify_search_inc.php');?>
 </div>

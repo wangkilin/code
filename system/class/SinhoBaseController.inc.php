@@ -186,7 +186,16 @@ class SinhoBaseController extends BaseController
             if ($_menuInfo['children']) {
                 $_children = array();
                 foreach ($_menuInfo['children'] as $_key2=>$_menuInfo2) {
-                    if (!$_menuInfo2['permission'] || $this->user_info['permission'][$_menuInfo2['permission']])  {
+                    empty($_menuInfo2['permission']) OR settype($_menuInfo2['permission'], 'array');
+                    $hasPermission = false;
+
+                    foreach ($_menuInfo2['permission'] as $_tmpPermissionName) {
+                        if ($this->user_info['permission'][$_tmpPermissionName]) {
+                            $hasPermission = true;
+                            break;
+                        }
+                    }
+                    if (!$_menuInfo2['permission'] || $hasPermission)  {
 
                         $_children[] = $_menuInfo2;
                     }
@@ -197,7 +206,20 @@ class SinhoBaseController extends BaseController
                     $newAdminMenu[$_key] = $_menuInfo;
                 }
 
-            } else if ($_menuInfo['permission'] && !$this->user_info['permission'][$_menuInfo['permission']]) {
+                continue;
+
+            }
+
+
+            empty($_menuInfo['permission']) OR settype($_menuInfo['permission'], 'array');
+            $hasPermission = false;
+            foreach ($_menuInfo['permission'] as $_tmpPermissionName) {
+                if ($this->user_info['permission'][$_tmpPermissionName]) {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+            if ($_menuInfo['permission'] && !$hasPermission) {
             } else {
                 $newAdminMenu[$_key] = $_menuInfo;
             }
