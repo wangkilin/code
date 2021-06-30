@@ -109,6 +109,7 @@ class sinhoWorkloadModel extends Model
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
             'delivery_date', // varchar(255) DEFAULT NULL COMMENT '发稿日期',
             'return_date', // varchar(255) DEFAULT NULL COMMENT '回稿日期',
+            'category', // 类别
             'serial', // varchar(255) DEFAULT NULL COMMENT '系列',
             'book_name', // varchar(255) DEFAULT NULL COMMENT '书名',
             'proofreading_times', // varchar(255) DEFAULT NULL COMMENT '校次',
