@@ -28,11 +28,22 @@
                             <div class="row">
                                 <!-- 系列 -->
                                 <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('类别'); ?>:</label>
+                                </div>
+                                <div class="col-sm-5 icb-item-title">
+                                    <input type="text" name="serial" value="<?php echo $this->itemInfo['category']; ?>" class="form-control" />
+                                </div>
+                                <!-- 系列 -->
+                                <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('系列'); ?>:</label>
                                 </div>
                                 <div class="col-sm-5 icb-item-title">
                                     <input type="text" name="serial" value="<?php echo $this->itemInfo['serial']; ?>" class="form-control" />
                                 </div>
+
+
+                            </div>
+                            <div class="row">
                                 <!-- 书名 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('书名'); ?>:</label>
@@ -40,9 +51,6 @@
                                 <div class="col-sm-5 icb-item-title">
                                     <input type="text" name="book_name" value="<?php echo $this->itemInfo['book_name']; ?>" class="form-control" />
                                 </div>
-
-                            </div>
-                            <div class="row">
                                 <!-- 校次 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('校次'); ?>:</label>

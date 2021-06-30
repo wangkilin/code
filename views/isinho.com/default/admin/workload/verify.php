@@ -42,6 +42,7 @@
                                     <th>#</th>
                                     <th class="text-left"><?php _e('日期'); ?></th>
                                     <th><?php _e('责编'); ?></th>
+                                    <th><?php _e('类别'); ?></th>
                                     <th><?php _e('系列'); ?></th>
                                     <th><?php _e('书名'); ?></th>
                                     <th><?php _e('校次'); ?></th>
@@ -79,6 +80,7 @@
                                                                                                                                 echo $itemInfo['return_date']; ?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5); ?></a>
                                             </td>
                                             <td><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></td>
+                                            <td class="js-category"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['category']; ?></a></td>
                                             <td class="js-serial"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['serial']; ?></a></td>
                                             <td class="js-bookname"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['book_name']; ?></a></td>
                                             <td class="js-proofreading-times"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['proofreading_times']; ?></a></td>
@@ -158,14 +160,14 @@
 
                                                 <tr class="book-line">
                                                     <td ><strong>合计</strong></td>
-                                                    <td colspan="23"></td>
+                                                    <td colspan="24"></td>
                                                     <td>&nbsp;<strong><?php echo $totalChars; ?></strong>&nbsp;</td>
                                                     <td>&nbsp;<strong><?php echo round($totalChars * 2, 2); ?></strong>&nbsp;</td>
                                                     <td ></td>
                                                 </tr>
                                 <?php } else { ?>
                                     <tr>
-                                        <td colspan="26">没有待核算工作量数据</td>
+                                        <td colspan="28">没有待核算工作量数据</td>
                                     </tr>
 
                                 <?php } ?>
