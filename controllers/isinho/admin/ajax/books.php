@@ -210,27 +210,28 @@ class books extends SinhoBaseController
         $id_number_key                      = 'A'; // 序号
         $delivery_date_key                  = 'B'; // 发稿日期
         $return_date_key                    = 'C'; // 回稿日期
-        $serial_key                         = 'D'; // 系列
-        $book_name_key                      = 'E'; // 书名
-        $proofreading_times_key             = 'F'; // 校次
-        $content_table_pages_key            = 'G'; // 目录
-        $text_pages_key                     = 'H'; // 成书
-        $text_table_chars_per_page_key      = 'I'; // 千字/页
-        $answer_pages_key                   = 'J'; // 答案
-        $answer_chars_per_page_key          = 'K'; // 千字/页
-        $test_pages_key                     = 'L'; // 试卷
-        $test_chars_per_page_key            = 'M'; // 千字/页
-        $test_answer_pages_key              = 'N'; // 试卷答案
-        $test_answer_chars_per_page_key     = 'O'; // 千字/页
-        $exercise_pages_key                 = 'P'; // 课后作业
-        $exercise_chars_per_page_key        = 'Q'; // 千字/页
-        $function_book_key                  = 'R'; // 功能册
-        $function_book_chars_per_page_key   = 'S'; // 千字/页
-        $function_answer_key                = 'T'; // 功能册答案
-        $function_answer_chars_per_page_key = 'U'; // 千字/页
-        $weight_key                         = 'V'; // 难度系数
-        $total_chars_key                    = 'W'; // 字数（合计）
-        $remarks_key                        = 'X'; // 备注
+        $category_key                       = 'D'; // 类别
+        $serial_key                         = 'E'; // 系列
+        $book_name_key                      = 'F'; // 书名
+        $proofreading_times_key             = 'G'; // 校次
+        $content_table_pages_key            = 'H'; // 目录
+        $text_pages_key                     = 'I'; // 成书
+        $text_table_chars_per_page_key      = 'J'; // 千字/页
+        $answer_pages_key                   = 'K'; // 答案
+        $answer_chars_per_page_key          = 'L'; // 千字/页
+        $test_pages_key                     = 'M'; // 试卷
+        $test_chars_per_page_key            = 'N'; // 千字/页
+        $test_answer_pages_key              = 'O'; // 试卷答案
+        $test_answer_chars_per_page_key     = 'P'; // 千字/页
+        $exercise_pages_key                 = 'Q'; // 课后作业
+        $exercise_chars_per_page_key        = 'R'; // 千字/页
+        $function_book_key                  = 'S'; // 功能册
+        $function_book_chars_per_page_key   = 'T'; // 千字/页
+        $function_answer_key                = 'U'; // 功能册答案
+        $function_answer_chars_per_page_key = 'V'; // 千字/页
+        $weight_key                         = 'W'; // 难度系数
+        $total_chars_key                    = 'X'; // 字数（合计）
+        $remarks_key                        = 'Y'; // 备注
         $data = $phpExcel->parseFile($newFilePath);
         $batchKey = md5($this->user_id . rand(1, 1000000000) . microtime());
         $totalImport = 0; // 导入的数据条数
@@ -257,7 +258,7 @@ class books extends SinhoBaseController
                     continue;
                 }
                 // 对重复的书稿， 做合并处理
-                $_uniqueKey = $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key];
+                $_uniqueKey = $dataLine[$category_key] . '/' . $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key];
                 if (isset($uniqueList[$_uniqueKey]) ) {
                     $dataLine[$content_table_pages_key            ] += doubleval($uniqueList[$_uniqueKey][$content_table_pages_key            ]);
                     $dataLine[$text_pages_key                     ] += doubleval($uniqueList[$_uniqueKey][$text_pages_key                     ]);
@@ -290,7 +291,8 @@ class books extends SinhoBaseController
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
                                  ->fetch_row(sinhoWorkloadModel::BOOK_TABLE,
-                                             'serial            = "' . $this->model('sinhoWorkload')->quote($dataLine[$serial_key]) . '"
+                                        'category            = "' . $this->model('sinhoWorkload')->quote($dataLine[$category_key]) . '"
+                                         AND serial            = "' . $this->model('sinhoWorkload')->quote($dataLine[$serial_key]) . '"
                                          AND book_name          = "' . $this->model('sinhoWorkload')->quote($dataLine[$book_name_key]) .'"
                                          AND proofreading_times = "' . $this->model('sinhoWorkload')->quote($dataLine[$proofreading_times_key]) .'"'
 
@@ -304,6 +306,7 @@ class books extends SinhoBaseController
                                     'id_number'                      => $dataLine[$id_number_key                      ],
                                     'delivery_date'                  => $dataLine[$delivery_date_key                  ],
                                     'return_date'                    => $dataLine[$return_date_key                    ],
+                                    'category'                       => $dataLine[$category_key                       ],
                                     'serial'                         => $dataLine[$serial_key                         ],
                                     'book_name'                      => $dataLine[$book_name_key                      ],
                                     'proofreading_times'             => $dataLine[$proofreading_times_key             ],
@@ -338,6 +341,7 @@ class books extends SinhoBaseController
                                     'id_number'                      => $dataLine[$id_number_key                      ],
                                     'delivery_date'                  => $dataLine[$delivery_date_key                  ],
                                     'return_date'                    => $dataLine[$return_date_key                    ],
+                                    'category'                       => $dataLine[$category_key                       ],
                                     'serial'                         => $dataLine[$serial_key                         ],
                                     'book_name'                      => $dataLine[$book_name_key                      ],
                                     'proofreading_times'             => $dataLine[$proofreading_times_key             ],
