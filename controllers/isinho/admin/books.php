@@ -247,6 +247,9 @@ class books extends SinhoBaseController
         if ($_GET['end_date']) {
             $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
         }
+        if ($_GET['category']) {
+            $where[] = 'category like "%' . $this->model()->quote(rawurldecode($_GET['category'])) .'%"';
+        }
         if ($_GET['serial']) {
             //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
             $where[] = 'serial like "%' . $this->model()->quote(rawurldecode($_GET['serial'])) .'%"';

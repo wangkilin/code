@@ -5,6 +5,13 @@
                     <input name="action" id="input_action_name" type="hidden" value="search" />
 
                     <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('类别'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <input class="form-control" type="text" value="<?php echo rawurldecode($_GET['category']); ?>" name="category" placeholder="类别关键字"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-2 col-xs-3 control-label"><?php _e('系列'); ?>:</label>
 
                         <div class="col-sm-5 col-xs-8">
