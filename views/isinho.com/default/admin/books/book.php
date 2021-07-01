@@ -31,7 +31,7 @@
                                     <label class="icb-label"><?php _e('类别'); ?>:</label>
                                 </div>
                                 <div class="col-sm-5 icb-item-title">
-                                    <input type="text" name="serial" value="<?php echo $this->itemInfo['category']; ?>" class="form-control" />
+                                    <input type="text" name="category" value="<?php echo $this->itemInfo['category']; ?>" class="form-control" />
                                 </div>
                                 <!-- 系列 -->
                                 <div class="col-sm-1">
