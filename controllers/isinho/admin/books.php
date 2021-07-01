@@ -379,7 +379,7 @@ class books extends SinhoBaseController
                 $url_param[] = $key . '-' . $val;
             }
         }
-
+        View::assign('backUrl', get_js_url('/admin/books/index/page-'.$_GET['page']));
         View::assign('pagination', Application::pagination()->initialize(array(
             'base_url'   => get_js_url('/admin/books/index/') . implode('__', $url_param),
             'total_rows' => $totalRows,

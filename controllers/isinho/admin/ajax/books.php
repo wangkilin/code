@@ -46,9 +46,10 @@ class books extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完成相同的书稿')));
         }
 
+        $backurl = isset($_POST['backUrl']) ? base64_decode($_POST['backUrl']) : get_js_url('/admin/books/');
         if ($_POST['id']) { // 更新
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
-            H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/books/')), 1, Application::lang()->_t('书稿保存成功')));
+            H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, Application::lang()->_t('书稿保存成功')));
         } else { // 添加
 
             $_POST['delivery_date'] = strtotime($_POST['delivery_date'])>0 ? date('Y-m-d', strtotime($_POST['delivery_date'])) : date('Y-m-d');
