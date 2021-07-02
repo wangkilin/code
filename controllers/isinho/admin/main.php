@@ -240,6 +240,8 @@ class main extends SinhoBaseController
 
         View::import_js('js/icb_template_isinho.com.js');
         View::import_js('js/functions.js');
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
 
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/fill_list', 'sinho_admin_menu') ) );
         View::output('admin/workload/fill_list');
