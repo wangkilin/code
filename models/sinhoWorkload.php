@@ -703,7 +703,7 @@ class sinhoWorkloadModel extends Model
         if ($whereList) {
             $where = join(' AND ', $whereList);
         }
-error_log($sql . print_r($where, true), 3, '/tmp/debug.txt');
+
         $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, $groupBy);
 
         return $list;
