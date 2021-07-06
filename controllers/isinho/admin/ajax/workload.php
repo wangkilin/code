@@ -213,6 +213,8 @@ class workload extends SinhoBaseController
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
         // 获取每个人的工作量
+        $quarlityStat = $this->model('sinhoWorkload')->getQuarlityStatByUserIds (array(), array('start'=>$start, 'end'=>$end));
+        $quarlityStat = array_combine(array_column($quarlityStat,'user_id'), array_column($quarlityStat,'quarlity_num'));
         $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, array('start'=>$start, 'end'=>$end));
         $totalCharsList = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
         $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
@@ -223,7 +225,8 @@ class workload extends SinhoBaseController
                 'name'                  => $userList[$_userId]['user_name'],
                 'total'                 => $_item,
                 'totalWithoutWeight'    => $totalCharsWithoutWeightListLastMonth[$_userId],
-                'totalCharsWeightLt1'   => $totalCharsWeightLt1ListLastMonth[$_userId]
+                'totalCharsWeightLt1'   => $totalCharsWeightLt1ListLastMonth[$_userId],
+                'quarlityStat'          => $quarlityStat[$_userId],
             );
         }
 

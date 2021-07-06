@@ -106,6 +106,8 @@ class main extends SinhoBaseController
         $userList = array();
         // 管理权限： 工作量榜单，已结算书稿
         if ($this->hasRolePermission(self::IS_SINHO_CHECK_WORKLOAD)) {
+            $quarlityList = $this->model('sinhoWorkload')->getQuarlityStatByUserIds(array(), array('start'=>$belongMonth, 'end'=>$belongMonth));
+            $quarlityList = array_combine(array_column($quarlityList,'user_id'), array_column($quarlityList,'quarlity_num'));
             $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
             $userIds  = array_column($userList, 'uid');
             $userList = array_combine($userIds, $userList);
@@ -179,6 +181,7 @@ class main extends SinhoBaseController
             View::assign('globalStatMsgList', $globalStatMsgList);
 
             View::assign('monthList', array_keys($itemList));
+            View::assign('quarlityStat', $quarlityList);
             View::assign('allTotalChars', $allTotalChars);
             View::assign('employeeWorkloadList', $employeeWorkloadList);
         }

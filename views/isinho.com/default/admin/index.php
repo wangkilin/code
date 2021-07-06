@@ -99,6 +99,7 @@
                                 <th ><b class="js-tooltip" data-toggle="tooltip" title="大于1的系数转换成系数为1"><?php _e('字数X转换系数?');?></b></th>
                                 <th><?php _e('字数X系数');?></th>
                                 <th><?php _e('绩效');?></th>
+                                <th><?php _e('考核奖惩');?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,6 +110,7 @@
                                 <td><?php echo $this->totalCharsWeightLt1ListLastMonth[$_userId]; ?></td>
                                 <td><?php echo $_totalChars; ?></td>
                                 <td><?php echo round($_totalChars*2,2);?></td>
+                                <td><?php echo round($this->quarlityStat[$_userId],2);?></td>
                             </tr>
                             <?php }?>
                         </tbody>
@@ -118,6 +120,7 @@
                                 <td><?php echo array_sum($this->totalCharsWeightLt1ListLastMonth);?></td>
                                 <td><?php echo array_sum($this->totalCharsListLastMonth);?></td>
                                 <td><?php echo round(array_sum($this->totalCharsListLastMonth)*2, 2);?></td>
+                                <td><?php echo array_sum($this->quarlityStat);?></td>
                             </tr>
                         </tfoot>
                     </table>
@@ -377,18 +380,21 @@ $(function () {
             var html = '';
             var total = 0;
             var totalCharsWeightLt1 = 0;
+            var totalQuarlity = 0;
             for(var i = 0; i<response.rsm.length; i++) {
                 if (! response.rsm[i].name) {
                     continue;
                 }
                 total += response.rsm[i].total;
                 totalCharsWeightLt1 += response.rsm[i].totalCharsWeightLt1;
+                totalQuarlity += response.rsm[i].quarlityStat;
 
                 html = '<tr><td>' + (i+1)
                       + '</td><td>' + response.rsm[i].name
                       + '</td><td>' + response.rsm[i].totalCharsWeightLt1
                       + '</td><td>' + response.rsm[i].total
                       + '</td><td>' + float(response.rsm[i].total*2, 2)
+                      + '</td><td>' + float(response.rsm[i].quarlityStat, 2)
                       + '</td></tr>';
                 $('#total-chars-list > tbody').append(html);
             }
@@ -397,6 +403,7 @@ $(function () {
                         '<td>' + float(totalCharsWeightLt1, 4) + '</td>' +
                         '<td>' + float(total, 4) + '</td>' +
                         '<td>'+ float(total*2, 2) +'</td>' +
+                        '<td>'+ float(totalQuarlity, 2) +'</td>' +
                     '</tr>';
             $('#total-chars-list > tfoot').append(html);
         };

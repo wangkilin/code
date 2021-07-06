@@ -621,6 +621,97 @@ class sinhoWorkloadModel extends Model
         return array_combine($keys, $list);
     }
 
+
+
+    /**
+     * 基于用户工作量奖惩数据统计
+     * @param array $userIds 编辑ids
+     *
+     * @return float
+     */
+    public function getQuarlityStatByUserIds ($userIds = array(), $belongMonth = null, $groupBy='user_id')
+    {
+        if (isset($belongMonth) && ! is_array($belongMonth)) {
+            $belongMonth = array($belongMonth);
+        }
+        // ( (目录+正文)*目录正文字数+答案*答案字数...) * 系数
+        $sql = 'SELECT
+                    ROUND (
+                        SUM(
+                            (
+                                    ( CASE `content_table_pages` IS NULL OR `content_table_pages`="" WHEN 1 THEN 0 ELSE `content_table_pages` END
+                                    + CASE `text_pages` IS NULL OR `text_pages`="" WHEN 1 THEN 0 ELSE `text_pages` END
+                                    )
+                                    *
+                                    CASE `text_table_chars_per_page` IS NULL OR `text_table_chars_per_page`="" WHEN 1 THEN 0 ELSE `text_table_chars_per_page` END
+                                +
+                                    CASE `answer_pages` IS NULL OR `answer_pages`="" WHEN 1 THEN 0 ELSE `answer_pages` END
+                                    *
+                                    CASE `answer_chars_per_page` IS NULL OR `answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `answer_chars_per_page` END
+                                +
+                                    CASE `test_pages` IS NULL OR `test_pages`="" WHEN 1 THEN 0 ELSE `test_pages` END
+                                    *
+                                    CASE `test_chars_per_page` IS NULL OR `test_chars_per_page`="" WHEN 1 THEN 0 ELSE `test_chars_per_page` END
+                                +
+                                    CASE `test_answer_pages` IS NULL OR `test_answer_pages`="" WHEN 1 THEN 0 ELSE `test_answer_pages` END
+                                    *
+                                    CASE `test_answer_chars_per_page` IS NULL OR `test_answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `test_answer_chars_per_page` END
+                                +
+                                    CASE `exercise_pages` IS NULL OR `exercise_pages`="" WHEN 1 THEN 0 ELSE `exercise_pages` END
+                                    *
+                                    CASE `exercise_chars_per_page` IS NULL OR `exercise_chars_per_page`="" WHEN 1 THEN 0 ELSE `exercise_chars_per_page` END
+                                +
+                                    CASE `function_book` IS NULL OR `function_book`="" WHEN 1 THEN 0 ELSE `function_book` END
+                                    *
+                                    CASE `function_book_chars_per_page` IS NULL OR `function_book_chars_per_page`="" WHEN 1 THEN 0 ELSE `function_book_chars_per_page` END
+                                +
+                                    CASE `function_answer` IS NULL OR `function_answer`="" WHEN 1 THEN 0 ELSE `function_answer` END
+                                    *
+                                    CASE `function_answer_chars_per_page` IS NULL OR `function_answer_chars_per_page`="" WHEN 1 THEN 0 ELSE `function_answer_chars_per_page` END
+                            )
+                            *
+                            CASE `weight` IS NULL OR `weight`="" WHEN 1 THEN 0 ELSE `weight` END
+                            * 2
+                            * CASE q.`good_or_bad`="-1" WHEN 1 THEN -1 ELSE 1 END
+                            * q.rate_num / 100
+                        ), 2
+                    ) AS quarlity_num,
+                    w.user_id
+                FROM ' . $this->get_table(self::WORKLOAD_TABLE) . ' w
+                INNER JOIN ' . $this->get_table(self::QUARLITY_TABLE) . ' q
+                   ON w.id = q.workload_id'
+                ;
+        $whereList = array();
+        if ($userIds) {
+            $whereList[] = 'q.user_id IN (' . join(',', $userIds) . ')';
+        }
+        if ($belongMonth) {
+            if (!empty($belongMonth['start']) || !empty($belongMonth['end'])) {
+                if (!empty($belongMonth['start'])) {
+                    $whereList[] = 'q.belong_month >= ' . intval($belongMonth['start']);
+                }
+
+                if (!empty($belongMonth['end'])) {
+                    $whereList[] = 'q.belong_month <= ' . intval($belongMonth['end']);
+                }
+            } else {
+                $whereList[] = 'q.belong_month IN (' . join(',', $belongMonth)  . ')';
+            }
+        }
+
+        $where = null;
+        if ($whereList) {
+            $where = join(' AND ', $whereList);
+        }
+error_log($sql . print_r($where, true), 3, '/tmp/debug.txt');
+        $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, $groupBy);
+
+        return $list;
+        $keys = array_column($list, 'user_id');
+
+        return array_combine($keys, $list);
+    }
+
     /**
      * 基于书稿做工作量数据统计
      * @param array $bookIds 编辑ids
