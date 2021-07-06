@@ -67,6 +67,7 @@
                                     <th><?php _e('核算总<br/>字数(千)'); ?></th>
                                     <th><?php _e('应发<br/>金额'); ?></th>
                                     <th><?php _e('备注'); ?></th>
+                                    <th><?php _e('操作'); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,8 +105,8 @@
                                             <td data-td-name="weight" ><?php echo $itemInfo['weight']; ?></td>
                                             <td><?php echo $itemInfo['total_chars']; ?></td>
                                             <td>&nbsp;</td>
-                                            <!-- <td><?php echo $itemInfo['remarks']; ?></td> -->
-                                            <td>
+                                            <td><?php echo $itemInfo['remarks']; ?></td>
+                                            <td class="nowrap">
                                                 <a target="_blank" href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                                 <a target="_blank" href="admin/books/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                             </td>
@@ -153,6 +154,7 @@
                                                     <td data-td-name="payable_amount" class=""><a><?php echo round($workloadInfo['total_chars'] * 2, 2); ?><?php //echo $workloadInfo['payable_amount']; ?></a></td>
                                                     <!-- 存在js-allow-diff-book-mark, 允许跨书稿间计算单元格；js-can-not-compute表示单元格不可以参与计算 -->
                                                     <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
+                                                    <td></td>
                                                 </tr>
                                             <?php } ?>
                                         <?php } //end if
@@ -161,7 +163,7 @@
 
                                                 <tr class="book-line">
                                                     <td ><strong>合计</strong></td>
-                                                    <td colspan="24"></td>
+                                                    <td colspan="25"></td>
                                                     <td>&nbsp;<strong><?php echo $totalChars; ?></strong>&nbsp;</td>
                                                     <td>&nbsp;<strong><?php echo round($totalChars * 2, 2); ?></strong>&nbsp;</td>
                                                     <td ></td>
