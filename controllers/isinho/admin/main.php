@@ -92,14 +92,19 @@ class main extends SinhoBaseController
             View::assign('currentWorkload', array_sum(array_column($personalWorkloadList, 'total_chars')));
             $startMonth = $belongMinMonth;
             $personalWorkloadList = array();
+            $personalQuarlityList = array();
             while ($startMonth <= $belongMonth) {
+                $personalQuarlityList[$startMonth] = $this->model('sinhoWorkload')->getQuarlityStatByUserIds(array($this->user_id), array('start'=>$belongMonth, 'end'=>$startMonth));
+                $personalQuarlityList[$startMonth] = array_sum(array_column($personalQuarlityList[$startMonth], 'quarlity_num'));
                 $personalWorkloadList[$startMonth] = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array($this->user_id), sinhoWorkloadModel::STATUS_VERIFIED, $startMonth);
                 $personalWorkloadList[$startMonth] = array_sum(array_column($personalWorkloadList[$startMonth], 'total_chars'));
                 $startMonth = date('Ym', strtotime("{$startMonth}01 +1month"));
             }
             $personalWorkloadList[$currentYearMonth]=View::$view->currentWorkload;
+            //$personalQuarlityList[$currentYearMonth]=0;
             View::assign('personalWorkloadList', $personalWorkloadList);
-            //var_dump($personalWorkloadList);
+            View::assign('personalQuarlityList', $personalQuarlityList);
+            //var_dump($personalQuarlityList);
         }
 
         $totalCharsListLastMonth = array();
