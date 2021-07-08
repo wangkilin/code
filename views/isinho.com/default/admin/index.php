@@ -310,7 +310,7 @@ $(function () {
     echartOptions1.yAxis[1].position = 'right',
     echartOptions1.series[1].yAxisIndex = 1, // 使用另外的y轴。
 
-    console.info(echartOptions1);
+    //console.info(echartOptions1);
 
     var chart = echarts.init($('#statistic_chart')[0]);
     chart.setOption(echartOptions1);
