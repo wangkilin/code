@@ -280,56 +280,6 @@ $(function () {
     };
 
 
-<?php if (property_exists($this, 'personalWorkloadList')) { ?>
-    var dates = JSON.parse('<?php echo json_encode(array_keys($this->personalWorkloadList));?>');
-    var shares = JSON.parse('<?php echo json_encode(array_values($this->personalWorkloadList));?>');
-    var maxLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalWorkloadList));?>) +50);
-    var minLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalWorkloadList));?>) -50);
-    var quarlityList = JSON.parse('<?php echo json_encode(array_values($this->personalQuarlityList));?>');
-    var quarlityMaxLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalQuarlityList));?>) +10);
-    var quarlityMinLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalQuarlityList));?>) -10);
-    minLeft = minLeft < 0 ? 0 : minLeft;
-    //console && console.info(shares, minLeft, maxLeft);
-    var echartOptions1 = Object.assign({}, echartOptions); // 克隆对象
-    echartOptions1.title.text =  '我的工作量和质量考核';
-    echartOptions1.series[1] = Object.assign({}, echartOptions1.series[0]);
-    //echartOptions1.xAxis[1] = Object.assign({}, echartOptions1.xAxis[0]);
-    echartOptions1.yAxis[1] = Object.assign({}, echartOptions1.yAxis[0]);
-
-    echartOptions1.series[0].data = shares;
-    echartOptions1.series[0].name = '工作量';
-    echartOptions1.xAxis[0].data =  dates;
-    echartOptions1.yAxis[0].max = maxLeft;
-    echartOptions1.yAxis[0].min = minLeft;
-
-    echartOptions1.series[1].data = quarlityList;
-    //echartOptions1.xAxis[1].data =  dates;
-    echartOptions1.yAxis[1].max = quarlityMaxLeft;
-    echartOptions1.yAxis[1].min = quarlityMinLeft;
-    echartOptions1.series[1].name = '质量考核';
-    echartOptions1.yAxis[1].position = 'right',
-    echartOptions1.series[1].yAxisIndex = 1, // 使用另外的y轴。
-
-    //console.info(echartOptions1);
-
-    var chart = echarts.init($('#statistic_chart')[0]);
-    chart.setOption(echartOptions1);
-
-    window.addEventListener("orientationchange", function ()
-    {
-        var chart = echarts.init($('#statistic_chart'));
-        chart.setOption(echartOptions1);
-    }, false);
-
-    // 左侧菜单收缩重新渲染图表
-    $('.icb-header .mod-head-btn').click(function () {
-        //chart = echarts.init($('#statistic_chart')[0]);
-        //chart.setOption(echartOptions);
-    });
-
-
-<?php } ?>
-
 <?php if (property_exists($this, 'employeeWorkloadList')) { ?>
     //var dates = JSON.parse('<?php echo json_encode(array_keys($this->employeeWorkloadList));?>');
     //var shares = JSON.parse('<?php echo json_encode(array_values($this->employeeWorkloadList));?>');
@@ -340,6 +290,7 @@ $(function () {
 
     var echartOptions2 = Object.assign({}, echartOptions);
     echartOptions2.title.text =  '近期工作量';
+    echartOptions2.legend.x = 'right';
     echartOptions2.series = [ // 显示的数据。
                 <?php
                 $length = count($this->employeeWorkloadList);
@@ -387,6 +338,60 @@ $(function () {
 
 
 <?php } ?>
+
+<?php if (property_exists($this, 'personalWorkloadList')) { ?>
+    var dates = JSON.parse('<?php echo json_encode(array_keys($this->personalWorkloadList));?>');
+    var shares = JSON.parse('<?php echo json_encode(array_values($this->personalWorkloadList));?>');
+    var maxLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalWorkloadList));?>) +50);
+    var minLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalWorkloadList));?>) -50);
+    var quarlityList = JSON.parse('<?php echo json_encode(array_values($this->personalQuarlityList));?>');
+    var quarlityMaxLeft = parseInt(Math.max(<?php echo join(',', array_values($this->personalQuarlityList));?>) +10);
+    var quarlityMinLeft = parseInt(Math.min(<?php echo join(',', array_values($this->personalQuarlityList));?>) -10);
+    minLeft = minLeft < 0 ? 0 : minLeft;
+    //console && console.info(shares, minLeft, maxLeft);
+    var echartOptions1 = Object.assign({}, echartOptions); // 克隆对象
+    echartOptions1.legend.x = 'center';
+    echartOptions1.title.text =  '我的工作量和质量考核';
+    echartOptions1.series[1] = Object.assign({}, echartOptions1.series[0]);
+    //echartOptions1.xAxis[1] = Object.assign({}, echartOptions1.xAxis[0]);
+    echartOptions1.yAxis[1] = Object.assign({}, echartOptions1.yAxis[0]);
+
+    echartOptions1.series[0].data = shares;
+    echartOptions1.series[0].name = '工作量';
+    echartOptions1.xAxis[0].data =  dates;
+    echartOptions1.yAxis[0].max = maxLeft;
+    echartOptions1.yAxis[0].min = minLeft;
+    echartOptions1.yAxis[0].name = '工作量';
+
+    echartOptions1.series[1].data = quarlityList;
+    //echartOptions1.xAxis[1].data =  dates;
+    echartOptions1.yAxis[1].max = quarlityMaxLeft;
+    echartOptions1.yAxis[1].min = quarlityMinLeft;
+    echartOptions1.series[1].name = '质量考核';
+    echartOptions1.yAxis[1].position = 'right';
+    echartOptions1.series[1].yAxisIndex = 1; // 使用另外的y轴。
+    echartOptions1.yAxis[1].name = '质量考核';
+
+    //console.info(echartOptions1);
+
+    var chart = echarts.init($('#statistic_chart')[0]);
+    chart.setOption(echartOptions1);
+
+    window.addEventListener("orientationchange", function ()
+    {
+        var chart = echarts.init($('#statistic_chart'));
+        chart.setOption(echartOptions1);
+    }, false);
+
+    // 左侧菜单收缩重新渲染图表
+    $('.icb-header .mod-head-btn').click(function () {
+        //chart = echarts.init($('#statistic_chart')[0]);
+        //chart.setOption(echartOptions);
+    });
+
+
+<?php } ?>
+
     /**
      * 工作量榜单。 根据起止月份，获取员工工作量统计榜。
      */
