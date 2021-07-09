@@ -301,75 +301,51 @@ class books extends SinhoBaseController
                                     ) ;
                 //  核算字数， 保持小数点4位
                 $dataLine[$total_chars_key] = sprintf('%.4f', round($dataLine[$total_chars_key], 4) );
+                $bookData = array(
+                    'id_number'                      => $dataLine[$id_number_key                      ],
+                    'delivery_date'                  => $dataLine[$delivery_date_key                  ],
+                    'return_date'                    => $dataLine[$return_date_key                    ],
+                    'category'                       => $dataLine[$category_key                       ],
+                    'serial'                         => $dataLine[$serial_key                         ],
+                    'book_name'                      => $dataLine[$book_name_key                      ],
+                    'proofreading_times'             => $dataLine[$proofreading_times_key             ],
+                    'content_table_pages'            => $dataLine[$content_table_pages_key            ],
+                    'text_pages'                     => rtrim(rtrim(bcdiv(round( $dataLine[$text_pages_key                     ] * 100000), 100000, 4), 0), '.'),
+                    'text_table_chars_per_page'      => rtrim(rtrim(bcdiv(round( $dataLine[$text_table_chars_per_page_key      ] * 100000), 100000, 4), 0), '.'),
+                    'answer_pages'                   => rtrim(rtrim(bcdiv(round( $dataLine[$answer_pages_key                   ] * 100000), 100000, 4), 0), '.'),
+                    'answer_chars_per_page'          => rtrim(rtrim(bcdiv(round( $dataLine[$answer_chars_per_page_key          ] * 100000), 100000, 4), 0), '.'),
+                    'test_pages'                     => rtrim(rtrim(bcdiv(round( $dataLine[$test_pages_key                     ] * 100000), 100000, 4), 0), '.'),
+                    'test_chars_per_page'            => rtrim(rtrim(bcdiv(round( $dataLine[$test_chars_per_page_key            ] * 100000), 100000, 4), 0), '.'),
+                    'test_answer_pages'              => rtrim(rtrim(bcdiv(round( $dataLine[$test_answer_pages_key              ] * 100000), 100000, 4), 0), '.'),
+                    'test_answer_chars_per_page'     => rtrim(rtrim(bcdiv(round( $dataLine[$test_answer_chars_per_page_key     ] * 100000), 100000, 4), 0), '.'),
+                    'exercise_pages'                 => rtrim(rtrim(bcdiv(round( $dataLine[$exercise_pages_key                 ] * 100000), 100000, 4), 0), '.'),
+                    'exercise_chars_per_page'        => rtrim(rtrim(bcdiv(round( $dataLine[$exercise_chars_per_page_key        ] * 100000), 100000, 4), 0), '.'),
+                    'function_book'                  => rtrim(rtrim(bcdiv(round( $dataLine[$function_book_key                  ] * 100000), 100000, 4), 0), '.'),
+                    'function_book_chars_per_page'   => rtrim(rtrim(bcdiv(round( $dataLine[$function_book_chars_per_page_key   ] * 100000), 100000, 4), 0), '.'),
+                    'function_answer'                => rtrim(rtrim(bcdiv(round( $dataLine[$function_answer_key                ] * 100000), 100000, 4), 0), '.'),
+                    'function_answer_chars_per_page' => rtrim(rtrim(bcdiv(round( $dataLine[$function_answer_chars_per_page_key ] * 100000), 100000, 4), 0), '.'),
+                    'weight'                         => $dataLine[$weight_key                         ],
+                    'total_chars'                    => $dataLine[$total_chars_key                    ],
+                    'remarks'                        => $dataLine[$remarks_key                        ],
+                    'sheet_name'                     => $sheetName,
+                    'batch_key'                      => $batchKey,
+                );
+                foreach ($bookData as $_tmpKey=>$_tmpValue) {
+                    if ($_tmpValue==='0') {
+                        $bookData[$_tmpKey] = '';
+                    }
+                }
                 if ($bookInfo) { // 已存在书稿信息， 更新
+                    $bookData['modify_time']                    = time();
                     $this->model('sinhoWorkload')
                          ->update(sinhoWorkloadModel::BOOK_TABLE,
-                                  array(
-                                    'id_number'                      => $dataLine[$id_number_key                      ],
-                                    'delivery_date'                  => $dataLine[$delivery_date_key                  ],
-                                    'return_date'                    => $dataLine[$return_date_key                    ],
-                                    'category'                       => $dataLine[$category_key                       ],
-                                    'serial'                         => $dataLine[$serial_key                         ],
-                                    'book_name'                      => $dataLine[$book_name_key                      ],
-                                    'proofreading_times'             => $dataLine[$proofreading_times_key             ],
-                                    'content_table_pages'            => $dataLine[$content_table_pages_key            ],
-                                    'text_pages'                     => $dataLine[$text_pages_key                     ],
-                                    'text_table_chars_per_page'      => $dataLine[$text_table_chars_per_page_key      ],
-                                    'answer_pages'                   => $dataLine[$answer_pages_key                   ],
-                                    'answer_chars_per_page'          => $dataLine[$answer_chars_per_page_key          ],
-                                    'test_pages'                     => $dataLine[$test_pages_key                     ],
-                                    'test_chars_per_page'            => $dataLine[$test_chars_per_page_key            ],
-                                    'test_answer_pages'              => $dataLine[$test_answer_pages_key              ],
-                                    'test_answer_chars_per_page'     => $dataLine[$test_answer_chars_per_page_key     ],
-                                    'exercise_pages'                 => $dataLine[$exercise_pages_key                 ],
-                                    'exercise_chars_per_page'        => $dataLine[$exercise_chars_per_page_key        ],
-                                    'function_book'                  => $dataLine[$function_book_key                  ],
-                                    'function_book_chars_per_page'   => $dataLine[$function_book_chars_per_page_key   ],
-                                    'function_answer'                => $dataLine[$function_answer_key                ],
-                                    'function_answer_chars_per_page' => $dataLine[$function_answer_chars_per_page_key ],
-                                    'weight'                         => $dataLine[$weight_key                         ],
-                                    'total_chars'                    => $dataLine[$total_chars_key                    ],
-                                    'remarks'                        => $dataLine[$remarks_key                        ],
-                                    'modify_time'                    => time(),
-                                    'sheet_name'                     => $sheetName,
-                                    'batch_key'                      => $batchKey,
-                                  ),
+                                  $bookData,
                                   array('id = ? ' => $bookInfo['id'])
                             );
                 } else { // 没找到书稿， 添加新书稿
+                    $bookData['add_time']                    = time();
                     $this->model('sinhoWorkload')
-                         ->insert(sinhoWorkloadModel::BOOK_TABLE,
-                                  array(
-                                    'id_number'                      => $dataLine[$id_number_key                      ],
-                                    'delivery_date'                  => $dataLine[$delivery_date_key                  ],
-                                    'return_date'                    => $dataLine[$return_date_key                    ],
-                                    'category'                       => $dataLine[$category_key                       ],
-                                    'serial'                         => $dataLine[$serial_key                         ],
-                                    'book_name'                      => $dataLine[$book_name_key                      ],
-                                    'proofreading_times'             => $dataLine[$proofreading_times_key             ],
-                                    'content_table_pages'            => $dataLine[$content_table_pages_key            ],
-                                    'text_pages'                     => $dataLine[$text_pages_key                     ],
-                                    'text_table_chars_per_page'      => $dataLine[$text_table_chars_per_page_key      ],
-                                    'answer_pages'                   => $dataLine[$answer_pages_key                   ],
-                                    'answer_chars_per_page'          => $dataLine[$answer_chars_per_page_key          ],
-                                    'test_pages'                     => $dataLine[$test_pages_key                     ],
-                                    'test_chars_per_page'            => $dataLine[$test_chars_per_page_key            ],
-                                    'test_answer_pages'              => $dataLine[$test_answer_pages_key              ],
-                                    'test_answer_chars_per_page'     => $dataLine[$test_answer_chars_per_page_key     ],
-                                    'exercise_pages'                 => $dataLine[$exercise_pages_key                 ],
-                                    'exercise_chars_per_page'        => $dataLine[$exercise_chars_per_page_key        ],
-                                    'function_book'                  => $dataLine[$function_book_key                  ],
-                                    'function_book_chars_per_page'   => $dataLine[$function_book_chars_per_page_key   ],
-                                    'function_answer'                => $dataLine[$function_answer_key                ],
-                                    'function_answer_chars_per_page' => $dataLine[$function_answer_chars_per_page_key ],
-                                    'weight'                         => $dataLine[$weight_key                         ],
-                                    'total_chars'                    => $dataLine[$total_chars_key                    ],
-                                    'remarks'                        => $dataLine[$remarks_key                        ],
-                                    'add_time'                       => time(),
-                                    'sheet_name'                     => $sheetName,
-                                    'batch_key'                      => $batchKey,
-                                  )
-                        );
+                         ->insert(sinhoWorkloadModel::BOOK_TABLE, $bookData);
                 }
 
                 $prevInfo = $dataLine;
