@@ -39,7 +39,7 @@
                             <tr>
                                 <th><input type="checkbox" class="check-all"></th>
                                 <th class="text-left"><?php _e('日期'); ?></th>
-                                <th><?php _e('类别'); ?></th>
+                                <th><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
                                 <th><?php _e('校次'); ?></th>
