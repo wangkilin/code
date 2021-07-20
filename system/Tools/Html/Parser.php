@@ -130,7 +130,7 @@ class Tools_Html_Parser
     {
         $urlInfo = parse_url($baseUrl);
         $scheme = $urlInfo['scheme'];
-        $refPath = dirname($urlInfo['path']);
+        $refPath = dirname($urlInfo['path'] . 'tmp'); // 附加多余字母， 保证获取全部目录部分
         $host = $urlInfo['host'];
         $attachAccessKey = '';
         // 将图片转换成本站内容
@@ -164,6 +164,8 @@ class Tools_Html_Parser
             } else {
                 $_src = $scheme . '://' . $host . $refPath . '/' . $_src;
             }
+            //var_dump($urlInfo, $refPath);
+            //echo $_src, "\r\n";
             $_srcExplodeInfo = explode('/', $_src);
             $_srcExplodeInfo[count($_srcExplodeInfo)-1] = urlencode($_srcExplodeInfo[count($_srcExplodeInfo)-1]);
             $_src = join('/', $_srcExplodeInfo);

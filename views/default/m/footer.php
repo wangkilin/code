@@ -282,5 +282,8 @@ var _hmt = _hmt || [];
   window.bughd = window.bughd || function(){};
   bughd("create",{key:"d96d072cefc5ab3c6256af43ec8859bc"})
 </script>
+
+<!-- 防止手机浏览器在页面后面加入垃圾广告, 放置一个标志性的元素。 所有必须的元素， 都要放到这个标识元素前面  -->
+<div id="last-one-flag"></div>
 </body>
 </html>
