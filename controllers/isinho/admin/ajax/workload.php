@@ -320,6 +320,7 @@ class workload extends SinhoBaseController
             'workload_id'  => $_POST['workload_id'],
             'book_id'      => $itemInfo['book_id'],
             'user_id'      => $itemInfo['user_id'],
+            'status'       => sinhoWorkloadModel::STATUS_VERIFYING,
         );
         $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
         if ($itemInfo) {
