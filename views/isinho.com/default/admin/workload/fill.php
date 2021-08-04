@@ -87,7 +87,7 @@
                                     <label class="icb-label"><?php _e('目录+正文千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-3 icb-item-title">
-                                    <input type="text" name="text_table_chars_per_page" value="<?php echo $this->itemInfo['text_table_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['text_table_chars_per_page']; ?>" title="<?php echo $this->bookInfo['text_table_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="text_table_chars_per_page" value="<?php echo empty($this->itemInfo['text_table_chars_per_page']) ? $this->bookInfo['text_table_chars_per_page'] : $this->itemInfo['text_table_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['text_table_chars_per_page']; ?>" title="<?php echo $this->bookInfo['text_table_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             </div>
@@ -104,7 +104,7 @@
                                     <label class="icb-label"><?php _e('答案千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-1 icb-item-title">
-                                    <input type="text" name="answer_chars_per_page" value="<?php echo $this->itemInfo['answer_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['answer_chars_per_page']; ?>" title="<?php echo $this->bookInfo['answer_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="answer_chars_per_page" value="<?php echo empty($this->itemInfo['answer_chars_per_page']) ? $this->bookInfo['answer_chars_per_page'] : $this->itemInfo['answer_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['answer_chars_per_page']; ?>" title="<?php echo $this->bookInfo['answer_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             </div>
@@ -121,7 +121,7 @@
                                     <label class="icb-label"><?php _e('试卷千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-1 icb-item-title">
-                                    <input type="text" name="test_chars_per_page" value="<?php echo $this->itemInfo['test_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['test_chars_per_page']; ?>" title="<?php echo $this->bookInfo['test_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="test_chars_per_page" value="<?php echo empty($this->itemInfo['test_chars_per_page']) ? $this->bookInfo['test_chars_per_page'] : $this->itemInfo['test_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['test_chars_per_page']; ?>" title="<?php echo $this->bookInfo['test_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             <!-- </div>
@@ -139,7 +139,7 @@
                                     <label class="icb-label"><?php _e('试卷答案千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-1 icb-item-title">
-                                    <input type="text" name="test_answer_chars_per_page" value="<?php echo $this->itemInfo['test_answer_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['test_answer_chars_per_page']; ?>" title="<?php echo $this->bookInfo['test_answer_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="test_answer_chars_per_page" value="<?php echo empty($this->itemInfo['test_answer_chars_per_page']) ? $this->bookInfo['test_answer_chars_per_page'] : $this->itemInfo['test_answer_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['test_answer_chars_per_page']; ?>" title="<?php echo $this->bookInfo['test_answer_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             </div>
@@ -157,7 +157,7 @@
                                     <label class="icb-label"><?php _e('课后作业千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-1 icb-item-title">
-                                    <input type="text" name="exercise_chars_per_page" value="<?php echo $this->itemInfo['exercise_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['exercise_chars_per_page']; ?>" title="<?php echo $this->bookInfo['exercise_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="exercise_chars_per_page" value="<?php echo empty($this->itemInfo['exercise_chars_per_page']) ? $this->bookInfo['exercise_chars_per_page'] : $this->itemInfo['exercise_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['exercise_chars_per_page']; ?>" title="<?php echo $this->bookInfo['exercise_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             </div>
@@ -174,7 +174,7 @@
                                     <label class="icb-label"><?php _e('功能册千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-1 icb-item-title">
-                                    <input type="text" name="function_book_chars_per_page" value="<?php echo $this->itemInfo['function_book_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['function_book_chars_per_page']; ?>" title="<?php echo $this->bookInfo['function_book_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="function_book_chars_per_page" value="<?php echo empty($this->itemInfo['function_book_chars_per_page']) ? $this->bookInfo['function_book_chars_per_page'] : $this->itemInfo['function_book_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['function_book_chars_per_page']; ?>" title="<?php echo $this->bookInfo['function_book_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             <!-- </div>
@@ -192,7 +192,7 @@
                                     <label class="icb-label"><?php _e('功能册答案千字/页'); ?>:</label>
                                 </div>
                                 <div class="col-sm-1 icb-item-title">
-                                    <input type="text" name="function_answer_chars_per_page" value="<?php echo $this->itemInfo['function_answer_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['function_answer_chars_per_page']; ?>" title="<?php echo $this->bookInfo['function_answer_chars_per_page']; ?>" data-toggle="tooltip" />
+                                    <input type="text" name="function_answer_chars_per_page" value="<?php echo empty($this->itemInfo['function_answer_chars_per_page']) ? $this->bookInfo['function_answer_chars_per_page'] : $this->itemInfo['function_answer_chars_per_page']; ?>" class="form-control md-tip" data-default="<?php echo $this->bookInfo['function_answer_chars_per_page']; ?>" title="<?php echo $this->bookInfo['function_answer_chars_per_page']; ?>" data-toggle="tooltip" />
                                 </div>
 
                             </div>
