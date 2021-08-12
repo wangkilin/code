@@ -14,6 +14,16 @@
                 •
                 <a href="/page/website_disclaimer.html">免责声明</a>
             </div>
+            <div>
+                友情链接：
+                <a href="http://www.isinho.com">新禾文化</a>
+                •
+                <a href="//www.devboy.cn">开发者</a>
+                •
+                <a href="//www.mysqlworkbench.cn">MySQL Workbench</a>
+                •
+                <a href="//www.icodebang.cn">爱码帮</a>
+            </div>
             <div class="margin10">
                 <div style="color:#fff">本站为个人网站，部分内容来自于互联网，版权归原作者所有。如本站内容有侵权，敬请来信联系我们，我们将及时删除清理。</div>
                 <div class="margin5">
