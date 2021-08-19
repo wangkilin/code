@@ -167,7 +167,7 @@
                                 <td data-td-name="category" class="js-allow-mark"><a><?php echo $workloadInfo['category']; ?></a></td>
                                 <td data-td-name="working_times" class="js-allow-mark"><a><?php echo $workloadInfo['working_times']; ?></a></td>
 
-                                <td colspan="3" class="text-right red-right-border">考核结果：</td>
+                                <td colspan="4" class="text-right red-right-border">考核结果：</td>
                                 <td ><?php echo $this->quarlityList[$workloadInfo['id']]['good_or_bad'] == 1 ? '<a class="icon-good"></a>' : '<a class="icon-bad"></a>';?></td>
                                 <td></td>
                                 <td></td>
