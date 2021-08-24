@@ -375,6 +375,9 @@ class books extends SinhoBaseController
 
         $url_param = array();
         foreach($_GET as $key => $val) {
+            if (is_array($val)) { // 如果是数组参数， 将参数用逗号连接
+                $val = join(',', $val);
+            }
             if (!in_array($key, array('app', 'c', 'act', 'page'))) {
                 $url_param[] = $key . '-' . $val;
             }
