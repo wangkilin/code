@@ -289,7 +289,7 @@ class books extends SinhoBaseController
         $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
 
         if ($_GET['action']=='export') {
-            $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+            $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', PHP_INT_MAX, $_GET['page']);
             $phpExcel = & loadClass('Tools_Excel_PhpExcel');
             $headArr = array(
                 'id_number' => '序号',
