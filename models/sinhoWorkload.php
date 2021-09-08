@@ -159,9 +159,9 @@ class sinhoWorkloadModel extends Model
                 continue;
             }
             $data[$varName] = intval($data[$varName]);
-            if (0!=$data[$varName]) {
+            //if (0!=$data[$varName]) {
                 $set[$varName] = $data[$varName];
-            }
+            //}
         }
 
         foreach ($allowVars as $varName) {
