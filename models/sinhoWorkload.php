@@ -104,6 +104,7 @@ class sinhoWorkloadModel extends Model
         // 转换成整数的数据
         $intVars   = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
+            'is_import',
         );
         $allowVars = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',

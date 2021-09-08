@@ -47,6 +47,7 @@ class books extends SinhoBaseController
         }
 
         $backurl = isset($_POST['backUrl']) ? base64_decode($_POST['backUrl']) : get_js_url('/admin/books/');
+        $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
         if ($_POST['id']) { // 更新
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, Application::lang()->_t('书稿保存成功')));
@@ -336,12 +337,14 @@ class books extends SinhoBaseController
                     }
                 }
                 if ($bookInfo) { // 已存在书稿信息， 更新
-                    $bookData['modify_time']                    = time();
-                    $this->model('sinhoWorkload')
-                         ->update(sinhoWorkloadModel::BOOK_TABLE,
-                                  $bookData,
-                                  array('id = ? ' => $bookInfo['id'])
-                            );
+                    if (1==$bookInfo['is_import']) { // 只有导入的数据可以更新
+                        $bookData['modify_time']                    = time();
+                        $this->model('sinhoWorkload')
+                            ->update(sinhoWorkloadModel::BOOK_TABLE,
+                                    $bookData,
+                                    array('id = ? ' => $bookInfo['id'])
+                                );
+                    }
                 } else { // 没找到书稿， 添加新书稿
                     $bookData['add_time']                    = time();
                     $this->model('sinhoWorkload')
