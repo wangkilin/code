@@ -167,7 +167,7 @@ class main extends BaseController
             //View::assign('article_category_list', $this->model('tag')->buildCategoryDropdownHtml($tagOrCategoryId));
             // 只显示文章下面的分类
             $categoryList = $this->model('category')->getAllCategories('id');
-            View::assign('article_category_list', buildSelectOptions(getListInTreeList($categoryList, 'article'), 'title', 'id', $article_info['category_id'], array('module'=>'data-module','title'=>'title') ) );
+            View::assign('article_category_list', buildSelectOptions(getListInTreeList($categoryList), 'title', 'id', $article_info['category_id'], array('module'=>'data-module','title'=>'title') ) );
         }
 
         View::assign('human_valid', human_valid('question_valid_hour'));
