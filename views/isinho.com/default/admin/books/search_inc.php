@@ -62,6 +62,7 @@
                                <option value="1" <?php echo in_array(1, $_GET['grade_level']) ? 'selected' : ''; ?>>小学</option>
                                <option value="2" <?php echo in_array(2, $_GET['grade_level']) ? 'selected' : ''; ?>>初中</option>
                                <option value="3" <?php echo in_array(3, $_GET['grade_level']) ? 'selected' : ''; ?>>高中</option>
+                               <option value="4" <?php echo in_array(4, $_GET['grade_level']) ? 'selected' : ''; ?>>外社</option>
 
                                <option value="0" <?php echo in_array(0, $_GET['grade_level']) ? 'selected' : ''; ?>>其他</option>
                             </select>

@@ -114,14 +114,15 @@
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
                                 <td><?php echo $itemInfo['remarks']; ?></td>
-                                <td><?php $_list=array('-','小','初','高');echo $_list[$itemInfo['grade_level'] ]; ?></td>
+                                <td><?php $_list=array('-','小','初','高','外');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">
                                   <span href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-score jsToggleSubIcon">
-                                    <a data-grade-level="1" title="<?php _e('设置书稿所属阶段：小学'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel">小学</a>
-                                    <a data-grade-level="2" title="<?php _e('设置书稿所属阶段：初中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel">初中</a>
-                                    <a data-grade-level="3" title="<?php _e('设置书稿所属阶段：高中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel">高中</a>
-                                    <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel">其他</a>
+                                    <a data-grade-level="1" title="<?php _e('设置书稿所属阶段：小学'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">小学</a>
+                                    <a data-grade-level="2" title="<?php _e('设置书稿所属阶段：初中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">初中</a>
+                                    <a data-grade-level="3" title="<?php _e('设置书稿所属阶段：高中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">高中</a>
+                                    <a data-grade-level="4" title="<?php _e('设置书稿所属阶段：外社'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">外社</a>
+                                    <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
                                   <!-- <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
                                   <a href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
@@ -163,23 +164,26 @@
     left:-35px;
     display: none;
     background-color: #8bbf61;
-
+    font-size: 11px !important;
     border-radius: 5px;
 }
 .jsToggleSubIcon.on .jsSinhoSetGradeLevel{
     display: inline-block;
 }
 .jsToggleSubIcon a[data-grade-level="1"] {
-    top: -40px;
+    top: -35px;
 }
 .jsToggleSubIcon a[data-grade-level="2"] {
     top: -15px;
 }
 .jsToggleSubIcon a[data-grade-level="3"] {
-    top: 15px;
+    top: 5px;
+}
+.jsToggleSubIcon a[data-grade-level="4"] {
+    top: 25px;
 }
 .jsToggleSubIcon a[data-grade-level="0"] {
-    top: 40px;
+    top: 45px;
 }
 </style>
 <script>
