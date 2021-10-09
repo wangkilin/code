@@ -26,6 +26,12 @@ class main extends BaseController
 
     public function showDataInCategory ($categoryInfo)
     {
+        $cache_key = preg_replace('/[^a-z_0-9]/i', '_',$_SERVER['HTTP_HOST'] . '_'.MODULE . '_' . __CLASS__ . '_' . __FUNCTION__ . '_' .$categoryInfo['id']);
+        if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key) )) {
+            View::assign('mainContent', $pageContent);
+            View::output('global/cache_show.php');
+            return;
+        }
 
         View::assign('category_info', $categoryInfo);
 
@@ -77,8 +83,15 @@ class main extends BaseController
         View::import_js('isinho.com/owl.carousel.min.js');
 
         View::assign('pagination', $pagination);
-        View::output('index/show_data_in_category');
-        return;
+        //View::output('index/show_data_in_category');
+        //return;
+
+
+        $pageContent = View::output('index/show_data_in_category_no_head_foot', false);
+        Application::cache()->set($cache_key, $pageContent .'<!-- cached ' . date('Y-m-d H:i:s') . ' -->', get_setting('cache_level_low'));
+        View::assign('mainContent', $pageContent);
+
+        return View::output('global/cache_show.php', false);
     }
 
     public function index_action()
@@ -111,7 +124,8 @@ class main extends BaseController
         // 获取到分类信息， 将分类信息传递到前端
         if ($category_info) {
 
-            return $this->showDataInCategory($category_info);
+            echo $this->showDataInCategory($category_info);
+            return;
         }
 
         $cache_key = str_replace(array('.',':'), '_',$_SERVER['HTTP_HOST']) . 'website_homepage';

@@ -217,6 +217,13 @@ class main extends BaseController
      */
     public function showDataInCategory ($categoryInfo)
     {
+        $cache_key = preg_replace('/[^a-z_0-9]/i', '_',$_SERVER['HTTP_HOST'] . '_'.MODULE . '_' . __CLASS__ . '_' . __FUNCTION__ . '_' .$categoryInfo['id']);
+        if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key) )) {
+            View::assign('mainContent', $pageContent);
+            View::output('global/cache_show.php');
+            return;
+        }
+
         View::assign('category_info', $categoryInfo);
 
         $this->crumb($categoryInfo['title'], '/category-' . $categoryInfo['id']);
@@ -269,8 +276,14 @@ class main extends BaseController
 
         View::assign('pagination', $pagination);
 
-        return View::output('index/show_data_in_category', false);
-        return;
+        //return View::output('index/show_data_in_category', false);
+        //return;
+
+        $pageContent = View::output('index/show_data_in_category_no_head_foot', false);
+        Application::cache()->set($cache_key, $pageContent .'<!-- cached ' . date('Y-m-d H:i:s') . ' -->', get_setting('cache_level_low'));
+        View::assign('mainContent', $pageContent);
+
+        return View::output('global/cache_show.php', false);
     }
 
     public function index_square_action()
@@ -299,6 +312,7 @@ class main extends BaseController
             $pageContent = $this->showDataInCategory($category_info);
             echo $pageContent;
             return;
+
         } else {
             $cache_key = str_replace(array('.',':'), '_',$_SERVER['HTTP_HOST']) . 'website_channel_page_article';
             if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key) )) {
