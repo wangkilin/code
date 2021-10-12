@@ -191,7 +191,7 @@ class main extends BaseController
         $this->crumb($article_info['title'], '/article/' . $article_info['id']);
         View::assign('article_info', $article_info);
 
-        $this->model('article')->update_views($article_info['id']);
+        //$this->model('article')->update_views($article_info['id']);
 
         View::assign('human_valid', human_valid('answer_valid_hour'));
 
@@ -206,7 +206,7 @@ class main extends BaseController
         $relatedList = array();
         View::assign('recommend_posts', $relatedList);
 
-        $latestArticleList = $this->model('article')->get_articles_list($article_info['category_id'], 1, 20, 'add_time DESC');
+        $latestArticleList = $this->model('article')->get_articles_list($article_info['category_id'], 1, 20, 'id DESC');
         View::assign('latestArticleList', $latestArticleList);
 
         View::output('article/index');
