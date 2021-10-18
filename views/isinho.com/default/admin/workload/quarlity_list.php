@@ -44,7 +44,9 @@
                                 <?php if (property_exists($this, 'userList')) { ?>
                                 <th><?php _e('编辑'); ?></th>
                                 <?php }?>
+                                <?php if ($this->hasCheckPermission) { ?>
                                 <th><?php _e('书稿类别'); ?></th>
+                                <?php } ?>
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
                                 <th><?php _e('校次'); ?></th>
@@ -69,7 +71,9 @@
                                 <?php if (property_exists($this, 'userList')) { ?>
                                 <td><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></td>
                                 <?php }?>
+                                <?php if ($this->hasCheckPermission) { ?>
                                 <td class="js-category"><?php echo $this->booksList[$itemInfo['book_id']]['category']; ?></td>
+                                <?php } ?>
                                 <td class="js-serial"><?php echo $this->booksList[$itemInfo['book_id']]['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $this->booksList[$itemInfo['book_id']]['book_name']; ?></td>
                                 <td class="js-proofreading-times"><?php echo $this->booksList[$itemInfo['book_id']]['proofreading_times']; ?></td>

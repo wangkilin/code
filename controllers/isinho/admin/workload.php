@@ -48,6 +48,7 @@ class workload extends SinhoBaseController
             View::assign('userList', $userList);
         }
 
+        View::assign('hasCheckPermission', $this->hasRolePermission(self::IS_SINHO_CHECK_WORKLOAD));
         View::assign('itemsList', $quarlityList);
         View::assign('booksList', $bookList);
         View::assign('workloadList', $workloadList);
