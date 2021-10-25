@@ -9,6 +9,7 @@ DIR=${BASH_SOURCE%/*} # /dir1/dir2/dir3
 source $DIR/export_icodebang_article_max_id.sh
 
 if [ ! -e $SSH_STORE_DIR/MAX_ARTICLE_ID.txt ]; then
+    echo "No article id found"
     exit 0
 fi
 
@@ -21,15 +22,21 @@ fi
 
 
 if [ ! -e $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.tgz ]; then
+    echo "No article data tgz found"
     exit 0
 fi
+
+cd $SSH_STORE_DIR
+
 tar zxf $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.tgz
 rm -f $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.tgz
 
 if [ ! -e $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql ]; then
+    echo "No article sql found"
     exit 0
 fi
 if [ ! -e $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql ]; then
+    echo "No article post sql found"
     exit 0
 fi
 
