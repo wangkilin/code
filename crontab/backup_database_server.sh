@@ -15,7 +15,7 @@ DIR=${BASH_SOURCE%/*} # /dir1/dir2/dir3
 
 . $DIR/global.config.sh  # 引入数据库配置
 
-DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload icb_users_ask_leave icb_users_ask_leave_date icb_users_attribute icb_sinho_schedule icb_sinho_key_value"  #要备份的表名列表
+DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload icb_users_ask_leave icb_users_ask_leave_date icb_users_attribute icb_sinho_schedule icb_sinho_key_value icb_sinho_workload_quarlity"  #要备份的表名列表
 DIR_STORE=/tmp
 
 NOW_DATE=`date "+%Y-%m-%d"`                     # 当前日期，用于生成数据库备份文件名称
