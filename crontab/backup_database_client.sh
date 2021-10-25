@@ -1,12 +1,12 @@
 #!/bin/sh
 # 备份数据库操作. 1.将远程数据库备份复制过来。2.将7天前的备份删除释放空间
 
-SSH_HOST=www.ekotlin.com           # 远程主机地址
-SSH_USERNAME=root            # 远程主机用户名
-#SSH_PASSWORD=password         # 远程主机密码
-SSH_PORT=8433                  # 远程主机端口
-SSH_STORE_DIR=/tmp           # 远程保存数据备份文件地址
-LOCAL_STORE_DIR=/tmp         # 本地保存地址
+
+#获取目录
+DIR=${BASH_SOURCE%/*} # /dir1/dir2/dir3
+
+. $DIR/global.config.sh  # 引入配置
+
 DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload"  #要备份的表名列表
 
 NOW_DATE=`date "+%Y-%m-%d"`                     # 当前日期，用于生成数据库备份文件名称

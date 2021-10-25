@@ -1,10 +1,20 @@
 #!/bin/sh
 # 备份数据库操作. 1.将数据库备份打包存放。2.将7天前的备份删除释放空间
+#echo $BASH_SOURCE   # BASH_SOURCE 是环境变量, 当前脚本的绝对路径
 
-DB_HOST=localhost               # 数据库主机地址
-DB_USERNAME=root		# 数据库用户名
-DB_PASSWORD=""            # 数据库密码
-DB_DATABASE=WeCenter            # 数据库名
+# BASH_SOURCE=/dir1/dir2/dir3/test.txt
+#echo ${BASH_SOURCE##*/}  #获取文件名  test.txt
+#echo ${BASH_SOURCE##*.}  #获取后缀  txt
+
+#不带后缀的文件名
+#temp=${BASH_SOURCE##*/}
+#echo ${temp%.*}  #test
+
+#获取目录
+DIR=${BASH_SOURCE%/*} # /dir1/dir2/dir3
+
+. $DIR/global.config.sh  # 引入数据库配置
+
 DB_TABLES="icb_sinho_employee_workload icb_sinho_company_workload icb_users_ask_leave icb_users_ask_leave_date icb_users_attribute icb_sinho_schedule icb_sinho_key_value"  #要备份的表名列表
 DIR_STORE=/tmp
 
