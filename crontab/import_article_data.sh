@@ -43,7 +43,7 @@ fi
 if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份
 
-    mysql -u $DB_USERNAME -proot -D$DB_DATABASE << EOF
+    mysql -u $DB_USERNAME -D$DB_DATABASE << EOF
     source $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql;
     source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql;
 EOF
