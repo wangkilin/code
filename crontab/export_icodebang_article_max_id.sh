@@ -19,6 +19,3 @@ EOF
 
 fi
 
-if [ -f "/tmp/"]
-
-exit 0
