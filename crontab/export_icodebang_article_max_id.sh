@@ -12,9 +12,17 @@ if [[ "$DB_PASSWORD" = "" ]]; then
     SELECT MAX(id) AS max_id FROM icb_article;
 EOF
 
+    mysql -u $DB_USERNAME -D${DB_DATABASE} << EOF > /tmp/MAX_ARTICLE_POST_ID.txt
+    SELECT MAX(post_id) AS max_id FROM icb_posts_index;
+EOF
+
 else
     mysql -u $DB_USERNAME -p${DB_PASSWORD} -D${DB_DATABASE} << EOF > /tmp/MAX_ARTICLE_ID.txt
     SELECT MAX(id) AS max_id FROM icb_article;
+EOF
+
+    mysql -u $DB_USERNAME -p${DB_PASSWORD} -D${DB_DATABASE} << EOF > /tmp/MAX_ARTICLE_POST_ID.txt
+    SELECT MAX(post_id) AS max_id FROM icb_posts_index;
 EOF
 
 fi

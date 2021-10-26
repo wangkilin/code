@@ -12,11 +12,19 @@ if [ ! -e $SSH_STORE_DIR/MAX_ARTICLE_ID.txt ]; then
     echo "No article id found"
     exit 0
 fi
+if [ ! -e $SSH_STORE_DIR/MAX_ARTICLE_POST_ID.txt ]; then
+    echo "No article post id found"
+    exit 0
+fi
 
 ARTICLE_ID=`tail -1 $SSH_STORE_DIR/MAX_ARTICLE_ID.txt`
+ARTICLE_POST_ID=`tail -1 $SSH_STORE_DIR/MAX_ARTICLE_POST_ID.txt`
 
 # 数据表中已存在数据记录， 只做id大小简单判断
 if [[ $ARTICLE_ID -le 100000 ]]; then
+    exit 0
+fi
+if [[ $ARTICLE_POST_ID -le 100000 ]]; then
     exit 0
 fi
 
@@ -35,7 +43,7 @@ if [ ! -e $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql ]; then
     echo "No article sql found"
     exit 0
 fi
-if [ ! -e $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql ]; then
+if [ ! -e $SSH_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql ]; then
     echo "No article post sql found"
     exit 0
 fi
@@ -44,18 +52,18 @@ if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份
 
     mysql -u $DB_USERNAME -D$DB_DATABASE << EOF
-    source $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql;
+    source $SSH_STORE_DIR/article_great_than_${ARTICLE_POST_ID}.sql;
     source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql;
 EOF
 
 else
     # 1. 数据库备份
     mysql -u $DB_USERNAME -p$DB_PASSWORD -D$DB_DATABASE << EOF
-    source $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql;
+    source $SSH_STORE_DIR/article_great_than_${ARTICLE_POST_ID}.sql;
     source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql;
 EOF
 
-rm -f $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql
+rm -f $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql $SSH_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
 
 fi
 
