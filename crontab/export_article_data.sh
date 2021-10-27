@@ -34,12 +34,12 @@ rm -f $LOCAL_STORE_DIR/MAX_ARTICLE_ID.txt $LOCAL_STORE_DIR/MAX_ARTICLE_POST_ID.t
 
 if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份
-    mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_posts_index --column-statistics=0 --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
-    mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_article --column-statistics=0 --no-create-info  -w "id>${ARTICLE_ID}"  > $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql
+    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_posts_index --column-statistics=0 --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
+    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_article --column-statistics=0 --no-create-info  -w "id>${ARTICLE_ID}"  > $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql
 else
     # 1. 数据库备份
-    mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE icb_posts_index --column-statistics=0 --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
-    mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE icb_article --column-statistics=0 --no-create-info  -w "id>${ARTICLE_ID}"  > $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql
+    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE icb_posts_index --column-statistics=0 --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
+    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE icb_article --column-statistics=0 --no-create-info  -w "id>${ARTICLE_ID}"  > $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql
 fi
 # 1.1 打包数据库备份文件
 cd $LOCAL_STORE_DIR
