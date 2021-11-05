@@ -52,20 +52,23 @@ if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份
 
     mysql -u $DB_USERNAME -D$DB_DATABASE << EOF
-    source $SSH_STORE_DIR/article_great_than_${ARTICLE_POST_ID}.sql;
-    source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql;
+    source $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql;
+    source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql;
 EOF
 
 else
     # 1. 数据库备份
     mysql -u $DB_USERNAME -p$DB_PASSWORD -D$DB_DATABASE << EOF
-    source $SSH_STORE_DIR/article_great_than_${ARTICLE_POST_ID}.sql;
-    source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_ID}.sql;
+    source $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql;
+    source $SSH_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql;
 EOF
+
+fi
+
+
 # 删除sql文件
 rm -f $SSH_STORE_DIR/article_great_than_${ARTICLE_ID}.sql $SSH_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
 
-fi
 # 导入数据后， 重新获取并生成文章最大id
 . $DIR/export_icodebang_article_max_id.sh
 
