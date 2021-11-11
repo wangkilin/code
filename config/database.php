@@ -7,7 +7,7 @@ $config['master'] = array (
   'charset' => 'utf8mb4',
   'host' => 'localhost',
   'username' => 'root',
-  'password' => '4728999',
+  'password' => '',
   'dbname' => 'wecenter',
   'port' => 3306,
 );
