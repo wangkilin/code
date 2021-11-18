@@ -217,7 +217,8 @@ class main extends BaseController
      */
     public function showDataInCategory ($categoryInfo)
     {
-        $cache_key = preg_replace('/[^a-z_0-9]/i', '_',$_SERVER['HTTP_HOST'] . '_'.MODULE . '_' . __CLASS__ . '_' . __FUNCTION__ . '_' .$categoryInfo['id']);
+        $pageId = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $cache_key = preg_replace('/[^a-z_0-9]/i', '_',$_SERVER['HTTP_HOST'] . '_'.MODULE . '_' . __CLASS__ . '_' . __FUNCTION__ . '_' .$categoryInfo['id'] . '_' . $pageId);
         if (empty($_GET['doGenerateCache']) && ($pageContent = Application::cache()->get($cache_key) )) {
             View::assign('mainContent', $pageContent);
             View::output('global/cache_show.php');
