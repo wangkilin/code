@@ -9,6 +9,8 @@ if [ ! -e $FILE ]; then
     exit 0
 fi
 
+sudo chmod 666 $FILE
+
 # 判断是否为有效pdf文件, 不是pdf文件， 直接退出
 if [ `pdfinfo $FILE 2>/dev/null | wc -l ` -le 1 ]; then
     echo "$FILE is NOT a PDF"
