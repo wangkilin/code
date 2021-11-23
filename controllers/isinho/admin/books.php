@@ -336,7 +336,7 @@ class books extends SinhoBaseController
         $bookIds   = array_column($itemList, 'id');
         $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
         $booksWorkloadNotPayed = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, array(sinhoWorkloadModel::STATUS_RECORDING, sinhoWorkloadModel::STATUS_VERIFYING) );
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList('forbidden != 1', 'uid DESC', PHP_INT_MAX);
         $groupList = $this->model('account')->get_user_group_list(0, 1);
         foreach ($groupList as & $_item) {
             $_item['permission'] = unserialize($_item['permission']);
