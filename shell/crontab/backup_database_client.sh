@@ -35,5 +35,26 @@ if [ -e $LOCAL_STORE_DIR/sinho_db_$ONE_WEEK_AGO_DATE.tgz ]; then
     rm -f $LOCAL_STORE_DIR/sinho_db_$ONE_WEEK_AGO_DATE.tgz
 fi
 
+# 解压打包文件， 执行sql内容，导入数据
+cd $LOCAL_STORE_DIR
+tar zxf sinho_db_$NOW_DATE.tgz
+
+# 根据数据库密码是否为空， 执行不同的命令
+if [[ "$DB_PASSWORD" = "" ]]; then
+
+    mysql -u $DB_USERNAME -D$DB_DATABASE << EOF
+    source isinho_$NOW_DATE.sql;
+EOF
+
+else
+
+    mysql -u $DB_USERNAME -p$DB_PASSWORD -D$DB_DATABASE << EOF
+    source isinho_$NOW_DATE.sql;
+EOF
+
+fi
+
+rm -f $LOCAL_STORE_DIR/isinho_$NOW_DATE.sql
+
 # 退出
 exit 0;
