@@ -39,17 +39,17 @@ fi
 cd $LOCAL_STORE_DIR
 tar zxf sinho_db_$NOW_DATE.tgz
 
+
 # 根据数据库密码是否为空， 执行不同的命令
 if [[ "$DB_PASSWORD" = "" ]]; then
-
-    mysql -u $DB_USERNAME -D$DB_DATABASE << EOF
-    source isinho_$NOW_DATE.sql;
+    /usr/local/bin/mysql -u $DB_USERNAME -D$DB_DATABASE << EOF
+    source $LOCAL_STORE_DIR/isinho_$NOW_DATE.sql;
 EOF
 
 else
 
-    mysql -u $DB_USERNAME -p$DB_PASSWORD -D$DB_DATABASE << EOF
-    source isinho_$NOW_DATE.sql;
+    /usr/local/bin/mysql -u $DB_USERNAME -p$DB_PASSWORD -D$DB_DATABASE << EOF
+    source $LOCAL_STORE_DIR/isinho_$NOW_DATE.sql;
 EOF
 
 fi
