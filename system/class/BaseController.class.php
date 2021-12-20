@@ -359,7 +359,7 @@ class BaseController extends Controller
     	            break;
 
     	        case 'upload_invalid_filesize':
-    	            H::ajax_json_output(Application::RSM(null, '-1', _t('文件尺寸过大, 最大允许尺寸为 %s KB', get_setting('upload_size_limit'))));
+    	            H::ajax_json_output(Application::RSM(null, '-1', _t('文件尺寸过大, 最大允许尺寸为 %s KB', Application::upload()->max_size)));
     	            break;
 
     	        default:
