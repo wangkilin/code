@@ -192,7 +192,7 @@ class books extends SinhoBaseController
                         'allowed_types' => 'xls,xlsx',
                         'upload_path'   => get_setting('upload_dir') . $dir,
                         'is_image'      => true,
-                        'max_size'      => get_setting('upload_avatar_size_limit')
+                        'max_size'      => get_setting('upload_size_limit')
         ));
 
         if (isset($_GET[$filename])) {
