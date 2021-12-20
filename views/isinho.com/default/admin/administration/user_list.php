@@ -33,6 +33,7 @@
                                 <th><?php _e('组长?'); ?></th>
                                 <th><?php _e('主科'); ?></th>
                                 <th><?php _e('副科'); ?></th>
+                                <th><?php _e('上次登录'); ?></th>
                                 <th><?php _e('注册时间'); ?></th>
                                 <th><?php _e('操作'); ?></th>
                             </tr>
@@ -49,6 +50,7 @@
                                 <td><?php if($this->userAttributes[$itemInfo['uid']]['sinho_permission_team_leader']) echo '是'; else echo '-'; ?></td>
                                 <td><?php echo SinhoBaseController::SUBJECT_LIST[$this->groupList[$itemInfo['group_id']]['permission']['sinho_subject']]['name']; ?></td>
                                 <td><?php if ($this->userAttributes[$itemInfo['uid']]['sinho_more_subject']) echo join('、', $this->userAttributes[$itemInfo['uid']]['sinho_more_subject']); else echo '-'; ?></td>
+                                <td><?php echo date_friendly($itemInfo['last_login']); ?></td>
                                 <td><?php echo date_friendly($itemInfo['reg_time']); ?></td>
 
                                 <td>
