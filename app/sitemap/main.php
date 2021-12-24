@@ -30,7 +30,7 @@ class main extends BaseController
         $categoryList = $this->model()->fetch_all('category');
         if (!$_GET['pageId'] || $_GET['pageId']<2) {
             foreach ($categoryList as $_itemInfo) {
-                echo  base_url(true) . '/article/category-' . $_itemInfo['title'] . '.html', "\r\n";
+                echo  base_url(true) . '/article/category-' . $_itemInfo['url_token'] . '.html', "\r\n";
             }
         }
         //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true, $column='*', $distinct=false)
@@ -47,10 +47,13 @@ class main extends BaseController
             $courseIds = array_column($courseArticleList, 'id');
             $courseArticleList = array_combine($courseIds, $courseArticleList);
 
-            foreach ($courseList as $_itemInfo) {
-                echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['title'] . '/'
-                   . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : $courseArticleList[$_itemInfo['article_id']]['url_token'])
-                   . ".html\r\n";
+            try {
+                foreach ($courseList as $_itemInfo) {
+                    echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['title'] . '/'
+                    . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : $courseArticleList[$_itemInfo['article_id']]['url_token'])
+                    . ".html\r\n";
+                }
+            } catch (Exception $e) {
             }
         }
     }
