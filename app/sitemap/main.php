@@ -49,7 +49,7 @@ class main extends BaseController
 
             try {
                 foreach ($courseList as $_itemInfo) {
-                    echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['title'] . '/'
+                    echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['url_token'] . '/'
                     . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : $courseArticleList[$_itemInfo['article_id']]['url_token'])
                     . ".html\r\n";
                 }
