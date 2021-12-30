@@ -127,7 +127,7 @@ class PostSearchEngine
         $urlList = array ();
         // 一次将4个网站的内容提交到搜索引擎
         $domainList = array(
-            //'www.icodebang.com',
+            'www.icodebang.com',
             'www.icodebang.cn',
             'www.devboy.cn',
             'www.popnic.cn'
@@ -139,7 +139,7 @@ class PostSearchEngine
         foreach ($articleList as $_itemInfo) {
 
             foreach ($domainList as $_domain) {
-                $urlList[$_domain] [] = "http://".$_domain."/article/" . ($_itemInfo['url_token']==='' ? urlencode($_itemInfo['url_token']) : $_itemInfo['id']) . '.html';
+                $urlList[$_domain] [] = "http://".$_domain."/article/" . ($_itemInfo['url_token']==='' ? $_itemInfo['id'] : urlencode($_itemInfo['url_token']) ) . '.html';
             }
 
             $tmpArticleId = $_itemInfo['id'];
@@ -152,7 +152,7 @@ class PostSearchEngine
                     "urlList" => $urlList[$_domain],
                 );
                 $response = HTTP::request(
-                            'http://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=' . $configInfo['bing']['apikey'],
+                            'http://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=' . $configInfo->bing['apikey'],
                             'post',
                             json_encode($params),
                             15,
@@ -179,7 +179,7 @@ class PostSearchEngine
             $data['httpMessage'] = base64_encode($data['httpMessage']);
             try {
             $response = HTTP::request(
-                          'http://ssl.bing.com/webmaster/api.svc/json/SubmitContent?apikey=' . $configInfo['bing']['apikey'],
+                          'http://ssl.bing.com/webmaster/api.svc/json/SubmitContent?apikey=' . $configInfo->bing['apikey'],
                           'post',
                           json_encode($data),
                           15,
