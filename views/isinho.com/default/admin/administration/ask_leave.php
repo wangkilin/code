@@ -111,19 +111,63 @@
                                 <tr>
                                     <th style="width:20px">#</th>
                                     <th class="col-sm-1"><span class="col-sm-12 no-padding">姓名</span></th>
-                                    <th>请假统计报告:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
+                                    <th>请假统计信息:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
+                                    <th class="col-sm-1">事假</th>
+                                    <th class="col-sm-1">病假</th>
+                                    <th class="col-sm-1">全部</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $i=1;
                                 $startMonthTime = strtotime($this->leaveYear.$this->leaveMonth.'01');
                                 $endMonthTime = strtotime($_GET['end_year_month'].'01 +1month');
-                                foreach ($this->userList as $_userInfo) {  ?>
+                                foreach ($this->userList as $_userInfo) {
+                                ?>
                                 <tr data-user-id="<?php echo $_userInfo['uid'];?>" data-user-name="<?php echo $_userInfo['user_name'];?>">
                                     <td style="width:20px"><?php echo $i++;?></td>
                                     <td class="col-sm-1"><?php echo $_userInfo['user_name'];?></td>
+
                                     <td><?php
+                                    $_leaveInfo = array(
+                                        'event' => array('m'=>0, 'd'=>0, 'h'=>0), // 事假信息
+                                        'sick'  => array('m'=>0, 'd'=>0, 'h'=>0), // 病假信息
+                                        'total' => array('m'=>0, 'd'=>0, 'h'=>0), // 全部请假信息
+                                    );
                                     foreach ($this->userLeaveList[$_userInfo['uid']] as $_itemInfo) {
+                                        $_leaveMonth = 0;
+                                        $_leaveDay   = 0;
+                                        $_leaveHour  = 0;
+                                        if ($_itemInfo['leave_start_time'] >= $startMonthTime && $_itemInfo['leave_end_time'] <= $endMonthTime) {
+                                            $_leaveHour = $_itemInfo['leave_period'];
+                                        } else if ($_itemInfo['leave_start_time'] < $startMonthTime && $_itemInfo['leave_end_time'] > $endMonthTime) {
+                                            $_dateInterval = date_diff(
+                                                               new DateTime(date('Y-m-d 08:30:00', $startMonthTime)),
+                                                               new DateTime(date('Y-m-d 17:30:00', $endMonthTime - 3600 * 24))
+                                            );
+                                            $_leaveDay   = $_dateInterval->d;
+                                            $_leaveHour  = 0;
+                                            $_leaveMonth = $_dateInterval->m;
+                                        } else if ($_itemInfo['leave_end_time'] >= $endMonthTime) {
+
+                                            $_dateInterval = date_diff(
+                                                new DateTime(date('Y-m-d H:i:00', $_itemInfo['leave_start_time'])),
+                                                new DateTime(date('Y-m-d 17:30:00', $endMonthTime - 3600 * 24))
+                                            );
+                                            $_leaveMonth = $_dateInterval->m;
+                                            $_leaveDay   = $_dateInterval->d;
+                                            $_leaveHour  = $_dateInterval->h;
+                                            $_leaveHour > 7.5 AND $_leaveHour = 8;
+                                            $_leaveDay > 0 AND $_leaveHour==8 AND $_leaveHour = 0;
+                                        } else {
+
+                                            $_dateInterval = date_diff(
+                                                new DateTime(date('Y-m-d 08:30:00', $startMonthTime)),
+                                                new DateTime(date('Y-m-d 17:30:00', $endMonthTime - 3600 * 24))
+                                            );
+                                            $_leaveDay   = $_dateInterval->d;
+                                            $_leaveHour  = $_dateInterval->h;
+                                            $_leaveMonth = $_dateInterval->m;
+                                        }
 
                                         if ($_itemInfo['leave_start_time'] < $startMonthTime) {
                                             echo date('m-d', $startMonthTime);
@@ -145,6 +189,9 @@
                                         switch($_itemInfo['leave_type']) {
                                             case 2: // 病假
                                                 _e('病假');
+                                                $_leaveInfo['sick']['m'] += $_leaveMonth;
+                                                $_leaveInfo['sick']['d'] += $_leaveDay;
+                                                $_leaveInfo['sick']['h'] += $_leaveHour;
                                                 break;
                                             case 3: // 年假
                                                 _e('年假');
@@ -166,16 +213,41 @@
                                                 break;
                                             case 1: // 事假
                                                 _e('事假');
+
+                                                $_leaveInfo['event']['m'] += $_leaveMonth;
+                                                $_leaveInfo['event']['d'] += $_leaveDay;
+                                                $_leaveInfo['event']['h'] += $_leaveHour;
                                                 break;
                                             default:
                                                 _e('旷工');
                                                 break;
                                         }
+
+
+                                        $_leaveInfo['total']['m'] += $_leaveMonth;
+                                        $_leaveInfo['total']['d'] += $_leaveDay;
+                                        $_leaveInfo['total']['h'] += $_leaveHour;
+
                                         if ($_itemInfo['leave_start_time'] >= $startMonthTime && $_itemInfo['leave_end_time'] < $endMonthTime) {
                                             echo ' ', $_itemInfo['leave_period'], '小时';
                                         }
                                         echo '; &nbsp; ';
                                     }
+                                    ?></td>
+                                    <td><?php
+                                    echo $_leaveInfo['event']['m']>0 ?$_leaveInfo['event']['m'] .'月' : '';
+                                    echo $_leaveInfo['event']['d']>0 ?$_leaveInfo['event']['d'] .'天' : '';
+                                    echo $_leaveInfo['event']['h']>0 ?$_leaveInfo['event']['h'] .'小时' : '';
+                                    ?></td>
+                                    <td><?php
+                                    echo $_leaveInfo['sick']['m']>0 ?$_leaveInfo['sick']['m'] .'月' : '';
+                                    echo $_leaveInfo['sick']['d']>0 ?$_leaveInfo['sick']['d'] .'天' : '';
+                                    echo $_leaveInfo['sick']['h']>0 ?$_leaveInfo['sick']['h'] .'小时' : '';
+                                    ?></td>
+                                    <td><?php
+                                    echo $_leaveInfo['total']['m']>0 ?$_leaveInfo['total']['m'] .'月' : '';
+                                    echo $_leaveInfo['total']['d']>0 ?$_leaveInfo['total']['d'] .'天' : '';
+                                    echo $_leaveInfo['total']['h']>0 ?$_leaveInfo['total']['h'] .'小时' : '';
                                     ?></td>
                                 </tr>
                                 <?php } ?>
