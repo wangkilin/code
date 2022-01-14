@@ -36,8 +36,9 @@ class books extends SinhoBaseController
         // 查找是否已存在相同书稿。 已存在相同书稿， 提示
         $itemInfo = Application::model('sinhoWorkload')->fetch_row(
             sinhoWorkloadModel::BOOK_TABLE,
-            'category            = "' . $this->model('sinhoWorkload')->quote($_POST['category']) . '"
-            AND serial            = "' . $this->model('sinhoWorkload')->quote($_POST['serial']) . '"
+            'book_belong_year      = "' . $this->model('sinhoWorkload')->quote($_POST['book_belong_year']) . '"
+            AND category           = "' . $this->model('sinhoWorkload')->quote($_POST['category']) . '"
+            AND serial             = "' . $this->model('sinhoWorkload')->quote($_POST['serial']) . '"
             AND book_name          = "' . $this->model('sinhoWorkload')->quote($_POST['book_name'] ) .'"
             AND proofreading_times = "' . $this->model('sinhoWorkload')->quote($_POST['proofreading_times']) .'"'
 

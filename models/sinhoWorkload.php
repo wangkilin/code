@@ -103,6 +103,7 @@ class sinhoWorkloadModel extends Model
         );
         // 转换成整数的数据
         $intVars   = array(
+            'book_belong_year',
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
             'is_import',
         );
@@ -110,6 +111,7 @@ class sinhoWorkloadModel extends Model
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
             'delivery_date', // varchar(255) DEFAULT NULL COMMENT '发稿日期',
             'return_date', // varchar(255) DEFAULT NULL COMMENT '回稿日期',
+            'book_belong_year', // 书稿所属年份
             'category', // 类别
             'serial', // varchar(255) DEFAULT NULL COMMENT '系列',
             'book_name', // varchar(255) DEFAULT NULL COMMENT '书名',

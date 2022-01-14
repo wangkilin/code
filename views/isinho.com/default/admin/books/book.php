@@ -26,6 +26,22 @@
 							<?php } ?>
 						<div class="icb-mod icb-book-infos">
                             <div class="row">
+                                <!-- 年份 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('年份'); ?>:</label>
+                                </div>
+                                <div class="col-sm-5 icb-item-title">
+                                    <select name="book_belong_year" class="form-control" id="book_belong_year">
+                                        <option value="0">- <?php _e('请选择年份'); ?> -</option>
+                                        <?php foreach ($this->bookBelongYears as $_key => $_valueInfo) {?>
+                                        <option value="<?php echo $_key;?>" <?php
+                                          echo  $this->itemInfo['book_belong_year']==$_key ? 'selected':'' ?>><?php echo $_valueInfo['long'];?></option>
+                                        <?php }?>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="row">
                                 <!-- 系列 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('类别'); ?>:</label>
@@ -304,8 +320,8 @@ function deleteItem(id)
 	       }
     );
 }
-$(function () {
 
+$(function () {
 
     /**
      * 监听输入框输入按键, 计算总字数

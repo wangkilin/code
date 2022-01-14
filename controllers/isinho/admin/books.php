@@ -215,9 +215,10 @@ class books extends SinhoBaseController
      */
     public function index_action()
     {
+        // post参数，搜索书稿。 组装参数变更get方式获取搜索列表
         if ($this->is_post()) {
             foreach ($_POST as $key => $val) {
-                if ($key == 'start_date' OR $key == 'end_date') {
+                if ($key == 'start_date' OR $key == 'end_date') {// 按照日期搜索
                     $val = base64_encode($val);
                 } else if (is_array($_POST[$key])) {
                     $val = rawurlencode(join(',', $_POST[$key]));
@@ -227,7 +228,7 @@ class books extends SinhoBaseController
 
                 $param[] = $key . '-' . $val;
             }
-
+            // 跳转到get方式
             H::ajax_json_output(Application::RSM(array(
                 'url' => get_js_url('/admin/books/index/' . implode('__', $param))
             ), 1, null));
@@ -241,28 +242,31 @@ class books extends SinhoBaseController
         }
 
         $where = array();
-        if ($_GET['start_date']) {
+        if ($_GET['start_date']) { // 发稿开始日期
             $where[] = 'delivery_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['start_date'])) ) . '"';
         }
-        if ($_GET['end_date']) {
+        if ($_GET['end_date']) { // 发稿结束日期
             $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
         }
-        if ($_GET['category']) {
+        if ($_GET['book_belong_year']) { // 书稿所属年份
+            $where[] = 'book_belong_year ="' . $this->model()->quote(rawurldecode($_GET['book_belong_year'])) . '"';
+        }
+        if ($_GET['category']) { // 按照分类搜素
             $where[] = 'category like "%' . $this->model()->quote(rawurldecode($_GET['category'])) .'%"';
         }
-        if ($_GET['serial']) {
+        if ($_GET['serial']) { // 按照系列搜索
             //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
             $where[] = 'serial like "%' . $this->model()->quote(rawurldecode($_GET['serial'])) .'%"';
         }
-        if ($_GET['book_name']) {
+        if ($_GET['book_name']) { // 按照书名搜索
             //$where[] = ' (MATCH(book_name) AGAINST("' . $this->model()->quote(rawurldecode($_GET['book_name'])) . '") )';
             $where[] = 'book_name like "%' . $this->model()->quote(rawurldecode($_GET['book_name'])) .'%"';
         }
-        if ($_GET['proofreading_times']) {
+        if ($_GET['proofreading_times']) { // 按照校次搜索
             //$where[] = ' (MATCH(proofreading_times) AGAINST("' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) . '") )';
             $where[] = 'proofreading_times like "%' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) .'%"';
         }
-        if (isset($_GET['grade_level']) && $_GET['grade_level']!=='') {
+        if (isset($_GET['grade_level']) && $_GET['grade_level']!=='') { // 按照级别搜索
             $_GET['grade_level'] = explode(',', $_GET['grade_level']);
             foreach($_GET['grade_level'] as & $_level) {
                 $_level = intval($_level);
@@ -270,7 +274,7 @@ class books extends SinhoBaseController
             $where[] = 'grade_level IN (' . join(',', $_GET['grade_level']) . ')';
         }
 
-        if ($where) {
+        if ($where) { // 组装搜索条件
             $where = join(' AND ', $where);
         } else {
             $where = null;
@@ -287,43 +291,55 @@ class books extends SinhoBaseController
             }
         }
         $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
+        // 获取书稿的配置信息
+        $bookBelongYears = $this->model('sinhoWorkload')->fetch_one('sinho_key_value', 'value', 'varname="bookBelongYear"');
+        $bookBelongYears = json_decode($bookBelongYears, true);
 
         if ($_GET['action']=='export') {
             $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', PHP_INT_MAX, $_GET['page']);
             $phpExcel = & loadClass('Tools_Excel_PhpExcel');
             $headArr = array(
-                'id_number' => '序号',
-                'delivery_date' => '发稿日期',
-                'return_date' => '回稿日期',
-                'serial' => '系列',
-                'book_name' => '书名',
-                'proofreading_times' => '校次',
-                'content_table_pages' => '目录',
-                'text_pages' => '正文',
-                'text_table_chars_per_page' => '目录+正文千字/页',
-                'answer_pages' => '答案',
-                'answer_chars_per_page' => '答案千字/页',
-                'test_pages' => '试卷',
-                'test_chars_per_page' => '试卷千字/页',
-                'test_answer_pages' => '试卷答案',
-                'test_answer_chars_per_page' => '试卷答案千字/页',
-                'exercise_pages' => '课后作业',
-                'exercise_chars_per_page' => '课后作业千字/页',
-                'function_book' => '功能册',
-                'function_book_chars_per_page' => '功能册千字/页',
-                'function_answer' => '功能册答案',
-                'function_answer_chars_per_page' => '功能册答案千字/页',
-                'weight' => '难度系数',
-                'total_chars' => '字数（合计）',
-                'total_chars_without_weight' => '字数（未乘系数）',
-                'remarks' => '备注'
+                'id_number'                         => '序号',
+                'delivery_date'                     => '发稿日期',
+                'return_date'                       => '回稿日期',
+                'book_belong_year'                  => '年份',
+                'serial'                            => '系列',
+                'book_name'                         => '书名',
+                'proofreading_times'                => '校次',
+                'content_table_pages'               => '目录',
+                'text_pages'                        => '正文',
+                'text_table_chars_per_page'         => '目录+正文千字/页',
+                'answer_pages'                      => '答案',
+                'answer_chars_per_page'             => '答案千字/页',
+                'test_pages'                        => '试卷',
+                'test_chars_per_page'               => '试卷千字/页',
+                'test_answer_pages'                 => '试卷答案',
+                'test_answer_chars_per_page'        => '试卷答案千字/页',
+                'exercise_pages'                    => '课后作业',
+                'exercise_chars_per_page'           => '课后作业千字/页',
+                'function_book'                     => '功能册',
+                'function_book_chars_per_page'      => '功能册千字/页',
+                'function_answer'                   => '功能册答案',
+                'function_answer_chars_per_page'    => '功能册答案千字/页',
+                'weight'                            => '难度系数',
+                'total_chars'                       => '字数（合计）',
+                'total_chars_without_weight'        => '字数（未乘系数）',
+                'remarks'                           => '备注'
             );
             $fileName = '导出书稿-' . date('Y-m-d') . '.xls';
+
+            // 变更书稿所属年份
+            foreach ($itemList as & $_itemInfo) {
+                $_itemInfo['book_belong_year'] = isset($bookBelongYears[$_itemInfo['book_belong_year']]) ? $bookBelongYears[$_itemInfo['book_belong_year']]['short'] : '';
+            }
+
+            // 导出书稿
             $phpExcel->export($fileName, $headArr, $itemList, true);
         } else {
             $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
         }
         foreach ($itemList as & $_itemInfo) {
+            $_itemInfo['book_belong_year'] = isset($bookBelongYears[$_itemInfo['book_belong_year']]) ? $bookBelongYears[$_itemInfo['book_belong_year']]['short'] : '';
             $_itemInfo['subject_code'] = '';
             foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
                 if (strpos($_itemInfo['book_name'], $_keyword)!==false) {
@@ -393,6 +409,8 @@ class books extends SinhoBaseController
         View::assign('booksWorkload', $booksWorkload);
         View::assign('booksWorkloadNotPayed', $booksWorkloadNotPayed);
 
+        View::assign('bookBelongYears', $bookBelongYears);
+
         View::assign('itemOptions',
                      buildSelectOptions(
                          $userList,
@@ -453,6 +471,11 @@ class books extends SinhoBaseController
             }
             $this->crumb(Application::lang()->_t('添加书稿'), 'admin/books/');
         }
+
+        // 获取书稿的配置信息
+        $bookBelongYears = $this->model('sinhoWorkload')->fetch_one('sinho_key_value', 'value', 'varname="bookBelongYear"');
+        $bookBelongYears = json_decode($bookBelongYears, true);
+        View::assign('bookBelongYears', $bookBelongYears);
 
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
 

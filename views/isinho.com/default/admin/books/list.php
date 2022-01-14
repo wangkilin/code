@@ -39,6 +39,7 @@
                             <tr>
                                 <th><input type="checkbox" class="check-all"></th>
                                 <th class="text-left"><?php _e('日期'); ?></th>
+                                <th><?php _e('年份'); ?></th>
                                 <th><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
@@ -99,6 +100,7 @@
 
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo ltrim(substr($itemInfo['delivery_date'], 5),'0'),'~',ltrim(substr($itemInfo['return_date'], 5), '0'); ?></a>
                                 </td>
+                                <td class=""><?php echo $itemInfo['book_belong_year']; ?></td>
                                 <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
