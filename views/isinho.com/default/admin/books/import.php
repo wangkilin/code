@@ -18,7 +18,7 @@
                                 <div  class="col-sm-12">
                                     <a class="btn btn-default js-upload-btn">上传附件</a>
                                     <span class="text-color-999 icb-upload-tips hidden-xs bg-danger"><?php _e('允许的附件文件类型'); ?>: xls, xlsx; </span>
-                                    &nbsp; 
+                                    &nbsp;
                                     <span class="icb-upload-tips hidden-xs bg-success"> <a href="/static/isinho.com/template_book_import.xls" target="_blank">导入模板下载</a></span>
                                     <div class="upload-container"></div>
                                 </div>
@@ -26,7 +26,7 @@
                             </div>
                             <div class="row hide hidden js-import-result">
                                 <div  class="col-sm-12">
-                                    <?php _e('导入工作表：');?><span id="import-result-total-sheet" class="bg-danger"></span>
+                                    <?php _e('识别出工作表：');?><span id="import-result-total-sheet" class="bg-danger"></span>
                                 &nbsp; &nbsp;
                                     <?php _e('导入书稿：');?><span id="import-result-total-book" class="bg-danger"></span>
                                 </div>
@@ -34,12 +34,32 @@
                             <div class="row"></div>
                             <div class="row hide hidden js-import-result">
                                 <div  class="col-sm-12">
-                                    <form action="admin/ajax/books/set_payed/" method="post" id="item_form" onsubmit="return false;">
+                                    <form action="admin/ajax/books/do_import/" method="post" id="item_form" onsubmit="return false;">
                                         <input type="hidden" id="js-import-result-batchkey" name="batch_key" value="" />
                                         <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
-                                        <div class="">
+                                        <input type="hidden" id="js-import-filename" name="filename" value=""/>
+                                        <div class="row">
+                                            <div class="col-sm-5">
                                             <select id="payed_sheets" name="payed_sheets[]" multiple ></select>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-sm-5">
+                                            <select name="book_belong_year" class="form-control" id="book_belong_year">
+                                                <option value="0">- <?php _e('请选择年份'); ?> -</option>
+                                                <?php foreach ($this->bookBelongYears as $_key => $_valueInfo) {?>
+                                                <option value="<?php echo $_key;?>" <?php
+                                                    echo  $_GET['book_belong_year']==$_key ? 'selected':'' ?>><?php echo $_valueInfo['long'];?></option>
+                                                <?php }?>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <div class="row">
+                                            <div class="col-sm-6">
                                             <input id="js-submit" class="btn btn-primary" type="submit" value="<?php _e('确 定');?>"/>
+                                            </div>
                                         </div>
 					                </form>
                                 </div>
@@ -79,8 +99,8 @@ $(function () {
         );
     });
 		new FileUploader(
-				$('.js-upload-btn'),
-				$('.upload-containerrr'),
+				$('.js-upload-btn'), // 绑定上传文件按钮
+				$('.upload-container'),
 				G_BASE_URL + '/admin/ajax/books/import/id-sinho',
 				{
 					//'uploadingModalSelector' : '#avatar_uploading_status',
@@ -89,16 +109,17 @@ $(function () {
 				},
 				function (result) {
                     console && console.info(result);
-                    $('#import-result-total-sheet').text(result.sheet_names.length);
-                    $('#import-result-total-book').text(result.total_import);
+                    $('#import-result-total-sheet').text('   ' + result.sheet_names.length + '   ');
+                    //$('#import-result-total-book').text(result.total_import);
                     $('#js-import-result-batchkey').val(result.batch_key);
-
+                    $('#js-import-filename').val(result.newFilePath);
+                    // 将Excel表中的子表做列表处理， 供选择导入。 只将选择的子表导入
                     for(var i=0; i<result.sheet_names.length; i++) {
                         $('#payed_sheets').append($('<option></option>').val(result.sheet_names[i]).text(result.sheet_names[i]));
                     }
-
+                    // 生成复选列表。 只有选中的子表才做导入处理
                     $('#payed_sheets').multiselect({
-                        nonSelectedText : '<?php _e('---- 选择已支付的工作表 ----');?>',
+                        nonSelectedText : '<?php _e('---- 选择待导入的工作表 ----');?>',
                         maxHeight       : 200,
                         buttonWidth     : 400,
                         allSelectedText : '<?php _e('已选择全部工作表');?>',

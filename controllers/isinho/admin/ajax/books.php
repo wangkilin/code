@@ -211,6 +211,28 @@ class books extends SinhoBaseController
         rename(get_setting('upload_dir') . $dir . '/' . $uploadData['file_name'], $newFilePath);
 
         $phpExcel = & loadClass('Tools_Excel_PhpExcel');
+        $data = $phpExcel->parseFile($newFilePath);
+        $batchKey = md5($this->user_id . rand(1, 1000000000) . microtime());
+
+
+        echo htmlspecialchars(json_encode(array(
+                        'success'        => true,
+                        'thumb'          => get_setting('upload_url') . $filePath,
+                        'file'           => $filePath,
+                        'newFilePath'    => $newFilePath,
+                        'batch_key'      => $batchKey,
+                        'sheet_names'    => $data['sheetNames'],
+        )), ENT_NOQUOTES);
+
+    }
+
+    /**
+     * 导入书稿
+     */
+    public function do_import_action ()
+    {
+        $newFilePath = $_POST['filename'];
+        $phpExcel = & loadClass('Tools_Excel_PhpExcel');
         $id_number_key                      = 'A'; // 序号
         $delivery_date_key                  = 'B'; // 发稿日期
         $return_date_key                    = 'C'; // 回稿日期
@@ -243,6 +265,9 @@ class books extends SinhoBaseController
         $uniqueList = array(); // 有书稿会按照页码分多次提交。 将这样的书稿数据合并起来
         foreach($data['sheetDatas'] as $_index=>$dataList) {
             $sheetName = $data['sheetNames'][$_index];
+            if (! in_array($sheetName, $_POST['payed_sheets'])) {
+                continue;
+            }
             $prevInfo = null;
             foreach ($dataList as $_rowNumber=>$dataLine) {
                 if (1==$_rowNumber) { // 表头行， 忽略
@@ -295,15 +320,18 @@ class books extends SinhoBaseController
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
                                  ->fetch_row(sinhoWorkloadModel::BOOK_TABLE,
-                                        'category            = "' . $this->model('sinhoWorkload')->quote($dataLine[$category_key]) . '"
-                                         AND serial            = "' . $this->model('sinhoWorkload')->quote($dataLine[$serial_key]) . '"
-                                         AND book_name          = "' . $this->model('sinhoWorkload')->quote($dataLine[$book_name_key]) .'"
-                                         AND proofreading_times = "' . $this->model('sinhoWorkload')->quote($dataLine[$proofreading_times_key]) .'"'
+                                        'book_belong_year        = "' . $this->model('sinhoWorkload')->quote($_POST['book_belong_year']) . '"
+                                         AND category            = "' . $this->model('sinhoWorkload')->quote($dataLine[$category_key]) . '"
+                                         AND serial              = "' . $this->model('sinhoWorkload')->quote($dataLine[$serial_key]) . '"
+                                         AND book_name           = "' . $this->model('sinhoWorkload')->quote($dataLine[$book_name_key]) .'"
+                                         AND proofreading_times  = "' . $this->model('sinhoWorkload')->quote($dataLine[$proofreading_times_key]) .'"'
 
                                     ) ;
+
                 //  核算字数， 保持小数点4位
                 $dataLine[$total_chars_key] = sprintf('%.4f', round($dataLine[$total_chars_key], 4) );
                 $bookData = array(
+                    'book_belong_year'               => $_POST['book_belong_year'],
                     'id_number'                      => $dataLine[$id_number_key                      ],
                     'delivery_date'                  => $dataLine[$delivery_date_key                  ],
                     'return_date'                    => $dataLine[$return_date_key                    ],
@@ -338,6 +366,7 @@ class books extends SinhoBaseController
                     }
                 }
                 if ($bookInfo) { // 已存在书稿信息， 更新
+
                     if (1==$bookInfo['is_import']) { // 只有导入的数据可以更新
                         $bookData['modify_time']                    = time();
                         $this->model('sinhoWorkload')
@@ -358,20 +387,15 @@ class books extends SinhoBaseController
         }
 
 
-        echo htmlspecialchars(json_encode(array(
-                        'success' => true,
-                        'thumb'   => get_setting('upload_url') . $filePath,
-                        'file'    => $filePath,
-                        'newFilePath'    => $newFilePath,
-                        'batch_key'      => $batchKey,
-                        'sheet_names'    => $data['sheetNames'],
-                        'total_import'   => $totalImport,
-        )), ENT_NOQUOTES);
+        H::ajax_json_output(Application::RSM(
+            array('url' => get_js_url('/admin/books/')),
+            1,
+            Application::lang()->_t('书稿导入成功。 共导入书稿：' . $totalImport)));
 
     }
 
     /**
-     * 将导入的书稿，
+     * 将导入的书稿中指定的工作表， 设置支付状态
      */
     public function set_payed_action ()
     {

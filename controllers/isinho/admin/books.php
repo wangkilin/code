@@ -490,6 +490,12 @@ class books extends SinhoBaseController
      */
     public function import_action ()
     {
+
+        // 获取书稿的配置信息
+        $bookBelongYears = $this->model('sinhoWorkload')->fetch_one('sinho_key_value', 'value', 'varname="bookBelongYear"');
+        $bookBelongYears = json_decode($bookBelongYears, true);
+        View::assign('bookBelongYears', $bookBelongYears);
+
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
 
 
