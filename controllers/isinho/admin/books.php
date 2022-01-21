@@ -248,9 +248,6 @@ class books extends SinhoBaseController
         if ($_GET['end_date']) { // 发稿结束日期
             $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
         }
-        if ($_GET['book_belong_year']) { // 书稿所属年份
-            $where[] = 'book_belong_year ="' . $this->model()->quote(rawurldecode($_GET['book_belong_year'])) . '"';
-        }
         if ($_GET['category']) { // 按照分类搜素
             $where[] = 'category like "%' . $this->model()->quote(rawurldecode($_GET['category'])) .'%"';
         }
@@ -302,7 +299,6 @@ class books extends SinhoBaseController
                 'id_number'                         => '序号',
                 'delivery_date'                     => '发稿日期',
                 'return_date'                       => '回稿日期',
-                'book_belong_year'                  => '年份',
                 'serial'                            => '系列',
                 'book_name'                         => '书名',
                 'proofreading_times'                => '校次',
@@ -328,18 +324,12 @@ class books extends SinhoBaseController
             );
             $fileName = '导出书稿-' . date('Y-m-d') . '.xls';
 
-            // 变更书稿所属年份
-            foreach ($itemList as & $_itemInfo) {
-                $_itemInfo['book_belong_year'] = isset($bookBelongYears[$_itemInfo['book_belong_year']]) ? $bookBelongYears[$_itemInfo['book_belong_year']]['short'] : '';
-            }
-
             // 导出书稿
             $phpExcel->export($fileName, $headArr, $itemList, true);
         } else {
             $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
         }
         foreach ($itemList as & $_itemInfo) {
-            $_itemInfo['book_belong_year'] = isset($bookBelongYears[$_itemInfo['book_belong_year']]) ? $bookBelongYears[$_itemInfo['book_belong_year']]['short'] : '';
             $_itemInfo['subject_code'] = '';
             foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
                 if (strpos($_itemInfo['book_name'], $_keyword)!==false) {
@@ -482,6 +472,10 @@ class books extends SinhoBaseController
         View::import_js('js/functions.js');
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
+        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
+        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
+        View::import_js('js/icb_template_isinho.com.js');
+        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
         View::output('admin/books/book');
     }
 

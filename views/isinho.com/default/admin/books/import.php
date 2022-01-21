@@ -44,17 +44,6 @@
                                             </div>
                                         </div>
                                         <br/>
-                                        <div class="row">
-                                            <div class="col-sm-5">
-                                            <select name="book_belong_year" class="form-control" id="book_belong_year">
-                                                <option value="0">- <?php _e('请选择年份'); ?> -</option>
-                                                <?php foreach ($this->bookBelongYears as $_key => $_valueInfo) {?>
-                                                <option value="<?php echo $_key;?>" <?php
-                                                    echo  $_GET['book_belong_year']==$_key ? 'selected':'' ?>><?php echo $_valueInfo['long'];?></option>
-                                                <?php }?>
-                                            </select>
-                                            </div>
-                                        </div>
                                         <br/>
                                         <div class="row">
                                             <div class="col-sm-6">

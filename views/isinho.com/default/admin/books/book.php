@@ -28,16 +28,13 @@
                             <div class="row">
                                 <!-- 年份 -->
                                 <div class="col-sm-1">
-                                    <label class="icb-label"><?php _e('年份'); ?>:</label>
+                                    <label class="icb-label"><?php _e('发稿日期'); ?>:</label>
                                 </div>
-                                <div class="col-sm-5 icb-item-title">
-                                    <select name="book_belong_year" class="form-control" id="book_belong_year">
-                                        <option value="0">- <?php _e('请选择年份'); ?> -</option>
-                                        <?php foreach ($this->bookBelongYears as $_key => $_valueInfo) {?>
-                                        <option value="<?php echo $_key;?>" <?php
-                                          echo  $this->itemInfo['book_belong_year']==$_key ? 'selected':'' ?>><?php echo $_valueInfo['long'];?></option>
-                                        <?php }?>
-                                    </select>
+
+                                <div class="col-sm-5 mod-double icon-date-container">
+                                    <input type="text" class="form-control icon-indent js-date-input js-monthpicker" value="<?php echo isset($this->itemInfo['delivery_date']) ? $this->itemInfo['delivery_date'] : date('Y-m-d'); ?>" name="delivery_date" autocomplete="off" placeholder="发稿日期"/>
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
                                 </div>
 
                             </div>
@@ -336,6 +333,19 @@ $(function () {
             compute_chars_ammount();
         }
     });
+
+    // 日期输入框
+    $( ".js-monthpicker" ).datetimepicker({
+                format  : 'yyyy-mm-dd',
+                language:  'zh-CN',
+                weekStart: 1, // 星期一 为一周开始
+                todayBtn:  1, // 显示今日按钮
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
+                forceParse: 0,
+                minView : 2, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+            });
 });
 </script>
 <?php View::output('admin/global/footer.php'); ?>

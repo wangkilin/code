@@ -34,7 +34,6 @@
                             <tr>
                                 <th class="text-left"><?php _e('日期'); ?></th>
                                 <th><?php _e('责编'); ?></th>
-                                <th><?php _e('书稿<br/>年份'); ?></th>
                                 <th><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
@@ -71,7 +70,6 @@
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5),'~',substr($itemInfo['return_date'], 5); ?></a>
                                 </td>
                                 <td><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></td>
-                                <td class=""><?php echo $this->bookBelongYears[$itemInfo['book_belong_year']]['short'];?></td>
                                 <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
@@ -125,7 +123,6 @@
                                     ?>
                                 </td>
                                 <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
-                                <td class="">&nbsp;</td>
                                 <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
@@ -164,7 +161,6 @@
                                     ?>
                                 </td>
                                 <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
-                                <td>&nbsp;</td>
                                 <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>

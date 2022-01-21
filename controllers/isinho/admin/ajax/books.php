@@ -36,7 +36,7 @@ class books extends SinhoBaseController
         // 查找是否已存在相同书稿。 已存在相同书稿， 提示
         $itemInfo = Application::model('sinhoWorkload')->fetch_row(
             sinhoWorkloadModel::BOOK_TABLE,
-            'book_belong_year      = "' . $this->model('sinhoWorkload')->quote($_POST['book_belong_year']) . '"
+            'delivery_date         = "' . $this->model('sinhoWorkload')->quote($_POST['delivery_date']) . '"
             AND category           = "' . $this->model('sinhoWorkload')->quote($_POST['category']) . '"
             AND serial             = "' . $this->model('sinhoWorkload')->quote($_POST['serial']) . '"
             AND book_name          = "' . $this->model('sinhoWorkload')->quote($_POST['book_name'] ) .'"
@@ -320,7 +320,7 @@ class books extends SinhoBaseController
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
                                  ->fetch_row(sinhoWorkloadModel::BOOK_TABLE,
-                                        'book_belong_year        = "' . $this->model('sinhoWorkload')->quote($_POST['book_belong_year']) . '"
+                                        'delivery_date           = "' . $this->model('sinhoWorkload')->quote($dataLine[$delivery_date_key]) . '"
                                          AND category            = "' . $this->model('sinhoWorkload')->quote($dataLine[$category_key]) . '"
                                          AND serial              = "' . $this->model('sinhoWorkload')->quote($dataLine[$serial_key]) . '"
                                          AND book_name           = "' . $this->model('sinhoWorkload')->quote($dataLine[$book_name_key]) .'"
@@ -331,7 +331,6 @@ class books extends SinhoBaseController
                 //  核算字数， 保持小数点4位
                 $dataLine[$total_chars_key] = sprintf('%.4f', round($dataLine[$total_chars_key], 4) );
                 $bookData = array(
-                    'book_belong_year'               => $_POST['book_belong_year'],
                     'id_number'                      => $dataLine[$id_number_key                      ],
                     'delivery_date'                  => $dataLine[$delivery_date_key                  ],
                     'return_date'                    => $dataLine[$return_date_key                    ],
