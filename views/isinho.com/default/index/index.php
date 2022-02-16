@@ -88,7 +88,7 @@ var G_STATIC_URL = './static/isinho.com/';
                     <img class="black-logo" src="./static/isinho.com/logo-black-stamp.png" style="float:left" />
                     <img class="blue-logo" src="./static/isinho.com/logo-stamp.png" style="float:left" />
                     <div class="logo">
-                        <a href="./">沈阳<span>新禾</span>文化传媒有限公司</a>
+                        <!-- <a href="./">沈阳<span>新禾</span>文化传媒有限公司</a> -->
                     </div>
                     <!--/ End Logo -->
                 </div>
@@ -404,8 +404,8 @@ var G_STATIC_URL = './static/isinho.com/';
                     <div class="section-title center">
                         <h2>图书出版</h2>
                         <p>新禾始终坚持“专业、高效、优质、诚信”的服务宗旨，不断赢得客户的信赖和口碑，一站式出版助力客户出书省心、省力、省钱！
-                           在选题申报，排版设计，编辑校对，书号申请，印刷装订等图书出版的各项业务中，公司员工均具有杰出的职业技能，为客户提供高效优质的服务。
-                           公司从图书出版的专业技术到图书内容的语言文字两个方面进行严格把关，致力于传播优质文化，努力实现推广社会文明的梦想和价值。
+                           在选题申报，排版设计，编辑校对，书号申请，印刷装订等图书出版的各项业务中，新禾均具有杰出的职业技能，为客户提供高效优质的服务。
+                           新禾从图书出版的专业技术到图书内容的语言文字两个方面进行严格把关，致力于传播优质文化，努力实现推广社会文明的梦想和价值。
                         </p>
                     </div>
                 </div>
@@ -470,7 +470,7 @@ var G_STATIC_URL = './static/isinho.com/';
                     <div class="section-title center">
                         <h2>新媒体</h2>
                         <p>新媒体以数字信息技术为基础，将传统书稿融合互动传播功能，成为具有创新形态的媒体，诸如：网站、电子书、微博、公众号、自媒体等。
-                            公司以文字功底深厚的编辑和校对队伍作支撑，为客户提供电子书制作、软文撰写、网站更新、自媒体账号维护服务。
+                            新禾以文字功底深厚的编辑和校对队伍作支撑，为客户提供电子书制作、软文撰写、网站更新、自媒体账号维护服务。
                         </p>
                     </div>
                 </div>
@@ -780,7 +780,7 @@ var G_STATIC_URL = './static/isinho.com/';
                 <div class="col-md-12 col-sm-12 col-xs-12  wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
                     <div class="section-title center">
                         <h2>软件开发</h2>
-                        <p>公司依靠先进的技术、创新的意识、出众的能力，为用户设计完整的技术解决方案，提供优质的系统支持服务，助力中小企业进行互联网+ 转型与升级，提高企业办公效率，赋能企业高效发展</p>
+                        <p>新禾依靠先进的技术、创新的意识、出众的能力，为用户设计完整的技术解决方案，提供优质的系统支持服务，助力中小企业进行互联网+ 转型与升级，提高企业办公效率，赋能企业高效发展</p>
                     </div>
                 </div>
             </div>
@@ -796,7 +796,7 @@ var G_STATIC_URL = './static/isinho.com/';
                                 </div>
                                 <div class="blog-content">
                                     <h2>APP开发</h2>
-                                    <p>公司拥有IOS/安卓APP应用定制与开发方面丰富经验的团队，能够为用户提供完善的原生app开发和混合app开发技术方案，解决用户对于移动端开发的不同需求</p>
+                                    <p>新禾拥有多年的IOS/安卓APP应用定制与开发方面丰富经验，能够为用户提供完善的原生app开发和混合app开发技术方案，解决用户对于移动端开发的不同需求</p>
                                 </div>
                             </div>
                             <!--/ End Single blog -->
@@ -917,7 +917,7 @@ var G_STATIC_URL = './static/isinho.com/';
                             <div class="footer-logo">
                                 <img src="static/isinho.com/logo-stamp.png" alt="#"><h4 class="slogan">怀匠心，造精品|立诚信，谋共赢|怀匠心，造精品；立诚信，谋共赢</h4>
                             </div>
-                            <p>新禾员工怀揣匠心，努力将每个经手项目打造成精品。新禾期待与每个客户谋求共同发展，共创佳绩！</p>
+                            <p>新禾怀揣匠心，努力将每个经手项目打造成精品。新禾期待与每个客户谋求共同发展，共创佳绩！</p>
                         </div>
                     </div>
                     <!--/ End Single Widget -->
@@ -944,7 +944,7 @@ var G_STATIC_URL = './static/isinho.com/';
                                 <li class="active"><a href="#newmedia"><i class="fa fa-link"></i>新媒体</a></li>
                                 <li class="active"><a href="#software"><i class="fa fa-mobile"></i>软件开发</a></li>
                                 <li class="active"><a href="#website"><i class="fa fa-link"></i>网站建设</a></li>
-                                <li class="active"><a href="/account/login/"><i class="fa fa-sign-in"></i>员工登录</a></li>
+                                <li class="active"><a href="/account/login/"><i class="fa fa-sign-in"></i>后台登录</a></li>
                             </ul>
                         </div>
                     </div>
@@ -960,8 +960,8 @@ var G_STATIC_URL = './static/isinho.com/';
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="text">
-                            <p>版权所有 &copy; 2020~<?php echo date('Y'); ?> 沈阳新禾文化传媒有限公司
-                            <span class="hidden-xs">备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a></span>
+                            <p>版权所有 &copy; 2020~<?php echo date('Y'); ?> 新禾
+                            <span class="hidden-xs">备案号：<a href="https://beian.miit.gov.cn/" target="blank">京ICP备10215645号</a></span>
                             <span class="hidden">新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司[官网]</span></p>
                         </div>
                     </div>

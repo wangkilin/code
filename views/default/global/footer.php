@@ -30,7 +30,7 @@
                 © <?php echo date('Y'); ?> <?php echo get_setting('site_name');?><?php if(get_setting('icp_beian')){ ?><span class="hidden-xs"> - <?php echo get_setting('icp_beian'); ?><?php } ?></span>
 
                 <span class="hidden-xs">Powered By <a href="//www.icodebang.com" target="blank">iCodebang.com <?php echo G_VERSION; ?></a></span>
-                <span class="hidden-xs">备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a></span>
+                <span class="hidden-xs">备案号：<a href="https://beian.miit.gov.cn/" target="blank">京ICP备10215645号</a></span>
                 </div>
             </div>
 		<?php if (is_mobile(true)) { ?>

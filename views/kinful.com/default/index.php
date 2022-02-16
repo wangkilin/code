@@ -180,7 +180,7 @@ foreach ($domains as $_domain) {
                     )
                 </div>
                 <div class="view_contents">
-                    CopyRight &copy; <?php echo $domain ?> 备案号：<a href="http://www.beian.miit.gov.cn" target="blank">京ICP备10215645号</a>
+                    CopyRight &copy; <?php echo $domain ?> 备案号：<a href="https://beian.miit.gov.cn/" target="blank">京ICP备10215645号</a>
                 </div>
             </div>
         </div>
