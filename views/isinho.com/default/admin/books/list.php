@@ -117,7 +117,7 @@
                                 <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">
-                                  <span href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-score jsToggleSubIcon">
+                                  <span href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" title="<?php _e('设置书稿所属阶段'); ?>" data-toggle="tooltip" class="md-tip icon icon-score jsToggleSubIcon">
                                     <a data-grade-level="1" title="<?php _e('设置书稿所属阶段：小学'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">小学</a>
                                     <a data-grade-level="2" title="<?php _e('设置书稿所属阶段：初中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">初中</a>
                                     <a data-grade-level="3" title="<?php _e('设置书稿所属阶段：高中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">高中</a>
@@ -128,6 +128,7 @@
                                   <!-- <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
                                   <a href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
+                                  <a href="" data-book-id="<?php echo $itemInfo['id']; ?>"  class="icon icon-coin-yen md-tip jsSinhoSetBookPayedStatus <?php echo $itemInfo['is_payed']==1 ? 'payed " title="已支付" style="' :'" title="未支付" style="color:#f00;';?>" data-toggle="tooltip"></a>
                                   <a href="admin/books/book/id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-subject-code="<?php echo $itemInfo['subject_code'];?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
                                 </td>
@@ -198,8 +199,17 @@ $(function(){
         }
     });
     $('body').on('click', '.jsToggleSubIcon', function () {
-        $('.jsToggleSubIcon').not(this).removeClass('on');
+        $('.jsToggleSubIcon').not(this).removeClass('on').tooltip();
         $(this).toggleClass('on');
+        if($(this).hasClass('on')) {
+            $(this).tooltip();
+        } else {
+            $(this).tooltip('show');
+        }
+    });
+    $('body').on('mouseover', '.jsSinhoSetGradeLevel', function (event) {// 阶段设置， 点击后不再显示提示。因为和子元素的提示冲突
+        event.preventDefault();
+        $(this).parent().tooltip('destroy')
     });
     $('body').on('click', '.jsSinhoSetGradeLevel', function (event) {
         event.preventDefault();
@@ -369,6 +379,48 @@ $(function(){
                 return_date         : returnDate
             });
         ICB.modal.dialog(html, onshowCallback);
+
+        return false;
+    });
+
+    /**
+     * 设置书稿支付状态
+     */
+    $('.jsSinhoSetBookPayedStatus').click(function() {
+        var bookId = $(this).data('book-id');
+        var url    = "admin/ajax/books/set_payed/id"+"-"+bookId;
+        $this      = $(this);
+        ICB.modal.confirm(
+            '确认设置书稿支付状态么？',
+            function () { //onYesCallback
+                var isPayed = $this.hasClass('payed') ? 0 : 1 ;
+                ICB.ajax.requestJson(
+                    url,
+                    {book_id : bookId, is_payed : isPayed},
+                    function (response) {
+                        //console.info(response);
+                        if ( $this.hasClass('payed') ) {
+                            $this.removeClass('payed');
+                            $this.attr('style', 'color:#f00');
+                            $this.tooltip('destroy');
+                            $this.attr('title', '未支付');
+                            $this.tooltip('show');
+                        } else {
+                            $this.addClass('payed');
+                            $this.attr('style', '');
+                            $this.tooltip('destroy');
+                            $this.attr('title', '已支付');
+                            $this.tooltip('show');
+                        }
+
+                    }, // 成功回调
+                    function (response) {
+
+                    }  // 失败回调
+                );
+            }
+            //, onshowCallback
+        );
 
         return false;
     });

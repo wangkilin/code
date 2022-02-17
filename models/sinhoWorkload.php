@@ -36,6 +36,10 @@ class sinhoWorkloadModel extends Model
      * 作息时间安排表
      */
     const SCHEDULE_TABLE = 'sinho_schedule';
+    /**
+     * 工资详细表
+     */
+    const SALARY_DETAIL_TABLE = 'sinho_salary_detail';
 
     // /**
     //  * 新禾各种权限常量

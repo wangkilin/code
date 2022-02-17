@@ -399,31 +399,19 @@ class books extends SinhoBaseController
     public function set_payed_action ()
     {
         $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
-        if (empty($_POST['batch_key'])) {
+        if (empty($_POST['book_id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作错误')));
         }
         $this->model('sinhoWorkload')
              ->update(sinhoWorkloadModel::BOOK_TABLE,
-                    array('is_payed'=>0),
-                    array('batch_key = ? ' => $_POST['batch_key'])
+                    array('is_payed'=> $_POST['is_payed']),
+                    array('id = ? ' => $_POST['book_id'])
             );
-        if ($_POST['payed_sheets']) {
-            foreach ($_POST['payed_sheets'] as $_sheetName) {
-                $this->model('sinhoWorkload')
-                     ->update(sinhoWorkloadModel::BOOK_TABLE,
-                              array('is_payed'=>1),
-                              array('batch_key = ? ' => $_POST['batch_key'],
-                                    'sheet_name = ? ' => $_sheetName
-                              )
-                    );
-            }
-        }
-
 
         H::ajax_json_output(Application::RSM(
             array('url' => get_js_url('/admin/books/')),
             1,
-            Application::lang()->_t('书稿导入成功')));
+            Application::lang()->_t('支付状态设置成功')));
 
     }
 
