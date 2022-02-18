@@ -6,7 +6,7 @@
     <meta name="description" content="isinho&reg;新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>[官网]沈阳新禾文化传媒有限公司：图书出版,编辑校对,软件开发,网站建设</title>
+    <title>[官网]新禾：图书出版,编辑校对,软件开发,网站建设</title>
     <link rel="icon" type="image/png" href="./static/isinho.com/favicon.png">
 
     <!-- Font Awesome CSS -->
