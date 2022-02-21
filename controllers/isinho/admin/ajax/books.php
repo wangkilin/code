@@ -316,7 +316,19 @@ class books extends SinhoBaseController
                 $dataLine[$id_number_key]==='' && $dataLine[$delivery_date_key]===''
                     AND $dataLine[$delivery_date_key] = $prevInfo[$delivery_date_key];
                 $dataLine[$id_number_key]==='' AND $dataLine[$id_number_key]=$prevInfo[$id_number_key];
-                $dataLine[$delivery_date_key] = strtotime(str_replace('.','-',$dataLine[$delivery_date_key]))>0 ? date('Y-m-d', strtotime(str_replace('.','-',$dataLine[$delivery_date_key]))) : date('Y-m-d');
+
+                // 发稿日期 字符串不包含年份， 需要将年份处理下
+                $dataLine[$delivery_date_key] = str_replace('.','-',$dataLine[$delivery_date_key]);
+                if (strlen($dataLine[$delivery_date_key]) < 6 ) {
+                    // 添加上年份后的日期，在当前日期之后， 年份减1
+                    if (strtotime(date('Y') . '-' . $dataLine[$delivery_date_key]) > time()) {
+                        $dataLine[$delivery_date_key] = (date('Y')-1) . '-' . $dataLine[$delivery_date_key];
+                    } else {
+                        $dataLine[$delivery_date_key] = date('Y') . '-' . $dataLine[$delivery_date_key];
+                    }
+                }
+
+                $dataLine[$delivery_date_key] = strtotime($dataLine[$delivery_date_key])>0 ? date('Y-m-d', strtotime($dataLine[$delivery_date_key])) : date('Y-m-d');
                 // 根据系列，书名，校次获取书稿信息。
                 $bookInfo = $this->model('sinhoWorkload')
                                  ->fetch_row(sinhoWorkloadModel::BOOK_TABLE,
