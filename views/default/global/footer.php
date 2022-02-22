@@ -63,8 +63,8 @@
 <?php View::output('global/debuger.php'); ?>
 <!-- / DO NOT REMOVE -->
 <!-- <script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script> -->
-<script src="/static/js/highlight/highlight.pack.js"></script>
-<script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
+<script src="//cdn.icodebang.com/static/js/highlight/highlight.pack.js"></script>
+<script type="text/javascript" src="//cdn.icodebang.com/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
 $(function () {
 $('pre>code').each(function(index, element) {
