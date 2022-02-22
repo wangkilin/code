@@ -63,7 +63,7 @@
 <?php View::output('global/debuger.php'); ?>
 <!-- / DO NOT REMOVE -->
 <!-- <script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlight.pack.js"></script> -->
-<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.4.1/highlight.min.js"></script>
+<script src="/static/js/highlight/highlight.pack.js"></script>
 <script type="text/javascript" src="/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
 $(function () {
