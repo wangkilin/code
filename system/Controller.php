@@ -74,7 +74,7 @@ class Controller
             'css/link.css',
             'js/fancybox/style.css',
             //'js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/styles/rainbow.css',
-            "//cdn.icodebang.com/ajax/libs/highlight.js/10.4.1/styles/monokai-sublime.min.css",
+            "//cdn.icodebang.com/static/js/highlight/styles/monokai.css",
         ));
 
         if (defined('SYSTEM_LANG'))
