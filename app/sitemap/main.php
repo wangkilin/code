@@ -43,14 +43,15 @@ class main extends BaseController
         if ($courseIds) {
             $categoryIds = array_column($categoryList, 'id');
             $categoryList = array_combine($categoryIds, $categoryList);
-            $courseArticleList = $this->model()->fetch_page('course', 'id IN (' . join(',', $courseIds) . ')', null, intval($_GET['pageId']), 10000, false, '*');
+            $courseArticleList = $this->model()->fetch_page('course', 'id IN (' . join(',', $courseIds) . ')', null, 1, 10000, false, '*');
             $courseIds = array_column($courseArticleList, 'id');
             $courseArticleList = array_combine($courseIds, $courseArticleList);
 
             try {
                 foreach ($courseList as $_itemInfo) {
-                    echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['url_token'] . '/'
-                    . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : $courseArticleList[$_itemInfo['article_id']]['url_token'])
+                    echo base_url(true) . '/course/' . $categoryList[$_itemInfo['category_id']]['url_token'] . '/id-'
+                    . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : urlencode($courseArticleList[$_itemInfo['article_id']]['url_token']) )
+                    . '__table_id-' . $_itemInfo['table_id']
                     . ".html\r\n";
                 }
             } catch (Exception $e) {

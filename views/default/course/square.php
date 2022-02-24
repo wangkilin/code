@@ -318,7 +318,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/go/id-go_tutorial__table_id-7.html" title="Go 教程">
+                            <a class="clearfix-item" href="/course/golang/id-go_tutorial__table_id-7.html" title="Go 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/go.png" alt="Go 教程">
                                 </div>
