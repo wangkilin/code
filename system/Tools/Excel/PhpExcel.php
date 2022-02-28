@@ -56,7 +56,7 @@ class Tools_Excel_PhpExcel
             for ($currentRow = 1; $currentRow <= $allRow; $currentRow++) {
                 $currentColumn = 'A';
                 $i = 0; // 最多处理50列. 在边界范围内获取数据
-                while ($currentColumn != $allColumn && $i<50) {
+                while ($currentColumn != $allColumn && $i<80) {
                     $address = $currentColumn.$currentRow;
 
                     $cell = $currentSheet->getCell($address)->getCalculatedValue();

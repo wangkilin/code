@@ -18,6 +18,8 @@ class PostSearchEngine
      */
     const ERROR_PARSE_CONTENT  = 4;
 
+    const API_BAIDU_POST_URL = 'http://data.zz.baidu.com/urls?site=%s&token=lRre6F9JOmuYOdU4';
+
     /**
      * 待解析的http内容
      */
@@ -199,7 +201,62 @@ class PostSearchEngine
 
     public function postToBaidu ()
     {
+        $hasError = false;
+        $urls = array();
+        //$api = 'http://data.zz.baidu.com/urls?site=www.icodebang.com&token=lRre6F9JOmuYOdU4';
+        $domainList = array('www.icodebang.com', 'www.icodebang.cn', 'www.devboy.cn');
+        $startPageId = $this->model->fetch_one('key_value', 'value', "varname='search_engine_baidu_page_id'");
 
+        $urlList = array();
+        $categoryList = $this->model->fetch_all('category');
+        $articleList = $this->model->fetch_page('article', null, null, $startPageId, 900, false, 'id');
+
+        $courseArticleList = array();
+        $courseList = $this->model->fetch_page('course_content_table', 'article_id > 0 ', null, $startPageId, 100, false, '*');
+        $courseIds = array_column($courseList, 'article_id');
+        if ($courseIds) {
+            $categoryIds = array_column($categoryList, 'id');
+            $categoryList = array_combine($categoryIds, $categoryList);
+            $courseArticleList = $this->model->fetch_page('course', 'id IN (' . join(',', $courseIds) . ')', null, 1, 1000, false, '*');
+            $courseIds = array_column($courseArticleList, 'id');
+            $courseArticleList = array_combine($courseIds, $courseArticleList);
+
+        }
+
+
+        foreach ($domainList as $_domain) {
+            $api = sprintf(self::API_BAIDU_POST_URL, $_domain);
+            $urlList = array();
+            foreach ($articleList as $_itemInfo) {
+                $urlList[] = 'http://' . $_domain . '/article/' . $_itemInfo['id'] . ".html";
+            }
+            foreach ($courseList as $_itemInfo) {
+                $urlList[] = 'http://' . $_domain . '/course/' . $categoryList[$_itemInfo['category_id']]['url_token'] . '/id-'
+                . ($courseArticleList[$_itemInfo['article_id']]['url_token'] ==''?$_itemInfo['article_id'] : urlencode($courseArticleList[$_itemInfo['article_id']]['url_token']) )
+                . '__table_id-' . $_itemInfo['table_id']
+                . ".html\r\n";
+            }
+
+            var_dump($api, count($urlList));
+
+
+                $ch = curl_init();
+                $options =  array(
+                    CURLOPT_URL => $api,
+                    CURLOPT_POST => true,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_POSTFIELDS => implode("\n", $urlList),
+                    CURLOPT_HTTPHEADER => array('Content-Type: text/plain'),
+                );
+                curl_setopt_array($ch, $options);
+                $result = curl_exec($ch);
+                echo $result;
+        }
+
+        if (! $hasError) {
+
+            $this->model->update('key_value', array('value'=>$startPageId+1), 'varname="search_engine_baidu_page_id"');
+        }
     }
 
 }
