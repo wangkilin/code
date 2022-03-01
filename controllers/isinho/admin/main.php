@@ -31,7 +31,7 @@ class main extends SinhoBaseController
         // 计算当月的工作日天数
         $nowMonth = date('n');
         $nowDay   = date('j');
-        $scheduleList = $this->model('sinhoWorkload')->fetch_one(sinhoWorkloadModel::SCHEDULE_TABLE, 'month_'.$nowMonth, 'belong_year = ' . $currentYear);
+        $scheduleList = $this->model('sinhoWorkload')->fetch_one(sinhoWorkloadModel::SCHEDULE_TABLE, 'month_'.$currentMonth, 'belong_year = ' . $currentYear);
         $workdayHolidays = array(
             $currentYear => array (
                 'holiday' => array($nowMonth => array()),
@@ -44,7 +44,7 @@ class main extends SinhoBaseController
             foreach ($scheduleList as $_dateString) {
                 $weekIndex = date('N', strtotime($_dateString) );
                 $workdayOrHoliday = ($weekIndex==6 OR $weekIndex==7) ? 'workday' : 'holiday';
-                $workdayHolidays[$currentYear][$workdayOrHoliday][$nowMonth][] = date('j', strtotime($_dateString) );
+                $workdayHolidays[$currentYear][$workdayOrHoliday][$currentMonth][] = date('j', strtotime($_dateString) );
             }
         }
 
