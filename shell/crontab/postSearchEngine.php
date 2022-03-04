@@ -204,7 +204,15 @@ class PostSearchEngine
         $hasError = false;
         $urls = array();
         //$api = 'http://data.zz.baidu.com/urls?site=www.icodebang.com&token=lRre6F9JOmuYOdU4';
-        $domainList = array('www.icodebang.com', 'www.icodebang.cn', 'www.devboy.cn');
+        $domainList = array(
+            'www.icodebang.com',
+            'www.icodebang.cn',
+            'www.devboy.cn',
+            'www.kinful.com',
+            'www.scanonly.com',
+            'www.3dwindy.com',
+            'www.ekotlin.com',
+        );
         $startPageId = $this->model->fetch_one('key_value', 'value', "varname='search_engine_baidu_page_id'");
 
         $urlList = array();
