@@ -212,6 +212,7 @@ class PostSearchEngine
             'www.scanonly.com',
             'www.3dwindy.com',
             'www.ekotlin.com',
+            'www.ukotlin.com',
             'www.teacup.com.cn',
         );
         $startPageId = $this->model->fetch_one('key_value', 'value', "varname='search_engine_baidu_page_id'");
