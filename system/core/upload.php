@@ -156,10 +156,12 @@ class core_upload {
             $this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $this->file_type);
             $this->file_type = strtolower(trim(stripslashes($this->file_type), '"'));
 
+
+            $this->client_name = $field;
             $this->file_name = $this->prep_filename($field);
 
             $this->file_ext  = $this->get_extension($this->file_name);
-            $this->client_name = $this->file_name;
+            //$this->client_name = $this->file_name;
 
         }
         else
@@ -213,9 +215,10 @@ class core_upload {
             $this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $this->file_type);
             $this->file_type = strtolower(trim(stripslashes($this->file_type), '"'));
 
+            $this->client_name = $_FILES[$field]['name'];
             $this->file_name = $this->prep_filename($_FILES[$field]['name']);
             $this->file_ext  = $this->get_extension($this->file_name);
-            $this->client_name = $this->file_name;
+            //$this->client_name = $this->file_name;
         }
 
         // Is the file type allowed to be uploaded?
@@ -291,7 +294,8 @@ class core_upload {
          * the file if one with the same name already exists.
          * If it returns false there was a problem.
          */
-        $this->orig_name = $this->file_name;
+        //$this->orig_name = $this->file_name;
+        $this->orig_name = $this->client_name;
 
         if ($this->overwrite == FALSE)
         {

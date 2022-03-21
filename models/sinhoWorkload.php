@@ -37,9 +37,21 @@ class sinhoWorkloadModel extends Model
      */
     const SCHEDULE_TABLE = 'sinho_schedule';
     /**
+     * 收入支出表
+     */
+    const INCOME_OUTPUT_TABLE = 'sinho_income_expense';
+    /**
      * 工资详细表
      */
     const SALARY_DETAIL_TABLE = 'sinho_salary_detail';
+    /**
+     * 完整的工资信息表
+     */
+    const FINANCE_DATA_TABLE = 'sinho_finance_data';
+    /**
+     * 工会经费排除的user id
+     */
+    const GONGHUI_FEE_IGNORE_USER_ID = 10003;
 
     // /**
     //  * 新禾各种权限常量
@@ -796,7 +808,276 @@ class sinhoWorkloadModel extends Model
         return $itemList;
     }
 
+    /**
+     * 更新工资数据
+     * @param int $id id
+     * @param array $data 数据信息
+     * @return bool
+     */
+    public function updateSalaryDetail ($id, $data)
+    {
+        $result = false;
+        if ($set = $this->processSalaryDetailData($data)) {
+            $result = $this->update(self::SALARY_DETAIL_TABLE, $set, 'id = ' . intval($id));
+        }
 
+        return $result;
+    }
+
+    /**
+     * 处理工资数据， 供更新和添加使用
+     * @param array $data 数据信息
+     * @return multitype:string NULL
+     */
+    protected function processSalaryDetailData ($data)
+    {
+        // 转换成浮点型的数据
+        $doubleVars = array (
+            'shifa_gongzi',					// decimal(7,2) DEFAULT NULL COMMENT '实发工资',
+            'jiben_gongzi',					 // decimal(7,2) DEFAULT NULL COMMENT '基本工资',
+            'jintie',						 // decimal(6,2) DEFAULT NULL COMMENT '津贴',
+            'zhiliangkaohe',				 // decimal(6,2) DEFAULT NULL COMMENT '质量考核奖惩',
+            'jixiao',						 // decimal(7,2) DEFAULT NULL COMMENT '绩效',
+            'chaoejiangli',					// decimal(7,2) DEFAULT NULL COMMENT '超额奖励',
+            'jiben_heji',
+            'gongzi_heji',			    	 // decimal(8,2) DEFAULT NULL COMMENT '工资合计',
+            'quanqinjiang',					 // decimal(6,2) DEFAULT NULL COMMENT '全勤奖',
+            'jiabanbutie',					 // decimal(7,2) DEFAULT NULL COMMENT '加班补贴',
+            'kaoqin_heji',					 // decimal(6,2) DEFAULT NULL COMMENT '全勤奖+加班补贴',
+            'queqinkoukuan',				 // decimal(7,2) DEFAULT NULL COMMENT '缺勤扣款',
+            'qingjiakoukuan',				 // decimal(7,2) DEFAULT NULL COMMENT '请假扣款',
+            'chidaokoukuan',				 // decimal(7,2) DEFAULT NULL COMMENT '迟到扣款',
+            'koukuan_heji',					 // decimal(7,2) DEFAULT NULL COMMENT '扣款合计',
+            'shangnianpingjun',				 // decimal(7,2) DEFAULT NULL COMMENT '上年平均工资',
+            'gonghuijingfei_gongzi',
+            'yanglao_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '养老保险 个人',
+            'yiliao_geren',					 // decimal(6,2) DEFAULT NULL COMMENT '医疗保险 个人',
+            'shiye_geren',					 // decimal(6,2) DEFAULT NULL COMMENT '失业保险 个人',
+            'gongshang_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '工伤保险 个人',
+            'shengyu_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '生育保险 个人',
+            'gongjijin_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '公积金 个人',
+            'geren_heji',				     // decimal(6,2) DEFAULT NULL COMMENT '个人五险一金合计',
+            'yingshui_gongzi',				 // decimal(7,2) DEFAULT NULL COMMENT '应税工资',
+            'geshui',						 // decimal(6,2) DEFAULT NULL COMMENT '个税',
+            'yanglao_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '养老保险 公司',
+            'yiliao_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '医疗保险 公司',
+            'shiye_gongsi',					 // decimal(6,2) DEFAULT NULL COMMENT '失业保险 公司',
+            'gongshang_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '工伤保险 公司',
+            'shengyu_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '生育保险 公司',
+            'gongjijin_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '公积金 公司',
+            'gongsi_heji',				     // decimal(6,2) DEFAULT NULL COMMENT '公司五险一金合计',
+            'yingchuqin',					 // float DEFAULT NULL COMMENT '应出勤天数',
+            'shijichuqin',					 // float DEFAULT NULL COMMENT '实际出勤天数',
+            'bingjia_tianshu',				 // float DEFAULT NULL COMMENT '病假天数',
+            'bingjia_xiaoshi',				 // float DEFAULT NULL COMMENT '病假小时数',
+            'bingjia_kouchu',				 // decimal(6,2) DEFAULT NULL COMMENT '病假扣除',
+            'shijia_xiaoshi',				 // float DEFAULT NULL COMMENT '事假小时数',
+            'shijia_tianshu',				 // float DEFAULT NULL COMMENT '事假天数',
+            'shijia_kouchu',				 // decimal(6,2) DEFAULT NULL COMMENT '事假扣除',
+        );
+        // 转换成整数的数据
+        $intVars   = array(
+            'id',						 // int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '工资表',
+            'belong_year_month',		// int(6) DEFAULT NULL COMMENT '所属月份',
+            'user_id',						 // int(11) DEFAULT NULL COMMENT '用户id',
+            'canbu',						 // smallint(6) DEFAULT NULL COMMENT '餐补天数',
+        );
+        $allowVars = array(
+            'id',						 // int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '工资表',
+            'belong_year_month',		// int(6) DEFAULT NULL COMMENT '所属月份',
+            'user_id',						 // int(11) DEFAULT NULL COMMENT '用户id',
+            'shifa_gongzi',					// decimal(7,2) DEFAULT NULL COMMENT '实发工资',
+            'jiben_gongzi',					 // decimal(7,2) DEFAULT NULL COMMENT '基本工资',
+            'jintie',						 // decimal(6,2) DEFAULT NULL COMMENT '津贴',
+            'zhiliangkaohe',				 // decimal(6,2) DEFAULT NULL COMMENT '质量考核奖惩',
+            'jixiao',						 // decimal(7,2) DEFAULT NULL COMMENT '绩效',
+            'chaoejiangli',					// decimal(7,2) DEFAULT NULL COMMENT '超额奖励',
+            'jiben_heji',                    //decimal(8,0) DEFAULT NULL COMMENT '基本收入合计=基本工资+津贴+质量考核+绩效+超额奖励',
+            'quanqinjiang',					 // decimal(6,2) DEFAULT NULL COMMENT '全勤奖',
+            'jiabanbutie',					 // decimal(7,2) DEFAULT NULL COMMENT '加班补贴',
+            'kaoqin_heji',					 // decimal(6,2) DEFAULT NULL COMMENT '全勤奖+加班补贴',
+            'queqinkoukuan',				 // decimal(7,2) DEFAULT NULL COMMENT '缺勤扣款',
+            'qingjiakoukuan',				 // decimal(7,2) DEFAULT NULL COMMENT '请假扣款',
+            'chidaokoukuan',				 // decimal(7,2) DEFAULT NULL COMMENT '迟到扣款',
+            'koukuan_heji',					 // decimal(7,2) DEFAULT NULL COMMENT '扣款合计',
+            'gongzi_heji',			    	 // decimal(8,2) DEFAULT NULL COMMENT '工资合计',
+            'shangnianpingjun',				 // decimal(7,2) DEFAULT NULL COMMENT '上年平均工资',
+            'gonghuijingfei_gongzi',
+            'yanglao_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '养老保险 个人',
+            'yiliao_geren',					 // decimal(6,2) DEFAULT NULL COMMENT '医疗保险 个人',
+            'shiye_geren',					 // decimal(6,2) DEFAULT NULL COMMENT '失业保险 个人',
+            'gongshang_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '工伤保险 个人',
+            'shengyu_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '生育保险 个人',
+            'gongjijin_geren',				 // decimal(6,2) DEFAULT NULL COMMENT '公积金 个人',
+            'geren_heji',				     // decimal(6,2) DEFAULT NULL COMMENT '个人五险一金合计',
+            'yingshui_gongzi',				 // decimal(7,2) DEFAULT NULL COMMENT '应税工资',
+            'geshui',						 // decimal(6,2) DEFAULT NULL COMMENT '个税',
+            'yanglao_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '养老保险 公司',
+            'yiliao_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '医疗保险 公司',
+            'shiye_gongsi',					 // decimal(6,2) DEFAULT NULL COMMENT '失业保险 公司',
+            'gongshang_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '工伤保险 公司',
+            'shengyu_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '生育保险 公司',
+            'gongjijin_gongsi',				 // decimal(6,2) DEFAULT NULL COMMENT '公积金 公司',
+            'gongsi_heji',				     // decimal(6,2) DEFAULT NULL COMMENT '公司五险一金合计',
+            'yingchuqin',					 // float DEFAULT NULL COMMENT '应出勤天数',
+            'shijichuqin',					 // float DEFAULT NULL COMMENT '实际出勤天数',
+            'canbu',						 // smallint(6) DEFAULT NULL COMMENT '餐补天数',
+            'bingjia_tianshu',				 // float DEFAULT NULL COMMENT '病假天数',
+            'bingjia_xiaoshi',				 // float DEFAULT NULL COMMENT '病假小时数',
+            'bingjia_kouchu',				 // decimal(6,2) DEFAULT NULL COMMENT '病假扣除',
+            'shijia_xiaoshi',				 // float DEFAULT NULL COMMENT '事假小时数',
+            'shijia_tianshu',				 // float DEFAULT NULL COMMENT '事假天数',
+            'shijia_kouchu',				 // decimal(6,2) DEFAULT NULL COMMENT '事假扣除',
+            'fadingjiari',					 // float DEFAULT NULL COMMENT '法定假日天数',
+            'remark',						 // varchar(400) DEFAULT NULL COMMENT '备注信息',
+            'batch_key',					 // varchar(32) NOT NULL DEFAULT '' COMMENT '数据上传的批次',
+        ); // 允许存在的数据
+
+        $set = array();
+        foreach ($doubleVars as $varName) {
+            if (! isset($data[$varName])) {
+                continue;
+            }
+
+            //$data[$varName] = trim($data[$varName], " \t\n\r\0\x0B");
+            $data[$varName] = doubleval($data[$varName]);
+            if (in_array($varName, array('yingchuqin', 'shijichuqin', 'bingjia_tianshu', 'shijia_tianshu')) ) {
+                $data[$varName] = round($data[$varName], 3); // 保留小数点后3位
+            } else {
+                $data[$varName] = round($data[$varName], 3); // 保留小数点后2位
+            }
+            if (0==$data[$varName]) {
+                $data[$varName] = '';
+            }
+
+            // 移除末尾的 0，以及小数点
+            $data[$varName] = strval($data[$varName]);
+            if (strpos($data[$varName], '.')) {
+                $data[$varName] = rtrim($data[$varName], '0');
+            }
+            $set[$varName] = rtrim($data[$varName], ".");
+        }
+        foreach ($intVars as $varName) {
+            if (! isset($data[$varName])) {
+                continue;
+            }
+            $data[$varName] = intval($data[$varName]);
+            //if (0!=$data[$varName]) {
+                $set[$varName] = $data[$varName];
+            //}
+        }
+
+        foreach ($allowVars as $varName) {
+            if (isset($data[$varName]) && !isset($set[$varName])) {
+                // 去空格， 替换全角空格
+                $set[$varName] = trim(str_replace(' ', ' ', $data[$varName]));
+            }
+        }
+
+        return $set;
+    }
+
+    /**
+     * 添加新工资数据
+     * @param array $data 数据关联数组
+     * @return int
+     */
+    public function addSalaryDetail ($data)
+    {
+        $id = 0;
+        if ($set = $this->processSalaryDetailData($data)) {
+            $id = $this->insert(self::SALARY_DETAIL_TABLE, $set);
+        }
+
+        return $id;
+    }
+
+    /**
+     * 获取工资统计信息
+     */
+    public function getSalaryStatistic ($startMonth, $endMonth, $userIds=array())
+    {
+        if (isset($belongMonth) && ! is_array($belongMonth)) {
+            $belongMonth = array($belongMonth);
+        }
+        // ( (目录+正文)*目录正文字数+答案*答案字数...) * 系数
+        $sql = 'SELECT
+                    belong_year_month,
+                    COUNT(1) AS staff_total,
+                    (SUM(shifa_gongzi) + SUM(geren_heji)  + SUM(gongzi_heji) + SUM(gonghuijingfei_gongzi)*0.02 )
+                    AS gongsi_quanbu,
+                    SUM(shifa_gongzi) AS shifa_gongzi,
+                    SUM(geren_heji) AS geren_heji,
+                    SUM(gongsi_heji) AS gongsi_heji,
+                    AVG(shifa_gongzi) AS pingjun_gongzi
+                FROM ' . $this->get_table(self::SALARY_DETAIL_TABLE)
+                ;
+        $where = null;
+        $whereList = array();
+        $whereList[] = 'belong_year_month >= ' . intval($startMonth);
+        $whereList[] = 'belong_year_month <= ' . intval($endMonth);
+        if ($userIds) {
+            $whereList[] = 'user_id IN (' . join(',', $userIds) .')';
+        }
+        $whereList[] = 'user_id != ' . self::GONGHUI_FEE_IGNORE_USER_ID; // 排除特殊用户
+
+        if ($whereList) {
+            $where = join(' AND ', $whereList);
+        }
+
+        $groupBy = 'belong_year_month';
+
+        $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, $groupBy);
+
+        return $list;
+    }
+
+    /**
+     * 获取工会会费
+     */
+    public function getGonghuiFee ($startMonth, $endMonth, $userIds=array())
+    {
+        if (isset($belongMonth) && ! is_array($belongMonth)) {
+            $belongMonth = array($belongMonth);
+        }
+        // ( (目录+正文)*目录正文字数+答案*答案字数...) * 系数
+        $sql = 'SELECT
+                    belong_year_month,
+                    SUM(gonghuijingfei_gongzi)*0.02  AS  gonghuijingfei
+                FROM ' . $this->get_table(self::SALARY_DETAIL_TABLE)
+                ;
+        $where = null;
+        $whereList = array();
+        $whereList[] = 'belong_year_month >= ' . intval($startMonth);
+        $whereList[] = 'belong_year_month <= ' . intval($endMonth);
+        if ($userIds) {
+            $whereList[] = 'user_id IN (' . join(',', $userIds) . ')';
+        }
+
+        if ($whereList) {
+            $where = join(' AND ', $whereList);
+        }
+
+        $groupBy = 'belong_year_month';
+
+        $list = $this->query_all($sql, PHP_INT_MAX, 0, $where, $groupBy);
+
+        return $list;
+    }
+
+    /**
+     * 获取收入支出期初数据
+     */
+    public function getBeginningValue ($yearMonth)
+    {
+        // ( (目录+正文)*目录正文字数+答案*答案字数...) * 系数
+        $sql = 'SELECT
+                    SUM(price * amount * direction) as total
+                FROM ' . $this->get_table(self::INCOME_OUTPUT_TABLE);
+
+        return $this->query_row($sql, 'belong_year_month <' . intval($yearMonth));
+
+    }
 }
 
 /* EOF */

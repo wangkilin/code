@@ -36,9 +36,10 @@ class Tools_Excel_PhpExcel
         } if (! is_array($sheetIndex)) {
             $sheetIndex = array($sheetIndex);
         }
-        $returnData = array('sheetNames' => array(), 'sheetDatas' => array());
+        $returnData = array('sheetNames' => array(), 'sheetDatas' => array(), 'sheetStyles' => array());
         foreach($sheetIndex as $_index) {
             $data = array();
+            $style = array();
             // 如果不存在指定的表， 对应返回数据为空数组
             if (! isset($sheets[$_index])) {
                 $returnData['sheetNames'][$_index] = $_index;
@@ -64,6 +65,7 @@ class Tools_Excel_PhpExcel
                         $cell = $cell->__toString();
                     }
                     $data[$currentRow][$currentColumn] = $cell;
+                    $style[$currentRow][$currentColumn] = $currentSheet->getCell($address)->getStyle()->getFill()->getStartColor()->getRGB();
 
                     $currentColumn++; // Z + 1 => AA, AZ + 1 => BA
                     $i++;
@@ -71,6 +73,7 @@ class Tools_Excel_PhpExcel
             }
 
             $returnData['sheetDatas'][$_index] = $data;
+            $returnData['sheetStyles'][$_index] = $style;
         }
 
         return $returnData;

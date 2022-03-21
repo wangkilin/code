@@ -98,5 +98,33 @@ $config[] = array(
         ),
     )
 );
+$config[] = array(
+    'id'    => 'admin/finance',
+    'title' => '财务数据',
+    'cname' => 'coin-yen',
+    'children' => array(
+        array (
+            'id'        => 'admin/finance/salary',
+            'title'     => _t('工资表'),
+            'cname'     => 'log',
+            'url'       => 'admin/finance/salary/',
+            'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
+        array(
+            'id'        => 'admin/finance/monthly_pay',
+            'title'     => _t('收入支出'),
+            'cname'     => 'transfer',
+            'url'       => 'admin/finance/monthly_pay/',
+            'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
+        // array(
+        //     'id'        => 'admin/finance/show_costing',
+        //     'title'     => _t('成本核算'),
+        //     'cname'     => 'check',
+        //     'url'       => 'admin/finance/show_costing/',
+        //     'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        // ),
+    )
+);
 
 /* EOF */

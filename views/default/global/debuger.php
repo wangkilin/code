@@ -1,5 +1,5 @@
 <?php if (Application::config()->get('system')->debug) { ?>
-<div class="well clearfix" style="margin: 20px;">
+<div class="well clearfix" style="margin: 20px; word-break:break-all;">
 	<b style="font-weight: bold; color: red;">Debug messages:</b><br >
 	<br /><p><b style="font-weight: bold;">Template:</b> <?php echo $this->template_name; ?></p>
 	<br /><p><b style="font-weight: bold;">Session:</b></p>
