@@ -132,7 +132,13 @@ class PostSearchEngine
             'www.icodebang.com',
             'www.icodebang.cn',
             'www.devboy.cn',
-            'www.popnic.cn'
+            'www.popnic.cn',
+            'www.kinful.com',
+            'www.scanonly.com',
+            'www.3dwindy.com',
+            'www.ekotlin.com',
+            'www.ukotlin.com',
+            'www.teacup.com.cn',
         );
         foreach ($domainList as $_domain) {
             $urlList[$_domain] = array();
