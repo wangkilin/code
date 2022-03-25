@@ -399,15 +399,33 @@
                 <br/>
 
                 <?php if ($this->salaryExcelData) {
-                    foreach ($this->salaryExcelData as $_dataInfo) {
                 ?>
                 <div class="bg-primary">
                     <?php
-                    echo $_dataInfo['belong_year_month'] . ' 原始Excel数据';
-                    $_dataInfo['data'] = json_decode($_dataInfo['data_json'], true);
+                    echo '工资表 原始Excel数据';
                     ?>
                 </div>
-                <table class="" border="0" cellpadding="0" cellspacing="0" style='border-collapse:collapse;'>
+                <div>
+                    <h3 class="nomargin">
+                        <ul class="nav nav-tabs">
+                            <?php
+                            $_tmpI = 1;
+                                foreach ($this->salaryExcelData as $_dataInfo) {
+                            ?>
+                            <li class="<?php if ($_tmpI++ == 1) echo 'active';?>">
+                            <a href="#salary_excel_<?php echo $_dataInfo['belong_year_month'];?>" data-toggle="tab"><?php echo $_dataInfo['belong_year_month'];?></a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </h3>
+                </div>
+                <div class="mod-body tab-content">
+                <?php
+                    $_tmpI = 1;
+                    foreach ($this->salaryExcelData as $_dataInfo) {
+                        $_dataInfo['data'] = json_decode($_dataInfo['data_json'], true);
+                ?>
+                <table id="<?php echo 'salary_excel_'.$_dataInfo['belong_year_month'];?>" class="tab-pane <?php if ($_tmpI++ == 1) echo 'active';?>" border="0" cellpadding="0" cellspacing="0" style='border-collapse:collapse;'>
                     <?php foreach ($_dataInfo['data'] as $_rowData) { ?>
                         <?php
                         $_isEmpty = true;
@@ -432,13 +450,13 @@
                     }
                 } ?>
 
-
-
-
-
                 </div>
 
+
+
             </div>
+
+        </div>
 
         </div>
     </div>

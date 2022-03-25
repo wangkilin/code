@@ -146,23 +146,56 @@
                 <br/>
 
                 <?php if ($this->excelData) {
-                    foreach ($this->excelData as $_monthlyData) {
                 ?>
                 <div class="bg-primary">
                     <?php
-                    echo $_monthlyData['belong_year_month'] . ' 原始Excel数据';
+                    echo $_monthlyData['belong_year_month'] . '收入支出 原始Excel数据';
                     ?>
                 </div>
+                <div>
+                    <h3 class="nomargin">
+                        <ul class="nav nav-tabs">
+                            <?php
+                                $_tmpI = 1;
+                                foreach ($this->excelData as $_monthlyData) {
+                            ?>
+                            <li class="<?php if ($_tmpI++ == 1) echo 'active';?>">
+                            <a href="#tab_id_<?php echo $_monthlyData['belong_year_month'];?>" data-toggle="tab"><?php echo $_monthlyData['belong_year_month'];?></a>
+                            </li>
+                            <?php }?>
+                        </ul>
+                    </h3>
+                </div>
+                <div class="mod-body tab-content">
                 <?php
+                $_tmpI = 1;
+                    foreach ($this->excelData as $_monthlyData) {
+                ?>
+                <div id="<?php echo 'tab_id_'.$_monthlyData['belong_year_month'];?>" class="tab-content tab-pane <?php if ($_tmpI++ == 1) echo 'active';?>" >
+
+                    <div>
+                        <h3 class="nomargin">
+                            <ul class="nav nav-tabs">
+                                <?php
+                                    $_tmpI = 1;
+                                    $_monthlyData['data'] = json_decode($_monthlyData['data_json'], true);
+                                    foreach ($_monthlyData['data']['sheetDatas'] as $_key=>$_sheetDataInfo) {
+                                ?>
+                                <li class="bg-info <?php if ($_tmpI++ == 1) echo 'active';?>">
+                                <a href="#tab_id_<?php echo $_monthlyData['belong_year_month'];?>_sheet_<?php echo $_key;?>" data-toggle="tab"><?php echo $_monthlyData['data']['sheetNames'][$_key];?></a>
+                                </li>
+                                <?php }?>
+                            </ul>
+                        </h3>
+                    </div>
+                <?php
+
+                    $_tmpI = 1;
                     $_monthlyData['data'] = json_decode($_monthlyData['data_json'], true);
                     foreach ($_monthlyData['data']['sheetDatas'] as $_key=>$_sheetDataInfo) {
-                    ?>
-                    <div class="bg-info">
-                        <?php
-                        echo $_monthlyData['data']['sheetNames'][$_key];
-                        ?>
-                    </div>
-                <table class="table table-bordered table-condensed" >
+                   ?>
+
+                <table class="<?php if ($_tmpI++ == 1) echo 'active';?> tab-pane table table-bordered table-condensed" id="tab_id_<?php echo $_monthlyData['belong_year_month'];?>_sheet_<?php echo $_key;?>">
                     <?php foreach ($_sheetDataInfo as $_rowKey=>$_rowData) { ?>
                         <?php
                         $_isEmpty = true;
@@ -207,9 +240,13 @@
                 </table>
                     <?php } ?>
                 <br/>
+                </div>
                 <?php
                     }
-                } ?>
+                ?>
+                </div>
+                <?php
+                } // end if ?>
 
                 </div>
 
