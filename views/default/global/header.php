@@ -2,6 +2,14 @@
 
 <body>
 	<div class="icb-top-menu-wrap">
+            <?php if (strpos($_SERVER['HTTP_HOST'], 'icodebang.cn') === false &&
+                      strpos($_SERVER['HTTP_HOST'], 'icodebang.com') === false &&
+                      strpos($_SERVER['HTTP_HOST'], 'devboy.cn')     === false ) {
+           ?>
+		<div class="hidden-xs bg-primary">
+        &nbsp;  &nbsp; Interested in this domain ? Email: icodebang#126.com (#->@)
+        </div>
+        <?php } ?>
 		<div class="container">
 			<!-- logo -->
 			<div class="icb-logo hidden-xs">
