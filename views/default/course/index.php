@@ -155,6 +155,13 @@
                                     <em class="text-color-999"><?php echo date_friendly($this->itemInfo['add_time'], 604800, 'Y-m-d'); ?></em>
                                 </span>
                             </div>
+                            <!-- added internal link, to improve search engine Index data -->
+                            <div class="hidden">
+                                <a href="//www.icodebang.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.icodebang.cn<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.devboy.cn<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+
+                            </div>
                         </div>
                         <div class="mod-footer">
                             <?php if ($this->itemInfo['vote_users']) { ?>
