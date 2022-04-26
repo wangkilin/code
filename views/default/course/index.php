@@ -160,6 +160,12 @@
                                 <a href="//www.icodebang.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
                                 <a href="//www.icodebang.cn<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
                                 <a href="//www.devboy.cn<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.scanonly.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.teacup.com.cn<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.ekotlin.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.ukontlin.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.3dwindy.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
+                                <a href="//www.kinful.com<?php echo $_SERVER['REQUEST_URI']; ?>"><?php echo $this->itemInfo['title']; ?></a>
 
                             </div>
                         </div>
