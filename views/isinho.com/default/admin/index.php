@@ -57,6 +57,47 @@
             </div>
         </div>
 
+        <?php if ($this->workloadStatCurrentMonth) {// 展示当前工作量榜单 ?>
+        <div class="col-md-6">
+            <div class="mod">
+
+                <div class="form-group echart-date mod-head">
+                        <div class="col-sm-3 col-xs-2 nopadding">
+                        <h3>
+                        <span class="pull-left nopadding nomargin"><?php _e('当月工作量'); ?></span>
+                        </h3>
+                        </div>
+                </div>
+                <div class="tab-content mod-content">
+                    <table  class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><?php _e('责编');?></th>
+                                <th><?php _e('字数');?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $i=1; foreach ($this->workloadStatCurrentMonth as $_userId => $_totalChars) { ?>
+                            <tr>
+                                <td><?php echo $i++;?></td>
+                                <td><?php echo $this->userList[$_userId]['user_name']; ?></td>
+                                <td><?php echo $_totalChars; ?></td>
+                            </tr>
+                            <?php }?>
+                        </tbody>
+                        <tfoot>
+                            <tr class="info">
+                                <td colspan="2">合计</td>
+                                <td><?php echo array_sum($this->workloadStatCurrentMonth);?></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+
         <?php if ($this->totalCharsListLastMonth) {// 展示工作量榜单 ?>
         <div class="col-md-6">
             <div class="mod">

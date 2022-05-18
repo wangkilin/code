@@ -122,6 +122,10 @@ class main extends SinhoBaseController
             $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
             $totalCharsWeightLt1ListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_weight_lt_1'));
             arsort($totalCharsListLastMonth, SORT_NUMERIC);
+            // 获取当前工作月份员工的工作量
+            $workloadStatCurrentMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), array(sinhoWorkloadModel::STATUS_VERIFYING, sinhoWorkloadModel::STATUS_RECORDING), array('start'=>$currentYearMonth) );
+            $workloadStatCurrentMonth = array_combine(array_column($workloadStatCurrentMonth,'user_id'), array_column($workloadStatCurrentMonth,'total_chars'));
+            arsort($workloadStatCurrentMonth, SORT_NUMERIC);
 
 
             $startMonth = $belongMinMonth;
@@ -198,6 +202,7 @@ class main extends SinhoBaseController
         View::assign('totalCharsWithoutWeightListLastMonth', $totalCharsWithoutWeightListLastMonth);
         View::assign('totalCharsWeightLt1ListLastMonth', $totalCharsWeightLt1ListLastMonth);
         View::assign('userList', $userList);
+        View::assign('workloadStatCurrentMonth', $workloadStatCurrentMonth);
 
 
         View::import_js('js/functions.js');
@@ -381,18 +386,21 @@ class main extends SinhoBaseController
         View::output('admin/workload/check');
     }
 
+    /**
+     * 按照用户查询工作量
+     */
     protected function check_by_user (& $userList, & $bookList)
     {
         $this->per_page = 30;
         $queryUserIds = array();
         //$where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE . ' AND status <> ' . sinhoWorkloadModel::STATUS_RECORDING;
         $where = 'status <> ' . sinhoWorkloadModel::STATUS_DELETE ;
-        if ($_GET['id']) {
+        if ($_GET['id']) { // 解析用户id
             $queryUserIds = explode(',', $_GET['id']);
             foreach ($queryUserIds as & $_id) {
                 $_id = intval($_id);
             }
-
+            // 获取指定用户数据
             $where .= ' AND user_id IN ( ' . join(', ',  $queryUserIds). ') ';
         }
         $belongMonth = array();
