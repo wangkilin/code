@@ -94,9 +94,9 @@
                                 </td>
                                 <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
                                 <td class="js-category"><?php echo $this->bookList[$workloadInfo['book_id']]['category']; ?></td>
-                                <td class="js-serial"><?php echo $this->bookList[$workloadInfo['book_id']]['serial']; ?></td>
-                                <td class="js-bookname"><?php echo $this->bookList[$workloadInfo['book_id']]['book_name']; ?></td>
-                                <td class="js-proofreading-times"><?php echo $this->bookList[$workloadInfo['book_id']]['proofreading_times']; ?></td>
+                                <td class="js-serial"><a target="_blank" href="admin/check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['serial']; ?></a></td>
+                                <td class="js-bookname"><a target="_blank" href="admin/check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['book_name']; ?></a></td>
+                                <td class="js-proofreading-times"><a target="_blank" href="admin/check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['proofreading_times']; ?></a></td>
                                 <td data-td-name="category" class="js-allow-mark"><a><?php echo $workloadInfo['category']; ?></a></td>
                                 <td data-td-name="working_times" class="js-allow-mark"><a><?php echo $workloadInfo['working_times']; ?></a></td>
                                 <td data-td-name="content_table_pages" class="js-allow-mark"><a><?php echo $workloadInfo['content_table_pages']; ?></a></td>

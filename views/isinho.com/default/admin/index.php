@@ -79,10 +79,10 @@
                         </thead>
                         <tbody>
                             <?php $i=1; foreach ($this->workloadStatCurrentMonth as $_userId => $_totalChars) { ?>
-                            <tr>
-                                <td><?php echo $i++;?></td>
-                                <td><?php echo $this->userList[$_userId]['user_name']; ?></td>
-                                <td><?php echo $_totalChars; ?></td>
+                            <tr class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>">
+                                <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $i++;?></td>
+                                <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $this->userList[$_userId]['user_name']; ?></td>
+                                <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $_totalChars; ?></td>
                             </tr>
                             <?php }?>
                         </tbody>

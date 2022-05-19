@@ -103,6 +103,31 @@ class workload extends SinhoBaseController
     }
 
     /**
+     * 撤回工作量的核算
+     */
+    public function rollback_action()
+    {
+        $this->checkPermission(self::IS_SINHO_VERIFY_WORKLOAD);
+        if (empty($_POST['id'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作方法错误')));
+        }
+
+        $itemInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id='.intval($_POST['id']));
+        if (! $itemInfo || $itemInfo['status']!=sinhoWorkloadModel::STATUS_VERIFYING) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+
+
+        $this->model('sinhoWorkload')
+             ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
+                array('status' => sinhoWorkloadModel::STATUS_RECORDING),
+                'id =' . intval($_POST['id']) . ' AND status = ' . sinhoWorkloadModel::STATUS_VERIFYING
+             );
+
+        H::ajax_json_output(Application::RSM(null, 1, null));
+    }
+
+    /**
      * 删除工作量
      */
     public function remove_action()

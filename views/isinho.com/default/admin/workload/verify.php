@@ -154,7 +154,7 @@
                                                     <td data-td-name="payable_amount" class=""><a><?php echo round($workloadInfo['total_chars'] * 2, 2); ?><?php //echo $workloadInfo['payable_amount']; ?></a></td>
                                                     <!-- 存在js-allow-diff-book-mark, 允许跨书稿间计算单元格；js-can-not-compute表示单元格不可以参与计算 -->
                                                     <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
-                                                    <td></td>
+                                                    <td><?php if ($workloadInfo['status'] == 2) { ?><a target="_blank" onclick="rollback(<?php echo $workloadInfo['id']; ?>)" class="icon icon-undo2 md-tip" title="<?php _e('撤回核算'); ?>" data-toggle="tooltip"></a><?php }?></td>
                                                 </tr>
                                             <?php } ?>
                                         <?php } //end if
@@ -476,6 +476,45 @@
                             ICB.modal.alert(response.err);
                         } else if (response.errno == 1) {
                             ICB.modal.alert(_t('工作量条目已拆分'), {
+                                'hidden.bs.modal': function() {
+                                    window.location.reload();
+                                    //window.location.href = G_BASE_URL + '/admin/fill_list/';
+                                }
+                            });
+                        } else {
+                            ICB.modal.alert(_t('请求发生错误'));
+                        }
+                    }
+                );
+            }
+        );
+
+        return false;
+    }
+    /**
+     * 撤回书稿工作量核算
+     */
+    function rollback(id) {
+        ICB.modal.confirm(
+            _t('确认撤回核算？'),
+            function() {
+                var url = G_BASE_URL + '/admin/ajax/workload/rollback/',
+                    params = {
+                        'id': id,
+                        '_post_type': 'ajax'
+                    };
+                ICB.ajax.requestJson(
+                    url,
+                    params,
+                    function(response) {
+                        if (!response) {
+                            return false;
+                        }
+
+                        if (response.err) {
+                            ICB.modal.alert(response.err);
+                        } else if (response.errno == 1) {
+                            ICB.modal.alert(_t('核算已撤回'), {
                                 'hidden.bs.modal': function() {
                                     window.location.reload();
                                     //window.location.href = G_BASE_URL + '/admin/fill_list/';
