@@ -75,14 +75,20 @@
                                 <th>#</th>
                                 <th><?php _e('责编');?></th>
                                 <th><?php _e('字数');?></th>
+                                <th><?php _e('超额');?></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $i=1; foreach ($this->workloadStatCurrentMonth as $_userId => $_totalChars) { ?>
-                            <tr class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>">
+                            <?php $i=1; foreach ($this->workloadStatCurrentMonth as $_userId => $_totalChars) {
+                                if ($this->userList[$_userId]['forbidden']) {
+                                    unset($this->workloadStatCurrentMonth[$_userId]);
+                                    continue;
+                                } ?>
+                            <tr>
                                 <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $i++;?></td>
                                 <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $this->userList[$_userId]['user_name']; ?></td>
                                 <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $_totalChars; ?></td>
+                                <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $_totalChars - $this->nowPassedDays * 50; ?></td>
                             </tr>
                             <?php }?>
                         </tbody>
@@ -90,6 +96,7 @@
                             <tr class="info">
                                 <td colspan="2">合计</td>
                                 <td><?php echo array_sum($this->workloadStatCurrentMonth);?></td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </table>
