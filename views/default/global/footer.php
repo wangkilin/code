@@ -23,6 +23,8 @@
                 <a href="//www.mysqlworkbench.cn">MySQL Workbench</a>
                 •
                 <a href="//www.icodebang.cn">爱码帮</a>
+                •
+                <a href="mailto:爱码帮<icodebang@126.com>?subject=交换链接">交换链接</a>
             </div>
             <div class="margin10">
                 <div style="color:#fff">本站为个人网站，部分内容来自于互联网，版权归原作者所有。如本站内容有侵权，敬请来信联系我们，我们将及时删除清理。</div>
