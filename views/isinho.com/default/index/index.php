@@ -926,7 +926,7 @@ var G_STATIC_URL = './static/isinho.com/';
                         <div class="single-widget contact">
                             <h4>联系方式</h4>
                             <ul class="list">
-                                <li><i class="fa fa-qq"></i>Q Q: 63923159 </li>
+                                <li><i class="fa fa-qq"></i>Q Q: 994640800 </li>
                                 <li><i class="fa fa-wechat"></i>微信: 18310310582 </li>
                                 <li><i class="fa fa-envelope"></i>邮箱: isinho@126.com</li>
                                 <!-- <li><i class="fa fa-map-marker"></i>地址: 沈阳市浑南区招商局大厦A座12层</li> -->
