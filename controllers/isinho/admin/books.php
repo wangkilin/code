@@ -270,6 +270,9 @@ class books extends SinhoBaseController
             }
             $where[] = 'grade_level IN (' . join(',', $_GET['grade_level']) . ')';
         }
+        if (isset($_GET['is_payed']) && $_GET['is_payed']!=='') { // 按照支付状态搜索。 设置了支付状态
+            $where[] = 'is_payed = ' . intval($_GET['is_payed']) ;
+        }
 
         if ($where) { // 组装搜索条件
             $where = join(' AND ', $where);

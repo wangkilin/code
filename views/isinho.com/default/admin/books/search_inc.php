@@ -69,6 +69,17 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('支付状态'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select id="sinho_is_payed" name="is_payed">
+                               <option value="" <?php echo in_array(array('0','1'), $_GET['is_payed']) ? '' : 'selected'; ?>>全部</option>
+                               <option value="0" <?php echo '0'===$_GET['is_payed'] ? 'selected' : ''; ?>>未支付</option>
+                               <option value="1" <?php echo 1==$_GET['is_payed'] ? 'selected' : ''; ?>>已支付</option>
+                            </select>
+                        </div>
+                    </div>
 
 
                     <div class="form-group">
@@ -91,7 +102,7 @@ $(function () {
     });
 
 
-    $("#sinho_grade_level").multiselect({
+    $("#sinho_grade_level,#sinho_is_payed").multiselect({
         			nonSelectedText : '<?php _e('---- 选择书稿所属阶段 ----');?>',
                     maxHeight       : 200,
                     buttonWidth     : 400,
