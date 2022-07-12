@@ -323,7 +323,7 @@
         // 基于存放的书稿参数， 比较工作量对应的数据。 不相同的地方，标红
         for (bookId in baseRef) {
             for(keyName in baseRef[bookId]) {
-                if(baseRef[bookId][keyName] === workload[bookId][keyName]) {// 和基数相同，继续比较下一个
+                if(baseRef[bookId][keyName] === float(workload[bookId][keyName], 4)) {// 和基数相同，继续比较下一个. 需要转换工作量计算后的数值，否则容易出现数据溢出导致比较错误
                     continue;
                 }
 
@@ -335,6 +335,8 @@
                         }
                     }
                 } else {// 页码数， 汇总求和的数比较， 不一样， 要把对应的单元格都标红
+
+                    //console.info(bookId, float(baseRef[bookId][keyName],4), float(workload[bookId][keyName],4), '---');
                     $('tr.verifying-line[data-book-id="'+bookId+'"] td[data-td-name="'+keyName+'"]').addClass('sinho-red-background');
                 }
                 //for (i=0; i<$lines.length; i++) {
