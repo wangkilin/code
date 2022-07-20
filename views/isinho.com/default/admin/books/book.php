@@ -9,6 +9,32 @@
             </label>
         </div>
 
+
+        <!-- Theme switcher -->
+        <div class="theme-switch" style="width:200px;right:-210px;top:55%;">
+            <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
+            <div class="tab-pane" id="search">
+
+                <form method="get" action="" class="form-horizontal" role="form" onsubmit="return false;">
+                    <input name="action" type="hidden" value="search" />
+
+                    <div class="form-group">
+                        <label class="col-sm-6 col-xs-6 control-label text-right no-padding"><?php _e('修订比例 %'); ?>:</label>
+
+                        <div class="col-sm-6 col-xs-6">
+                            <input id="rateNumber" class="form-control" type="text" value="" name="number" placeholder="数值"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-4 col-xs-8">
+                            <input type="button" class="btn btn-primary js-change-rate" value="<?php _e('修订计算'); ?>"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="mod-body tab-content">
             <div class="tab-pane active" id="book">
                 <div class="table-responsive">
@@ -85,7 +111,7 @@
                                     <label class="icb-label"><?php _e('正文'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="text_pages" value="<?php echo $this->itemInfo['text_pages']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="text_pages" value="<?php echo $this->itemInfo['text_pages']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('目录+正文千字/页'); ?>:</label>
@@ -102,7 +128,7 @@
                                     <label class="icb-label"><?php _e('答案'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="answer_pages" value="<?php echo $this->itemInfo['answer_pages']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="answer_pages" value="<?php echo $this->itemInfo['answer_pages']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('答案千字/页'); ?>:</label>
@@ -119,7 +145,7 @@
                                     <label class="icb-label"><?php _e('试卷'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="test_pages" value="<?php echo $this->itemInfo['test_pages']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="test_pages" value="<?php echo $this->itemInfo['test_pages']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('试卷千字/页'); ?>:</label>
@@ -136,7 +162,7 @@
                                     <label class="icb-label"><?php _e('试卷答案'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="test_answer_pages" value="<?php echo $this->itemInfo['test_answer_pages']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="test_answer_pages" value="<?php echo $this->itemInfo['test_answer_pages']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('试卷答案千字/页'); ?>:</label>
@@ -154,7 +180,7 @@
                                     <label class="icb-label"><?php _e('课后作业'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="exercise_pages" value="<?php echo $this->itemInfo['exercise_pages']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="exercise_pages" value="<?php echo $this->itemInfo['exercise_pages']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('课后作业千字/页'); ?>:</label>
@@ -171,7 +197,7 @@
                                     <label class="icb-label"><?php _e('功能册'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="function_book" value="<?php echo $this->itemInfo['function_book']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="function_book" value="<?php echo $this->itemInfo['function_book']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('功能册千字/页'); ?>:</label>
@@ -188,7 +214,7 @@
                                     <label class="icb-label"><?php _e('功能册答案'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
-                                    <input type="text" name="function_answer" value="<?php echo $this->itemInfo['function_answer']; ?>" class="form-control js-monitor-compute" />
+                                    <input type="text" name="function_answer" value="<?php echo $this->itemInfo['function_answer']; ?>" class="form-control js-monitor-compute js-monitor-change-rate" />
                                 </div>
                                 <div class="col-sm-2">
                                     <label class="icb-label"><?php _e('功能册答案千字/页'); ?>:</label>
@@ -319,6 +345,25 @@ function deleteItem(id)
 }
 
 $(function () {
+    /**
+     * 点击修订率计算按钮，将除目录外的页码按照修订率计算；
+     */
+    $('body').on('click', '.js-change-rate', function () {
+        var rateNumber = parseFloat($('#rateNumber').val());
+        // 对每个设置样式的输入框计算修订页码
+        $('.js-monitor-change-rate').each(function () {
+            if ($.trim($(this).val()) =='') {
+                return;
+            }
+            // 展示原值
+            $(this).tooltip({title:$(this).val()});
+            $(this).tooltip('show');
+            // 计算结果
+            $(this).val(float($(this).val() * rateNumber / 100) );
+            // 页码变更， 字总数要重新计算
+            compute_chars_ammount();
+        });
+    });
 
     /**
      * 监听输入框输入按键, 计算总字数
@@ -346,6 +391,23 @@ $(function () {
                 forceParse: 0,
                 minView : 2, // 0:选择到分钟， 1：选择到小时， 2：选择到天
             });
+
+
+    // 点击侧边栏图标，将侧边栏工具内容显示/隐藏
+    $('.theme-switch').width(200);
+    $('.theme-switch .icon').click (function(event){
+            event.preventDefault();
+            if( $ (this).hasClass('inOut')  ){
+                $('.theme-switch').stop().animate({right:'0px'},1000 );
+            } else{
+                $('.theme-switch').stop().animate({right:'-210px'},1000 );
+            }
+            $(this).toggleClass('inOut');
+            return false;
+
+        }  );
 });
+
+
 </script>
 <?php View::output('admin/global/footer.php'); ?>
