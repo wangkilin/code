@@ -1145,8 +1145,8 @@ class main extends BaseController
                 $comments[$key]['vote_info'] = $this->model('article')->getVoteByArticleId('comment', $val['id'], 1, $this->user_id);
             }
         }
-
-        $this->model('article')->update_views($article_info['id']);
+        // 暂停更新
+        //$this->model('article')->update_views($article_info['id']);
 
         View::set_meta('keywords', implode(',', $this->model('system')->analysis_keyword($article_info['title'])));
         View::set_meta('description', $article_info['title'] . ' - ' . cjk_substr(str_replace("\r\n", ' ', strip_tags($article_info['message'])), 0, 128, 'UTF-8', '...'));
