@@ -20,6 +20,18 @@ if (!defined('iCodeBang_Com'))
 
 class main extends Controller
 {
+    /**
+     * 控制器 Setup 动作
+     *
+     * 每个继承于此类库的控制器均会调用此函数
+     *
+     * @access    public
+     */
+    public function setup()
+    {
+        HTTP::redirect('/'); // 临时跳转到首页， 降低服务器负载
+
+    }
 	public function get_access_rule()
 	{
 		if ($this->user_info['permission']['visit_people'] AND $this->user_info['permission']['visit_site'])
