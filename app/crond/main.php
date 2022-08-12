@@ -39,6 +39,8 @@ class main extends Controller
         header('Pragma: no-cache');                                   // HTTP/1.0
 
         @set_time_limit(0);
+        // @todo 增加了服务器负载。 待优化
+        return;
 
         if ($call_actions = $this->model('crond')->start())
         {
