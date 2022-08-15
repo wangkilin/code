@@ -157,6 +157,7 @@
 </div>
 <!-- end nav -->
 
+<?php View::output('global/debuger.php'); ?>
 <div style="display:none">
 	<?php echo get_setting('statistic_code'); ?>
 </div>
