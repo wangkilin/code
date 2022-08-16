@@ -44,17 +44,17 @@
                                 <th><?php _e('正文'); ?></th>
                                 <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('答案'); ?></th>
-                                <!-- <th class="red-right-border"><?php _e('千字/页'); ?></th> -->
+                                <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('试卷'); ?></th>
-                                <!-- <th class="red-right-border"><?php _e('千字/页'); ?></th> -->
+                                <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('试卷<br/>答案'); ?></th>
-                                <!-- <th class="red-right-border"><?php _e('千字/页'); ?></th> -->
+                                <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('课后<br/>作业'); ?></th>
-                                <!-- <th class="red-right-border"><?php _e('千字/页'); ?></th> -->
+                                <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('功能册'); ?></th>
-                                <!-- <th class="red-right-border"><?php _e('千字/页'); ?></th> -->
+                                <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('功能册<br/>答案'); ?></th>
-                                <!-- <th class="red-right-border"><?php _e('千字/页'); ?></th> -->
+                                <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('系数'); ?></th>
                                 <th><?php _e('核算总<br/>字数(千)'); ?></th>
                                 <th><?php _e('应发<br/>金额'); ?></th>
@@ -80,17 +80,17 @@
                                 <td><?php echo $itemInfo['text_pages']; ?></td>
                                 <td class="red-right-border"><?php echo $itemInfo['text_table_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['answer_pages']; ?></td>
-                                <!-- <td class="red-right-border"><?php echo $itemInfo['answer_chars_per_page']; ?></td> -->
+                                <td class="red-right-border"><?php echo $itemInfo['answer_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['test_pages']; ?></td>
-                                <!-- <td class="red-right-border"><?php echo $itemInfo['test_chars_per_page']; ?></td> -->
+                                <td class="red-right-border"><?php echo $itemInfo['test_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['test_answer_pages']; ?></td>
-                                <!-- <td class="red-right-border"><?php echo $itemInfo['test_answer_chars_per_page']; ?></td> -->
+                                <td class="red-right-border"><?php echo $itemInfo['test_answer_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['exercise_pages']; ?></td>
-                                <!-- <td class="red-right-border"><?php echo $itemInfo['exercise_chars_per_page']; ?></td> -->
+                                <td class="red-right-border"><?php echo $itemInfo['exercise_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['function_book']; ?></td>
-                                <!-- <td class="red-right-border"><?php echo $itemInfo['function_book_chars_per_page']; ?></td> -->
+                                <td class="red-right-border"><?php echo $itemInfo['function_book_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['function_answer']; ?></td>
-                                <!-- <td class="red-right-border"><?php echo $itemInfo['function_answer_chars_per_page']; ?></td> -->
+                                <td class="red-right-border"><?php echo $itemInfo['function_answer_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo $itemInfo['total_chars']; ?></td>
                                 <td>&nbsp;</td>
@@ -133,17 +133,17 @@
                                 <td data-td-name="text_pages" class="js-allow-mark"><a><?php echo $workloadInfo['text_pages']; ?></a></td>
                                 <td data-td-name="text_table_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['text_table_chars_per_page']; ?></a></td>
                                 <td data-td-name="answer_pages" class="js-allow-mark"><a><?php echo $workloadInfo['answer_pages']; ?></a></td>
-                                <!-- <td data-td-name="answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['answer_chars_per_page']; ?></a></td> -->
+                                <td data-td-name="answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['answer_chars_per_page']; ?></a></td>
                                 <td data-td-name="test_pages" class="js-allow-mark"><a><?php echo $workloadInfo['test_pages']; ?></a></td>
-                                <!-- <td data-td-name="test_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['test_chars_per_page']; ?></a></td> -->
+                                <td data-td-name="test_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['test_chars_per_page']; ?></a></td>
                                 <td data-td-name="test_answer_pages" class="js-allow-mark"><a><?php echo $workloadInfo['test_answer_pages']; ?></a></td>
-                                <!-- <td data-td-name="test_answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['test_answer_chars_per_page']; ?></a></td> -->
+                                <td data-td-name="test_answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['test_answer_chars_per_page']; ?></a></td>
                                 <td data-td-name="exercise_pages" class="js-allow-mark"><a><?php echo $workloadInfo['exercise_pages']; ?></a></td>
-                                <!-- <td data-td-name="exercise_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['exercise_chars_per_page']; ?></a></td> -->
+                                <td data-td-name="exercise_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['exercise_chars_per_page']; ?></a></td>
                                 <td data-td-name="function_book" class="js-allow-mark"><a><?php echo $workloadInfo['function_book']; ?></a></td>
-                                <!-- <td data-td-name="function_book_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['function_book_chars_per_page']; ?></a></td> -->
+                                <td data-td-name="function_book_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['function_book_chars_per_page']; ?></a></td>
                                 <td data-td-name="function_answer" class="js-allow-mark"><a><?php echo $workloadInfo['function_answer']; ?></a></td>
-                                <!-- <td data-td-name="function_answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['function_answer_chars_per_page']; ?></a></td> -->
+                                <td data-td-name="function_answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['function_answer_chars_per_page']; ?></a></td>
                                 <td data-td-name="weight" class="js-allow-mark"><a><?php echo $workloadInfo['weight']; ?></a></td>
                                 <td data-td-name="total_chars" class=""><a><?php echo $workloadInfo['total_chars']; ?></a></td>
                                 <td data-td-name="payable_amount" class=""><a><?php echo $workloadInfo['payable_amount']; ?></a></td>
