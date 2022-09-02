@@ -253,6 +253,17 @@
 
                             </div>
 
+                            <div class="row">
+                                <!-- 管理员备注信息 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('管理员备注'); ?>:</label>
+                                </div>
+                                <div class="col-sm-11 icb-item-title">
+                                    <input type="text" name="admin_remarks" value="<?php echo $this->itemInfo['admin_remarks']; ?>" class="form-control" placeholder="<?php _e('管理员备注信息，只对管理员可见');?>"/>
+                                </div>
+
+                            </div>
+
 							<div class="row mod-footer clearfix">
 								<?php if ($this->itemInfo['id'] ) { ?>
 								<a class="btn btn-large btn-danger" id="deleteBatchBtn" onclick="deleteItem(<?php echo $this->itemInfo['id'];?>); return false;"><?php _e('删除书稿'); ?></a>

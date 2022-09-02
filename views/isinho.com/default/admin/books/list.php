@@ -113,7 +113,7 @@
                                 <td><?php echo $itemInfo['function_answer']; ?></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
-                                <td><?php echo $itemInfo['remarks']; ?></td>
+                                <td><?php echo $itemInfo['remarks']; ?> <span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
                                 <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">

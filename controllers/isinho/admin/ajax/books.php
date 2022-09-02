@@ -47,7 +47,7 @@ class books extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完成相同的书稿')));
         }
 
-        $backurl = isset($_POST['backUrl']) ? base64_decode($_POST['backUrl']) : get_js_url('/admin/books/');
+        $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
         $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
         if ($_POST['id']) { // 更新
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);

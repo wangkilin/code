@@ -149,6 +149,7 @@ class sinhoWorkloadModel extends Model
             'total_chars', // varchar(255) DEFAULT NULL COMMENT '字数（合计）',
             'total_chars_without_weight', // varchar(255) DEFAULT NULL COMMENT '字数（未乘系数）',
             'remarks', // mediumtext COMMENT '备注',); // 转换成浮点型的数据
+            'admin_remarks', // varchar， 管理员备注信息
         ); // 允许存在的数据
 
         $set = array();
