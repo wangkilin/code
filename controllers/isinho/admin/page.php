@@ -5,21 +5,22 @@ defined('iCodeBang_Com') OR die('Access denied!');
  * @author zhoumingxia
  *
  */
-class page extends AdminController
+class page extends SinhoBaseController
 {
-
     /**
      * 控制器 初始化
      * @see Controller::setup()
      */
     public function setup()
     {
-        $this->checkPermission(AdminController::IS_ROLE_ADMIN);
+        // 检查管理员 或者 页面管理 权限
+        $this->checkPermission(AdminController::IS_ROLE_ADMIN | self::IS_SINHO_PAGE_ADMIN);
 
         $this->crumb(Application::lang()->_t('页面管理'), 'admin/page/');
 
-        View::assign('menu_list', $this->model('admin')->fetch_menu_list('page'));
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/page/','sinho_admin_menu') ) );
     }
+
 
     /**
      * 页面列表
@@ -71,7 +72,8 @@ class page extends AdminController
         if (!$page_info = $this->model('page')->getPageById($_GET['id'])) {
             H::redirect_msg(Application::lang()->_t('页面不存在'), '/admin/page/');
         }
-        $categoryList = $this->model()->fetch_all('page_category');
+        $where = is_null(self::$domainId) ? null : 'belong_domain = ' . self::$domainId;
+        $categoryList = $this->model()->fetch_all('page_category', $where);
         View::assign('categoryList', $categoryList);
 
         View::assign('page_info', $page_info);

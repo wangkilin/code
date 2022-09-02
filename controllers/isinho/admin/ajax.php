@@ -1409,7 +1409,13 @@ class ajax extends AdminController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已经存在相同的页面 URL')));
         }
 
-        $this->model('page')->add_page($_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
+        $pageId = $this->model('page')->add_page($_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
+        $this->model()->update('pages', array('category_id'=>$_POST['category_id']), 'id = ' . $pageId);
+
+            // 设置了附件， 绑定附件和文章关系
+            if ($_POST['attach_ids']) {
+                $this->model('attach')->update('attach', array('item_id'=>$pageId), 'id IN(' . join(',', $_POST['attach_ids']) . ')');
+            }
 
         H::ajax_json_output(Application::RSM(array(
             'url' => get_js_url('/admin/page/')
@@ -1458,8 +1464,14 @@ class ajax extends AdminController
             }
         }
 
-        $this->model('page')->update_page($_POST['page_id'], $_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
 
+        $this->model('page')->update_page($_POST['page_id'], $_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
+        $this->model()->update('pages', array('category_id'=>$_POST['category_id']), 'id = ' . $_POST['page_id']);
+
+        // 设置了附件， 绑定附件和文章关系
+        if ($_POST['attach_ids']) {
+            $this->model('attach')->update('attach', array('item_id'=>$_POST['page_id']), 'id IN(' . join(',', $_POST['attach_ids']) . ')');
+        }
         H::ajax_json_output(Application::RSM(array(
             'url' => get_js_url('/admin/page/')
         ), 1, null));

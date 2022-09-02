@@ -19,6 +19,7 @@
 					<thead>
 						<tr>
 							<th><?php _e('启用'); ?></th>
+							<th><?php _e('页面分类'); ?></th>
 							<th><?php _e('页面标题'); ?></th>
 							<th width="50%"><?php _e('页面描述'); ?></th>
 							<th><?php _e('操作'); ?></th>
@@ -31,11 +32,13 @@
 								<input type="hidden" name="page_ids[<?php echo $val['id']; ?>]" value="<?php echo $val['id']; ?>" />
 								<input type="checkbox" class="enabled-status" name="enabled_status[<?php echo $val['id']; ?>]" value="1"<?php if ($val['enabled']) { ?> checked="checked"<?php } ?> />
 							</td>
+                            <td><?php if($val['category_id']) echo $this->categoryList[$val['category_id']]['title'];?></td>
+
 							<td><a href="page/<?php echo $val['url_token']; ?>" target="_blank"><?php echo $val['title']; ?></a></td>
 							<td width="50%"><?php echo $val['description']; ?></td>
 							<td>
 								<a href="admin/page/edit/id-<?php echo $val['id']; ?>" title="<?php _e('编辑'); ?>" data-toggle="tooltip" class="icon icon-edit md-tip"></a>
-								<a onclick="AWS.ajax_request(G_BASE_URL + '/admin/ajax/remove_page/', 'id=<?php echo $val['id']; ?>');" title="<?php _e('删除'); ?>" data-toggle="tooltip" class="icon icon-trash md-tip"></a>
+								<a onclick="ICB.domEvents.deleteShowConfirmModal( _t('确认删除？'), function(){ ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/remove_page/', 'id=<?php echo $val['id']; ?>') });" title="<?php _e('删除'); ?>" data-toggle="tooltip" class="icon icon-trash md-tip"></a>
 							</td>
 						</tr>
 						<?php } ?>

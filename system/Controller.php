@@ -9,6 +9,11 @@ class Controller
     public $user_id;
     public $user_info;
 
+    /**
+     * 确定访问的域名id. 后续根据域名id，获取对应域名下的内容；
+     */
+    static public $domainId = null;
+
     static public $crumb = array();
 
     public function __construct($process_setup = true)
@@ -124,6 +129,13 @@ class Controller
             H::redirect_msg(get_setting('close_notice'), '/account/login/');
         }
 
+        // 获取当前访问域名对应的id。 后面根据域名id获取指定网站下的内容；
+        preg_match('/([0-9a-z]+)\.(com|net|cn|com\.cn)$/i', $_SERVER['HTTP_HOST'], $matches);
+        if ($matches && property_exists(Application::config()->get('system'), 'page_domain_map')
+             && isset(Application::config()->get('system')->page_domain_map[$matches[0]])) {
+            self::$domainId = Application::config()->get('system')->page_domain_map[$matches[0]];
+        }
+
         if ($_GET['ignore_ua_check'] == 'TRUE')
         {
             HTTP::set_cookie('_ignore_ua_check', 'TRUE', (time() + 3600 * 24 * 7));
@@ -198,8 +210,8 @@ class Controller
         $name = htmlspecialchars_decode($name);
         $crumb_template = $this->crumb;
 
-        if (strlen($url) > 1 and substr($url, 0, 1) == '/') {
-            $url = base_url() . substr($url, 1);
+        if (strlen($url) > 1 and substr($url, 0, 1) == '/' &&  substr($url, 1, 1) != '/') {
+            $url = base_url() . '/'.substr($url, 1);
         }
 
         $this->crumb[] = array(

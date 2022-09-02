@@ -40,6 +40,19 @@
 				<tr>
 					<td>
 						<div class="form-group">
+							<span class="col-sm-2 col-xs-3 control-label"><?php _e('所属分类'); ?>:</span>
+							<div class="col-sm-10 col-xs-9">
+                                <select name="category_id" class="form-control" >
+                                    <option value="0">--选择分类--</option>
+                                    <?php echo buildSelectOptions($this->categoryList, 'title', 'id', $this->page_info['category_id']);?>
+                                </select>
+							</div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('页面描述'); ?>:</span>
 							<div class="col-sm-10 col-xs-9">
 								<input type="text" name="description" class="form-control" value="<?php echo $this->page_info['description']; ?>" />
@@ -109,13 +122,30 @@ $(function () {
 		} else {
 			var editorSetting = {'editor' : $('.article-content')};
 		}
-		var fileupload = new FileUpload(
-		    	'file',
+
+		var fileupload = new FileUploader(
+		    	//'file',
 		    	'.icb-editor-box .icb-upload-wrap .btn',
 		    	'.icb-editor-box .icb-upload-wrap .upload-container',
-		    	G_BASE_URL + '/publish/ajax/attach_upload/id-page',
+		    	G_BASE_URL + '/publish/ajax/attach_upload/id-page__type-page__batchKey-<?php echo $this->batchKey;?>',
 		    	editorSetting
 		    );
+
+
+        <?php if ($this->page_info['id']) {  ?>
+            $.post(G_BASE_URL + '/admin/ajax/page/get_attach_list/', 'id=' + <?php echo $this->page_info['id']?>, function (data) {
+                if (data['err']) {
+                    return false;
+                } else {
+                	if (data['rsm']['attachs'])
+                	{
+                		$.each(data['rsm']['attachs'], function (i, v) {
+                			fileupload.setFileList(v);
+	                    });
+                	}
+                }
+            }, 'json');
+        <?php } ?>
 	}
 
 

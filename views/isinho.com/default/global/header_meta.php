@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<link rel="dns-prefetch" href="//www.icodebang.com">
+<link rel="dns-prefetch" href="//www.isinho.com">
 <!-- <link rel="canonical" href="" /> -->
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
@@ -10,22 +10,47 @@
 <title><?php echo $this->page_title; ?></title>
 <meta name="keywords" content="<?php echo $this->_meta_keywords; ?>" />
 <meta name="description" content="<?php echo $this->_meta_description; ?>"  />
-<link href="<?php echo G_STATIC_URL; ?>/css/<?php echo $this->template_name; ?>/img/favicon.ico?v=<?php echo G_VERSION_BUILD; ?>" rel="shortcut icon" type="image/x-icon" />
-
-<link rel="stylesheet" type="text/css" href="<?php echo G_STATIC_URL; ?>/css/bootstrap.css" />
+<link rel="icon" type="image/png" href="<?php echo G_STATIC_URL; ?>/isinho.com/favicon.png?v=<?php echo G_VERSION_BUILD; ?>">
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/isinho.com/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="<?php echo G_STATIC_URL; ?>/css/icomoon/style.css" />
-
+<!-- Sinhe Style CSS -->
+<link rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/isinho.com/style.css">
+<link rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/isinho.com/default.css">
+<link rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/isinho.com/responsive.css">
 <?php if (is_array($this->_import_css_files)) { ?>
 <?php foreach ($this->_import_css_files AS $import_css) { ?>
 <link href="<?php echo $import_css; ?>?v=<?php echo G_VERSION_BUILD; ?>" rel="stylesheet" type="text/css" />
 <?php } ?>
 <?php } ?>
+<link rel="stylesheet" href="<?php echo G_STATIC_URL; ?>/isinho.com/blue.css" id="theme-switch">
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-<?php if ($this->template_name != 'default') { ?>
-<link href="<?php echo G_STATIC_URL; ?>/css/<?php echo $this->template_name; ?>/<?php echo $this->template_name; ?>.css" rel="stylesheet" type="text/css" />
-<?php } ?>
 
-<?php $post_hash_var_name = strtoupper(md5(TIMESTAMP . $this->userinfo['salt'])); ?>
+
+<script type="text/javascript">
+var G_STATIC_URL = '<?php echo G_STATIC_URL; ?>/';
+
+	var iScale = 1;
+	iScale = iScale / window.devicePixelRatio;
+
+	document.write('<meta name="viewport" content="height=device-height,width=device-width,initial-scale='+iScale+',minimum-scale='+iScale+',maximum-scale='+iScale+',user-scalable=no" />')
+
+	var iWidth = document.documentElement.clientWidth;
+	document.getElementsByTagName('html')[0].style.fontSize = iWidth / 1200 + 'px';
+	function Wonresize(){
+		setTimeout(function(){
+			var iWidth = document.documentElement.clientWidth;
+			document.getElementsByTagName('html')[0].style.fontSize = iWidth / 1200 + 'px';
+		},200);
+	 }
+	window.addEventListener("onorientationchange" in window ? "orientationchange" : "resize", Wonresize, false);
+</script>
 <script type="text/javascript">
 	var _<?php echo $post_hash_var_name; ?>="<?php echo new_post_hash(); ?>";
 	var G_POST_HASH=_<?php echo $post_hash_var_name; ?>;
@@ -65,6 +90,8 @@
 <!--[if lte IE 8]>
 	<script type="text/javascript" src="<?php echo G_STATIC_URL; ?>/js/respond.js"></script>
 <![endif]-->
+
+<?php $post_hash_var_name = strtoupper(md5(TIMESTAMP . $this->userinfo['salt'])); ?>
 </head>
 <noscript unselectable="on" id="noscript">
     <div class="icb-404 icb-404-wrap container">

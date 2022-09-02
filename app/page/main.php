@@ -1,25 +1,25 @@
 <?php
-/*
-+--------------------------------------------------------------------------
-|   WeCenter [#RELEASE_VERSION#]
-|   ========================================
-|   by WeCenter Software
-|   © 2011 - 2014 WeCenter. All Rights Reserved
-|   http://www.wecenter.com
-|   ========================================
-|   Support: WeCenter@qq.com
-|
-+---------------------------------------------------------------------------
+/**
++-------------------------------------------+
+|   iCodeBang CMS [#RELEASE_VERSION#]       |
+|   by iCodeBang.com Team                   |
+|   © iCodeBang.com. All Rights Reserved    |
+|   ------------------------------------    |
+|   Support: icodebang@126.com              |
+|   WebSite: http://www.icodebang.com       |
++-------------------------------------------+
 */
-
-
-if (!defined('iCodeBang_Com'))
-{
-    die;
-}
+defined('iCodeBang_Com') OR die('Access denied!');
 
 class main extends Controller
 {
+
+    public function setup ()
+    {
+
+        $this->crumb(_e('动态'), '/page');
+    }
+
     public function get_access_rule()
     {
         $rule_action['rule_type'] = 'black';
@@ -51,7 +51,7 @@ class main extends Controller
         }
 
         $_GET['category'] = $categoryInfo['url_token']=='' ? $categoryInfo['id'] : $categoryInfo['url_token'];
-        $categoryList = $this->model()->fetch_all('page_category', ' parent_id = ' . $categoryInfo['parent_id']);
+        $categoryList = $this->model()->fetch_all('page_category', ' parent_id = ' . $categoryInfo['parent_id'] . ' AND belong_domain = ' . $categoryInfo['belong_domain']);
         $prevPageInfo = $this->model()->fetch_row('pages', 'id < ' .$page_info['id']. ' AND publish_time<= ' .time(). ' AND enabled = 1 AND category_id = ' . $page_info['category_id'], 'is_top DESC, id DESC');
         $nextPageInfo = $this->model()->fetch_row('pages', 'id > ' .$page_info['id']. ' AND publish_time<= ' .time(). ' AND enabled = 1 AND category_id = ' . $page_info['category_id'], 'is_top DESC, id DESC');
 
@@ -75,6 +75,10 @@ class main extends Controller
             }
         } else {
             $categoryInfo = $this->model()->fetch_row('page_category', 'url_token = "' . $this->model()->quote($categoryToken) .'"' );
+        }
+        // 如果指定的分类不属于当前访问域名， 设置分类信息为空， 不允许访问
+        if (self::$domainId && self::$domainId!=$categoryInfo['belong_domain'] ) {
+            $categoryInfo = null;
         }
 
         if (! $categoryInfo) {
@@ -125,7 +129,7 @@ class main extends Controller
         $page_info['url_token'] = empty($page_info['url_token']) ? $page_info['id'] : $page_info['url_token'];
         if ($page_info['title']) {
 
-            $this->crumb($page_info['title'], '/' . $page_info['url_token'] );
+            $this->crumb($page_info['title'], '/page/' . $page_info['url_token'] );
             //View::assign('page_title', $page_info['title']);
         }
 

@@ -1,25 +1,24 @@
 <?php
-/*
-+--------------------------------------------------------------------------
-|   WeCenter [#RELEASE_VERSION#]
-|   ========================================
-|   by WeCenter Software
-|   © 2011 - 2014 WeCenter. All Rights Reserved
-|   http://www.wecenter.com
-|   ========================================
-|   Support: WeCenter@qq.com
-|
-+---------------------------------------------------------------------------
+/**
++-------------------------------------------+
+|   iCodeBang CMS [#RELEASE_VERSION#]       |
+|   by iCodeBang.com Team                   |
+|   © iCodeBang.com. All Rights Reserved    |
+|   ------------------------------------    |
+|   Support: icodebang@126.com              |
+|   WebSite: http://www.icodebang.com       |
++-------------------------------------------+
 */
-
-
-if (!defined('iCodeBang_Com'))
-{
-    die;
-}
+defined('iCodeBang_Com') OR die('Access denied!');
 
 class main extends Controller
 {
+
+    public function setup ()
+    {
+        $this->crumb(_t('动态'), '/page');
+    }
+
     public function get_access_rule()
     {
         $rule_action['rule_type'] = 'black';
@@ -28,30 +27,149 @@ class main extends Controller
         return $rule_action;
     }
 
-    public function index_action()
+    /**
+     * 分类下的页面数量较少， 将网页作为导航菜单
+     */
+    public function pageIsNavMenu ($page_info)
     {
-        if (!$page_info = $this->model('page')->getPageByToken($_GET['id']) OR $page_info['enabled'] == 0)
-        {
+        if ($page_info['category_id']) {
+            View::assign('page_list', $this->model()->fetch_all('pages', 'category_id = ' . $page_info['category_id']));
+        }
+
+        View::output('page/index');
+    }
+
+    /**
+     * 将分类作为导航菜单, 显示
+     */
+    public function categoryIsNaMenuAndShowPage ($page_info)
+    {
+        $categoryInfo =$this->model()->fetch_row('page_category', 'id = ' . $page_info['category_id']);
+        if (! $categoryInfo) { // 禁止通过id访问分类下的内容
             HTTP::error_404();
         }
 
-        if ($page_info['title'])
-        {
-            View::assign('page_title', $page_info['title']);
+        $_GET['category'] = $categoryInfo['url_token']=='' ? $categoryInfo['id'] : $categoryInfo['url_token'];
+        $categoryList = $this->model()->fetch_all('page_category', ' parent_id = ' . $categoryInfo['parent_id'] . ' AND belong_domain = ' . $categoryInfo['belong_domain']);
+        $prevPageInfo = $this->model()->fetch_row('pages', 'id < ' .$page_info['id']. ' AND publish_time<= ' .time(). ' AND enabled = 1 AND category_id = ' . $page_info['category_id'], 'is_top DESC, id DESC');
+        $nextPageInfo = $this->model()->fetch_row('pages', 'id > ' .$page_info['id']. ' AND publish_time<= ' .time(). ' AND enabled = 1 AND category_id = ' . $page_info['category_id'], 'is_top DESC, id DESC');
+
+        View::assign('prevPageInfo', $prevPageInfo);
+        View::assign('nextPageInfo', $nextPageInfo);
+        View::assign('categoryList', $categoryList);
+
+        View::output('page/showPageInCategory');
+    }
+
+    /**
+     * 显示分类下的页面
+     */
+    public function showPageListInCategory ($categoryToken)
+    {
+        //$this->per_page = 1;
+        if (is_numeric($categoryToken)) {
+            $categoryInfo =$this->model()->fetch_row('page_category', 'id = ' . $categoryToken);
+            if ($categoryInfo && $categoryInfo['url_token']) { // 禁止通过id访问分类下的内容
+                HTTP::error_404();
+            }
+        } else {
+            $categoryInfo = $this->model()->fetch_row('page_category', 'url_token = "' . $this->model()->quote($categoryToken) .'"' );
+        }
+        // 如果指定的分类不属于当前访问域名， 设置分类信息为空， 不允许访问
+        if (self::$domainId && self::$domainId!=$categoryInfo['belong_domain'] ) {
+            $categoryInfo = null;
         }
 
-        if ($page_info['keywords'])
-        {
+        if (! $categoryInfo) {
+            HTTP::error_404();
+        }
+
+        View::assign('categoryInfo', $categoryInfo);
+        $categoryList = $this->model()->fetch_all('page_category', ' parent_id = ' . $categoryInfo['parent_id'] . ' AND belong_domain = ' . $categoryInfo['belong_domain']);
+        $this->crumb($categoryInfo['title'], '/page/category-' .$categoryInfo['id'] .'.html');
+        $categoryList = array_combine(array_column($categoryList, 'id'), $categoryList);
+        View::assign('categoryList', $categoryList);
+
+        $pageList  = $this->model()->fetch_page('pages', 'enabled = 1 AND publish_time <=' . time() . ' AND category_id = '.$categoryInfo['id'], 'id DESC', $_GET['page'], $this->per_page, true, '*');
+        $totalRows = $this->model()->found_rows();
+        $userIds   = array_column($pageList, 'user_id');
+        $userList  = array();
+        if ($userIds) {
+            $userList  = $this->model()->fetch_all('users', 'uid IN (' . join(',', $userIds) .')');
+            $userList  = array_combine(array_column($userList, 'uid'), $userList);
+        }
+        $thumbList = array ();
+        if ($pageList) { // 获取图片
+            $thumbList = $this->model('attach')->getThumbListByItemids('page', array_column($pageList, 'id'));
+        }
+        View::assign('userList', $userList);
+        View::assign('pageList', $pageList);
+        View::assign('thumbList', $thumbList);
+
+        $url_param = array();
+        foreach($_GET as $key => $val) {
+            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
+                $url_param[] = $key . '-' . $val;
+            }
+        }
+        View::assign('pagination', Application::pagination()->initialize(array(
+            'base_url'   => get_js_url('/page/') . implode('__', $url_param),
+            'total_rows' => $totalRows,
+            'per_page'   => $this->per_page
+        ))->create_links());
+
+        View::output('page/showPageListInCategory');
+    }
+
+    public function index_action()
+    {
+        if ($_GET['id']) { // 访问指定页面
+            $page_info = $this->model('page')->getPageByToken($_GET['id']);
+            if (!$page_info OR $page_info['enabled'] == 0) { // 页面信息没找到， 或者页面没有启用， 显示404
+                HTTP::error_404();
+            }
+        } else if ($_GET['category']) { // 访问指定分类
+
+            $this->showPageListInCategory($_GET['category']);
+            return;
+
+        } else { // 没有指定页面， 也没有指定分类， 直接404
+            HTTP::error_404();
+            return;
+        }
+
+        $page_info['url_token'] = empty($page_info['url_token']) ? $page_info['id'] : $page_info['url_token'];
+
+        if ($page_info['keywords']) {
             View::set_meta('keywords', $page_info['keywords']);
         }
 
-        if ($page_info['description'])
-        {
+        if ($page_info['description']) {
             View::set_meta('description', $page_info['description']);
         }
 
         View::assign('page_info', $page_info);
 
-        View::output('page/index');
+        $categoryInfo =$this->model()->fetch_row('page_category', 'id = ' . $page_info['category_id'] );
+
+        $this->crumb($categoryInfo['title'], '/page/category-' .$categoryInfo['id'] .'.html');
+        if ($page_info['title']) {
+
+            $this->crumb($page_info['title'], '/page/' . $page_info['url_token'] .'.html');
+            //View::assign('page_title', $page_info['title']);
+        }
+
+        switch ($categoryInfo['display_mode']) {
+            case 3:
+            case 2:
+                $this->categoryIsNaMenuAndShowPage($page_info);
+                break;
+            case 1:
+            default:
+                $this->pageIsNavMenu($page_info);
+                break;
+
+
+        }
     }
 }

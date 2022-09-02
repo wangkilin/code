@@ -39,6 +39,8 @@ class SinhoBaseController extends BaseController
     const PERMISSION_ADMINISTRATION     = 'sinho_administration';
     const PERMISSION_SUBJECT            = 'sinho_subject';
     const PERMISSION_TEAM_LEADER        = 'sinho_permission_team_leader';
+    const PERMISSION_PAGE_ADMIN         = 'sinho_permission_page_admin';  // 页面内容管理权限
+
     const SINHO_PERMISSION_LIST = array(
         self::PERMISSION_FILL_WORKLOAD,
         self::PERMISSION_BOOKLIST,
@@ -46,7 +48,8 @@ class SinhoBaseController extends BaseController
         self::PERMISSION_CHECK_WORKLOAD,
         self::PERMISSION_ADMINISTRATION,
         self::PERMISSION_SUBJECT,
-        self::PERMISSION_SUBJECT,
+        self::PERMISSION_TEAM_LEADER,
+        self::PERMISSION_PAGE_ADMIN,
     );
 
     // const PERMISSION_BOOKLIST        = SinhoBaseController::PERMISSION_MODIFY_MANUSCRIPT_PARAM;
@@ -60,16 +63,18 @@ class SinhoBaseController extends BaseController
     const IS_SINHO_CHECK_WORKLOAD  = 0x20; // 查看工作量
     const IS_SINHO_ADMIN           = 0x40; // 行政管理
     const IS_SINHO_TEAM_LEADER     = 0x80; // 是否是组长
+    const IS_SINHO_PAGE_ADMIN      = 0x100; // 是否是页面内容管理人员
 
     const PERMISSION_MAP = array (
-        self::IS_ROLE_ADMIN         => parent::PERMISSION_MAP[parent::IS_ROLE_ADMIN],
-        self::IS_ROLE_MODERATOR     => parent::PERMISSION_MAP[parent::IS_ROLE_MODERATOR],
-        self::IS_SINHO_BOOK_ADMIN   => self::PERMISSION_BOOKLIST,
+        self::IS_ROLE_ADMIN              => parent::PERMISSION_MAP[parent::IS_ROLE_ADMIN],
+        self::IS_ROLE_MODERATOR          => parent::PERMISSION_MAP[parent::IS_ROLE_MODERATOR],
+        self::IS_SINHO_BOOK_ADMIN        => self::PERMISSION_BOOKLIST,
         self::IS_SINHO_VERIFY_WORKLOAD   => self::PERMISSION_VERIFY_WORKLOAD,
         self::IS_SINHO_FILL_WORKLOAD     => self::PERMISSION_FILL_WORKLOAD,
         self::IS_SINHO_CHECK_WORKLOAD    => self::PERMISSION_CHECK_WORKLOAD,
         self::IS_SINHO_ADMIN             => self::PERMISSION_ADMINISTRATION,
         self::IS_SINHO_TEAM_LEADER       => self::PERMISSION_TEAM_LEADER,
+        self::IS_SINHO_PAGE_ADMIN        => self::PERMISSION_PAGE_ADMIN,
     );
 
     public $user_id;
