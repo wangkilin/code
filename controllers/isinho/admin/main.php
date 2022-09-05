@@ -304,7 +304,8 @@ class main extends SinhoBaseController
         $bookIds = array_keys($workloadList);
         $bookList = array();
         if ($bookIds) {
-            $bookList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 'id IN (' . join(',', $bookIds) . ')', 'id DESC');
+            $orderby = $_GET['orderby']=='book' ? 'category,serial,book_name,proofreading_times' : 'id DESC';
+            $bookList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 'id IN (' . join(',', $bookIds) . ')', $orderby);
         }
 
 

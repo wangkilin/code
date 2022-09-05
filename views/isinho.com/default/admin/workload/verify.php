@@ -42,7 +42,7 @@
                                     <th>#</th>
                                     <th class="text-left"><?php _e('日期'); ?></th>
                                     <th><?php _e('责编'); ?></th>
-                                    <th><?php _e('书稿<br/>类别'); ?></th>
+                                    <th><a href="/admin/verify_list/orderby-<?php echo $_GET['orderby']=='book'? 'id':'book'; ?>"><?php _e('书稿<br/>类别'); ?></a><?php echo $_GET['orderby']=='book'? '<i class="icon-insert"></i>':''; ?></th>
                                     <th><?php _e('系列'); ?></th>
                                     <th><?php _e('书名'); ?></th>
                                     <th><?php _e('校次'); ?></th>
