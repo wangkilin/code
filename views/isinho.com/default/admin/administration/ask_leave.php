@@ -20,15 +20,9 @@
                     <table class="table table-bordered">
                         <tr>
                          <td>图标说明：</td>
-                         <td><i class="icon icon-sick-leave"></i>病假</td>
-                         <td><i class="icon icon-annual-leave"></i>年假</td>
-                         <td><i class="icon icon-wedding-leave"></i>婚假</td>
-                         <td><i class="icon icon-maternity-leave"></i>产假</td>
-                         <td><i class="icon icon-body-check"></i>产检</td>
-                         <td><i class="icon icon-period-leave"></i>生理假</td>
-                         <td><i class="icon icon-funeral-leave"></i>丧假</td>
-                         <td><i class="icon icon-private-leave"></i>事假</td>
-                         <td><i class="icon icon-leave"></i>旷工</td>
+                         <?php foreach ($this->leaveTypeList as $_itemInfo) { ?>
+                         <td><i class="icon <?php echo $_itemInfo['icon'];?>"></i><?php echo $_itemInfo['name'];?></td>
+                         <?php } ?>
                         </tr>
                     </table>
                 </div>
@@ -114,7 +108,8 @@
                                     <th>请假统计信息:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
                                     <th class="col-sm-1">事假</th>
                                     <th class="col-sm-1">病假</th>
-                                    <th class="col-sm-1">全部</th>
+                                    <th class="col-sm-1">全部请假</th>
+                                    <!-- <th class="col-sm-1">加班</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -187,46 +182,53 @@
                                         }
                                         echo ' ';
                                         switch($_itemInfo['leave_type']) {
-                                            case 2: // 病假
+                                            case administration::LEAVE_TYPE_SICK: // 病假
                                                 _e('病假');
                                                 $_leaveInfo['sick']['m'] += $_leaveMonth;
                                                 $_leaveInfo['sick']['d'] += $_leaveDay;
                                                 $_leaveInfo['sick']['h'] += $_leaveHour;
                                                 break;
-                                            case 3: // 年假
+                                            case administration::LEAVE_TYPE_ANNUAL: // 年假
                                                 _e('年假');
                                                 break;
-                                            case 4: // 婚假
+                                            case administration::LEAVE_TYPE_WEDDING: // 婚假
                                                 _e('婚假');
                                                 break;
-                                            case 5: // 产假
+                                            case administration::LEAVE_TYPE_MATERNITY: // 产假
                                                 _e('产假');
                                                 break;
-                                            case 6: // 生理假
+                                            case administration::LEAVE_TYPE_PERIOD: // 生理假
                                                 _e('生理假');
                                                 break;
-                                            case 7: // 丧假
+                                            case administration::LEAVE_TYPE_FUNERAL: // 丧假
                                                 _e('丧假');
                                                 break;
-                                            case 8: // 产检
+                                            case administration::LEAVE_TYPE_BODY_CHECK: // 产检
                                                 _e('产检');
                                                 break;
-                                            case 1: // 事假
+                                            case administration::LEAVE_TYPE_PRIVATE: // 事假
                                                 _e('事假');
 
                                                 $_leaveInfo['event']['m'] += $_leaveMonth;
                                                 $_leaveInfo['event']['d'] += $_leaveDay;
                                                 $_leaveInfo['event']['h'] += $_leaveHour;
                                                 break;
+                                            case administration::LEAVE_TYPE_OVERTIME: // 加班
+                                                _e('加班');
+                                                $_leaveInfo['overtime']['m'] += $_leaveMonth;
+                                                $_leaveInfo['overtime']['d'] += $_leaveDay;
+                                                $_leaveInfo['overtime']['h'] += $_leaveHour;
+                                                break;
                                             default:
                                                 _e('旷工');
                                                 break;
                                         }
 
-
-                                        $_leaveInfo['total']['m'] += $_leaveMonth;
-                                        $_leaveInfo['total']['d'] += $_leaveDay;
-                                        $_leaveInfo['total']['h'] += $_leaveHour;
+                                        if ($_itemInfo['leave_type'] <= 20) {
+                                            $_leaveInfo['total']['m'] += $_leaveMonth;
+                                            $_leaveInfo['total']['d'] += $_leaveDay;
+                                            $_leaveInfo['total']['h'] += $_leaveHour;
+                                        }
 
                                         if ($_itemInfo['leave_start_time'] >= $startMonthTime && $_itemInfo['leave_end_time'] < $endMonthTime) {
                                             echo ' ', $_itemInfo['leave_period'], '小时';
@@ -249,6 +251,11 @@
                                     echo $_leaveInfo['total']['d']>0 ?$_leaveInfo['total']['d'] .'天' : '';
                                     echo $_leaveInfo['total']['h']>0 ?$_leaveInfo['total']['h'] .'小时' : '';
                                     ?></td>
+                                    <!--<td><?php
+                                    echo $_leaveInfo['overtime']['m']>0 ?$_leaveInfo['overtime']['m'] .'月' : '';
+                                    echo $_leaveInfo['overtime']['d']>0 ?$_leaveInfo['overtime']['d'] .'天' : '';
+                                    echo $_leaveInfo['overtime']['h']>0 ?$_leaveInfo['overtime']['h'] .'小时' : '';
+                                    ?></td>-->
                                 </tr>
                                 <?php } ?>
                             </tbody>
@@ -283,30 +290,11 @@ function loadLeaveDataIntoTable (leaveList) {
             // }
             tmpTdId = '#td_' + userId + '_' + tmpDate.getDate();
             switch(leaveList[i].leave_type) {
-                case 2: // 病假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-sick-leave"/>');
+                <?php foreach ($this->leaveTypeList as $_key=>$_leaveItemInfo) { ?>
+                case <?php echo $_key;?>: // <?php echo $_leaveItemInfo['name']."\r\n";?>
+                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon <?php echo $_leaveItemInfo['icon'];?>"/>');
                     break;
-                case 3: // 年假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-annual-leave"/>');
-                    break;
-                case 4: // 婚假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-wedding-leave"/>');
-                    break;
-                case 5: // 产假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-maternity-leave"/>');
-                    break;
-                case 6: // 生理假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-period-leave"/>');
-                    break;
-                case 7: // 丧假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-funeral-leave"/>');
-                    break;
-                case 8: // 产检
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-body-check"/>');
-                    break;
-                case 1: // 事假
-                    $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-private-leave"/>');
-                    break;
+                <?php }?>
                 default:
                     $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-leave"/>');
                     break;
@@ -430,6 +418,10 @@ $(function () {
         var callback = function (response) {
             //console.info(response);
             var onshowCallback = function () {
+                // 设置下拉框选项
+                var options = '<?php foreach ($this->leaveTypeList as $_key => $_optionItemInfo) { echo '<option value="'.$_key.'">'.$_optionItemInfo['name'].'</option>';} ?>';
+                $('#leave_type').append(options);
+
                 //$('.js-datepicker').date_input(); // 已有日期输入。 后台管理首页，有示例
                 var startDate, endDate;
                 for (var i=0; i<response.rsm.length; i++) {
@@ -508,7 +500,9 @@ $(function () {
                     leave_date_display  : leaveDateDisplay,
                     //leave_date_start    : leaveDateDisplay.substr(5) +' ' + currentDate.getHours() + ':00',
                     //leave_date_end      : leaveDateDisplay.substr(5) +' ' + currentDate.getHours() + ':00',
+                    //options             : options
                 });
+
             ICB.modal.dialog(html, onshowCallback);
 
             // 如果是编辑请假， 显示删除按钮， 允许删除请假

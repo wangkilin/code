@@ -70,7 +70,7 @@ $config[] = array(
     'children' => array(
         array (
             'id'        => 'admin/administration/ask_leave',
-            'title'     => _t('请假管理'),
+            'title'     => _t('考勤管理'),
             'cname'     => 'order',
             'url'       => 'admin/administration/ask_leave/',
             'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
@@ -95,6 +95,16 @@ $config[] = array(
             'cname'     => 'users',
             'url'       => 'admin/administration/group_list/',
             'permission'=> SinhoBaseController::PERMISSION_ADMINISTRATION,
+        ),
+        array(
+            'id'        => 'admin/page/',
+            'title'     => _t('页面管理'),
+            'cname'     => 'log',
+            'url'       => 'admin/page/',
+            'permission'=> array(
+                SinhoBaseController::PERMISSION_ADMINISTRATION,
+                SinhoBaseController::PERMISSION_PAGE_ADMIN,
+            )
         ),
     )
 );
