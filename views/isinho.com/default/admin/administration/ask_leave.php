@@ -110,6 +110,7 @@
                                     <th class="col-sm-1">病假</th>
                                     <th class="col-sm-1">全部请假</th>
                                     <!-- <th class="col-sm-1">加班</th> -->
+                                    <th class="col-sm-1">周末带稿量</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,9 +125,11 @@
 
                                     <td><?php
                                     $_leaveInfo = array(
-                                        'event' => array('m'=>0, 'd'=>0, 'h'=>0), // 事假信息
-                                        'sick'  => array('m'=>0, 'd'=>0, 'h'=>0), // 病假信息
-                                        'total' => array('m'=>0, 'd'=>0, 'h'=>0), // 全部请假信息
+                                        'event'     => array('m'=>0, 'd'=>0, 'h'=>0), // 事假信息
+                                        'sick'      => array('m'=>0, 'd'=>0, 'h'=>0), // 病假信息
+                                        'weekend'   => array('m'=>0, 'd'=>0, 'h'=>0), // 周末带稿
+                                        'overtime'  => array('m'=>0, 'd'=>0, 'h'=>0), // 加班
+                                        'total'     => array('m'=>0, 'd'=>0, 'h'=>0), // 全部请假信息
                                     );
                                     foreach ($this->userLeaveList[$_userInfo['uid']] as $_itemInfo) {
                                         $_leaveMonth = 0;
@@ -219,12 +222,18 @@
                                                 $_leaveInfo['overtime']['d'] += $_leaveDay;
                                                 $_leaveInfo['overtime']['h'] += $_leaveHour;
                                                 break;
+                                            case administration::LEAVE_TYPE_WEEKEND_WORKLOAD: // 周末带稿
+                                                _e('周末带稿量');
+                                                $_leaveInfo['weekend']['m'] += $_leaveMonth;
+                                                $_leaveInfo['weekend']['d'] += $_leaveDay;
+                                                $_leaveInfo['weekend']['h'] += $_leaveHour;
+                                                break;
                                             default:
                                                 _e('旷工');
                                                 break;
                                         }
 
-                                        if ($_itemInfo['leave_type'] <= 20) {
+                                        if ($_itemInfo['leave_type'] <= 20) { // 20以下的是请假
                                             $_leaveInfo['total']['m'] += $_leaveMonth;
                                             $_leaveInfo['total']['d'] += $_leaveDay;
                                             $_leaveInfo['total']['h'] += $_leaveHour;
@@ -256,6 +265,11 @@
                                     echo $_leaveInfo['overtime']['d']>0 ?$_leaveInfo['overtime']['d'] .'天' : '';
                                     echo $_leaveInfo['overtime']['h']>0 ?$_leaveInfo['overtime']['h'] .'小时' : '';
                                     ?></td>-->
+                                    <td><?php
+                                    echo $_leaveInfo['weekend']['m']>0 ?$_leaveInfo['weekend']['m'] .'月' : '';
+                                    echo $_leaveInfo['weekend']['d']>0 ?$_leaveInfo['weekend']['d'] .'天' : '';
+                                    echo $_leaveInfo['weekend']['h']>0 ?$_leaveInfo['weekend']['h'] .'小时' : '';
+                                    ?></td>
                                 </tr>
                                 <?php } ?>
                             </tbody>
@@ -410,7 +424,8 @@ $(function () {
     /**
      * 点击单元格， 设置考勤
      */
-    $('body').on('click', '#js-sinho-leave-table > tbody > tr > td:not(.weekend)', function() {
+    //$('body').on('click', '#js-sinho-leave-table > tbody > tr > td:not(.weekend)', function() {
+    $('body').on('click', '#js-sinho-leave-table > tbody > tr > td', function() {
         var userId    = $(this).parent().data('user-id');
         var userName  = $(this).parent().data('user-name');
         var leaveDate = $(this).data('date').toString();
