@@ -89,7 +89,7 @@
                                 if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line'; ?>" data-verify-remark='<?php echo $itemInfo['verify_remark'];?>'>
                                 <td class="text-left">
 
-                                    <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5),'~',substr($itemInfo['return_date'], 5); ?></a>
+                                    <a class="md-tip"  title="<?php _e('发稿日期'); echo date('m-d', $itemInfo['add_time']);?> <?php _e('回稿日期'); echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):'';?>" data-toggle="tooltip"><?php echo date('m-d', $itemInfo['add_time']),'~';echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):''; ?></a>
                                 </td>
                                 <!-- <td class="js-category"><?php //echo $this->booksList[$itemInfo['book_id']]['category']; ?></td> -->
                                 <td class="js-serial"><?php echo $this->booksList[$itemInfo['book_id']]['serial']; ?></td>
@@ -133,7 +133,9 @@
                                   <?php } ?>
                                   <?php if (($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) && $itemInfo['is_branch']) {// 工作量没有核算过，而且是分支处理，允许删除 ?>
                                   <a href="admin/ajax/workload/remove/" onclick="deleteItem(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-delete md-tip" title="<?php _e('删除'); ?>" data-toggle="tooltip"></a>
-                                  <?php } ?>
+                                  <?php }
+                                  ?>
+                                  <?php if ($itemInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) { ?><a target="_blank" onclick="rollback(<?php echo $itemInfo['id']; ?>)" class="icon icon-undo2 md-tip" title="<?php _e('撤回核算'); ?>" data-toggle="tooltip"></a><?php }?>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -409,6 +411,45 @@ function fillMore(id)
 
     return false;
 }
+    /**
+     * 撤回书稿工作量核算
+     */
+    function rollback(id) {
+        ICB.modal.confirm(
+            _t('确认撤回核算？'),
+            function() {
+                var url = G_BASE_URL + '/admin/ajax/workload/rollback/',
+                    params = {
+                        'id': id,
+                        '_post_type': 'ajax'
+                    };
+                ICB.ajax.requestJson(
+                    url,
+                    params,
+                    function(response) {
+                        if (!response) {
+                            return false;
+                        }
+
+                        if (response.err) {
+                            ICB.modal.alert(response.err);
+                        } else if (response.errno == 1) {
+                            ICB.modal.alert(_t('核算已撤回'), {
+                                'hidden.bs.modal': function() {
+                                    window.location.reload();
+                                    //window.location.href = G_BASE_URL + '/admin/fill_list/';
+                                }
+                            });
+                        } else {
+                            ICB.modal.alert(_t('请求发生错误'));
+                        }
+                    }
+                );
+            }
+        );
+
+        return false;
+    }
 
 $(function(){
     $('.js-fill-more').click(function () {

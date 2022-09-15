@@ -40,6 +40,7 @@ class workload extends SinhoBaseController
             $itemInfo['payable_amount'] = round($itemInfo['total_chars'] * 2, 2);
         }
         // 保存填充的工作量内容
+        $_POST['fill_time'] = time();
         Application::model('sinhoWorkload')->fillWorkload(intval($_POST['id']), $_POST);
         if (! $itemInfo['fill_time']) { // 第一次填充书稿工作量， 加入填充时间
             Application::model('sinhoWorkload')->update(sinhoWorkloadModel::WORKLOAD_TABLE, array('fill_time'=>time()), 'id = ' . intval($_POST['id']) );
@@ -107,14 +108,20 @@ class workload extends SinhoBaseController
      */
     public function rollback_action()
     {
-        $this->checkPermission(self::IS_SINHO_VERIFY_WORKLOAD);
+        $this->checkPermission(self::IS_SINHO_VERIFY_WORKLOAD | self::IS_SINHO_FILL_WORKLOAD);
         if (empty($_POST['id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作方法错误')));
         }
 
         $itemInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id='.intval($_POST['id']));
         if (! $itemInfo || $itemInfo['status']!=sinhoWorkloadModel::STATUS_VERIFYING) {
+        // 没找到条目， 或者条目不是正在核算中的状态
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+        if (! $this->hasRolePermission(self::IS_SINHO_VERIFY_WORKLOAD) && $itemInfo['user_id']!=$this->user_id) {
+        // 检查是否有核酸全部工作量权限。 如果没有，只能撤回自己的工作量状态
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('只能撤回自己的工作量核算')));
+
         }
 
 
