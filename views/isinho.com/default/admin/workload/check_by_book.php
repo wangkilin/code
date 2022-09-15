@@ -25,7 +25,7 @@
                 <br/>
 
                 <div class="table-responsive">
-                <form id="workload_verify_form" action="admin/ajax/workload/confirm/" method="post">
+                <form id="workload_verify_form" action="admin/ajax/workload/confirm/" method="post" target="">
                     <input type="hidden" id="action" name="action" value="" />
                 <?php if ($this->itemsList) { ?>
 
@@ -117,7 +117,7 @@
                                     if ($workloadInfo['fill_time']) {
                                         echo date('m-d', $workloadInfo['fill_time']);
                                     } else {
-                                        substr($itemInfo['return_date'], 5);
+                                        echo substr($itemInfo['return_date'], 5);
                                     }
                                     ?>
                                 </td>

@@ -328,7 +328,38 @@ class books extends SinhoBaseController
             $fileName = '导出书稿-' . date('Y-m-d') . '.xls';
 
             // 导出书稿
-            $phpExcel->export($fileName, $headArr, $itemList, true);
+            $style = array(
+                'width'   => array('A'=>4, 'B'=>10, 'C'=>10, 'D'=>15,'E'=>20,'G'=>4,'H'=>4, 'Y'=>20,), // 字符数算
+                'height'  => array(1 => 20),      // 按照 磅 算
+                'style'   => array (
+                    'A1:Y1'=> array (
+                                'font'    => array(
+                                                    'size'      => 9
+                                ),
+                                'fill'    => array(
+                                                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                                                    'color' => array('rgb' => 'E8F1E2'),
+                                ),
+                                'borders' => array(
+                                                    'bottom'     => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array(
+                                                            'rgb' => '999999'
+                                                        )
+                                                    ),
+                                                    'right' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array(
+                                                            'rgb' => '999999'
+                                                        ),
+                                                    )
+                                ),
+
+                                'alignment'  => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                    )
+                ),
+            );
+            $phpExcel->export($fileName, $headArr, $itemList, true, $style);
         } else {
             $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
         }

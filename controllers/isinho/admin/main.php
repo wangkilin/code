@@ -534,6 +534,10 @@ class main extends SinhoBaseController
             $booksList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::BOOK_TABLE, $where, 'delivery_date DESC, id DESC', null, PHP_INT_MAX, true, 'id');
             $bookIds = array();
             $totalRows = 0;
+            if (isset($_GET['export_all']) || isset($_GET['export_workload'])) {
+                $this->per_page = PHP_INT_MAX;
+                $_GET['page']   = 1;
+            }
             if ($booksList) {
                 $bookIdList = $this->model('sinhoWorkload')
                                 ->query_all('SELECT DISTINCT  book_id FROM ' . $this->model('sinhoWorkload')->get_table(sinhoWorkloadModel::WORKLOAD_TABLE),
@@ -605,6 +609,179 @@ class main extends SinhoBaseController
                              ->fetch_all(sinhoWorkloadModel::BOOK_TABLE,
                                     'id IN (' . join(', ', $bookIds) . ')'
                                 );
+        }
+
+        if (isset($_GET['export_all']) || isset($_GET['export_workload'])) {
+            $phpExcel = & loadClass('Tools_Excel_PhpExcel');
+            $headArr = array(
+                'date'                              => '日期',
+                'user_name'                         => '责编',
+                //'delivery_date'                     => '发稿日期',
+                //'return_date'                       => '回稿日期',
+                'category'                          => '类别',
+                'serial'                            => '系列',
+                'book_name'                         => '书名',
+                'proofreading_times'                => '校次',
+                'content_table_pages'               => '目录',
+                'text_pages'                        => '正文',
+                'text_table_chars_per_page'         => '目录+正文千字/页',
+                'answer_pages'                      => '答案',
+                'answer_chars_per_page'             => '答案千字/页',
+                'test_pages'                        => '试卷',
+                'test_chars_per_page'               => '试卷千字/页',
+                'test_answer_pages'                 => '试卷答案',
+                'test_answer_chars_per_page'        => '试卷答案千字/页',
+                'exercise_pages'                    => '课后作业',
+                'exercise_chars_per_page'           => '课后作业千字/页',
+                'function_book'                     => '功能册',
+                'function_book_chars_per_page'      => '功能册千字/页',
+                'function_answer'                   => '功能册答案',
+                'function_answer_chars_per_page'    => '功能册答案千字/页',
+                'weight'                            => '难度系数',
+                'total_chars'                       => '字数（合计）',
+                'payable_amount'                    => '应发金额',
+                'remarks'                           => '备注'
+            );
+            $fileName = '导出书稿工作量-' . date('Y-m-d') . '.xls';
+            $itemList = array();
+            $bookLines = array(); // 书稿在excel中的行数
+            $workloadLines = $payedLines = array();
+            $_bookLine = 2;
+            foreach ($bookList as $_item) {
+                if (isset($_GET['export_all'])) { // 导出书稿
+                    $_item['date'] = substr($_item['delivery_date'], 5) . '~' . substr($_item['return_date'], 5);
+                    $_item['user_name'] = '';
+                    $itemList[] = $_item;
+                    $bookLines[] = $_bookLine++;
+                }
+                foreach ($workloadList[$_item['id']] as $_item2) {
+                    $_item2['category'          ] = $_item['category'          ];
+                    $_item2['serial'            ] = $_item['serial'            ];
+                    $_item2['book_name'         ] = $_item['book_name'         ];
+                    $_item2['proofreading_times'] = $_item['proofreading_times'];
+                    if ($_item2['add_time']) {
+                        $_item2['date'] = date('m-d', $_item2['add_time']);
+                    } else {
+                        $_item2['date'] = substr($_item['delivery_date'], 5);
+                    }
+                    $_item2['date'] .= '~';
+                    if ($_item2['fill_time']) {
+                        $_item2['date'] .= date('m-d', $_item2['fill_time']);
+                    }
+                    $_item2['user_name'] = $userList[$_item2['user_id']]['user_name'];
+                    $itemList[] = $_item2;
+                    $_item2['status'] == 1 ? ($payedLines[] = $_bookLine++) : ($workloadLines[] = $_bookLine++);
+                }
+            }
+
+            // 导出书稿
+            $style = array(
+                'width'   => array('A'=>12, 'B'=>10, 'C'=>10, 'D'=>15,'E'=>20,'G'=>4,'H'=>4, 'Y'=>40,), // 字符数算
+                'height'  => array(1 => 24),      // 按照 磅 算
+                'style'   => array (
+                    'A1:Y1'=> array (
+                                'font'    => array(
+                                                    'size'      => 9
+                                ),
+                                'fill'    => array(
+                                                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                                                    'color' => array('rgb' => 'f2dede'),
+                                ),
+                                'borders' => array(
+                                                    'bottom'     => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array(
+                                                            'rgb' => '999999'
+                                                        )
+                                                    ),
+                                                    'right' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array(
+                                                            'rgb' => '999999'
+                                                        ),
+                                                    )
+                                ),
+
+                                'alignment'  => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER, 'wrap' => TRUE)
+                    )
+                ),
+            );
+            if (isset($_GET['export_all'])) {
+                foreach ($bookLines as $_bookLine) {
+                    $style['style']['A' . $_bookLine . ':Y' .$_bookLine] = array(
+                        'font'    => array(
+                            'size'      => 9
+                        ),
+                        'fill'    => array(
+                                            'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color' => array('rgb' => 'ECECEC'),
+                        ),
+                        'borders' => array(
+                                            'bottom'     => array(
+                                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                'color' => array(
+                                                    'rgb' => '999999'
+                                                )
+                                            ),
+                                            'right' => array(
+                                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                'color' => array(
+                                                    'rgb' => '999999'
+                                                ),
+                                            )
+                        ),
+                        'alignment'  => array('wrap' => TRUE)
+                    );
+                }
+            }
+                foreach ($workloadLines as $_line) {
+                    $style['style']['A' . $_line . ':Y' .$_line] = array(
+                        'alignment'  => array('wrap' => TRUE),
+
+                        'borders' => array(
+                            'bottom'     => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array(
+                                    'rgb' => 'aaaaaa'
+                                )
+                            ),
+                            'right' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array(
+                                    'rgb' => 'aaaaaa'
+                                ),
+                            )
+                        ),
+                    );
+                }
+                foreach ($payedLines as $_line) {
+                    $style['style']['A' . $_line . ':Y' .$_line] = array(
+                        'fill'    => array(
+                                            'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color' => array('rgb' => 'dbedf7'),
+                        ),
+                        'alignment'  => array('wrap' => TRUE),
+
+                        'borders' => array(
+                            'bottom'     => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array(
+                                    'rgb' => 'aaaaaa'
+                                )
+                            ),
+                            'right' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                'color' => array(
+                                    'rgb' => 'aaaaaa'
+                                ),
+                            )
+                        ),
+                    );
+                }
+            $phpExcel->export($fileName, $headArr, $itemList, true, $style);
+            // 导出书稿
+           // $phpExcel->export($fileName, $headArr, $itemList, true);
+           // return;
         }
 
         $url_param = array();

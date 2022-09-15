@@ -1,7 +1,7 @@
 
             <div class="tab-pane" id="search">
 
-                <form method="get" action="/admin/check_list/by-book" id="search_form" class="form-horizontal" role="form">
+                <form method="get" action="/admin/check_list/by-book" id="search_form" class="form-horizontal" role="form" target="">
                     <input name="action" type="hidden" value="search" />
 
                     <div class="form-group">
@@ -75,8 +75,10 @@
 
 
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-4 col-xs-8">
-                            <input type="submit" class="btn btn-primary" value="<?php _e('搜索书稿'); ?>"/>
+                        <div class="col-sm-offset-2 col-sm-8 col-xs-8">
+                            <input type="submit" onclick="$(this).closest('form').attr('target', ''); return true;" class="btn btn-primary" value="<?php _e('搜索书稿'); ?>"/>
+                            <input type="submit" onclick="$(this).closest('form').attr('target', '_blank'); return true;" name="export_all" class="btn btn-default" value="<?php _e('导出书稿和工作量'); ?>"/>
+                            <input type="submit" onclick="$(this).closest('form').attr('target', '_blank'); return true;" name="export_workload" class="btn btn-info" value="<?php _e('导出工作量'); ?>"/>
                         </div>
                     </div>
                 </form>

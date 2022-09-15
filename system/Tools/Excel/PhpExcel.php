@@ -138,21 +138,107 @@ class Tools_Excel_PhpExcel
      * @param string $fileName 文件名
      * @param array  $headArr  Excel第几个工作簿，默认为0
      * @param array  $data     Excel第几个工作簿，默认为0
+     * @param bool   $bindHeadKey
+     * @param array  $cellStyleInfoList
+     *
+     *                   $sharedStyle->applyFromArray(
+     *                       array('fill' 	=> array(
+     *                                                   'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+     *                                                   'color'		=> array('argb' => 'FFCCFFCC',
+     *                                                                       //'rgb' => '808080'
+     *                                                   )
+     *                                               ),
+     *
+     *                           'font'    => array(
+     *                               'name'      => 'Arial',
+     *                               'bold'      => true,
+     *                               'italic'    => false,
+     *                               'underline' => PHPExcel_Style_Font::UNDERLINE_DOUBLE,
+     *                               'strike'    => false,
+     *                               'color'     => array(
+     *                                   'rgb' => '808080'
+     *                               )
+     *                           ),
+     *                           'borders' => array(
+     *                               'bottom'     => array(
+     *                                   'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
+     *                                   'color' => array(
+     *                                       'rgb' => '808080'
+     *                                   )
+     *                               ),
+     *                               'top'     => array(
+     *                                   'style' => PHPExcel_Style_Border::BORDER_DASHDOT,
+     *                                   'color' => array(
+     *                                       'rgb' => '808080'
+     *                                   )
+     *                               ),
+     *                               'right'		=> array('style' => PHPExcel_Style_Border::BORDER_MEDIUM)
+     *                           ),
+     *
+     *                           )
+     *                       );
+     *
+     *                   $objPHPExcel->getActiveSheet()->setSharedStyle($sharedStyle1, "A1:T100");
+     *
+     *                   #设置单元格宽高
+     *                   $objPHPExcel->getActiveSheet()->getDefaultRowDimension()->setRowHeight(20);#设置单元格行高
+     *                   $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(40);#设置单元格宽度
+     *                   $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
+     *                   $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+     *                   $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(15);
+     *
      *
      * @return
      */
-    public function export($fileName, $headArr, $data, $bindHeadKey=false)
+    public function export($fileName, $headArr, $data, $bindHeadKey=false, $cellStyleInfoList=array())
     {
         //创建PHPExcel对象
         $objPHPExcel = new PHPExcel();
         $objProps = $objPHPExcel->getProperties();
+
+
+        //设置活动单指数到第一个表,所以Excel打开这是第一个表
+        $objPHPExcel->setActiveSheetIndex(0);
+
+        foreach ($cellStyleInfoList as $_key => $_itemInfo) {
+            switch (strtolower($_key)) {
+                case 'width':
+                    foreach ($_itemInfo as $_columnOrRowName => $_unit) {
+                        if (preg_match("/^[a-z]+$/i",$_columnOrRowName) && preg_match("/^\d+$/", $_unit)) {
+                            $objPHPExcel->getActiveSheet()->getColumnDimension($_columnOrRowName)->setWidth($_unit);#设置单元格宽度
+                        }
+                        continue;
+                    }
+                    break;
+
+                case 'height':
+                    foreach ($_itemInfo as $_columnOrRowName => $_unit) {
+                        if (preg_match("/^\d+$/i",$_columnOrRowName) && preg_match("/^\d+$/", $_unit)) {
+                            $objPHPExcel->getActiveSheet()->getRowDimension($_columnOrRowName)->setRowHeight($_unit);
+                        }
+                        continue;
+                    }
+                    break;
+
+                case 'style':
+                    static $_styleIndex = 1;
+                    foreach($_itemInfo as $_columnOrRowName => $_unit) {
+                        ${'sharedStyle'.$_styleIndex} = new PHPExcel_Style();
+                        ${'sharedStyle'.$_styleIndex}->applyFromArray( $_unit);
+                        $objPHPExcel->getActiveSheet()->setSharedStyle(${'sharedStyle'.$_styleIndex}, $_columnOrRowName);
+
+                        $_styleIndex++;
+                        //var_dump($_styleIndex, $_unit);
+                    }
+                    break;
+            }
+        }
 
         //设置表头
         $key = ord("A");
         foreach($headArr as $v){
             $colum = chr($key);
             $objPHPExcel->setActiveSheetIndex(0) ->setCellValue($colum.'1', $v);
-            //$objPHPExcel->setActiveSheetIndex(0) ->setCellValue($colum.'1', $v);
             $key += 1;
         }
 
@@ -180,8 +266,6 @@ class Tools_Excel_PhpExcel
 
         //$fileName = iconv("utf-8", "gb2312", $fileName);
 
-        //设置活动单指数到第一个表,所以Excel打开这是第一个表
-        $objPHPExcel->setActiveSheetIndex(0);
 
         ob_end_clean();//清除缓冲区,避免乱码
         header('Content-Type: application/vnd.ms-excel');
