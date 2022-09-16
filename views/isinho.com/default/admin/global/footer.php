@@ -1,5 +1,5 @@
 <div class="icb-footer">
-    <p>Copyright &copy; <?php echo date('Y'); ?> - Powered By <a href="http://www.icodebang.com/?copyright" target="blank">iCodeBang.com <?php echo G_VERSION; ?></a></p>
+    <p>Copyright &copy; <a href="http://www.isinho.com" target="_blank">isinho.com</a> <?php echo date('Y'); ?> - 技术支持：<a href="http://www.isinho.com" target="_blank">沈阳新禾文化传媒有限公司</a></p>
 </div>
 
 <!-- DO NOT REMOVE -->

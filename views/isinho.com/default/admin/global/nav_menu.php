@@ -2,7 +2,7 @@
     <div class="mod">
         <div class="mod-logo">
             <img class="pull-left" src="<?php echo G_STATIC_URL; ?>/isinho.com/logo-blue-fat-small.png" alt="" />
-            <h1>isinho.com</h1>
+            <h1>绩效管理系统</h1>
         </div>
 
         <div class="mod-message">
