@@ -31,7 +31,7 @@ class administration extends SinhoBaseController
     }
 
     /**
-     * 新建编辑书稿
+     * 考勤管理
      */
     public function ask_leave_action()
     {

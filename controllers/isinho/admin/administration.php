@@ -50,11 +50,11 @@ class administration extends SinhoBaseController
     }
 
     /**
-     * 新建编辑书稿
+     * 考勤管理
      */
     public function ask_leave_action()
     {
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid ASC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid ASC', PHP_INT_MAX);
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
         $year = date('Y');
