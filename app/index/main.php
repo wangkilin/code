@@ -102,7 +102,7 @@ class main extends BaseController
 
         // 已登录用户
         if ($this->user_id) {
-            $this->crumb(Application::lang()->_t('发现'), '/index');
+            //$this->crumb(Application::lang()->_t(''), '/index');
             // 资料不完善
             if (! $this->user_info['email']) {
                 HTTP::redirect('/account/complete_profile/');
