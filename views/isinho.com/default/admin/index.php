@@ -5,7 +5,7 @@
 	<?php
     if (property_exists($this, 'currentWorkload')) {
         $hasDanger = $this->currentWorkload < $this->nowPassedDays * 50;
-    ?><div class="alert <?php echo $hasDanger ? 'bg-danger' : 'bg-info'; ?>">
+    ?><div class="alert <?php echo $hasDanger ? 'bg-danger js_homepage_workload_notice' : 'bg-info'; ?>">
     <?php echo $hasDanger ? '要加油啦！！！' : ''; ?>
     本月工作量：<?php echo $this->currentWorkload; ?>千字 /
     <?php echo $this->workingDaysAmount * 50 + round(50/8 * $this->overtimeHours,2);?>千字
@@ -544,6 +544,13 @@ $(function () {
                 forceParse: 0,
                 minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
             });
+
+    // 工作日天数剩余少于一半时，提示工作量不够。
+    <?php if (! isset($_SESSION['has_alert_workload'])) { $_SESSION['has_alert_workload'] = 1; ?>
+    if ($('.js_homepage_workload_notice').length && <?php echo (($this->workingDaysAmount-$this->nowPassedDays) .' / ' . $this->workingDaysAmount ); ?> < 0.5) {
+        ICB.modal.alert($('.js_homepage_workload_notice').text());
+    }
+    <?php }?>
 
 });
 
