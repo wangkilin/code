@@ -546,7 +546,7 @@ $(function () {
             });
 
     // 工作日天数剩余少于一半时，提示工作量不够。
-    <?php if (! isset($_SESSION['has_alert_workload'])) { $_SESSION['has_alert_workload'] = 1; ?>
+    <?php if (! isset(Application::session()->client_info['has_alert_workload'])) { Application::session()->client_info['has_alert_workload'] = 1; ?>
     if ($('.js_homepage_workload_notice').length && <?php echo (($this->workingDaysAmount-$this->nowPassedDays) .' / ' . $this->workingDaysAmount ); ?> < 0.5) {
         ICB.modal.alert($('.js_homepage_workload_notice').text());
     }
