@@ -467,6 +467,19 @@ class books extends SinhoBaseController
     }
 
     /**
+     * 管理书稿分类
+     */
+    public function category_action ()
+    {
+        $table = 'sinho_book_category';
+        $bookCategoryList = $this->model()->fetch_all($table);
+        View::assign('itemList', $bookCategoryList);
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
+        View::assign('formAction', 'admin/ajax/books/save_subject/'); // 设置表单提交的链接
+        View::output('admin/books/book_category_list');
+    }
+
+    /**
      * 新建/编辑 书稿
      */
     public function book_action()

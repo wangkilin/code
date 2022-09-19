@@ -69,6 +69,18 @@ class main extends SinhoBaseController
         if ($currentMonth != $nowMonth) { // 如果当前月份天数不等于计算月份天数， 那么认为计算月份已经结束，已过去工作天数为对应月份的天数
             $nowPassedDays = $workingDaysAmount;
         }
+
+        // 获取加班天数， 周末带稿天数
+        $overtimeHours = 0;
+        $leaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date("$currentYear-$currentMonth-01"), date("Y-m-t", strtotime("$currentYear-$currentMonth-01")));
+        foreach ($leaveList as $_itemInfo) {
+            if ($this->user_id != $_itemInfo['user_id'] || $_itemInfo['leave_type']!= self::LEAVE_TYPE_WEEKEND_WORKLOAD) {
+                continue;
+            }
+            $overtimeHours += $_itemInfo['leave_period'];
+        }
+
+        View::assign('overtimeHours', $overtimeHours);
         View::assign('workingDaysAmount', $workingDaysAmount); // 当月的工作日天数
         View::assign('nowPassedDays', $nowPassedDays); // 当月已经过完多少工作日
 

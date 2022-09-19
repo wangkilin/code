@@ -6,10 +6,12 @@
     if (property_exists($this, 'currentWorkload')) {
         $hasDanger = $this->currentWorkload < $this->nowPassedDays * 50;
     ?><div class="alert <?php echo $hasDanger ? 'bg-danger' : 'bg-info'; ?>">
-    <?php echo $hasDanger ? '！！！要加油啦！！！ ' : ''; ?>
+    <?php echo $hasDanger ? '要加油啦！！！' : ''; ?>
     本月工作量：<?php echo $this->currentWorkload; ?>千字 /
-    <?php echo $this->workingDaysAmount * 50;?>千字 ——
-    本月工作日天数剩余：<?php echo $this->workingDaysAmount-$this->nowPassedDays, '天/', $this->workingDaysAmount, '天';?></div><?php
+    <?php echo $this->workingDaysAmount * 50 + round(50/8 * $this->overtimeHours,2);?>千字
+    <?php if ($this->overtimeHours) {echo '(<span class="text-primary">包括基础工作量外的 '.$this->overtimeHours  .'小时工作量</span>)';} ?>
+    ——
+    本月工作日剩余：<?php echo $this->workingDaysAmount-$this->nowPassedDays, '/', $this->workingDaysAmount, '天';?></div><?php
     }
     foreach ($this->warningMsgList as $_msg) { ?>
 	<div class="alert alert-danger"><?php echo $_msg; ?> </div>

@@ -477,6 +477,50 @@ class books extends SinhoBaseController
         H::ajax_json_output(Application::RSM(null, 0, Application::lang()->_t('保存成功')));
 
     }
+
+    /**
+     *
+     */
+    public function save_subject_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        $table = 'sinho_book_category';
+        if ('save'==$_POST['action']) {
+            if ($_POST['item']) { // 更新组
+                foreach ($_POST['item'] as $_id => $_info) {
+                    $_info['name'] = trim($_info['name']);
+                    if (''===$_info['name']) {
+                        H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入图书分类名称')));
+                    }
+
+                    $this->model()->update($table, array('name'=>trim($_info['name']),'remark'=>trim($_info['remark'])), 'id='.$this->model()->quote($_id) );
+                }
+            }
+
+            if ($_POST['item_new']) { // 添加新组
+                foreach ($_POST['item_new']['name'] as $_index => $_name) {
+                    $_name = trim($_name);
+
+                    if ($_name) {
+                        $this->model()->insert($table, array('name'=>$_name, 'remark'=>trim($_POST['item_new']['remark'][$_index])));
+                    }
+                }
+            }
+
+        } else if ('delete'==$_POST['action']) { // 删除组
+
+            if ($_POST['item_ids']) {
+                $this->model()->delete($table, 'id IN (' . join(',', $_POST['item_ids']) .')');
+            }
+        }
+
+
+            $rsm = array(
+                'url' => get_js_url('/admin/books/category/r-' . rand(1, 999))
+            );
+
+            H::ajax_json_output(Application::RSM($rsm, 1, '已保存'));
+    }
 }
 
 /* EOF */

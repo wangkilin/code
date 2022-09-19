@@ -16,6 +16,34 @@ defined('iCodeBang_Com') OR die('Access denied!');
  */
 class SinhoBaseController extends BaseController
 {
+    CONST LEAVE_TYPE_PRIVATE                = 1  ; // '事假',
+    CONST LEAVE_TYPE_SICK                   = 2  ; // '病假',
+    CONST LEAVE_TYPE_ANNUAL                 = 3  ; // '年假',
+    CONST LEAVE_TYPE_WEDDING                = 4  ; // '婚假',
+    CONST LEAVE_TYPE_MATERNITY              = 5  ; // '产假',
+    CONST LEAVE_TYPE_PERIOD                 = 6  ; // '生理',
+    CONST LEAVE_TYPE_BODY_CHECK             = 8  ; // '产检',
+    CONST LEAVE_TYPE_FUNERAL                = 9  ; // '丧假',
+    CONST LEAVE_TYPE_NO_REASON              = 20 ; // '旷工',
+    CONST LEAVE_TYPE_OVERTIME               = 50 ; // '++ 加班',
+    CONST LEAVE_TYPE_WEEKEND_WORKLOAD       = 51 ; // 周末带稿
+    CONST LEAVE_TYPE_HOMEWORK               = 55 ; // '🏠居家办公'
+
+    protected $leaveTypeList = array (
+        self::LEAVE_TYPE_PRIVATE            => array('name' => '事假',          'icon' => 'icon-private-leave'),
+        self::LEAVE_TYPE_SICK               => array('name' => '病假',          'icon' => 'icon-sick-leave'),
+        self::LEAVE_TYPE_ANNUAL             => array('name' => '年假',          'icon' => 'icon-annual-leave'),
+        self::LEAVE_TYPE_WEDDING            => array('name' => '婚假',          'icon' => 'icon-wedding-leave'),
+        self::LEAVE_TYPE_MATERNITY          => array('name' => '产假',          'icon' => 'icon-maternity-leave'),
+        self::LEAVE_TYPE_PERIOD             => array('name' => '生理假',        'icon' => 'icon-period-leave'),
+        self::LEAVE_TYPE_BODY_CHECK         => array('name' => '产检',          'icon' => 'icon-body-check'),
+        self::LEAVE_TYPE_FUNERAL            => array('name' => '丧假',          'icon' => 'icon-funeral-leave'),
+        self::LEAVE_TYPE_NO_REASON          => array('name' => '旷工',          'icon' => 'icon-leave'),
+        self::LEAVE_TYPE_OVERTIME           => array('name' => '++ 加班',       'icon' => 'icon-add-to-list'),
+        self::LEAVE_TYPE_WEEKEND_WORKLOAD   => array('name' => '周末带稿',       'icon' => 'icon-attach'),
+        self::LEAVE_TYPE_HOMEWORK           => array('name' => '🏠居家办公',     'icon' => 'icon-home'),
+    );
+
     const SUBJECT_LIST = array(
         1 => array('name'=>"语文", 'keyword'=>array('语文','7语','8语','9语','七语','八语','九语','语',)),
         2 => array('name'=>"数学", 'keyword'=>array('数学','7数','8数','9数','七数','八数','九数','数',)),
