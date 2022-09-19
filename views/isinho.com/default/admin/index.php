@@ -341,6 +341,25 @@ $(function () {
     var echartOptions2 = Object.assign({}, echartOptions);
     echartOptions2.title.text =  '近期工作量';
     echartOptions2.legend.x = 'right';
+    echartOptions2.legend.left = 100;
+    echartOptions2.legend.selected = {
+
+        <?php
+                $tmpNameList = array();
+                $length = count($this->employeeWorkloadList);
+                $i = 1;
+                foreach ($this->employeeWorkloadList as $_userId=>$_stats) {
+                    if (! $_userId) {
+                        continue;
+                    }
+                    $tmpNameList = $this->userList[$_userId]['user_name'];
+                    echo "'".$this->userList[$_userId]['user_name']."' : ".($i==1 ? 'true':'false')."";
+                    echo $i==$length ? '' : ",\r\n";
+                    $i++;
+                }
+
+        ?>
+    };
     echartOptions2.series = [ // 显示的数据。
                 <?php
                 $length = count($this->employeeWorkloadList);
@@ -401,6 +420,7 @@ $(function () {
     //console && console.info(shares, minLeft, maxLeft);
     var echartOptions1 = Object.assign({}, echartOptions); // 克隆对象
     echartOptions1.legend.x = 'center';
+    echartOptions1.legend.left = 'center';
     echartOptions1.title.text =  '我的工作量和质量考核';
     echartOptions1.series[1] = Object.assign({}, echartOptions1.series[0]);
     //echartOptions1.xAxis[1] = Object.assign({}, echartOptions1.xAxis[0]);
