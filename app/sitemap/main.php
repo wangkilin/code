@@ -46,11 +46,12 @@ class main extends BaseController
 
         //fetch_page($table, $where = null, $order = null, $page = null, $limit = 10, $rows_cache = true, $column='*', $distinct=false)
         //
-        $limit = $_GET['pageId'] > 5 ? 48000 : 20000;
+        $limit = 45000;
         $articleList = $this->model()->fetch_page('article', null, null, intval($_GET['pageId']), $limit, false, 'id');
         foreach ($articleList as $_itemInfo) {
             $pageContent .= base_url(true) . '/article/' . $_itemInfo['id'] . ".html\r\n";
         }
+        $limit = 2200;
         $courseList = $this->model()->fetch_page('course_content_table', 'article_id > 0 ', null, intval($_GET['pageId']), $limit, false, '*');
         $courseIds = array_column($courseList, 'article_id');
         if ($courseIds) {
