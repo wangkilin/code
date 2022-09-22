@@ -121,6 +121,8 @@ class sinhoWorkloadModel extends Model
         $intVars   = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
             'is_import',
+            'category_id',
+            'user_id',
         );
         $allowVars = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
@@ -150,6 +152,9 @@ class sinhoWorkloadModel extends Model
             'total_chars_without_weight', // varchar(255) DEFAULT NULL COMMENT '字数（未乘系数）',
             'remarks', // mediumtext COMMENT '备注',); // 转换成浮点型的数据
             'admin_remarks', // varchar， 管理员备注信息
+
+            'category_id', // 书稿所属学科
+            'user_id',     // 书稿创建者id
         ); // 允许存在的数据
 
         $set = array();

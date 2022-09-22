@@ -133,7 +133,7 @@ class administration extends SinhoBaseController
         if ($_GET['keyword']) {
             $where[] = "title LIKE '" . $this->model('course')->quote($_GET['keyword']) . "%'";
         }
-        $userList = $this->model('sinhoWorkload')->getUserList($where, 'uid DESC', $this->per_page, $_GET['page']);
+        $userList = $this->model('sinhoWorkload')->getUserList($where, 'forbidden ASC,uid DESC', $this->per_page, $_GET['page']);
         $userIds  = array_column($userList, 'uid');
         $totalRows = $this->model('sinhoWorkload')->found_rows();
 
@@ -159,6 +159,10 @@ class administration extends SinhoBaseController
         if ($userIds) {
             $itemList = $this->model()->fetch_all('users_attribute', 'uid IN ('.join(',', $userIds).')');
         }
+
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+
         foreach ($itemList as $_itemInfo) {
             isset($userAttributes[$_itemInfo['uid']]) OR $userAttributes[$_itemInfo['uid']] = array();
             if ($_itemInfo['decode_method'] && function_exists($_itemInfo['decode_method'])) {
@@ -168,9 +172,15 @@ class administration extends SinhoBaseController
                     $_itemInfo['attr_value'] = $_itemInfo['decode_method'] ($_itemInfo['attr_value']);
                 }
             }
+            // 转换学科id对应学科名称
             if($_itemInfo['attr_key']=='sinho_more_subject') {
                 foreach ($_itemInfo['attr_value'] as & $_subject) {
-                    $_subject = SinhoBaseController::SUBJECT_LIST[$_subject]['name'];
+                    $_subject = $bookSubjectList[$_subject]['name'];
+                }
+            }
+            if($_itemInfo['attr_key']=='sinho_manage_subject') {
+                foreach ($_itemInfo['attr_value'] as & $_subject) {
+                    $_subject = $bookSubjectList[$_subject]['name'];
                 }
             }
             $userAttributes[$_itemInfo['uid']][$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
@@ -210,13 +220,20 @@ class administration extends SinhoBaseController
         $userAttributes = array();
         $moreSubject = array();
         foreach ($itemList as $_itemInfo) {
-            if ($_itemInfo['attr_key']  =="sinho_more_subject") {
-                $moreSubject = json_decode($_itemInfo['attr_value']);
-            } else {
-                $userAttributes[$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
+            if ($_itemInfo['decode_method']) {
+                $_itemInfo['attr_value'] = $_itemInfo['decode_method'] ($_itemInfo['attr_value']);
             }
+            if ($_itemInfo['attr_key']  =="sinho_more_subject") {
+                $moreSubject = $_itemInfo['attr_value'];
+            }
+                $userAttributes[$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
+
         }
 
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+
+        View::assign('bookSubjectList',  $bookSubjectList);
         View::assign('userAttributes', $userAttributes);
         View::assign('moreSubjects', $moreSubject);
         View::assign('userInfo', $userInfo);
@@ -260,7 +277,7 @@ class administration extends SinhoBaseController
 
         $booleanParamList = array (
             'sinho'     => array (
-                SinhoBaseController::PERMISSION_BOOKLIST        => Application::lang()->_t('允许管理稿件'),
+                SinhoBaseController::PERMISSION_BOOKLIST        => Application::lang()->_t('允许管理全部图书'),
                 SinhoBaseController::PERMISSION_FILL_WORKLOAD   => Application::lang()->_t('允许添加个人工作量'),
                 SinhoBaseController::PERMISSION_VERIFY_WORKLOAD => Application::lang()->_t('允许核算工作量'),
                 SinhoBaseController::PERMISSION_CHECK_WORKLOAD  => Application::lang()->_t('允许查阅工作量'),
@@ -268,10 +285,20 @@ class administration extends SinhoBaseController
             ),
         );
 
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+
+        View::assign('bookSubjectList',  $bookSubjectList);
         View::assign('booleanParamList', $booleanParamList);
         View::assign('group', $group);
         View::assign('group_pms', $group['permission']);
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/group_list', 'sinho_admin_menu')) );
+
+
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_js('js/icb_template_isinho.com.js');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
+
         View::output('admin/administration/group_edit');
     }
 

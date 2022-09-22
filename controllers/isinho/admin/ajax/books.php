@@ -47,14 +47,44 @@ class books extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完成相同的书稿')));
         }
 
+        // 解析每个学科中用于搜索书名匹配的关键字。 匹配到关键字， 将书稿设置成对应的学科
+        $keywordSubjectList = array();
+        $keywordSubjectList1 = array();
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+        foreach ($bookSubjectList as $_subjectCode => $_itemInfo) {
+            $_itemInfo['keyword'] = explode(',', $_itemInfo['remark']);
+            foreach ($_itemInfo['keyword'] as $_keyword) {
+                if (mb_strlen($_keyword)==1) {
+                    $keywordSubjectList1[$_keyword] = $_subjectCode;
+                } else {
+                    $keywordSubjectList[$_keyword] = $_subjectCode;
+                }
+            }
+        }
+        $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
+
         $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
         $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
         if ($_POST['id']) { // 更新
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, Application::lang()->_t('书稿保存成功')));
         } else { // 添加
-
+            $_POST['user_id']       = $this->user_id;
             $_POST['delivery_date'] = strtotime($_POST['delivery_date'])>0 ? date('Y-m-d', strtotime($_POST['delivery_date'])) : date('Y-m-d');
+
+
+            // 获取书稿所属学科id
+            if (! $_POST['category_id']) {
+                $_POST['category_id'] = null;
+                foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
+                    if (strpos($_POST['book_name'], $_keyword)!==false) {
+                        $_POST['category_id'] = $_subjectCode;
+                        break;
+                    }
+                }
+            }
+
             Application::model('sinhoWorkload')->addBook($_POST);
 
             H::ajax_json_output(Application::RSM(
@@ -262,6 +292,24 @@ class books extends SinhoBaseController
         $batchKey = md5($this->user_id . rand(1, 1000000000) . microtime());
         $totalImport = 0; // 导入的数据条数
 
+
+        // 解析每个学科中用于搜索书名匹配的关键字。 匹配到关键字， 将书稿设置成对应的学科
+        $keywordSubjectList = array();
+        $keywordSubjectList1 = array();
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+        foreach ($bookSubjectList as $_subjectCode => $_itemInfo) {
+            $_itemInfo['keyword'] = explode(',', $_itemInfo['remark']);
+            foreach ($_itemInfo['keyword'] as $_keyword) {
+                if (mb_strlen($_keyword)==1) {
+                    $keywordSubjectList1[$_keyword] = $_subjectCode;
+                } else {
+                    $keywordSubjectList[$_keyword] = $_subjectCode;
+                }
+            }
+        }
+        $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
+
         $uniqueList = array(); // 有书稿会按照页码分多次提交。 将这样的书稿数据合并起来
         foreach($data['sheetDatas'] as $_index=>$dataList) {
             $sheetName = $data['sheetNames'][$_index];
@@ -385,8 +433,17 @@ class books extends SinhoBaseController
                         $bookData[$_tmpKey] = '';
                     }
                 }
-                if ($bookInfo) { // 已存在书稿信息， 更新
+                // 获取书稿所属学科id
+                $bookData['category_id'] = 0;
+                foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
+                    if (strpos($bookData['book_name'], $_keyword)!==false) {
+                        $bookData['category_id'] = $_subjectCode;
+                        break;
+                    }
+                }
 
+                if ($bookInfo) { // 已存在书稿信息， 更新
+                    $bookInfo['user_id'] == 0 AND $bookData['user_id'] = $this->user_id;
                     if (1==$bookInfo['is_import']) { // 只有导入的数据可以更新
                         $bookData['modify_time']                    = time();
                         $this->model('sinhoWorkload')
@@ -396,7 +453,8 @@ class books extends SinhoBaseController
                                 );
                     }
                 } else { // 没找到书稿， 添加新书稿
-                    $bookData['add_time']                    = time();
+                    $bookData['add_time']                   = time();
+                    $bookData['user_id']                    = $this->user_id;
                     $this->model('sinhoWorkload')
                          ->insert(sinhoWorkloadModel::BOOK_TABLE, $bookData);
                 }

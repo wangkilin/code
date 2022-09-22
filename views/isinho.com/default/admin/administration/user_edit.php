@@ -53,6 +53,21 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <!-- 校次 -->
+                                <div class="col-sm-2">
+                                    <label class="icb-label"><?php _e('允许跨学科'); ?>:</label>
+                                </div>
+                                <div class="col-sm-4 icb-item-title text-left">
+                                    <select id="more_subject" name="attributes[sinho_more_subject][]" class="form-control js_select" multiple>
+                                        <?php foreach ($this->bookSubjectList as $_subjectKey => $_subjectInfo) {?>
+                                            <option value="<?php echo $_subjectKey;?>" <?php if ( in_array($_subjectKey, $this->moreSubjects) ) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
+                                        <?php }?>
+                                    </select>
+                                    <input type="hidden" name="remark[sinho_more_subject]" value="设置的责编的副科。在稿子分配时，根据主副科优先选择对应的责编"/>
+                                </div>
+                            </div>
                             <div class="row">
                                 <!-- 是否组长 -->
                                 <div class="col-sm-2">
@@ -76,17 +91,17 @@
                             </div>
 
                             <div class="row">
-                                <!-- 校次 -->
                                 <div class="col-sm-2">
-                                    <label class="icb-label"><?php _e('副科'); ?>:</label>
+                                    <label class="icb-label"><?php _e('允许管理学科'); ?>:</label>
                                 </div>
+
                                 <div class="col-sm-4 icb-item-title text-left">
-                                    <select id="more_subject" name="attributes[sinho_more_subject][]" class="form-control" multiple>
-                                        <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectInfo) {?>
-                                            <option value="<?php echo $_subjectKey;?>" <?php if ( in_array($_subjectKey, $this->moreSubjects) ) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
+                                    <select name="attributes[sinho_manage_subject][]" class="js_select form-control" multiple>
+                                        <?php foreach ($this->bookSubjectList as $_subjectKey => $_subjectInfo) {?>
+                                            <option value="<?php echo $_subjectKey;?>" <?php if ( is_array($this->userAttributes['sinho_manage_subject']) && in_array($_subjectKey, $this->userAttributes['sinho_manage_subject'])) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
                                         <?php }?>
                                     </select>
-                                    <input type="hidden" name="remark[sinho_more_subject]" value="设置的责编的副科。在稿子分配时，根据主副科优先选择对应的责编"/>
+                                    <span class=" help-block"><?php _e('管理对应学科下的图书，及分配对应学科下的工作量'); ?></span>
                                 </div>
                             </div>
 
@@ -106,13 +121,14 @@
 <script>
 $(function () {
 
-    $("#more_subject").multiselect({
-        			nonSelectedText : '<?php _e('---- 选择学科 ----');?>',
-                    maxHeight       : 200,
-                    buttonWidth     : '100%',
-                    allSelectedText : '<?php _e('已选择所有学科');?>',
-                    numberDisplayed : 7, // 选择框最多提示选择多少个人名
-        		});
+
+    $(".js_select").multiselect({
+        nonSelectedText : '<?php _e('---- 选择学科 ----');?>',
+        maxHeight       : 200,
+        buttonWidth     : '100%',
+        allSelectedText : '<?php _e('已选择所有学科');?>',
+        numberDisplayed : 7, // 选择框最多提示选择多少个人名
+    });
 
 });
 </script>

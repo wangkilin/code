@@ -47,9 +47,9 @@
 						<div class="form-group">
 							<span class="col-sm-4 col-xs-3 control-label"><?php _e('首选学科'); ?>:</span>
 							<div class="col-sm-2 col-xs-4">
-                                <select name="permission[sinho_subject]" class="form-control">
+                                <select name="permission[sinho_subject]" class="js_select form-control">
                                      <option value="0">-- 选择学科 --</option>
-                                     <?php foreach (SinhoBaseController::SUBJECT_LIST as $_subjectKey => $_subjectInfo) {?>
+                                     <?php foreach ($this->bookSubjectList as $_subjectKey => $_subjectInfo) {?>
                                         <option value="<?php echo $_subjectKey;?>" <?php if ( $_subjectKey == $this->group_pms['sinho_subject']) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
                                      <?php }?>
                                 </select>
@@ -86,6 +86,16 @@ $(function () {
         $('.' + $(this).data('toggle-class')).removeClass('hide').show();
     });
     $('.js-toggle-class:first').trigger('click');
+
+
+    $(".js_select").multiselect({
+        			nonSelectedText : '<?php _e('-- 选择学科 --');?>',
+                    maxHeight       : 200,
+                    buttonWidth     : '100%',
+                    allSelectedText : '<?php _e('已选择所有学科');?>',
+                    numberDisplayed : 7, // 选择框最多提示选择多少个人名
+        		});
+
 });
 </script>
 

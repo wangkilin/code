@@ -40,6 +40,7 @@
                                 <th><input type="checkbox" class="check-all"></th>
                                 <th class="text-left"><?php _e('日期'); ?></th>
                                 <th><?php _e('书稿<br/>类别'); ?></th>
+                                <th><?php _e('学科'); ?></th>
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
                                 <th><?php _e('校次'); ?></th>
@@ -95,22 +96,23 @@
                                       }
                             ?>">
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>
-                                <td class="text-left">
+                                <td class="text-left px10">
 
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo $itemInfo['delivery_date']; ?></a>
                                 </td>
-                                <td class="js-category"><?php echo $itemInfo['category']; ?></td>
+                                <td class="px10 js-category"><?php echo $itemInfo['category']; ?></td>
+                                <td class="px10"><?php echo $this->bookSubjectList[$itemInfo['category_id']]['name'];?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                 <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
-                                <td><?php echo $itemInfo['content_table_pages']; ?></td>
-                                <td><?php echo $itemInfo['text_pages']; ?></td>
-                                <td><?php echo $itemInfo['answer_pages']; ?></td>
-                                <td><?php echo $itemInfo['test_pages']; ?></td>
-                                <td><?php echo $itemInfo['test_answer_pages']; ?></td>
-                                <td><?php echo $itemInfo['exercise_pages']; ?></td>
-                                <td><?php echo $itemInfo['function_book']; ?></td>
-                                <td><?php echo $itemInfo['function_answer']; ?></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['text_table_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['content_table_pages']; ?></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['text_table_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['text_pages']; ?>         </a></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['answer_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['answer_pages']; ?>       </a></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['test_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['test_pages']; ?>         </a></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['test_answer_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['test_answer_pages']; ?>  </a></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['exercise_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['exercise_pages']; ?>     </a></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['function_book_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['function_book']; ?>      </a></td>
+                                <td><a class="md-tip"  title="<?php echo $itemInfo['function_answer_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['function_answer']; ?>    </a></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
                                 <td><?php echo $itemInfo['remarks']; ?> <span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>

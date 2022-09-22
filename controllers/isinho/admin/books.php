@@ -279,9 +279,13 @@ class books extends SinhoBaseController
         } else {
             $where = null;
         }
+        // 解析每个学科中用于搜索书名匹配的关键字。 匹配到关键字， 将书稿设置成对应的学科
         $keywordSubjectList = array();
         $keywordSubjectList1 = array();
-        foreach (SinhoBaseController::SUBJECT_LIST as $_subjectCode => $_itemInfo) {
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+        foreach ($bookSubjectList as $_subjectCode => $_itemInfo) {
+            $_itemInfo['keyword'] = explode(',', $_itemInfo['remark']);
             foreach ($_itemInfo['keyword'] as $_keyword) {
                 if (mb_strlen($_keyword)==1) {
                     $keywordSubjectList1[$_keyword] = $_subjectCode;
@@ -364,7 +368,10 @@ class books extends SinhoBaseController
             $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
         }
         foreach ($itemList as & $_itemInfo) {
-            $_itemInfo['subject_code'] = '';
+            $_itemInfo['subject_code'] = $_itemInfo['category_id'];
+            if ($_itemInfo['subject_code']) {
+                continue;
+            }
             foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
                 if (strpos($_itemInfo['book_name'], $_keyword)!==false) {
                     $_itemInfo['subject_code'] = $_subjectCode;
@@ -429,10 +436,10 @@ class books extends SinhoBaseController
             'per_page'   => $this->per_page
         ))->create_links());
         //$categoryList = $this->model('category')->getAllCategories('id');
-        View::assign('itemsList', $itemList);
-        View::assign('booksWorkload', $booksWorkload);
+        View::assign('itemsList',       $itemList);
+        View::assign('booksWorkload',   $booksWorkload);
         View::assign('booksWorkloadNotPayed', $booksWorkloadNotPayed);
-
+        View::assign('bookSubjectList', $bookSubjectList);
         View::assign('bookBelongYears', $bookBelongYears);
 
         View::assign('itemOptions',
@@ -508,6 +515,22 @@ class books extends SinhoBaseController
             }
             $this->crumb(Application::lang()->_t('添加书稿'), 'admin/books/');
         }
+        // 获取书稿所属学科列表
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+        View::assign('bookSubjectList', $bookSubjectList);
+
+        View::assign('itemOptions',
+                     buildSelectOptions(
+                         $bookSubjectList,
+                         'name',
+                         'id',
+                         isset($itemInfo)? $itemInfo['category_id'] : null,
+                         array(
+                             'remark'     => 'data-subject_keyword'
+                         )
+                    )
+                );
 
         // 获取书稿的配置信息
         $bookBelongYears = $this->model('sinhoWorkload')->fetch_one('sinho_key_value', 'value', 'varname="bookBelongYear"');

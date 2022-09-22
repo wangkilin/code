@@ -14,5 +14,10 @@
           echo ACTION=='import'?'#import" data-toggle="tab':'admin/books/import/'
         ?>"><?php _e('书稿导入'); ?></a>
     </li>
+    <li<?php echo ACTION=='category'?' class="active"':''?>>
+      <a href="<?php
+          echo ACTION=='category'?'#category" data-toggle="tab':'admin/books/category/'
+        ?>"><?php _e('图书分类'); ?></a>
+    </li>
     <li><a href="#search" data-toggle="tab"><?php _e('搜索书稿'); ?></a></li>
 </ul>

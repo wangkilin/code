@@ -342,6 +342,7 @@ $(function () {
     echartOptions2.title.text =  '近期工作量';
     echartOptions2.legend.x = 'right';
     echartOptions2.legend.left = 100;
+    echartOptions2.legend.height = 300;
     echartOptions2.legend.selected = {
 
         <?php

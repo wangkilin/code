@@ -44,14 +44,23 @@
 						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
                         <input type="hidden" name="id" id="item_id" value="<?php echo $this->itemInfo['id']; ?>" />
                         <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
-						<?php if ($this->itemOptions) { ?>
-							<select name="category_id" class="collapse js_select_transform" id="category_id">
-								<option value="0">- <?php _e('请选择分类'); ?> -</option>
+
+						<div class="icb-mod icb-book-infos">
+                            <div class="row">
+                                <!-- 年份 -->
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('隶属学科'); ?>:</label>
+                                </div>
+
+                                <div class="col-sm-5 mod-double icon-date-container">
+                                <?php if ($this->itemOptions) { ?>
+							<select name="category_id" class="form-control  " id="category_id">
+								<option value="0">- <?php _e('请选择学科'); ?> -</option>
 								<?php echo $this->itemOptions; ?>
 							</select>
 							<?php } ?>
-						<div class="icb-mod icb-book-infos">
-                            <div class="row">
+                                </div>
+
                                 <!-- 年份 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('发稿日期'); ?>:</label>
@@ -417,6 +426,7 @@ $(function () {
             return false;
 
         }  );
+
 });
 
 
