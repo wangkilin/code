@@ -456,6 +456,18 @@ class books extends SinhoBaseController
                          )
                     )
                 );
+
+        View::assign('bookSubjectListOptions',
+                buildSelectOptions(
+                    $bookSubjectList,
+                    'name',
+                    'id',
+                    isset($itemInfo)? $itemInfo['category_id'] : null,
+                    array(
+                        'remark'     => 'data-subject_keyword'
+                    )
+               )
+           );
         //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
         View::assign('totalRows', $totalRows);
         View::assign('amountPerPage', $this->per_page);

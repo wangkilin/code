@@ -494,7 +494,28 @@ class books extends SinhoBaseController
 
     }
 
+    /**
+     * 批量删除书稿数据. 删除书稿同时， 将对应的工作量信息也删除
+     */
+    public function set_book_category_action()
+    {
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        if (empty($_POST['ids'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
+        }
+        if (empty($_POST['category_id'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择学科进行操作')));
+        }
 
+        $set = array('category_id'=>$_POST['category_id']);
+        $this->model('sinhoWorkload')
+                ->update(sinhoWorkloadModel::BOOK_TABLE,
+                $set,
+                'id IN ( ' . join(',' , $_POST['ids']) . ' )'
+        );
+
+        H::ajax_json_output(Application::RSM(array('url'=>''), 1, Application::lang()->_t('学科已设置')));
+    }
 
     /**
      * 批量删除书稿数据. 删除书稿同时， 将对应的工作量信息也删除
@@ -537,7 +558,7 @@ class books extends SinhoBaseController
     }
 
     /**
-     *
+     * 保存学科信息
      */
     public function save_subject_action ()
     {

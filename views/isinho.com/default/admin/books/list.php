@@ -32,6 +32,7 @@
                 <div class="table-responsive">
                 <form id="batchs_form" action="admin/ajax/books/remove/" method="post">
                     <input type="hidden" id="action" name="action" value="" />
+                    <input type="hidden" id="batch_book_category" name="category_id" value=""/>
                 <?php if ($this->itemsList) { ?>
 
                     <table class="table table-hover book-list">
@@ -146,6 +147,7 @@
                     <div class="text-right">每页<?php echo $this->amountPerPage; ?> &nbsp; 共<?php echo $this->totalRows;?>本</div>
                     <?php echo $this->pagination; ?>
 
+                    <a class="btn btn-default" id="setBookCategory"><?php _e('设置学科'); ?></a>
                     <a class="btn btn-danger" id="deleteBatchBtn"><?php _e('删除书稿'); ?></a>
                 </div>
 
@@ -253,6 +255,7 @@ $(function(){
     	    ICB.domEvents.deleteShowConfirmModal(
             	   _t('确认删除？ 书稿工作量也会一起删除。 请通知责编！'),
             	   function(){
+                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/books/remove/');
         	           $('#action').val('remove');
         	           ICB.ajax.postForm($('#batchs_form'));
         	       }
@@ -260,7 +263,49 @@ $(function(){
         } else {
             ICB.modal.alert(_t('请勾选书稿'));
         }
-    	 return false;;
+    	 return false;
+    });
+    /**
+     * 点击提交批量设置书稿隶属学科
+     */
+    $('body').on('click', '#js-set-book-category', function (event) {
+        $('#batch_book_category').val($('#sinho_book_category').val());
+        $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/books/set_book_category/');
+        $('#action').val('setBookCategory');
+        ICB.ajax.postForm($('#batchs_form'));
+
+        $('#batch_book_category').val('');
+
+        return false;
+    });
+    /**
+     * 批量设置书稿所属的学科
+     */
+    $('body').on('click', '#setBookCategory', function (event) {
+        if($('.icheckbox_square-blue.checked').length){
+            var onshowCallback = function () {};
+            var html = Hogan.compile(ICB.template.sinhoSetBookCategory).render(
+                {
+                    category_option_list     : '<?php echo $this->bookSubjectListOptions;?>'
+                });
+            ICB.modal.dialog(html, onshowCallback);
+
+            return false;
+
+    	    ICB.modal.confirm(
+            	   _t('确认设置选定书稿的隶属学科么？'),
+            	   function(){
+                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/books/set_book_category/');
+        	           $('#action').val('setBookCategory');
+        	           ICB.ajax.postForm($('#batchs_form'));
+        	       },
+                   undefined,
+                  _t('设置学科'),
+            );
+        } else {
+            ICB.modal.alert(_t('请勾选书稿'));
+        }
+    	 return false;
     });
 
     /**

@@ -33,11 +33,11 @@ class main extends Controller
 
         if ($_GET['type'] == 'js')
         {
-            $file_content = "var aws_lang = new Array();\r\n\r\n";
+            $file_content = "var icb_lang_i18n = new Array();\r\n\r\n";
 
             foreach ($lang AS $key => $data)
             {
-                $file_content .= 'aws_lang[\'' . addcslashes($data['string'], "'") . '\'] = \'' . addcslashes($data['string'], "'") . "';\r\n";
+                $file_content .= 'icb_lang_i18n[\'' . addcslashes($data['string'], "'") . '\'] = \'' . addcslashes($data['string'], "'") . "';\r\n";
             }
         }
         else
