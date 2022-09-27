@@ -267,6 +267,7 @@ class PostSearchEngine
                 curl_setopt_array($ch, $options);
                 $result = curl_exec($ch);
                 echo $result;
+                $hasError = strpos($result, 'error');
         }
 
         if (! $hasError) {
