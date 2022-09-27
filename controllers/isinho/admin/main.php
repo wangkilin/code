@@ -375,7 +375,7 @@ class main extends SinhoBaseController
      */
     public function check_list_action ()
     {
-        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD | self::IS_SINHO_ADMIN | self::IS_SINHO_TEAM_LEADER);
         $_GET['page'] = intval($_GET['page']) >0 ? intval($_GET['page']) : 1;
 
         $userList = array();

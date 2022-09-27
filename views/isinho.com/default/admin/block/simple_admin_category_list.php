@@ -7,6 +7,7 @@
 							<th class="col-sm-1"><input type="checkbox" class="check-all"></th>
 							<th class="col-sm-1">ID</th>
 							<th class="col-sm-3"><?php _e('名称'); ?></th>
+							<th class="col-sm-1">文/理</th>
 							<th><?php _e('备注'); ?></th>
 						</tr>
 					</thead>
@@ -17,6 +18,10 @@
 							<td><input type="checkbox" value="<?php echo $val['id']; ?>" name="item_ids[]"></td>
 							<td><?php echo $val['id']; ?></td>
 							<td><input type="text" class="form-control" name="item[<?php echo $val['id']; ?>][name]" value="<?php echo $val['name']; ?>" /></td>
+							<td><select name="item[<?php echo $val['id']; ?>][type]" class="form-control">
+                                   <?php echo $val['type']; ?>
+                                </select>
+                            </td>
 							<td><input type="text" class="form-control" name="item[<?php echo $val['id']; ?>][remark]" value="<?php echo $val['remark']; ?>" /></td>
 						</tr>
 						<?php } ?>
@@ -33,6 +38,13 @@
 							<td></td>
 							<td></td>
 							<td><input type="text" class="form-control" name="item_new[name][]" placeholder="<?php _e('名称'); ?>" /></td>
+							<td>
+                                <?php if ($this->itemOptions) { ?>
+							    <select name="type" class="form-control  " id="type">
+								    <?php echo $this->itemOptions; ?>
+							    </select>
+                                <?php } ?>
+                            </td>
 							<td><input type="text" class="form-control" name="item_new[remark][]" placeholder="<?php _e('备注'); ?>" /></td>
 						</tr>
 				</table>

@@ -84,7 +84,7 @@ class core_pagination
 	 *
 	 * @access	public
 	 * @param	array	initialization parameters
-	 * @return	void
+	 * @return	object
 	 */
 	public function initialize($params = array())
 	{

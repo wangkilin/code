@@ -9,207 +9,29 @@
  * |   WebSite: http://www.icodebang.com       |
  * +-------------------------------------------+
  */
-/**
- *
- * select c.`serial`,
- *       p.*
- *   from icb_sinho_employee_workload p
- *   left join icb_sinho_company_workload c
- *   on  p.`serial` = c.`serial`
- *   and p.`book_name` = c.`book_name`
- *   #and p.`proofreading_times` = c.`proofreading_times`
- *   where belong_month = '202101'
- *   ; ## 匹配公司稿件和个人分配的稿件
- *
- *   select * from (
- *   select
- *   '公司' AS `数据源`,
- *   c.`id` ,
- *   c.`序号` ,
- *   '' AS `责编`,
- *   c.`发稿日期`,
- *   c.`回稿日期` AS `日期`,
- *   c.`系列` ,
- *   c.`书名` ,
- *   c.`校次` ,
- *   '' AS `类别` ,
- *   '' AS `遍次` ,
- *   c.`目录` ,
- *   c.`正文` ,
- *   c.`目+正千字/页` ,
- *   c.`答案` ,
- *   c.`千字/页` ,
- *   c.`试卷` ,
- *   c.`试卷千字/页` ,
- *   c.`试卷答案` ,
- *   c.`试卷答案千字/页` ,
- *   c.`课后作业` ,
- *   c.`课后作业千字/页` ,
- *   c.`功能册` ,
- *   c.`功能册千字/页` ,
- *   c.`功能册答案` ,
- *   c.`功能册答案千字/页` ,
- *   c.`难度系数` AS `系数`,
- *   c.`字数（合计）` ,
- *   c.`字数（未乘系数）` ,
- *   2 AS `单价`,
- *   '' AS `应发金额` ,
- *   '' AS `考核奖罚比例` ,
- *   '' AS `考核奖罚金额` ,
- *   '' AS `实发金额` ,
- *
- *   c.`备注`
- *   from company_workload c
- *   inner join personal_workload p
- *   on p.`系列` = c.`系列`
- *   and p.`书名` = c.`书名`
- *   and p.`校次` = c.`校次`
- *   group by c.id                     ## 获取分配出去的 公司稿件内容，作为基准，供校验; ## 获取分配出去的 公司稿件内容，作为基准，供校验
- *
- *   union
- *
- *   select
- *   '员工' AS `数据源`,
- *   p.`id` ,
- *   '' AS `序号`,
- *   p.`责编`,
- *   '' AS `发稿日期`,
- *   p.`结算日期` AS `日期`,
- *   p.`系列` ,
- *   p.`书名` ,
- *   p.`校次` ,
- *   p.`类别` ,
- *   p.`遍次` ,
- *   p.`目录` ,
- *   p.`正文` ,
- *   p.`千字/页` ,
- *   p.`答案` ,
- *   p.`答案千字/页` ,
- *   p.`试卷` ,
- *   p.`试卷千字/页` ,
- *   p.`试卷答案` ,
- *   p.`试卷答案千字/页` ,
- *   p.`课后作业` ,
- *   p.`课后作业千字/页` ,
- *   p.`功能册` ,
- *   p.`功能册千字/页` ,
- *   p.`功能册答案` ,
- *   p.`功能册答案千字/页` ,
- *   p.`系数` ,
- *   p.`核算总字数（千）` ,
- *   p.`核算总字数（千）`/ p.`系数`  AS`字数（未乘系数）` ,
- *   p.`单价` ,
- *   p.`应发金额` ,
- *   p.`考核奖罚比例` ,
- *   p.`考核奖罚金额` ,
- *   p.`实发金额` ,
- *   p.`备注（具体校稿页码）`
- *   from `personal_workload` p
- *   ) as union_all
- *   order by
- *   `系列` ,
- *   `书名` ,
- *   `校次` ,
- *   `类别` ,
- *   `遍次`
- *   ;
- *
- *
- *   insert INto personal_workload select * from personal_workload_copy where `责编` = '史旭' or  `责编` = '黄惠莹' ;
- *
- *   update personal_workload set `对应月份` = 202011, `状态` = 1, `核算日期` = UNIX_TIMESTAMP()
- *
- *
- *
- *
- *   show variables like 'table_open_cache'
- *
- *   show variables like 'max_connections'
- *
- *   insert into icb_sinho_employee_workload (
- *   `user_id` , # varchar(255) DEFAULT NULL COMMENT '编辑员工id， 对应到 user.id',
- *   `settlement_date` , #  varchar(255) DEFAULT NULL COMMENT '结算日期',
- *   `serial` , #  varchar(255) DEFAULT NULL,
- *   `book_name` , #  varchar(255) DEFAULT NULL COMMENT '书名',
- *   `proofreading_times` , #  varchar(255) DEFAULT NULL,
- *   `category` , #  varchar(255) DEFAULT NULL COMMENT '类别',
- *   `working_times` , #  varchar(255) DEFAULT NULL COMMENT '遍次',
- *   `content_table_pages` , #  varchar(255) DEFAULT NULL COMMENT '目录',
- *   `text_pages` , #  varchar(255) DEFAULT NULL COMMENT '正文',
- *   `text_table_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '目录+正文千字/页',
- *   `answer_pages` , #  varchar(255) DEFAULT NULL COMMENT '答案',
- *   `answer_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '答案千字/页',
- *   `test_pages` , #  varchar(255) DEFAULT NULL COMMENT '试卷',
- *   `test_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '试卷千字/页',
- *   `test_answer_pages` , #  varchar(255) DEFAULT NULL COMMENT '试卷答案',
- *   `test_answer_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '试卷答案千字/页',
- *   `exercise_pages` , #  varchar(255) DEFAULT NULL COMMENT '课后作业',
- *   `exercise_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '课后作业千字/页',
- *   `function_book` , #  varchar(255) DEFAULT NULL COMMENT '功能册',
- *   `function_book_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '功能册千字/页',
- *   `function_answer` , #  varchar(255) DEFAULT NULL COMMENT '功能册答案',
- *   `function_answer_chars_per_page` , #  varchar(255) DEFAULT NULL COMMENT '功能册答案千字/页',
- *   `weight` , #  varchar(255) DEFAULT NULL COMMENT '难度系数',
- *   `total_chars` , #  varchar(255) DEFAULT NULL COMMENT '核算总字数（千）',
- *   `price` , #  varchar(10) DEFAULT NULL COMMENT '单价',
- *   `payable_amount` , #  varchar(10) DEFAULT NULL COMMENT '应发金额',
- *   `assessment_rate` , #  varchar(11) DEFAULT NULL COMMENT '考核奖罚比例',
- *   `assessment_amount` , #  varchar(11) DEFAULT NULL COMMENT '考核奖罚金额',
- *   `actual_amount` , #  varchar(11) DEFAULT NULL COMMENT '实发金额',
- *   `remarks` , #  mediumtext COMMENT '备注',
- *   `belong_month` , #  int(6) DEFAULT NULL COMMENT '对应月份',
- *   `accounting_date` , #  int(11) DEFAULT NULL COMMENT '核算日期',
- *   `status`  #  tinyint(1) DEFAULT NULL COMMENT '状态： 1-已验证， 0-未验证',
- *   )
- *   select
- *   `责编` , #varchar(255) DEFAULT NULL,
- *   `结算日期`, # varchar(255) DEFAULT NULL,
- *   `系列` , #varchar(255) DEFAULT NULL,
- *   `书名` , #varchar(255) DEFAULT NULL,
- *   `校次` , #varchar(255) DEFAULT NULL,
- *   `类别` , #varchar(255) DEFAULT NULL,
- *   `遍次` , #varchar(255) DEFAULT NULL,
- *   `目录` , #varchar(255) DEFAULT NULL,
- *   `正文` , #varchar(255) DEFAULT NULL,
- *   `千字/页` , #varchar(255) DEFAULT NULL,
- *   `答案` , #varchar(255) DEFAULT NULL,
- *   `答案千字/页` , #varchar(255) DEFAULT NULL,
- *   `试卷` , #varchar(255) DEFAULT NULL,
- *   `试卷千字/页` , #varchar(255) DEFAULT NULL,
- *   `试卷答案` , #varchar(255) DEFAULT NULL,
- *   `试卷答案千字/页` , #varchar(255) DEFAULT NULL,
- *   `课后作业` , #varchar(255) DEFAULT NULL,
- *   `课后作业千字/页`, # varchar(255) DEFAULT NULL,
- *   `功能册` , #varchar(255) DEFAULT NULL,
- *   `功能册千字/页` , #varchar(255) DEFAULT NULL,
- *   `功能册答案` , #varchar(255) DEFAULT NULL,
- *   `功能册答案千字/页`, # varchar(255) DEFAULT NULL,
- *   `系数`, # varchar(255) DEFAULT NULL,
- *   `核算总字数（千）`, # varchar(255) DEFAULT NULL,
- *   `单价`, # varchar(255) DEFAULT NULL,
- *   `应发金额`, # varchar(255) DEFAULT NULL,
- *   `考核奖罚比例`, # varchar(255) DEFAULT NULL,
- *   `考核奖罚金额`, # varchar(255) DEFAULT NULL,
- *   `实发金额`, # varchar(255) DEFAULT NULL,
- *   `备注（具体校稿页码）`, # varchar(255) DEFAULT NULL,
- *   `对应月份`, # mediumint(6) NOT NULL DEFAULT '0',
- *   `核算日期`, # int(11) NOT NULL DEFAULT '0',
- *   `状态` # tinyint(1) NOT NULL DEFAULT '0'
- *   from icb_sinho_personal_workload ;
- *
- *   update icb_sinho_employee_workload e, icb_sinho_company_workload c
- *   set e.book_id = c.id
- *   where e.`serial` = c.`serial` AND e.`book_name`=c.`book_name` AND e.`proofreading_times` = c.`proofreading_times`;
- *
- *
- *   SELECT `icb_sinho_company_workload`.* FROM `icb_sinho_company_workload` WHERE (id = 85) LIMIT 1
- *
- */
 
 defined('iCodeBang_Com') OR die('Access denied!');
 
-class books extends SinhoBaseController
+class team_books extends SinhoBaseController
 {
+    protected $bookSubjectList = array();
+    public function setup()
+    {
+        $this->checkPermission(self::IS_SINHO_TEAM_LEADER);
+
+        $this->user_info['sinho_manage_subject'] = @json_decode($this->user_info['sinho_manage_subject'], true);
+
+        if (! $this->user_info['sinho_manage_subject']) {
+            H::redirect_msg(Application::lang()->_t('你没有管理任何学科的权限'), 'admin/');
+        }
+
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $this->bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+
+        View::assign('bookSubjectList', $this->bookSubjectList);
+
+    }
+
     /**
      * 书稿列表
      */
@@ -230,18 +52,14 @@ class books extends SinhoBaseController
             }
             // 跳转到get方式
             H::ajax_json_output(Application::RSM(array(
-                'url' => get_js_url('/admin/books/index/' . implode('__', $param))
+                'url' => get_js_url('/admin/'.CONTROLLER.'/index/' . implode('__', $param))
             ), 1, null));
         }
 
         $this->per_page = 30;
-        $this->crumb(Application::lang()->_t('书稿管理'), 'admin/books/');
-
-        if (!$this->user_info['permission'][self::PERMISSION_BOOKLIST]) {
-            H::redirect_msg(Application::lang()->_t('你没有访问权限'), 'admin/');
-        }
-
-        $where = array();
+        $this->crumb(Application::lang()->_t('书稿分管理'), 'admin/team_books/');
+        // 只能管理指定学科下的书稿， 以及自己创建的书稿
+        $where = array('(category_id IN ('. join(',', $this->user_info['sinho_manage_subject']).') OR user_id = '.$this->user_id.')');
         if ($_GET['start_date']) { // 发稿开始日期
             $where[] = 'delivery_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['start_date'])) ) . '"';
         }
@@ -388,6 +206,14 @@ class books extends SinhoBaseController
         foreach ($groupList as & $_item) {
             $_item['permission'] = unserialize($_item['permission']);
         }
+        $artsList = $scienceList = array();
+        foreach ($this->bookSubjectList as $_item) {
+            if ($_item['type'] == self::SUBJECT_CATEGORIZE_ARTS) {
+                $artsList[] = $_item['type'];
+            } else if ($_item['type'] == self::SUBJECT_CATEGORIZE_SCIENCE) {
+                $scienceList[] = $_item['type'];
+            }
+        }
         $userMoreSubjects = $this->model()->fetch_all('users_attribute', 'attr_key = "sinho_more_subject"');
         $userIds = array_column($userMoreSubjects, 'uid');
         $userMoreSubjects = array_column($userMoreSubjects, 'attr_value');
@@ -399,16 +225,14 @@ class books extends SinhoBaseController
                 $_item['more_subject'] = '[]';
             }
             $_item['main_subject'] = $groupList[$_item['group_id']]['permission']['sinho_subject'];
-            if (in_array($_item['main_subject'], SinhoBaseController::SUBJECT_CATEGORIZE[0]) ) {
+            if (in_array($_item['main_subject'], $artsList) ) {
                 $_item['subject_category'] = 0;
-            } else if (in_array($_item['main_subject'], SinhoBaseController::SUBJECT_CATEGORIZE[1]) ) {
+            } else if (in_array($_item['main_subject'], $scienceList) ) {
                 $_item['subject_category'] = 1;
             } else {
                 $_item['subject_category'] = '';
             }
         }
-
-        $this->crumb(Application::lang()->_t('书稿列表'), 'admin/books/index/');
 
         $url_param = array();
         foreach($_GET as $key => $val) {
@@ -419,9 +243,9 @@ class books extends SinhoBaseController
                 $url_param[] = $key . '-' . $val;
             }
         }
-        View::assign('backUrl', get_js_url('/admin/books/index/page-'.$_GET['page']));
+        View::assign('backUrl', get_js_url('/admin/'.CONTROLLER.'/index/page-'.$_GET['page']));
         View::assign('pagination', Application::pagination()->initialize(array(
-            'base_url'   => get_js_url('/admin/books/index/') . implode('__', $url_param),
+            'base_url'   => get_js_url('/admin/'.CONTROLLER.'/index/') . implode('__', $url_param),
             'total_rows' => $totalRows,
             'per_page'   => $this->per_page
         ))->create_links());
@@ -469,47 +293,10 @@ class books extends SinhoBaseController
         View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
 
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list(null,'sinho_admin_menu')  ) );
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/team_books','sinho_admin_menu')  ) );
 
 
         View::output('admin/books/list');
-    }
-
-    /**
-     * 管理书稿分类
-     */
-    public function category_action ()
-    {
-        $list = array();
-        foreach (self::SUBJECT_CATEGORIZE_LIST as $_k => $_v) {
-            $list[] = array('id' => $_k, 'name'=> $_v);
-        }
-
-        $table = 'sinho_book_category';
-        $bookCategoryList = $this->model()->fetch_all($table);
-        foreach ($bookCategoryList as & $_itemInfo) {
-            $_itemInfo['type'] = buildSelectOptions(
-                $list,
-                'name',
-                'id',
-                $_itemInfo['type'],
-                array()
-            );
-        }
-
-        View::assign('itemOptions',
-                     buildSelectOptions(
-                         $list,
-                         'name',
-                         'id',
-                         null,
-                         array()
-                    )
-                );
-        View::assign('itemList', $bookCategoryList);
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
-        View::assign('formAction', 'admin/ajax/books/save_subject/'); // 设置表单提交的链接
-        View::output('admin/books/book_category_list');
     }
 
     /**
@@ -521,12 +308,12 @@ class books extends SinhoBaseController
         $selected = null;
 
         if ($_GET['id']) { // 传递书稿id，编辑书稿
-            $this->crumb(Application::lang()->_t('书稿编辑'), 'admin/books/');
+            $this->crumb(Application::lang()->_t('书稿编辑'), 'admin/'.CONTROLLER.'/');
 
             $itemInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']);
 
-            if (!$itemInfo) {
-                H::redirect_msg(Application::lang()->_t('书稿不存在'), '/admin/books/');
+            if (!$itemInfo || (!in_array($itemInfo['category_id'], $this->user_info['sinho_manage_subject']) && $itemInfo['user_id']!=$this->user_id) ) {
+                H::redirect_msg(Application::lang()->_t('书稿不存在'), '/admin/'.CONTROLLER.'/');
             }
 
             View::assign('itemInfo', $itemInfo);
@@ -534,12 +321,16 @@ class books extends SinhoBaseController
             // 基于指定书稿复制成新书稿. 将书稿id清空， 只用其他数据
             if (isset($_GET['from_id'])) {
                 $itemInfo = $this->model('sinhoWorkload')->getBookById($_GET['from_id']);
+
+            if (!$itemInfo || (!in_array($itemInfo['category_id'], $this->user_info['sinho_manage_subject']) && $itemInfo['user_id']!=$this->user_id) ) {
+                H::redirect_msg(Application::lang()->_t('书稿不存在'), '/admin/'.CONTROLLER.'/');
+            }
                 if ($itemInfo) {
                     unset($itemInfo['id']);
                 }
                 View::assign('itemInfo', $itemInfo);
             }
-            $this->crumb(Application::lang()->_t('添加书稿'), 'admin/books/');
+            $this->crumb(Application::lang()->_t('添加书稿'), 'admin/'.CONTROLLER.'/');
         }
         // 获取书稿所属学科列表
         $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
@@ -563,7 +354,7 @@ class books extends SinhoBaseController
         $bookBelongYears = json_decode($bookBelongYears, true);
         View::assign('bookBelongYears', $bookBelongYears);
 
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/team_books','sinho_admin_menu') ) );
 
         View::import_js('js/functions.js');
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
@@ -580,7 +371,6 @@ class books extends SinhoBaseController
      */
     public function import_action ()
     {
-
         // 获取书稿的配置信息
         $bookBelongYears = $this->model('sinhoWorkload')->fetch_one('sinho_key_value', 'value', 'varname="bookBelongYear"');
         $bookBelongYears = json_decode($bookBelongYears, true);
@@ -593,100 +383,6 @@ class books extends SinhoBaseController
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
         View::import_js('js/fileupload.js');
         View::output('admin/books/import');
-    }
-
-    /**
-     * 组长分配书稿
-     */
-    public function leader_assign_book_action ()
-    {
-        if (!$this->user_info['permission'][self::PERMISSION_TEAM_LEADER]) {
-            H::redirect_msg(Application::lang()->_t('你没有访问权限'), 'admin/');
-        }
-
-        if ($this->is_post()) {
-            foreach ($_POST as $key => $val) {
-                if ($key == 'start_date' OR $key == 'end_date') {
-                    $val = base64_encode($val);
-                } else  {
-                    $val = rawurlencode($val);
-                }
-
-                $param[] = $key . '-' . $val;
-            }
-
-            H::ajax_json_output(Application::RSM(array(
-                'url' => get_js_url('/admin/books/leader_assign_book/' . implode('__', $param))
-            ), 1, null));
-        }
-
-        $this->per_page = 30;
-        $this->crumb(Application::lang()->_t('书稿分配'), 'admin/books/leader_assign_book');
-        //$this->user_info['uid'] = 10017;
-        $bookIdList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE, 'user_id = '.$this->user_info['uid'], 'id DESC', $_GET['page'], $this->per_page, true, 'book_id', true);
-        $totalRows   = $this->model('sinhoWorkload')->found_rows();
-        $itemList = array();
-        $booksWorkload = array();
-        $_tmpList = array();
-        $bookIds   = array_column($bookIdList,'book_id');
-        if ($bookIdList) {
-            $itemList  = $this->model('sinhoWorkload')->getBookList('id IN (' . join(',', $bookIds) . ')', 'delivery_date DESC, id DESC', $this->per_page);
-            $booksWorkload = $this->model('sinhoWorkload')->getWorkloadStatByBookIds ($bookIds, sinhoWorkloadModel::STATUS_VERIFIED);
-            $_tmpList = $this->model('sinhoWorkload')->fetch_all (sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN (' . join(',', $bookIds) . ') AND `status` <>' . sinhoWorkloadModel::STATUS_DELETE  );
-        }
-        $booksWorkloadAll = array();
-        foreach ($_tmpList as $_info) {
-            isset($booksWorkloadAll[$_info['book_id']]) OR $booksWorkloadAll[$_info['book_id']] = array();
-            $booksWorkloadAll[$_info['book_id']][$_info['user_id']] = $_info['user_id'];
-        }
-        $userList = $this->model('sinhoWorkload')->getUserList('group_id = ' . $this->user_info['group_id'], 'uid DESC', PHP_INT_MAX);
-
-        $url_param = array();
-        foreach($_GET as $key => $val) {
-            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
-                $url_param[] = $key . '-' . $val;
-            }
-        }
-
-        View::assign('pagination', Application::pagination()->initialize(array(
-            'base_url'   => get_js_url('/admin/books/leader_assign_book/') . implode('__', $url_param),
-            'total_rows' => $totalRows,
-            'per_page'   => $this->per_page
-        ))->create_links());
-        //$categoryList = $this->model('category')->getAllCategories('id');
-        View::assign('itemsList', $itemList);
-        View::assign('booksWorkload', $booksWorkload);
-        View::assign('booksWorkloadAll', $booksWorkloadAll);
-
-        View::assign('itemOptions',
-                     buildSelectOptions(
-                         $userList,
-                         'user_name',
-                         'uid',
-                         null,
-                         array(
-                             'group_id'             => 'data-group_id',
-                             'more_subject'         => 'data-more_subject',
-                             'main_subject'         => 'data-main_subject',
-                             'subject_category'     => 'data-subject_category'
-                         )
-                    )
-                );
-        //View::assign('itemOptions', $this->buildCategoryDropdownHtml('0', $selected, '--'));
-        View::assign('totalRows', $totalRows);
-        View::assign('amountPerPage', $this->per_page);
-
-        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
-        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
-        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
-        View::import_js('js/icb_template_isinho.com.js');
-        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
-        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
-
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/leader_assign_book','sinho_admin_menu')  ) );
-
-
-        View::output('admin/books/leader_assign');
     }
 }
 

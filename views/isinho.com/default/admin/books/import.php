@@ -10,7 +10,7 @@
         </div>
 
         <div class="mod-body tab-content">
-            <div class="tab-pane active">
+            <div class="tab-pane active" id="import">
                 <div class="table-responsive">
 
 						<div class="icb-mod">

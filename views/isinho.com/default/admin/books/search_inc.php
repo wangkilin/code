@@ -1,7 +1,7 @@
 
             <div class="tab-pane" id="search">
 
-                <form method="post" action="admin/books/index/" onsubmit="return false;" id="search_form" class="form-horizontal" role="form">
+                <form method="post" action="admin/<?php echo CONTROLLER;?>/index/" onsubmit="return false;" id="search_form" class="form-horizontal" role="form">
                     <input name="action" id="input_action_name" type="hidden" value="search" />
 
                     <div class="form-group">

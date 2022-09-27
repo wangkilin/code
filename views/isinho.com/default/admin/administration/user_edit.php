@@ -71,19 +71,18 @@
                             <div class="row">
                                 <!-- 是否组长 -->
                                 <div class="col-sm-2">
-                                    <label class="icb-label"><?php _e('是否组长'); ?>:</label>
-
-                                    <input type="hidden" name="remark[sinho_permission_team_leader]" value="是否为组长"/>
+                                    <label class="icb-label"><?php _e('是否组管理员'); ?>:</label>
+                                    <input type="hidden" name="remark[sinho_permission_team_leader]" value="是否为组管理员"/>
                                 </div>
                                 <div class="col-sm-4 icb-item-title">
 								  <div class="btn-group mod-btn col-sm-4 nopadding">
-									<label type="button" class="btn mod-btn-color">
+									<label type="button" class="btn mod-btn-color js-input-radio">
 										<input type="radio" value="1" name="attributes[sinho_permission_team_leader]"<?php if ($this->userAttributes['sinho_permission_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
 									</label>
 
                                     </div>
                                     <div class="btn-group mod-btn  col-sm-offset-4 col-sm-4 nopadding">
-									<label type="button" class="btn mod-btn-color">
+									<label type="button" class="btn mod-btn-color js-input-radio">
 										<input type="radio" value="0" name="attributes[sinho_permission_team_leader]"<?php if (! $this->userAttributes['sinho_permission_team_leader']) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
 									</label>
 								  </div>
@@ -96,7 +95,7 @@
                                 </div>
 
                                 <div class="col-sm-4 icb-item-title text-left">
-                                    <select name="attributes[sinho_manage_subject][]" class="js_select form-control" multiple>
+                                    <select id="sinho_manage_subject" name="attributes[sinho_manage_subject][]" class="form-control" multiple>
                                         <?php foreach ($this->bookSubjectList as $_subjectKey => $_subjectInfo) {?>
                                             <option value="<?php echo $_subjectKey;?>" <?php if ( is_array($this->userAttributes['sinho_manage_subject']) && in_array($_subjectKey, $this->userAttributes['sinho_manage_subject'])) { ?> selected<?php } ?>><?php echo $_subjectInfo['name'];?></option>
                                         <?php }?>
@@ -122,13 +121,29 @@
 $(function () {
 
 
-    $(".js_select").multiselect({
-        nonSelectedText : '<?php _e('---- 选择学科 ----');?>',
-        maxHeight       : 200,
-        buttonWidth     : '100%',
-        allSelectedText : '<?php _e('已选择所有学科');?>',
-        numberDisplayed : 7, // 选择框最多提示选择多少个人名
+    $("#sinho_manage_subject, .js_select").multiselect({
+                nonSelectedText : '<?php _e('---- 选择学科 ----');?>',
+                maxHeight       : 200,
+                buttonWidth     : '100%',
+                allSelectedText : '<?php _e('已选择所有学科');?>',
+                numberDisplayed : 7, // 选择框最多提示选择多少个人名
+            });
+
+
+    // 是否是组管理员 开关 决定可以管理哪些组
+    $('input[type=radio]').on('ifChecked', function(obj){
+        if ($(this).attr('name') == 'attributes[sinho_permission_team_leader]') {
+            if($(this).val()==1 ) {
+                $("#sinho_manage_subject").multiselect('enable');
+            } else {
+                $("#sinho_manage_subject").siblings('.open').removeClass('open');
+                $("#sinho_manage_subject").multiselect('clearSelection');
+                $("#sinho_manage_subject").multiselect('rebuild');
+                $("#sinho_manage_subject").multiselect('disable');
+            }
+        }
     });
+    $('input[type=radio]').filter(':checked[name="attributes[sinho_permission_team_leader]"]').trigger('ifChecked');
 
 });
 </script>

@@ -124,13 +124,19 @@ require_once INC_PATH . 'Model.php';
 if (isset($_SERVER['HTTP_HOST']) ) {
     if (file_exists(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php')) {// 包含网站独立的配置参数
         //include_once(CONF_PATH . $_SERVER['HTTP_HOST'] .'.inc.php');
-        Application::config()->load_config($_SERVER['HTTP_HOST'] .'.inc');
+        $_hostConfig = Application::config()->get($_SERVER['HTTP_HOST'] .'.inc');
+
     } else { // 访问形式如 w.icodebang.com网站， 如果没有对应的配置文件， 采用 www 的配置
         $_tmpHostInfo = explode('.', $_SERVER['HTTP_HOST']);
         $_tmpHostName = 'www.' . $_tmpHostInfo[count($_tmpHostInfo)-2] . '.' . $_tmpHostInfo[count($_tmpHostInfo)-1];
         if (file_exists(CONF_PATH . $_tmpHostName .'.inc.php')) {// 包含网站独立的配置参数
-            Application::config()->load_config($_tmpHostName.'.inc');
+            $_hostConfig = Application::config()->get($_tmpHostName.'.inc');
         }
+    }
+
+    if ($_hostConfig) {
+        settype($_hostConfig, 'array');
+        Application::config()->set('__HOST__', $_hostConfig, false);
     }
 }
 

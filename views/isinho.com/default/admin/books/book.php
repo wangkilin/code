@@ -10,36 +10,12 @@
         </div>
 
 
-        <!-- Theme switcher -->
-        <div class="theme-switch" style="width:200px;right:-210px;top:55%;">
-            <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
-            <div class="tab-pane" id="search">
-
-                <form method="get" action="" class="form-horizontal" role="form" onsubmit="return false;">
-                    <input name="action" type="hidden" value="search" />
-
-                    <div class="form-group">
-                        <label class="col-sm-6 col-xs-6 control-label text-right no-padding"><?php _e('修订比例 %'); ?>:</label>
-
-                        <div class="col-sm-6 col-xs-6">
-                            <input id="rateNumber" class="form-control" type="text" value="" name="number" placeholder="数值"/>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-4 col-xs-8">
-                            <input type="button" class="btn btn-primary js-change-rate" value="<?php _e('修订计算'); ?>"/>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
 
         <div class="mod-body tab-content">
             <div class="tab-pane active" id="book">
                 <div class="table-responsive">
 
-					<form action="admin/ajax/books/save/" method="post" id="item_form" onsubmit="return false;">
+					<form action="admin/ajax/<?php echo CONTROLLER;?>/save/" method="post" id="item_form" onsubmit="return false;">
 						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
 						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
                         <input type="hidden" name="id" id="item_id" value="<?php echo $this->itemInfo['id']; ?>" />
@@ -283,6 +259,31 @@
 					</form>
 
                 </div>
+
+                <!-- Theme switcher -->
+                <div class="theme-switch" style="width:200px;right:-210px;top:55%;">
+                    <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
+                    <div class="tab-pane">
+
+                        <form method="get" action="" class="form-horizontal" role="form" onsubmit="return false;">
+                            <input name="action" type="hidden" value="search" />
+
+                            <div class="form-group">
+                                <label class="col-sm-6 col-xs-6 control-label text-right no-padding"><?php _e('修订比例 %'); ?>:</label>
+
+                                <div class="col-sm-6 col-xs-6">
+                                    <input id="rateNumber" class="form-control" type="text" value="" name="number" placeholder="数值"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-4 col-xs-8">
+                                    <input type="button" class="btn btn-primary js-change-rate" value="<?php _e('修订计算'); ?>"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
             <?php View::output('admin/books/search_inc.php');?>
         </div>
@@ -338,7 +339,7 @@ function deleteItem(id)
     ICB.domEvents.deleteShowConfirmModal(
   	   _t('确认删除书稿？书稿工作量也会一起删除。 请通知责编！'),
   	   function(){
-      	   var url = G_BASE_URL + '/admin/ajax/books/remove/',
+      	   var url = G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/remove/',
       	       params = {'ids[]':id, 'action':'remove', '_post_type':'ajax'};
   		   ICB.ajax.requestJson(
   	      	   url,
@@ -352,7 +353,7 @@ function deleteItem(id)
 	      	      		ICB.modal.alert(response.err);
 	      	      	} else if (response.errno == 1) {
 	      	      	    ICB.modal.alert(_t('书稿成功删除'), {'hidden.bs.modal': function () {
-		      	      		    window.location.href = G_BASE_URL + '/admin/books/';
+		      	      		    window.location.href = G_BASE_URL + '/admin/<?php echo CONTROLLER;?>/';
 		      	      	    }
 	      	      	    });
 	      	      	} else {

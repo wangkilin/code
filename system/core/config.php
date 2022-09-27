@@ -87,15 +87,21 @@ class core_config
      * 设置配置信息， 将配置信息存储到文件中
      * @param string $config_id 配置信息全局名称， 会被转换成文件名
      * @param array  $data      配置信息关联数组
+     * @param bool   $writeIntoConfigFile  是否将配置信息写入配置文件
      *
      * @return int  >0表示文件写入成功， =0表示文件写入失败
      */
-	public function set($config_id, $data)
+	public function set($config_id, $data, $writeIntoConfigFile=true)
 	{
-		if (!$data || ! is_array($data))
-		{
+		if (!$data || ! is_array($data)) {
 			throw new Zend_Exception('config data type error');
 		}
+        $this->config[$config_id] = (object)$data;
+
+        // 如果不需要写入配置文件， 直接返回
+        if (! $writeIntoConfigFile) {
+            return;
+        }
 
 		$content = "<?php\n\n";
 

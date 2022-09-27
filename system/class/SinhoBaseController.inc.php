@@ -60,6 +60,13 @@ class SinhoBaseController extends BaseController
 
     );
 
+    const SUBJECT_CATEGORIZE_ARTS = 1;    // 文科
+    const SUBJECT_CATEGORIZE_SCIENCE = 2; // 理科
+    const SUBJECT_CATEGORIZE_LIST = array (
+        self::SUBJECT_CATEGORIZE_ARTS        => '文科',
+        self::SUBJECT_CATEGORIZE_SCIENCE     => '理科',
+    );
+
     const PERMISSION_VERIFY_WORKLOAD    = 'sinho_verify_workload';
     const PERMISSION_FILL_WORKLOAD      = 'sinho_fill_workload';
     const PERMISSION_BOOKLIST           = 'sinho_modify_manuscript_param';
@@ -112,19 +119,20 @@ class SinhoBaseController extends BaseController
 
     public function __construct($process_setup=true)
     {
-        parent::__construct(false);
+        parent::__construct(false); // 不在父级构造方法里执行 setup 方法。  后面会执行
 
         if ($this->user_info['uid']) {
             $userAttributes = $this->model()->fetch_all('users_attribute', 'uid = ' . $this->user_info['uid']);
             foreach($userAttributes as $_tmpInfo) {
                 if (strpos($_tmpInfo['attr_key'], 'sinho_permission') === 0) {
                     $this->user_info['permission'][$_tmpInfo['attr_key']] = $_tmpInfo['attr_value'];
+                } else {
+                    $this->user_info[$_tmpInfo['attr_key']] = $_tmpInfo['attr_value'];
                 }
             }
         }
 
-        if ($_GET['app'] != 'admin')
-        {
+        if ($_GET['app'] != 'admin' && $_GET['app'] != 'admin/ajax') {
             return false;
         }
 
@@ -202,7 +210,6 @@ class SinhoBaseController extends BaseController
             }
         }
 
-
         //View::assign('menu_list', $this->model('admin')->fetch_menu_list(null, 'sinho_admin_menu'));
 
         $this->setup();
@@ -214,6 +221,12 @@ class SinhoBaseController extends BaseController
      */
     public function filterAdminMenu ($adminMenuList)
     {
+        try {
+            $hostConfig = Application::config()->get('__HOST__');
+        } catch (Exception $e) {
+            $hostConfig = new stdClass();
+        }
+
         $newAdminMenu = array();
         foreach ($adminMenuList as $_key => $_menuInfo) {
             if ($_menuInfo['children']) {
@@ -223,7 +236,8 @@ class SinhoBaseController extends BaseController
                     $hasPermission = false;
 
                     foreach ($_menuInfo2['permission'] as $_tmpPermissionName) {
-                        if ($this->user_info['permission'][$_tmpPermissionName]) {
+                        if ($this->user_info['permission'][$_tmpPermissionName]
+                          && (!property_exists($hostConfig, 'sinho_permission') || !isset($hostConfig->sinho_permission[$_tmpPermissionName]) || $hostConfig->sinho_permission[$_tmpPermissionName])) {
                             $hasPermission = true;
                             break;
                         }
@@ -247,7 +261,8 @@ class SinhoBaseController extends BaseController
             empty($_menuInfo['permission']) OR settype($_menuInfo['permission'], 'array');
             $hasPermission = false;
             foreach ($_menuInfo['permission'] as $_tmpPermissionName) {
-                if ($this->user_info['permission'][$_tmpPermissionName]) {
+                if ($this->user_info['permission'][$_tmpPermissionName]
+                  && (!property_exists($hostConfig, 'sinho_permission') || !isset($hostConfig->sinho_permission[$_tmpPermissionName]) || $hostConfig->sinho_permission[$_tmpPermissionName])) {
                     $hasPermission = true;
                     break;
                 }

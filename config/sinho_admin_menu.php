@@ -10,7 +10,7 @@ $config[] = array(
 
 $config[] = array(
     'id'        => 'admin/books',
-    'title'     => _t('书稿管理'),
+    'title'     => _t('书稿总管理'),
     'cname'     => 'reader',
     'url'       => 'admin/books/index/',
     'children'  => array(),
@@ -18,10 +18,10 @@ $config[] = array(
 );
 
 $config[] = array(
-    'id'        => 'admin/leader_assign_book',
-    'title'     => _t('分配书稿'),
+    'id'        => 'admin/team_books',
+    'title'     => _t('书稿分管理'),
     'cname'     => 'reader',
-    'url'       => 'admin/books/leader_assign_book/',
+    'url'       => 'admin/team_books/',
     'children'  => array(),
     'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
 );

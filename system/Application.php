@@ -292,7 +292,7 @@ class Application
      * 调用 core/user.php
      *
      * @access    public
-     * @return    object
+     * @return    core_user
      */
     public static function user()
     {
@@ -305,7 +305,7 @@ class Application
      * 调用 core/upload.php
      *
      * @access    public
-     * @return    object
+     * @return    core_lang
      */
     public static function upload()
     {
@@ -318,7 +318,7 @@ class Application
      * 调用 core/image.php
      *
      * @access    public
-     * @return    object
+     * @return    core_lang
      */
     public static function image()
     {
@@ -331,7 +331,7 @@ class Application
      * 调用 core/lang.php
      *
      * @access    public
-     * @return    object
+     * @return    core_lang
      */
     public static function lang()
     {
@@ -344,7 +344,7 @@ class Application
      * 调用 core/captcha.php
      *
      * @access    public
-     * @return    object
+     * @return    core_captcha
      */
     public static function captcha()
     {
@@ -357,7 +357,7 @@ class Application
      * 调用 core/cache.php
      *
      * @access    public
-     * @return    object
+     * @return    core_cache
      */
     public static function cache()
     {
@@ -370,7 +370,7 @@ class Application
      * 调用 core/form.php
      *
      * @access    public
-     * @return    object
+     * @return    core_form
      */
     public static function form()
     {
@@ -383,7 +383,7 @@ class Application
      * 调用 core/mail.php
      *
      * @access    public
-     * @return    object
+     * @return    core_mail
      */
     public static function mail()
     {
@@ -396,7 +396,7 @@ class Application
      * 调用 core/plugins.php
      *
      * @access    public
-     * @return    object
+     * @return    core_plugins
      */
     public static function plugins()
     {
@@ -409,7 +409,7 @@ class Application
      * 调用 core/pagination.php
      *
      * @access    public
-     * @return    object
+     * @return    core_pagination
      */
     public static function pagination()
     {
@@ -454,7 +454,7 @@ class Application
      * 调用 core/crypt.php
      *
      * @access    public
-     * @return    object
+     * @return    core_crypt
      */
     public static function crypt()
     {

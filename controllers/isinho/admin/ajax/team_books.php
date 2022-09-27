@@ -8,19 +8,27 @@
 |   Support: icodebang@126.com              |
 |   WebSite: http://www.icodebang.com       |
 +-------------------------------------------+
-update icb_sinho_company_workload set delivery_date = '2020.10.28' where delivery_date = '';
-
-update icb_sinho_company_workload set delivery_date =  FROM_UNIXTIME(unix_timestamp(delivery_date), '%Y-%m-%d');
 */
 
 defined('iCodeBang_Com') OR die('Access denied!');
 define('IN_AJAX', TRUE);
 
-class books extends SinhoBaseController
+class team_books extends SinhoBaseController
 {
     public function setup()
     {
+        $this->checkPermission(self::IS_SINHO_TEAM_LEADER);
         HTTP::setHeaderNoCache();
+
+        $this->user_info['sinho_manage_subject'] = @json_decode($this->user_info['sinho_manage_subject'], true);
+
+        if (! $this->user_info['sinho_manage_subject']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有管理任何学科的权限')));
+        }
+
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $this->bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+
     }
 
     /**
@@ -28,7 +36,6 @@ class books extends SinhoBaseController
      */
     public function save_action()
     {
-        $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
 
         if (!$_POST['serial'] && !$_POST['book_name'] && !$_POST['proofreading_times']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
@@ -64,9 +71,14 @@ class books extends SinhoBaseController
         }
         $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
 
-        $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
+        $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/team_books/') : base64_decode($_POST['backUrl']) ;
         $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
         if ($_POST['id']) { // 更新
+            $itemInfo = $this->model('sinhoWorkload')->getBookById($_POST['id']);
+            if (!$itemInfo || (!in_array($itemInfo['category_id'], $this->user_info['sinho_manage_subject']) && $itemInfo['user_id']!=$this->user_id) ) {
+
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
+            }
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, Application::lang()->_t('书稿保存成功')));
         } else { // 添加
@@ -88,7 +100,7 @@ class books extends SinhoBaseController
             Application::model('sinhoWorkload')->addBook($_POST);
 
             H::ajax_json_output(Application::RSM(
-                array('url' => get_js_url('/admin/books/')),
+                array('url' => get_js_url('/admin/team_books/')),
                 1,
                 Application::lang()->_t('书稿添加成功')));
         }
@@ -100,12 +112,12 @@ class books extends SinhoBaseController
      */
     public function assign_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN | self::IS_SINHO_TEAM_LEADER);
-
         if (! $_GET['id'] || $_POST['action']!='assign') {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
-        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) ) ) {
+
+        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) )
+        || (!in_array($bookInfo['category_id'], $this->user_info['sinho_manage_subject']) && $bookInfo['user_id']!=$this->user_id)) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
         }
 
@@ -159,13 +171,12 @@ class books extends SinhoBaseController
      */
     public function assigned_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN | self::IS_SINHO_TEAM_LEADER);
-
         if (! $_GET['id']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
-        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) ) ) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
+        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) )
+           || (!in_array($bookInfo['category_id'], $this->user_info['sinho_manage_subject']) && $bookInfo['user_id']!=$this->user_id)) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在'.$this->user_info['sinho_manage_subject'])));
         }
 
         $data = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($_GET['id']) .' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE );
@@ -178,13 +189,11 @@ class books extends SinhoBaseController
      */
     public function set_date_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
-
-
         if (! $_GET['id']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
-        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) ) ) {
+        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_GET['id']) )
+        || (!in_array($bookInfo['category_id'], $this->user_info['sinho_manage_subject']) && $bookInfo['user_id']!=$this->user_id)) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
         }
 
@@ -466,31 +475,9 @@ class books extends SinhoBaseController
 
 
         H::ajax_json_output(Application::RSM(
-            array('url' => get_js_url('/admin/books/')),
+            array('url' => get_js_url('/admin/team_books/')),
             1,
             Application::lang()->_t('书稿导入成功。 共导入书稿：' . $totalImport)));
-
-    }
-
-    /**
-     * 将导入的书稿中指定的工作表， 设置支付状态
-     */
-    public function set_payed_action ()
-    {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
-        if (empty($_POST['book_id'])) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作错误')));
-        }
-        $this->model('sinhoWorkload')
-             ->update(sinhoWorkloadModel::BOOK_TABLE,
-                    array('is_payed'=> $_POST['is_payed']),
-                    array('id = ? ' => $_POST['book_id'])
-            );
-
-        H::ajax_json_output(Application::RSM(
-            array('url' => get_js_url('/admin/books/')),
-            1,
-            Application::lang()->_t('支付状态设置成功')));
 
     }
 
@@ -499,12 +486,18 @@ class books extends SinhoBaseController
      */
     public function set_book_category_action()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
         if (empty($_POST['ids'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
         }
         if (empty($_POST['category_id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择学科进行操作')));
+        }
+
+        $bookList = $this->model('sinhoWorkload')->getBookList ('id IN ( ' . join(',' , $_POST['ids']) . ' )', null, count($_POST['ids']));
+        foreach ($bookList as $bookInfo) {
+            if (!in_array($bookInfo['category_id'], $this->user_info['sinho_manage_subject']) && $bookInfo['user_id']!=$this->user_id) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
+            }
         }
 
         $set = array('category_id'=>$_POST['category_id']);
@@ -522,14 +515,21 @@ class books extends SinhoBaseController
      */
     public function remove_action()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
         if (empty($_POST['ids'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
         }
+
+        $bookList = $this->model('sinhoWorkload')->getBookList ('id IN ( ' . join(',' , $_POST['ids']) . ' )', null, count($_POST['ids']));
+        foreach ($bookList as $bookInfo) {
+            if (!in_array($bookInfo['category_id'], $this->user_info['sinho_manage_subject']) && $bookInfo['user_id']!=$this->user_id) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
+            }
+        }
+
         Application::model()->delete(sinhoWorkloadModel::BOOK_TABLE, 'id IN( ' . join(', ', $_POST['ids']) . ')' );
         Application::model()->delete(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id IN( ' . join(', ', $_POST['ids']) . ')' );
 
-        H::ajax_json_output(Application::RSM(null, 1, null));
+        H::ajax_json_output(Application::RSM(array('url'=>''), 1, Application::lang()->_t('书稿已删除')));
     }
 
 
@@ -538,12 +538,11 @@ class books extends SinhoBaseController
      */
     public function set_grade_action ()
     {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
-
         if (! $_POST['book_id'] || ! isset($_POST['grade_level'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
-        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_POST['book_id']) ) ) {
+        if (! ($bookInfo = $this->model('sinhoWorkload')->getBookById($_POST['book_id']) )
+        || (!in_array($bookInfo['category_id'], $this->user_info['sinho_manage_subject']) && $bookInfo['user_id']!=$this->user_id)) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('书稿不存在')));
         }
 
@@ -555,63 +554,6 @@ class books extends SinhoBaseController
         );
         H::ajax_json_output(Application::RSM(null, 0, Application::lang()->_t('保存成功')));
 
-    }
-
-    /**
-     * 保存学科信息
-     */
-    public function save_subject_action ()
-    {
-        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
-        $table = 'sinho_book_category';
-        if ('save'==$_POST['action']) {
-            if ($_POST['item']) { // 更新组
-                foreach ($_POST['item'] as $_id => $_info) {
-                    $_info['name'] = trim($_info['name']);
-                    if (''===$_info['name']) {
-                        H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入图书分类名称')));
-                    }
-
-                    $this->model()->update($table,
-                                           array(
-                                            'name'=>trim($_info['name']),
-                                            'type'=>$this->model()->quote($_info['type']),
-                                            'remark'=>trim($_info['remark'])
-                                           ),
-                                           'id='.$this->model()->quote($_id)
-                                        );
-                }
-            }
-
-            if ($_POST['item_new']) { // 添加新组
-                foreach ($_POST['item_new']['name'] as $_index => $_name) {
-                    $_name = trim($_name);
-
-                    if ($_name) {
-                        $this->model()->insert($table,
-                                               array(
-                                                'name'=>$_name,
-                                                'type'=>$this->model()->quote($_info['type']),
-                                                'remark'=>trim($_POST['item_new']['remark'][$_index])
-                                               )
-                                            );
-                    }
-                }
-            }
-
-        } else if ('delete'==$_POST['action']) { // 删除组
-
-            if ($_POST['item_ids']) {
-                $this->model()->delete($table, 'id IN (' . join(',', $_POST['item_ids']) .')');
-            }
-        }
-
-
-            $rsm = array(
-                'url' => get_js_url('/admin/books/category/r-' . rand(1, 999))
-            );
-
-            H::ajax_json_output(Application::RSM($rsm, 1, '已保存'));
     }
 }
 

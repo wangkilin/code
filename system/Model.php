@@ -16,6 +16,12 @@ class Model
 
     protected $table = null;
 
+    /**
+     * 数据缓存的key值
+     * @var string
+     */
+    protected $_cacheKey = null;
+
     public function __construct($options=array())
     {
         $this->prefix = Application::config()->get('database')->prefix;
@@ -851,9 +857,9 @@ class Model
 
         if ($rows_cache)
         {
-            $cache_key = 'db_rows_cache_' . md5($table . '_' . $where . '_' .$column . '_' . intval($distinct));
+            $this->_cacheKey = 'db_rows_cache_' . md5($table . '_' . $where . '_' .$column . '_' . intval($distinct));
 
-            $db_found_rows = Application::cache()->get($cache_key);
+            $db_found_rows = Application::cache()->get($_cacheKey);
         }
 
         if (!$db_found_rows)
@@ -867,13 +873,21 @@ class Model
 
         if ($rows_cache AND $db_found_rows)
         {
-            Application::cache()->set($cache_key, $db_found_rows, get_setting('cache_level_high'));
+            Application::cache()->set($_cacheKey, $db_found_rows, get_setting('cache_level_high'));
         }
 
         // Found rows
         $this->_found_rows = $db_found_rows;
 
         return $result;
+    }
+
+    /**
+     * 将数据缓存的key值返回
+     */
+    public function getCacheKey ()
+    {
+        return $this->_cacheKey;
     }
 
     /**

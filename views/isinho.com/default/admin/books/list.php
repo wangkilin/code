@@ -116,11 +116,11 @@
                                 <td><a class="md-tip"  title="<?php echo $itemInfo['function_answer_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['function_answer']; ?>    </a></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
-                                <td><?php echo $itemInfo['remarks']; ?> <span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
+                                <td class="px10"><?php echo $itemInfo['remarks']; ?> <span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
                                 <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">
-                                  <span href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" title="<?php _e('设置书稿所属阶段'); ?>" data-toggle="tooltip" class="md-tip icon icon-score jsToggleSubIcon">
+                                  <span href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" title="<?php _e('设置书稿所属阶段'); ?>" data-toggle="tooltip" class="md-tip icon icon-score jsToggleSubIcon">
                                     <a data-grade-level="1" title="<?php _e('设置书稿所属阶段：小学'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">小学</a>
                                     <a data-grade-level="2" title="<?php _e('设置书稿所属阶段：初中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">初中</a>
                                     <a data-grade-level="3" title="<?php _e('设置书稿所属阶段：高中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">高中</a>
@@ -128,12 +128,14 @@
                                     <a data-grade-level="5" title="<?php _e('设置书稿所属阶段：综合'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">综合</a>
                                     <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
-                                  <!-- <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
-                                  <a href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
+                                  <!-- <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
+                                  <a href="admin/<?php echo CONTROLLER; ?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
+                                  <?php if (CONTROLLER == 'books') {// 支付状态 只能在书稿总管理页面出现 ?>
                                   <a href="" data-book-id="<?php echo $itemInfo['id']; ?>"  class="icon icon-coin-yen md-tip jsSinhoSetBookPayedStatus <?php echo $itemInfo['is_payed']==1 ? 'payed " title="已支付" style="' :'" title="未支付" style="color:#f00;';?>" data-toggle="tooltip"></a>
-                                  <a href="admin/books/book/id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
-                                  <a href="admin/books/book/#id-<?php echo $itemInfo['id']; ?>" data-subject-code="<?php echo $itemInfo['subject_code'];?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
+                                  <?php } ?>
+                                  <a href="admin/<?php echo CONTROLLER; ?>/book/id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
+                                  <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-subject-code="<?php echo $itemInfo['subject_code'];?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -221,7 +223,7 @@ $(function(){
         var gradeLevel = $(this).data('grade-level');
 
         ICB.modal.loading(true);
-        var url = G_BASE_URL + '/admin/ajax/books/set_grade/';
+        var url = G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/set_grade/';
         var params = {book_id : bookId, grade_level : gradeLevel};
 
         ICB.ajax.requestJson(
@@ -255,7 +257,7 @@ $(function(){
     	    ICB.domEvents.deleteShowConfirmModal(
             	   _t('确认删除？ 书稿工作量也会一起删除。 请通知责编！'),
             	   function(){
-                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/books/remove/');
+                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/remove/');
         	           $('#action').val('remove');
         	           ICB.ajax.postForm($('#batchs_form'));
         	       }
@@ -270,7 +272,7 @@ $(function(){
      */
     $('body').on('click', '#js-set-book-category', function (event) {
         $('#batch_book_category').val($('#sinho_book_category').val());
-        $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/books/set_book_category/');
+        $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/set_book_category/');
         $('#action').val('setBookCategory');
         ICB.ajax.postForm($('#batchs_form'));
 
@@ -295,7 +297,7 @@ $(function(){
     	    ICB.modal.confirm(
             	   _t('确认设置选定书稿的隶属学科么？'),
             	   function(){
-                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/books/set_book_category/');
+                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/set_book_category/');
         	           $('#action').val('setBookCategory');
         	           ICB.ajax.postForm($('#batchs_form'));
         	       },
@@ -314,7 +316,7 @@ $(function(){
     $('.jsAssign').click(function() {
         var bookId = $(this).data('book-id');
         var subjectCode = '' + $(this).data('subject-code');
-        var url = "admin/ajax/books/assigned/id"+"-"+bookId;
+        var url = "admin/ajax/<?php echo CONTROLLER;?>/assigned/id"+"-"+bookId;
         var onshowCallback = function () {
             // 组装下拉列表需要的数据， 获取默认选择.
             $.each($('.modal-dialog .js_select_transform'), function () {
@@ -379,6 +381,7 @@ $(function(){
         };
         var html = Hogan.compile(ICB.template.sinhoBindBookWithEditor).render(
             {
+                controller  : "<?php echo CONTROLLER;?>",
                 book_id     : $(this).data('book-id'),
                 serial      : $(this).closest('tr').find('.js-serial').text(),
                 book_name   : $(this).closest('tr').find('.js-bookname').text(),
@@ -394,7 +397,7 @@ $(function(){
      */
     $('.jsSinhoSetBookDate').click(function() {
         var bookId = $(this).data('book-id');
-        var url = "admin/ajax/books/set_date/id"+"-"+bookId;
+        var url = "admin/ajax/<?php echo CONTROLLER;?>/set_date/id"+"-"+bookId;
         var deliveryDate = $(this).data('delivery-date');
         var returnDate   = $(this).data('return-date');
         var onshowCallback = function () {
@@ -435,7 +438,7 @@ $(function(){
      */
     $('.jsSinhoSetBookPayedStatus').click(function() {
         var bookId = $(this).data('book-id');
-        var url    = "admin/ajax/books/set_payed/id"+"-"+bookId;
+        var url    = "admin/ajax/<?php echo CONTROLLER;?>/set_payed/id"+"-"+bookId;
         $this      = $(this);
         ICB.modal.confirm(
             '确认设置书稿支付状态么？',
