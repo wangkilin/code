@@ -13,7 +13,13 @@
 		<div class="container">
 			<!-- logo -->
 			<div class="icb-logo hidden-xs">
-				<a href="<?php echo base_url(); ?>">爱码帮<i>&trade;</i></a>
+				<a href="<?php echo base_url(); ?>"><?php
+                  if (strpos($_SERVER['HTTP_HOST'], 'devboy.cn')===false) {
+                    echo '爱码帮';
+                  } else {
+                    echo '开发者';
+                  }
+                ?></a>
 			</div>
 			<!-- end logo -->
 			<!-- 导航 -->
