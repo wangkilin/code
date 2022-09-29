@@ -9,22 +9,49 @@ $config[] = array(
 );
 
 $config[] = array(
-    'id'        => 'admin/books',
-    'title'     => _t('书稿总管理'),
-    'cname'     => 'reader',
-    'url'       => 'admin/books/index/',
-    'children'  => array(),
-    'permission'=> SinhoBaseController::PERMISSION_BOOKLIST,
+    'id'        => 'admin/book_manage',
+    'title'     => _t('书稿管理'), // 概述
+    'cname'     => 'home',
+    'children'  => array(
+
+        array(
+            'id'        => 'admin/books',
+            'title'     => _t('书稿总管理'),
+            'cname'     => 'reader',
+            'url'       => 'admin/books/index/',
+            'children'  => array(),
+            'permission'=> SinhoBaseController::PERMISSION_BOOKLIST,
+        ),
+
+        array(
+            'id'        => 'admin/team_books',
+            'title'     => _t('书稿分管理'),
+            'cname'     => 'reader',
+            'url'       => 'admin/team_books/',
+            'children'  => array(),
+            'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
+        ),
+    ),
+    'permission'=> '',
 );
 
-$config[] = array(
-    'id'        => 'admin/team_books',
-    'title'     => _t('书稿分管理'),
-    'cname'     => 'reader',
-    'url'       => 'admin/team_books/',
-    'children'  => array(),
-    'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
-);
+// $config[] = array(
+//     'id'        => 'admin/books',
+//     'title'     => _t('书稿总管理'),
+//     'cname'     => 'reader',
+//     'url'       => 'admin/books/index/',
+//     'children'  => array(),
+//     'permission'=> SinhoBaseController::PERMISSION_BOOKLIST,
+// );
+
+// $config[] = array(
+//     'id'        => 'admin/team_books',
+//     'title'     => _t('书稿分管理'),
+//     'cname'     => 'reader',
+//     'url'       => 'admin/team_books/',
+//     'children'  => array(),
+//     'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
+// );
 
 $config[] = array(
     'id'    => 'admin/workload',

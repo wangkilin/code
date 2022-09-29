@@ -273,6 +273,12 @@ class SinhoBaseController extends BaseController
             }
         }
 
+        foreach ($newAdminMenu as & $_itemInfo) {
+            if (isset($_itemInfo['children']) && count($_itemInfo['children'])==1 && empty($_itemInfo['url']) ) {
+                $_itemInfo = $_itemInfo['children'][0];
+            }
+        }
+
         return $newAdminMenu;
     }
 }

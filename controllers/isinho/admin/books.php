@@ -469,7 +469,7 @@ class books extends SinhoBaseController
         View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
 
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list(null,'sinho_admin_menu')  ) );
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu')  ) );
 
 
         View::output('admin/books/list');
