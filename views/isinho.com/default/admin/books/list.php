@@ -130,7 +130,7 @@
                                   </span>
                                   <!-- <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
-                                  <a href="admin/check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
+                                  <a href="admin/<?php echo CONTROLLER=='team_books' ? 'team_workload/':''; ?>check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
                                   <?php if (CONTROLLER == 'books') {// 支付状态 只能在书稿总管理页面出现 ?>
                                   <a href="" data-book-id="<?php echo $itemInfo['id']; ?>"  class="icon icon-coin-yen md-tip jsSinhoSetBookPayedStatus <?php echo $itemInfo['is_payed']==1 ? 'payed " title="已支付" style="' :'" title="未支付" style="color:#f00;';?>" data-toggle="tooltip"></a>
                                   <?php } ?>

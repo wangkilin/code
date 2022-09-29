@@ -1,7 +1,7 @@
 
             <div class="tab-pane" id="search">
 
-                <form method="get" action="/admin/check_list/by-book" id="search_form" class="form-horizontal" role="form" target="">
+                <form method="get" action="/admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-book" id="search_form" class="form-horizontal" role="form" target="">
                     <input name="action" type="hidden" value="search" />
 
                     <div class="form-group">

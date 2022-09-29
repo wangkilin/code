@@ -94,9 +94,9 @@
                                 </td>
                                 <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
                                 <td class="js-category"><?php echo $this->bookList[$workloadInfo['book_id']]['category']; ?></td>
-                                <td class="js-serial"><a target="_blank" href="admin/check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['serial']; ?></a></td>
-                                <td class="js-bookname"><a target="_blank" href="admin/check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['book_name']; ?></a></td>
-                                <td class="js-proofreading-times"><a target="_blank" href="admin/check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['proofreading_times']; ?></a></td>
+                                <td class="js-serial"><a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['serial']; ?></a></td>
+                                <td class="js-bookname"><a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['book_name']; ?></a></td>
+                                <td class="js-proofreading-times"><a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-book__id-<?php echo $workloadInfo['book_id'];?>"><?php echo $this->bookList[$workloadInfo['book_id']]['proofreading_times']; ?></a></td>
                                 <td data-td-name="category" class="js-allow-mark"><a><?php echo $workloadInfo['category']; ?></a></td>
                                 <td data-td-name="working_times" class="js-allow-mark"><a><?php echo $workloadInfo['working_times']; ?></a></td>
                                 <td data-td-name="content_table_pages" class="js-allow-mark"><a><?php echo $workloadInfo['content_table_pages']; ?></a></td>
@@ -154,7 +154,13 @@
                             <?php } //end if ?>
                         </tbody>
                     </table>
-                <?php } ?>
+                <?php } else {?>
+                    <table class="table table-striped ">
+                        <tr><td>
+                    没有数据记录</td></tr>
+                    </table>
+                    </div>
+                <?php }?>
                 </form>
                 </div>
 
@@ -175,7 +181,7 @@ function query_workload () {
     }
     var startMonth = $('#start_month').val().replace('-','');
     var endMonth = $('#end_month').val().replace('-','');
-    var url = '/admin/check_list/by-user'+'__'+'id'+'-' + userIds.join(',') + '__'+'start_month'+'-' + startMonth +'__'+'end_month'+'-'+endMonth;
+    var url = '/admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-user'+'__'+'id'+'-' + userIds.join(',') + '__'+'start_month'+'-' + startMonth +'__'+'end_month'+'-'+endMonth;
     window.location.href = url;
 
     return false;

@@ -375,7 +375,7 @@ class main extends SinhoBaseController
      */
     public function check_list_action ()
     {
-        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD | self::IS_SINHO_ADMIN | self::IS_SINHO_TEAM_LEADER);
+        $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD | self::IS_SINHO_ADMIN);
         $_GET['page'] = intval($_GET['page']) >0 ? intval($_GET['page']) : 1;
 
         $userList = array();
@@ -429,7 +429,7 @@ class main extends SinhoBaseController
         $allList = $this->model('sinhoWorkload')
                         ->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE,
                                     $where,
-                                    'user_id,id desc',
+                                    'belong_month desc,user_id,id desc',
                                     $_GET['page'],
                                     $this->per_page
                             );
@@ -560,7 +560,7 @@ class main extends SinhoBaseController
                                             //.' and `status`<> ' . sinhoWorkloadModel::STATUS_RECORDING
                                             ,
                                             null,
-                                            '`status` desc, belong_month desc'
+                                            'book_id DESC, `status` desc, belong_month desc'
                                         );  // ($sql, $limit = null, $offset = null, $where = null, $group_by = null, $order_by = '');
                 $bookIds = array_column($bookIdList, 'book_id');
                 $totalRows = $this->model('sinhoWorkload')

@@ -15,6 +15,8 @@ define('IN_AJAX', TRUE);
 
 class team_books extends SinhoBaseController
 {
+    protected $bookSubjectList = array();
+
     public function setup()
     {
         $this->checkPermission(self::IS_SINHO_TEAM_LEADER);
@@ -163,7 +165,7 @@ class team_books extends SinhoBaseController
             }
         }
 
-        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('分配书稿成功')));
+        H::ajax_json_output(Application::RSM(array('url'=>''), 1, Application::lang()->_t('分配书稿成功')));
     }
 
     /**

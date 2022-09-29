@@ -47,6 +47,13 @@ $config[] = array(
                                  SinhoBaseController::PERMISSION_CHECK_WORKLOAD
                             ),
         ),
+        array (
+            'id'        => 'admin/team_workload/quarlity_list',
+            'title'     => _t('成员质量考核记录'),
+            'cname'     => 'ol',
+            'url'       => 'admin/team_workload/quarlity_list/',
+            'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
+        ),
         array(
             'id'        => 'admin/verify_list',
             'title'     => _t('核算工作量'),
@@ -56,10 +63,17 @@ $config[] = array(
         ),
         array(
             'id'        => 'admin/check_list',
-            'title'     => _t('查看工作量'),
+            'title'     => _t('查看总工作量'),
             'cname'     => 'search',
             'url'       => 'admin/check_list/',
             'permission'=> SinhoBaseController::PERMISSION_CHECK_WORKLOAD,
+        ),
+        array( // 组长查看工作量
+            'id'        => 'admin/team_workload',
+            'title'     => _t('查看分工作量'),
+            'cname'     => 'search',
+            'url'       => 'admin/team_workload/check_list/',
+            'permission'=> SinhoBaseController::PERMISSION_TEAM_LEADER,
         ),
     )
 );

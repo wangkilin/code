@@ -97,8 +97,8 @@
                                 <td><?php echo $itemInfo['remarks']; ?><span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
 
                                 <td class="nowrap">
-                                    <a target="_blank" href="admin/books/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
-                                    <a target="_blank" href="admin/books/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
+                                    <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
+                                    <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                 </td>
                             </tr>
                             <?php if (isset($this->workloadList[$itemInfo['id']])) { ?>
@@ -121,7 +121,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td class="no-word-break"><a target="_blank" href="admin/check_list/by-user__id-<?php echo $workloadInfo['user_id'];?>"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></a></td>
+                                <td class="no-word-break"><a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-user__id-<?php echo $workloadInfo['user_id'];?>"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></a></td>
                                 <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
@@ -167,15 +167,19 @@
                                 <td data-td-name="category" class="js-allow-mark"><a><?php echo $workloadInfo['category']; ?></a></td>
                                 <td data-td-name="working_times" class="js-allow-mark"><a><?php echo $workloadInfo['working_times']; ?></a></td>
 
-                                <td colspan="3" class="text-right">考核结果：</td>
-                                <td class=" red-right-border" ><?php echo $this->quarlityList[$workloadInfo['id']]['good_or_bad'] == 1 ? '<a class="icon-good"></a>' : '<a class="icon-bad"></a>';?></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td colspan="3" class="text-right">比例：<?php echo $this->quarlityList[$workloadInfo['id']]['rate_num'];?></td>
+                                <td colspan="4" class="text-right">考核结果：
+                                     <?php echo $this->quarlityList[$workloadInfo['id']]['good_or_bad'] == 1 ? '<span class="icon-good"></span>' : '<span class="icon-bad"></span>';?>
+                                </td>
                                 <td></td>
                                 <td></td>
-
+                                <td colspan="4" class="text-right">比例：<?php echo $this->quarlityList[$workloadInfo['id']]['rate_num'];?></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                                 <td><a><?php echo  round($this->quarlityList[$workloadInfo['id']]['good_or_bad'] * $workloadInfo['payable_amount'] * $this->quarlityList[$workloadInfo['id']]['rate_num'] / 100, 2) ; ?></a></td>
                                 <td colspan="2"><?php echo $this->quarlityList[$workloadInfo['id']]['remarks'];?></td>
 
@@ -258,7 +262,7 @@
 function show_quarlity (workloadId)
 {
     ICB.modal.loading(true);
-    var url = G_BASE_URL + '/admin/ajax/workload/get_quarlity/';
+    var url = G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER=='team_workload' ? 'team_workload':'workload'; ?>/get_quarlity/';
     var params = {'workload_id' : workloadId};
     var $refTr = $('tr[data-db-id="'+workloadId+'"]');
 
@@ -306,7 +310,7 @@ function show_quarlity (workloadId)
 function fill_quarlity ($form)
 {
     ICB.modal.loading(true);
-    var url = G_BASE_URL + '/admin/ajax/workload/fill_quarlity/';
+    var url = G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER=='team_workload' ? 'team_workload':'workload'; ?>/fill_quarlity/';
     var params = $form.serialize();
 
     ICB.ajax.requestJson(
@@ -339,7 +343,7 @@ function remove_quarlity ($form)
         _t('确认删除质量考核？'),
         function(){
 
-            var url = G_BASE_URL + '/admin/ajax/workload/remove_quarlity/';
+            var url = G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER=='team_workload' ? 'team_workload':'workload'; ?>/remove_quarlity/';
             var params = $form.serialize();
 
             ICB.ajax.requestJson(
