@@ -569,6 +569,7 @@ class team_workload extends SinhoBaseController
             }
         }
 
+        View::assign('userList', $userList);
         View::assign('thisUserId', $this->user_id);
 
         View::assign('pagination', Application::pagination()->initialize(array(
