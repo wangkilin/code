@@ -39,14 +39,20 @@
                         <thead>
                             <tr>
                                 <th><input type="checkbox" class="check-all"></th>
-                                <th class="text-left"><?php _e('日期'); ?></th>
+                                <th class="text-left"><?php if ($_GET['orderby']!='date') { ?><a href="/admin/books/index/<?php echo $this->urlQuery; ?>__orderby-date"><?php
+                                   _e('日期'); ?></a><?php } else {  _e('日期'); ?><i class="icon-insert"></i> <?php }
+                                ?></th>
                                 <th><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('学科'); ?></th>
                                 <th><?php _e('系列'); ?></th>
-                                <th><?php _e('书名'); ?></th>
+                                <th class="text-left"><?php if ($_GET['orderby']!='book') { ?><a href="/admin/books/index/<?php echo $this->urlQuery; ?>__orderby-book"><?php
+                                   _e('书名'); ?></a><?php } else {  _e('书名'); ?><i class="icon-insert"></i> <?php }
+                                ?></th>
                                 <th><?php _e('校次'); ?></th>
                                 <th><?php _e('目录'); ?></th>
-                                <th><?php _e('正文'); ?></th>
+                                <th class="text-left"><?php if ($_GET['orderby']!='page') { ?><a href="/admin/books/index/<?php echo $this->urlQuery; ?>__orderby-page"><?php
+                                   _e('正文'); ?></a><?php } else {  _e('正文'); ?><i class="icon-insert"></i> <?php }
+                                ?></th>
                                 <th><?php _e('答案'); ?></th>
                                 <th><?php _e('试卷'); ?></th>
                                 <th><?php _e('试卷<br/>答案'); ?></th>

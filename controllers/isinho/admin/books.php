@@ -299,8 +299,24 @@ class books extends SinhoBaseController
         $bookBelongYears = $this->model('sinhoWorkload')->fetch_one('sinho_key_value', 'value', 'varname="bookBelongYear"');
         $bookBelongYears = json_decode($bookBelongYears, true);
 
+        $orderBy = 'delivery_date DESC, id DESC'; // 默认按照日期排序
+        switch ($_GET['orderby']) {
+            case 'book': // 按照书名排序
+                $orderBy = 'book_name,proofreading_times,text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer';
+                break;
+
+            case 'page': // 按照页码排序
+                $orderBy = 'text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer,book_name,proofreading_times';
+                break;
+            case 'date':
+                $orderBy ='delivery_date DESC, id DESC,book_name,proofreading_times,text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer';
+                break;
+            default:  // 按照日期排序
+                $_GET['orderby'] = '';
+                break;
+        }
         if ($_GET['action']=='export') {
-            $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', PHP_INT_MAX, $_GET['page']);
+            $itemList  = $this->model('sinhoWorkload')->getBookList($where, $orderBy, PHP_INT_MAX, $_GET['page']);
             $phpExcel = & loadClass('Tools_Excel_PhpExcel');
             $headArr = array(
                 'id_number'                         => '序号',
@@ -365,7 +381,7 @@ class books extends SinhoBaseController
             );
             $phpExcel->export($fileName, $headArr, $itemList, true, $style);
         } else {
-            $itemList  = $this->model('sinhoWorkload')->getBookList($where, 'delivery_date DESC, id DESC', $this->per_page, $_GET['page']);
+            $itemList  = $this->model('sinhoWorkload')->getBookList($where, $orderBy, $this->per_page, $_GET['page']);
         }
         foreach ($itemList as & $_itemInfo) {
             $_itemInfo['subject_code'] = $_itemInfo['category_id'];
@@ -419,6 +435,8 @@ class books extends SinhoBaseController
                 $url_param[] = $key . '-' . $val;
             }
         }
+
+        View::assign('urlQuery', implode('__', $url_param));
         View::assign('backUrl', get_js_url('/admin/books/index/page-'.$_GET['page']));
         View::assign('pagination', Application::pagination()->initialize(array(
             'base_url'   => get_js_url('/admin/books/index/') . implode('__', $url_param),
