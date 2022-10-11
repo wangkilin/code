@@ -11,16 +11,6 @@
                         echo ACTION=='index'?'#index" data-toggle="tab':'admin/books/index/'
                         ?>"><?php _e('我的工作量'); ?></a>
                     </li>
-                    <li class="bg-warning sinho-stat-total-chars">
-                        <a><?php
-                        echo _e('核算中：');
-                        echo isset($this->totalChars[$this->thisUserId]) ? $this->totalChars[$this->thisUserId] : 0;
-                        echo _e('千字');
-                        echo ' &nbsp; &nbsp; ';
-                        echo _e(' 金额：');
-                        echo isset($this->totalChars[$this->thisUserId]) ? round($this->totalChars[$this->thisUserId]*2,2) : 0;
-                        ?></a>
-                    </li>
                 </ul>
             </h3>
         </div>
@@ -36,9 +26,14 @@
                     <table class="table table-bordered workload-list">
                         <tr>
                          <td>列表颜色说明：</td>
+                         <td class="warning">工作量正在核算，绩效正在核算：<?php
+                        echo isset($this->totalChars[$this->thisUserId]) ? $this->totalChars[$this->thisUserId] : 0;
+                        echo _e('千字');
+                        echo '， ￥';
+                        echo isset($this->totalChars[$this->thisUserId]) ? round($this->totalChars[$this->thisUserId]*2,2) : 0;
+                        ?></td>
                          <td class="success">工作量记录中，没有提交到核算</td>
                          <td class="info">工作量结算完成，绩效已支付</td>
-                         <td class="warning">工作量正在核算，绩效正在核算</td>
                          <!-- <td class="sinho-red-background">有疑问数据，需确认重新提交</td> -->
                         </tr>
                     </table>
