@@ -309,7 +309,7 @@ class books extends SinhoBaseController
                 $orderBy = 'text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer,book_name,proofreading_times';
                 break;
             case 'date':
-                $orderBy ='delivery_date DESC, id DESC,book_name,proofreading_times,text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer';
+                $orderBy ='delivery_date DESC, book_name,proofreading_times,text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer';
                 break;
             default:  // 按照日期排序
                 $_GET['orderby'] = '';
