@@ -65,11 +65,39 @@ class books extends SinhoBaseController
         $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
 
         $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
-        $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
         if ($_POST['id']) { // 更新
+            $_checkKeys = array (
+                'content_table_pages',		// varchar(255) DEFAULT NULL COMMENT '目录',
+                'text_pages',		// varchar(255) DEFAULT NULL COMMENT '正文',
+                'text_table_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '目录+正文千字/页',
+                'answer_pages',		// varchar(255) DEFAULT NULL COMMENT '答案',
+                'answer_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '答案千字/页',
+                'test_pages',		// varchar(255) DEFAULT NULL COMMENT '试卷',
+                'test_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '试卷千字/页',
+                'test_answer_pages',		// varchar(255) DEFAULT NULL COMMENT '试卷答案',
+                'test_answer_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '试卷答案千字/页',
+                'exercise_pages',		// varchar(255) DEFAULT NULL COMMENT '课后作业',
+                'exercise_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '课后作业千字/页',
+                'function_book',		// varchar(255) DEFAULT NULL COMMENT '功能册',
+                'function_book_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '功能册千字/页',
+                'function_answer',		// varchar(255) DEFAULT NULL COMMENT '功能册答案',
+                'function_answer_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '功能册答案千字/页',
+                'weight',		// varchar(255) DEFAULT NULL COMMENT '难度系数',
+
+            );
+            // 检查关键数据是否存在变更， 如果存在变更， 就认为稿件不是导入的， 以后不能修改;
+            foreach ($_checkKeys as $_checkKey) {
+                if ($itemInfo[$_checkKey]!=$_POST[$_checkKey]) {
+                    $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
+
+                    break;
+                }
+            }
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, Application::lang()->_t('书稿保存成功')));
         } else { // 添加
+            $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
+
             $_POST['user_id']       = $this->user_id;
             $_POST['delivery_date'] = strtotime($_POST['delivery_date'])>0 ? date('Y-m-d', strtotime($_POST['delivery_date'])) : date('Y-m-d');
 
