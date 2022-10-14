@@ -1389,13 +1389,11 @@ class ajax extends AdminController
 
     public function add_page_action()
     {
-        if (!$this->user_info['permission']['is_administortar'])
-        {
+        if (!$this->user_info['permission']['is_administortar'] || !$this->hasRolePermission(self::IS_SINHO_PAGE_ADMIN)) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有访问权限, 请重新登录')));
         }
 
-        if (!$_POST['url_token'])
-        {
+        if (!$_POST['url_token']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入页面 URL')));
         }
 
@@ -1409,8 +1407,7 @@ class ajax extends AdminController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已经存在相同的页面 URL')));
         }
 
-        $pageId = $this->model('page')->add_page($_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
-        $this->model()->update('pages', array('category_id'=>$_POST['category_id']), 'id = ' . $pageId);
+        $pageId = $this->model('page')->add_page($_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token'], $_POST);
 
             // 设置了附件， 绑定附件和文章关系
             if ($_POST['attach_ids']) {
@@ -1465,8 +1462,7 @@ class ajax extends AdminController
         }
 
 
-        $this->model('page')->update_page($_POST['page_id'], $_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token']);
-        $this->model()->update('pages', array('category_id'=>$_POST['category_id']), 'id = ' . $_POST['page_id']);
+        $this->model('page')->update_page($_POST['page_id'], $_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token'], $_POST);
 
         // 设置了附件， 绑定附件和文章关系
         if ($_POST['attach_ids']) {

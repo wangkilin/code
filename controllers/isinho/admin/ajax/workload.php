@@ -20,6 +20,14 @@ class workload extends SinhoBaseController
         HTTP::setHeaderNoCache();
     }
 
+    public function report_action ()
+    {
+        $bookId = $this->saveBook($_POST);
+        $this->assignBookToEditor($bookId, $_POST['sinho_editor']);
+
+        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('已发起工作量添加请求， 请等待审核！')));
+    }
+
     /**
      * 保存工作量
      */

@@ -23,7 +23,7 @@
 
 						<div class="icb-mod icb-book-infos">
                             <div class="row">
-                                <!-- 年份 -->
+                                <!-- 隶属学科 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('隶属学科'); ?>:</label>
                                 </div>

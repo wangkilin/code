@@ -4,41 +4,64 @@
 <div class="icb-content-wrap">
     <div class="mod">
         <div class="mod-head">
-            <h3>
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                    <a><?php _e('工作量填写'); ?></a>
-                    </li>
-                </ul>
-            </h3>
+            <h3><?php View::output('admin/workload/nav_inc'); ?></h3>
         </div>
 
         <div class="mod-body tab-content">
             <div class="tab-pane active" id="book">
-                <div class="table-responsive">
+                <div class="table-responsive" id="workload-edit-form-container">
 
-					<form action="admin/ajax/workload/fill/" method="post" id="workload-edit-form" onsubmit="return false;">
-						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
-						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
-                        <input type="hidden" name="id" id="item_id" value="<?php echo $this->itemInfo['id']; ?>" />
-                        <input type="hidden" name="book_id" value="<?php echo $this->itemInfo['book_id']; ?>" />
-                        <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
+					<form action="<?php echo $this->formAction=='' ? 'admin/ajax/workload/fill/' : $this->formAction;?>" method="post" id="workload-edit-form" onsubmit="return false;">
 
 						<div class="icb-mod icb-book-infos">
+						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
+						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
+                        <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
+                        <?php if ($this->flagIsEditorReporting) { ?>
+                        <input type="hidden" name="delivery_date" value="<?php echo date('Y-m-d'); ?>" />
+                        <input type="hidden" name="category" value="" />
+
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <label class="icb-label"><?php _e('协同'); ?>:</label>
+                            </div>
+                            <div class="col-sm-5 text-left">
+                                <select id="sinho_editor" name="user_ids" multiple><?php echo $this->userOptions;?></select>
+                            </div>
+
+                            <!-- 隶属学科 -->
+                            <div class="col-sm-1">
+                                <label class="icb-label"><?php _e('隶属学科'); ?>:</label>
+                            </div>
+
+                            <div class="col-sm-5 mod-double icon-date-container">
+                                <?php if ($this->bookSubjectOptions) { ?>
+                                <select name="category_id" class="form-control  " id="category_id">
+                                    <option value="0">- <?php _e('请选择学科'); ?> -</option>
+                                    <?php echo $this->bookSubjectOptions; ?>
+                                </select>
+							    <?php } ?>
+                            </div>
+                        </div>
+                        <?php } else { ?>
+                        <input type="hidden" name="id" id="item_id" value="<?php echo $this->itemInfo['id']; ?>" />
+                        <input type="hidden" name="book_id" value="<?php echo $this->itemInfo['book_id']; ?>" />
+                        <?php } ?>
+
                             <div class="row">
                                 <!-- 系列 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('系列'); ?>:</label>
                                 </div>
                                 <div class="col-sm-5 icb-item-title">
-                                    <input type="text" name="serial" value="<?php echo $this->bookInfo['serial']; ?>" class="form-control" readonly/>
+                                    <input type="text" name="serial" value="<?php echo $this->bookInfo['serial']; ?>" class="form-control" <?php if (! $this->flagIsEditorReporting) { ?>readonly<?php }?>/>
                                 </div>
                                 <!-- 书名 -->
                                 <div class="col-sm-1">
                                     <label class="icb-label"><?php _e('书名'); ?>:</label>
                                 </div>
                                 <div class="col-sm-5 icb-item-title">
-                                    <input type="text" name="book_name" value="<?php echo $this->bookInfo['book_name']; ?>" class="form-control"  readonly/>
+                                    <input type="text" name="book_name" value="<?php echo $this->bookInfo['book_name']; ?>" class="form-control"  <?php if (! $this->flagIsEditorReporting) { ?>readonly<?php }?>/>
                                 </div>
 
                             </div>
@@ -48,7 +71,7 @@
                                     <label class="icb-label"><?php _e('校次'); ?>:</label>
                                 </div>
                                 <div class="col-sm-5 icb-item-title">
-                                    <input type="text" name="proofreading_times" value="<?php echo $this->bookInfo['proofreading_times']; ?>" class="form-control"  readonly/>
+                                    <input type="text" name="proofreading_times" value="<?php echo $this->bookInfo['proofreading_times']; ?>" class="form-control"  <?php if (! $this->flagIsEditorReporting) { ?>readonly<?php }?>/>
                                 </div>
                             </div>
                             <div class="row">
@@ -237,11 +260,11 @@
                             <div class="row">
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-4 mod-footer clearfix">
-                                    <a class="btn btn-large btn-success" id="publish_submit" onclick="submit_workload_edit_form();"><?php _e('保 存'); ?></a>
+                                    <a class="btn btn-large btn-success col-sm-8" id="publish_submit" onclick="submit_workload_edit_form();"><?php _e('保 存'); ?></a>
                                 </div>
                                 <div class="col-sm-2"></div>
                                 <div class="col-sm-4 mod-footer clearfix">
-                                    <a class="btn btn-large btn-warning " onclick="concel_form();"><?php _e('取 消'); ?></a>
+                                    <a class="btn btn-large btn-warning col-sm-8" onclick="concel_form();"><?php _e('取 消'); ?></a>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
@@ -254,6 +277,8 @@
         </div>
     </div>
 </div>
+
+<?php View::output('admin/workload/fill_workload_js'); ?>
 <script type="text/javascript">
 function concel_form ()
 {
@@ -288,6 +313,14 @@ function submit_workload_edit_form ()
 }
 
 $(function () {
+
+    $("#sinho_editor").multiselect({
+        			nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
+                    maxHeight       : 200,
+                    buttonWidth     : '100%',
+                    allSelectedText : '<?php _e('已选择所有人');?>',
+                    numberDisplayed : 7, // 选择框最多提示选择多少个人名
+    });
     /**
      * 监听输入框输入按键为回车时， 如果输入框为空值， 使用默认值填充
      */
@@ -306,8 +339,11 @@ $(function () {
         }
     });
 
-    $('#workload-edit-form input').change(function () {
 
+
+    $('#workload-edit-form input').change(function () {
+        compute_chars_ammount();
+        console.info($(this).data('default'));
         if ($(this).data('default')===undefined) {
             return;
         }
@@ -317,7 +353,9 @@ $(function () {
         } else {
             $(this).parent().removeClass('has-error');
         }
+        console.info(parseFloat($(this).val()) , parseFloat($(this).data('default')));
     });
+
 
 });
 </script>

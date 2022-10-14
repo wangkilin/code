@@ -205,6 +205,7 @@ class user extends AdminController
                 SinhoBaseController::PERMISSION_VERIFY_WORKLOAD  => Application::lang()->_t('允许核算工作量'),
                 SinhoBaseController::PERMISSION_CHECK_WORKLOAD  => Application::lang()->_t('允许查阅工作量'),
                 SinhoBaseController::PERMISSION_ADMINISTRATION  => Application::lang()->_t('允许管理行政&人事'),
+                SinhoBaseController::PERMISSION_PAGE_ADMIN      => Application::lang()->_t('允许管理动态页面'),
 
             ),
         );

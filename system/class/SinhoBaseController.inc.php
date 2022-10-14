@@ -117,9 +117,17 @@ class SinhoBaseController extends BaseController
 
     public $per_page = 20; // 每页显示多少条
 
+    protected $hostConfig = null;
+
     public function __construct($process_setup=true)
     {
         parent::__construct(false); // 不在父级构造方法里执行 setup 方法。  后面会执行
+
+        try {
+            $this->hostConfig = Application::config()->get('__HOST__');
+        } catch (Exception $e) {
+            $this->hostConfig = new stdClass();
+        }
 
         if ($this->user_info['uid']) {
             $userAttributes = $this->model()->fetch_all('users_attribute', 'uid = ' . $this->user_info['uid']);
@@ -262,7 +270,9 @@ class SinhoBaseController extends BaseController
             $hasPermission = false;
             foreach ($_menuInfo['permission'] as $_tmpPermissionName) {
                 if ($this->user_info['permission'][$_tmpPermissionName]
-                  && (!property_exists($hostConfig, 'sinho_permission') || !isset($hostConfig->sinho_permission[$_tmpPermissionName]) || $hostConfig->sinho_permission[$_tmpPermissionName])) {
+                  && (!property_exists($hostConfig, 'sinho_permission')
+                    || !isset($hostConfig->sinho_permission[$_tmpPermissionName])
+                    || $hostConfig->sinho_permission[$_tmpPermissionName])) {
                     $hasPermission = true;
                     break;
                 }
@@ -280,6 +290,145 @@ class SinhoBaseController extends BaseController
         }
 
         return $newAdminMenu;
+    }
+
+    /**
+     * 将书稿分配给编辑。 可以重新分配已经分配过的书稿。
+     * 需要检查书稿是否已经记录了工作量
+     */
+    public function assignBookToEditor ($bookId, $userIds=array())
+    {
+        $assigned = (array) $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($bookId) .' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE );
+        $assignedUserIds = array_column($assigned, 'user_id');
+        $toBeRemoved = array();
+        foreach ($assigned as $_itemInfo) {
+            if (in_array($_itemInfo['user_id'], $userIds)) {
+                continue;
+            }
+
+            if ($_itemInfo['content_table_pages']!=0 || $_itemInfo['text_pages']!=0 || $_itemInfo['answer_pages']!=0
+              || $_itemInfo['test_pages']!=0 || $_itemInfo['test_answer_pages']!=0 || $_itemInfo['exercise_pages']!=0
+              || $_itemInfo['function_book']!=0 || $_itemInfo['function_answer']!=0  ) {
+                $userInfo = $this->model('account')->getUserById($_itemInfo['user_id']);
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('*'.$userInfo['user_name'] . '* 已经在书稿上开始了工作，不能取消分配！')));
+            }
+
+            $toBeRemoved[] = $_itemInfo['id'];
+        }
+        if ($toBeRemoved) { // 取消绑定， 设置成删除状态
+            // $this->model('sinhoWorkload')
+            //      ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
+            //                 array('status' => sinhoWorkloadModel::STATUS_DELETE),
+            //                 'id IN(' . join(',', $toBeRemoved). ')' // AND status = ' . sinhoWorkloadModel::STATUS_RECORDING
+            //         );
+            $this->model('sinhoWorkload')->deleteByIds ($toBeRemoved, sinhoWorkloadModel::WORKLOAD_TABLE);
+        }
+
+        foreach ($userIds as $_userId) {
+            if (! in_array($_userId, $assignedUserIds)) {
+                $set = array(
+                    'book_id'   => $bookId,
+                    'user_id'   => $_userId,
+                    'status'    => sinhoWorkloadModel::STATUS_RECORDING,
+                    'add_time'  => time(),
+                );
+                $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::WORKLOAD_TABLE, $set);
+            }
+        }
+
+    }
+
+    /**
+     * 保存书稿
+     */
+    public function saveBook($bookInfo)
+    {
+        if (!$bookInfo['serial'] && !$bookInfo['book_name'] && !$bookInfo['proofreading_times']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
+        }
+        // 查找是否已存在相同书稿。 已存在相同书稿， 提示
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(
+            sinhoWorkloadModel::BOOK_TABLE,
+            'delivery_date         = "' . $this->model('sinhoWorkload')->quote($bookInfo['delivery_date']) . '"
+            AND category           = "' . $this->model('sinhoWorkload')->quote($bookInfo['category']) . '"
+            AND serial             = "' . $this->model('sinhoWorkload')->quote($bookInfo['serial']) . '"
+            AND book_name          = "' . $this->model('sinhoWorkload')->quote($bookInfo['book_name'] ) .'"
+            AND proofreading_times = "' . $this->model('sinhoWorkload')->quote($bookInfo['proofreading_times']) .'"'
+
+        ) ;
+        if ($itemInfo && $itemInfo['id']!=$bookInfo['id']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完成相同的书稿')));
+        }
+
+        // 解析每个学科中用于搜索书名匹配的关键字。 匹配到关键字， 将书稿设置成对应的学科
+        $keywordSubjectList = array();
+        $keywordSubjectList1 = array();
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+        foreach ($bookSubjectList as $_subjectCode => $_itemInfo) {
+            $_itemInfo['keyword'] = explode(',', $_itemInfo['remark']);
+            foreach ($_itemInfo['keyword'] as $_keyword) {
+                if (mb_strlen($_keyword)==1) {
+                    $keywordSubjectList1[$_keyword] = $_subjectCode;
+                } else {
+                    $keywordSubjectList[$_keyword] = $_subjectCode;
+                }
+            }
+        }
+        $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
+
+        if ($bookInfo['id']) { // 更新
+            $_checkKeys = array (
+                'content_table_pages',		// varchar(255) DEFAULT NULL COMMENT '目录',
+                'text_pages',		// varchar(255) DEFAULT NULL COMMENT '正文',
+                'text_table_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '目录+正文千字/页',
+                'answer_pages',		// varchar(255) DEFAULT NULL COMMENT '答案',
+                'answer_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '答案千字/页',
+                'test_pages',		// varchar(255) DEFAULT NULL COMMENT '试卷',
+                'test_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '试卷千字/页',
+                'test_answer_pages',		// varchar(255) DEFAULT NULL COMMENT '试卷答案',
+                'test_answer_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '试卷答案千字/页',
+                'exercise_pages',		// varchar(255) DEFAULT NULL COMMENT '课后作业',
+                'exercise_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '课后作业千字/页',
+                'function_book',		// varchar(255) DEFAULT NULL COMMENT '功能册',
+                'function_book_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '功能册千字/页',
+                'function_answer',		// varchar(255) DEFAULT NULL COMMENT '功能册答案',
+                'function_answer_chars_per_page',		// varchar(255) DEFAULT NULL COMMENT '功能册答案千字/页',
+                'weight',		// varchar(255) DEFAULT NULL COMMENT '难度系数',
+
+            );
+            // 检查关键数据是否存在变更， 如果存在变更， 就认为稿件不是导入的， 以后不能修改;
+            foreach ($_checkKeys as $_checkKey) {
+                if ($itemInfo[$_checkKey]!=$bookInfo[$_checkKey]) {
+                    $bookInfo['is_import'] = 0; // 书稿设置为手动录入， 非导入
+
+                    break;
+                }
+            }
+            Application::model('sinhoWorkload')->updateBook(intval($bookInfo['id']), $bookInfo);
+
+        } else { // 添加
+            $bookInfo['is_import'] = 0; // 书稿设置为手动录入， 非导入
+
+            $bookInfo['user_id']       = $this->user_id;
+            $bookInfo['delivery_date'] = strtotime($bookInfo['delivery_date'])>0 ? date('Y-m-d', strtotime($bookInfo['delivery_date'])) : date('Y-m-d');
+
+
+            // 获取书稿所属学科id
+            if (! $bookInfo['category_id']) {
+                $bookInfo['category_id'] = null;
+                foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {
+                    if (strpos($bookInfo['book_name'], $_keyword)!==false) {
+                        $bookInfo['category_id'] = $_subjectCode;
+                        break;
+                    }
+                }
+            }
+
+            $bookInfo['id'] = Application::model('sinhoWorkload')->addBook($bookInfo);
+        }
+
+        return $bookInfo['id'];
     }
 }
 

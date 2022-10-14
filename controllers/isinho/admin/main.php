@@ -234,6 +234,7 @@ class main extends SinhoBaseController
     public function fill_list_action ()
     {
         $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
+
         $assigned = (array) $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE, 'user_id = ' . intval($this->user_id) . ' AND `status`<>' . sinhoWorkloadModel::STATUS_DELETE , 'id DESC', $_GET['page'], $this->per_page);
 
         $bookIds  = array_column($assigned, 'book_id');
@@ -243,6 +244,8 @@ class main extends SinhoBaseController
             $bookIds  = array_column($bookList, 'id');
             $bookList = array_combine($bookIds, $bookList);
         }
+
+        View::assign('hostConfig', $this->hostConfig);
         View::assign('itemsList', $assigned);
         View::assign('booksList', $bookList);
         $totalRows     = $this->model('sinhoWorkload')->found_rows();
@@ -277,6 +280,7 @@ class main extends SinhoBaseController
      */
     public function fill_workload_action ()
     {
+        View::assign('hostConfig', $this->hostConfig);
         $itemInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id = ' . intval($_GET['id']). ' AND `status`<>' . sinhoWorkloadModel::STATUS_DELETE );
 
         if (! $itemInfo) {

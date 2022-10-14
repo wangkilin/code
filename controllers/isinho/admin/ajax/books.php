@@ -30,6 +30,11 @@ class books extends SinhoBaseController
     {
         $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
 
+        $bookId = $this->saveBook($_POST);
+        $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
+        $message = empty($_POST['id']) ? Application::lang()->_t('书稿添加成功') : Application::lang()->_t('书稿保存成功');
+        H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, $message));
+
         if (!$_POST['serial'] && !$_POST['book_name'] && !$_POST['proofreading_times']) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请输入参数')));
         }
@@ -44,7 +49,7 @@ class books extends SinhoBaseController
 
         ) ;
         if ($itemInfo && $itemInfo['id']!=$_POST['id']) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完成相同的书稿')));
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完全相同的书稿')));
         }
 
         // 解析每个学科中用于搜索书名匹配的关键字。 匹配到关键字， 将书稿设置成对应的学科
@@ -95,6 +100,7 @@ class books extends SinhoBaseController
             }
             Application::model('sinhoWorkload')->updateBook(intval($_POST['id']), $_POST);
             H::ajax_json_output(Application::RSM(array('url' => $backurl), 1, Application::lang()->_t('书稿保存成功')));
+
         } else { // 添加
             $_POST['is_import'] = 0; // 书稿设置为手动录入， 非导入
 
@@ -116,7 +122,7 @@ class books extends SinhoBaseController
             Application::model('sinhoWorkload')->addBook($_POST);
 
             H::ajax_json_output(Application::RSM(
-                array('url' => get_js_url('/admin/books/')),
+                array('url' => $backurl),
                 1,
                 Application::lang()->_t('书稿添加成功')));
         }
@@ -140,6 +146,9 @@ class books extends SinhoBaseController
         if (! $_POST['sinho_editor']) {
             $_POST['sinho_editor'] = array();
         }
+        $this->assignBookToEditor($_GET['id'], $_POST['sinho_editor']);
+        H::ajax_json_output(Application::RSM(array('url'=>null), 1, Application::lang()->_t('分配书稿成功!')));
+
 
         $assigned = (array) $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($_GET['id']) .' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE );
         $assignedUserIds = array_column($assigned, 'user_id');
@@ -280,6 +289,7 @@ class books extends SinhoBaseController
                         'newFilePath'    => $newFilePath,
                         'batch_key'      => $batchKey,
                         'sheet_names'    => $data['sheetNames'],
+                        'data'           => $data,
         )), ENT_NOQUOTES);
 
     }
@@ -396,6 +406,12 @@ class books extends SinhoBaseController
                 // 发稿日期 字符串不包含年份， 需要将年份处理下
                 $dataLine[$delivery_date_key] = str_replace(array('.','年','月','日', ' ',' '),array('-','-','-','','',''),$dataLine[$delivery_date_key]);
                 $dataLine[$return_date_key] = str_replace(array('.','年','月','日', ' ',' '),array('-','-','-','','',''),$dataLine[$return_date_key]);
+                if (strpos($dataLine[$delivery_date_key], '0000000000001') || strpos($dataLine[$delivery_date_key], '9999999999999') ) {
+                    $dataLine[$delivery_date_key] = substr($dataLine[$delivery_date_key], 0, -13);
+                }
+                if (strpos($dataLine[$return_date_key], '0000000000001') || strpos($dataLine[$return_date_key], '9999999999999') ) {
+                    $dataLine[$return_date_key] = substr($dataLine[$return_date_key], 0, -13);
+                }
                 if (strlen($dataLine[$delivery_date_key]) < 6 && strlen($dataLine[$delivery_date_key]) > 0 ) {
                     // 添加上年份后的日期，在当前日期之后， 年份减1
                     if (strtotime(date('Y') . '-' . $dataLine[$delivery_date_key]) > time()) {
@@ -494,7 +510,10 @@ class books extends SinhoBaseController
 
 
         H::ajax_json_output(Application::RSM(
-            array('url' => get_js_url('/admin/books/')),
+            array(
+                'url' => get_js_url('/admin/books/'),
+                //'data' => $data,
+            ),
             1,
             Application::lang()->_t('书稿导入成功。 共导入书稿：' . $totalImport)));
 

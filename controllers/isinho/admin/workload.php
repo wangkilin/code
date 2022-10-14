@@ -74,6 +74,51 @@ class workload extends SinhoBaseController
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/workload/quarlity_list', 'sinho_admin_menu') ) );
         View::output('admin/workload/quarlity_list');
     }
+
+
+    /**
+     * 编辑自行添加书稿和工作量
+     */
+    public function report_action ()
+    {
+        $bookInfo = $itemInfo = array();
+        // 获取书稿所属学科列表
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+        View::assign('bookSubjectList', $bookSubjectList);
+        View::assign('bookSubjectOptions',
+                     buildSelectOptions(
+                         $bookSubjectList,
+                         'name',
+                         'id',
+                         null,
+                         array(
+                             'remark'     => 'data-subject_keyword'
+                         )
+                    )
+                );
+
+
+        // 获取用户信息列表,
+        $userList = $this->model('sinhoWorkload')->getUserList('forbidden = 0', 'uid DESC', PHP_INT_MAX);
+
+        View::assign('userOptions', buildSelectOptions($userList, 'user_name', 'uid' ) );
+
+        View::assign('formAction', 'admin/ajax/workload/report/');
+        View::assign('flagIsEditorReporting', true); // 通知View页面， 这里是编辑自主上报
+        View::assign('hostConfig', $this->hostConfig);
+        View::assign('bookInfo', $bookInfo);
+        View::assign('itemInfo', $itemInfo);
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/fill_list','sinho_admin_menu') ) );
+
+
+        View::import_js('js/functions.js');
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
+
+
+        View::output('admin/workload/fill');
+    }
 }
 
 /* EOF */
