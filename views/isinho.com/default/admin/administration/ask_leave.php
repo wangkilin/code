@@ -279,6 +279,11 @@
         </div>
     </div>
 </div>
+<style>
+.icb-content-wrap .icon:not(.icon-attach){
+background: #cc0d0d;
+}
+</style>
 <script type="text/javascript">
 function loadLeaveDataIntoTable (leaveList) {
     var startTime, endTime, startDateObj,endDateObj;
