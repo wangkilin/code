@@ -49,6 +49,15 @@ class administration extends SinhoBaseController
         }
         View::assign('leaveTypeList', $this->leaveTypeList);
 
+        View::assign('itemOptions',
+                     buildSelectOptions(
+                         $userList,
+                         'user_name',
+                         'uid',
+                         null
+                    )
+                );
+
         View::assign('leaveYear', $year);
         View::assign('leaveMonth', $month);
         View::assign('userList', $userList);

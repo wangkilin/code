@@ -565,6 +565,26 @@ class books extends SinhoBaseController
     }
 
     /**
+     * 审核书稿通过
+     */
+    public function set_book_verify_status_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        if (empty($_POST['ids'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
+        }
+
+        $set = array('verify_status'=>0);
+        $this->model('sinhoWorkload')
+                ->update(sinhoWorkloadModel::BOOK_TABLE,
+                $set,
+                'id IN ( ' . join(',' , $_POST['ids']) . ' )'
+        );
+
+        H::ajax_json_output(Application::RSM(array('url'=>''), 1, Application::lang()->_t('书稿审核通过！')));
+    }
+
+    /**
      * 批量删除书稿数据. 删除书稿同时， 将对应的工作量信息也删除
      */
     public function remove_action()

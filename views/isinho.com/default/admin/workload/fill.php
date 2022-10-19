@@ -26,7 +26,7 @@
                                 <label class="icb-label"><?php _e('协同'); ?>:</label>
                             </div>
                             <div class="col-sm-5 text-left">
-                                <select id="sinho_editor" name="user_ids" multiple><?php echo $this->userOptions;?></select>
+                                <select id="sinho_editor" name="user_ids[]" multiple><?php echo $this->userOptions;?></select>
                             </div>
 
                             <!-- 隶属学科 -->

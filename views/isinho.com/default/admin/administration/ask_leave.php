@@ -427,6 +427,19 @@ $(function () {
     });
 
     /**
+     * 请假时长如果为8小时， 请假时间为空， 将请假时间填充默认值
+     */
+    $('body').on('change', '.js-change-input-date', function () {
+        if ($(this).val()==8 && $(this).closest('.ask-leave-single-item').find('input[name="leave_start_time[]"]').val()==''
+          && $(this).closest('.ask-leave-single-item').find('input[name="leave_end_time[]"]').val()=='') {
+            $(this).closest('.ask-leave-single-item').find('input[name="leave_start_time[]"]').val($('#ask-leave-date').text()+' 08:30');
+
+            $(this).closest('.ask-leave-single-item').find('input[name="leave_end_time[]"]').val($('#ask-leave-date').text()+' 08:30');
+
+        }
+    });
+
+    /**
      * 点击单元格， 设置考勤
      */
     //$('body').on('click', '#js-sinho-leave-table > tbody > tr > td:not(.weekend)', function() {
@@ -438,6 +451,18 @@ $(function () {
         var callback = function (response) {
             //console.info(response);
             var onshowCallback = function () {
+                $("#sinho_user_ids").find('option[value='+userId+']').attr('selected','selected').removeAttr('disabled');
+                if (response.rsm.length) {
+                    $("#sinho_user_ids").find('option[value!='+userId+']').attr('disabled','disabled');
+                }
+
+                $("#sinho_user_ids").multiselect({
+                        nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
+                        maxHeight       : 200,
+                        buttonWidth     : '100%',
+                        allSelectedText : '<?php _e('已选择所有人');?>',
+                        numberDisplayed : 7, // 选择框最多提示选择多少个人名
+                });
                 // 设置下拉框选项
                 var options = '<?php foreach ($this->leaveTypeList as $_key => $_optionItemInfo) { echo '<option value="'.$_key.'">'.$_optionItemInfo['name'].'</option>';} ?>';
                 $('#leave_type').append(options);
@@ -514,6 +539,7 @@ $(function () {
             var currentDate = new Date();
             var html = Hogan.compile(ICB.template.sinhoAskLeave).render(
                 {
+                    user_option_list     : '<?php echo $this->itemOptions;?>',
                     user_id             : userId,
                     user_name           : userName,
                     leave_date          : leaveDate,

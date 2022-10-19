@@ -69,6 +69,14 @@
 <script type="text/javascript" src="//cdn.icodebang.com/static/js/editor/ckeditor.4.11/plugins/codesnippet/lib/highlight/highlightjs-line-numbers.min.js"></script>
 <script type="text/javascript">
 $(function () {
+
+/*====================================
+//	防止手机浏览器在页面后面加入垃圾广告
+======================================*/
+$(document).scroll(function () {
+    $("#last-one-flag").nextAll(':not(#scrollUp,.datetimepicker)').remove();
+});
+
 $('pre>code').each(function(index, element) {
     $(this).data('data-code', $(this).html());
     $(this).parent().append('<div class="code_tools"><!--<a href="javascript:;" class="select_all icon-insert-template-" title="全选">全选</a>--><a href="javascript:;" class="copy_all icon-files-empty-" title="复制">复制</a><textarea class="code__for__copy"></textarea></div>');

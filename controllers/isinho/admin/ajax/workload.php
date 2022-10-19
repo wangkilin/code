@@ -20,12 +20,19 @@ class workload extends SinhoBaseController
         HTTP::setHeaderNoCache();
     }
 
+    /**
+     * 主动上报工作量： 创建书稿，添加工作量记录
+     */
     public function report_action ()
     {
+        $_POST['verify_status'] = 9; // 设置书稿为主动上报
         $bookId = $this->saveBook($_POST);
-        $this->assignBookToEditor($bookId, $_POST['sinho_editor']);
+        is_array($_POST['user_ids']) OR $_POST['user_ids'] = array();
+        $_POST['user_ids'][] = $this->user_id;
+        $_POST['user_ids'] = array_unique($_POST['user_ids']);
+        $this->assignBookToEditor($bookId, $_POST['user_ids']);
 
-        H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('已发起工作量添加请求， 请等待审核！')));
+        H::ajax_json_output(Application::RSM(array('url'=>get_js_url('/admin/fill_list/')), 1, Application::lang()->_t('已发起工作量添加请求， 请等待审核！')));
     }
 
     /**

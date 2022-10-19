@@ -39,6 +39,11 @@ class administration extends SinhoBaseController
 
         $total = count($_POST['leave_type']);
         $scope = array();
+
+        if (empty($_POST['user_ids']) ) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("请假人信息不能为空！")));
+        }
+        // 检查每个参数是否正确
         for($i=0; $i<$total; $i++) {
             if ('' != $_POST['leave_type'][$i] . $_POST['leave_start_time'][$i] . $_POST['leave_end_time'][$i] . $_POST['leave_period'][$i]) {
 
@@ -75,18 +80,20 @@ class administration extends SinhoBaseController
             }
             $scope[] = array($min, $max);
             // 查看请求的数据是否和数据库内有重复数据
-            $itemList = $this->model('sinhoWorkload')->getAskLeaveByDate(date('Y-m-d H:i:s', $min+1), date('Y-m-d H:i:s', $max-1), $_POST['user_id']);
-            foreach ($itemList as $_key => $_itemInfo) { //
-                if (in_array($_itemInfo['id'], $_POST['id']) ) {
-                    unset($itemList[$_key]);
+            foreach ($_POST['user_ids'] as $_userId) {
+                $itemList = $this->model('sinhoWorkload')->getAskLeaveByDate(date('Y-m-d H:i:s', $min+1), date('Y-m-d H:i:s', $max-1), $_userId);
+                foreach ($itemList as $_key => $_itemInfo) { //
+                    if (in_array($_itemInfo['id'], $_POST['id']) ) {
+                        unset($itemList[$_key]);
+                    }
                 }
-            }
-            if (! $itemList) { // 没有重叠数据
-                continue;
-            }
-            if ( count($itemList)>1 || $itemList[0]['id']!=$_POST['id'][$i]) { // 有超过一个数据记录，或者不是更新数据记录， 说明有重叠数据
-                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("第 ".($i+1)." 条请假信息时间有冲突，存在重叠情况")));
-                break;
+                if (! $itemList) { // 没有重叠数据
+                    continue 2;
+                }
+                if ( count($itemList)>1 || $itemList[0]['id']!=$_POST['id'][$i]) { // 有超过一个数据记录，或者不是更新数据记录， 说明有重叠数据
+                    H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t("第 ".($i+1)." 条请假信息时间有冲突，存在重叠情况")));
+                    break 2;
+                }
             }
         }
 
@@ -94,36 +101,38 @@ class administration extends SinhoBaseController
             if ('' == $_POST['leave_type'][$i] . $_POST['leave_start_time'][$i] . $_POST['leave_end_time'][$i]. $_POST['leave_period'][$i]) {
                 continue;
             }
-            $set = array(
-                'user_id'           => $_POST['user_id'],
-                'leave_type'        => $_POST['leave_type'][$i],
-                'leave_start_time'  => $_POST['__leave_start_time'][$i],
-                'leave_end_time'    => $_POST['__leave_end_time'][$i],
-                'leave_period'      => $_POST['leave_period'][$i],
-                'status'            => 1,
-                'apply_time'        => time(),
-                'remarks'           => strval($_POST['remarks'][$i]),
-            );
-            if ($_POST['id'][$i]) { // 更新请假
-                $_id = intval($_POST['id'][$i]);
-                $this->model('sinhoWorkload')->delete(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, 'ask_leave_id=' . $_id);
-                $this->model('sinhoWorkload')->update(sinhoWorkloadModel::ASK_LEAVE_TABLE, $set, 'id = ' .  $_id);
-            } else { // 新请假内容
-                $_id = $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::ASK_LEAVE_TABLE, $set);
-            }
-
-            $j = 0;
-            $startDate = date('Y-m-d', $_POST['__leave_start_time'][$i]);
-            $endTime   = $_POST['__leave_end_time'][$i];
-            while (strtotime("$startDate+{$j}day")<$endTime) {
-                $set2 = array(
-                    'ask_leave_id'          => $_id,
-                    'belong_year'           => date('Y', strtotime("$startDate+{$j}day")),
-                    'belong_month'          => date('m', strtotime("$startDate+{$j}day")),
-                    'belong_day'            => date('d', strtotime("$startDate+{$j}day")),
+            foreach ($_POST['user_ids'] as $_userId) {
+                $set = array(
+                    'user_id'           => $_userId,
+                    'leave_type'        => $_POST['leave_type'][$i],
+                    'leave_start_time'  => $_POST['__leave_start_time'][$i],
+                    'leave_end_time'    => $_POST['__leave_end_time'][$i],
+                    'leave_period'      => $_POST['leave_period'][$i],
+                    'status'            => 1,
+                    'apply_time'        => time(),
+                    'remarks'           => strval($_POST['remarks'][$i]),
                 );
-                $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, $set2);
-                $j++;
+                if ($_POST['id'][$i]) { // 更新请假
+                    $_id = intval($_POST['id'][$i]);
+                    $this->model('sinhoWorkload')->delete(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, 'ask_leave_id=' . $_id);
+                    $this->model('sinhoWorkload')->update(sinhoWorkloadModel::ASK_LEAVE_TABLE, $set, 'id = ' .  $_id);
+                } else { // 新请假内容
+                    $_id = $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::ASK_LEAVE_TABLE, $set);
+                }
+
+                $j = 0;
+                $startDate = date('Y-m-d', $_POST['__leave_start_time'][$i]);
+                $endTime   = $_POST['__leave_end_time'][$i];
+                while (strtotime("$startDate+{$j}day")<$endTime) {
+                    $set2 = array(
+                        'ask_leave_id'          => $_id,
+                        'belong_year'           => date('Y', strtotime("$startDate+{$j}day")),
+                        'belong_month'          => date('m', strtotime("$startDate+{$j}day")),
+                        'belong_day'            => date('d', strtotime("$startDate+{$j}day")),
+                    );
+                    $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::ASK_LEAVE_DATE_TABLE, $set2);
+                    $j++;
+                }
             }
         }
 

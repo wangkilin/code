@@ -123,6 +123,7 @@ class sinhoWorkloadModel extends Model
             'is_import',
             'category_id',
             'user_id',
+            'verify_status', // 是否是主动上报
         );
         $allowVars = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
@@ -155,6 +156,8 @@ class sinhoWorkloadModel extends Model
 
             'category_id', // 书稿所属学科
             'user_id',     // 书稿创建者id
+            'is_import',
+            'verify_status',
         ); // 允许存在的数据
 
         $set = array();

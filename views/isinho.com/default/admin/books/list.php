@@ -16,8 +16,9 @@
                     <table class="table table-bordered">
                         <tr>
                          <td>列表颜色说明：</td>
-                         <td class="success">已分配责编</td>
+                         <td class="danger">上报待审核</td>
                          <td>未分配责编</td>
+                         <td class="success">已分配责编</td>
                          <td class="info">结算完成</td>
                          <td class="warning">部分结算</td>
                         </tr>
@@ -69,8 +70,11 @@
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr class="<?php
+                                      if ($itemInfo['verify_status']!=0) {
+                                        echo 'danger';
+                                      }
                                       // 书稿未结算过
-                                      if(! $this->booksWorkload[$itemInfo['id']]) {
+                                      else if(! $this->booksWorkload[$itemInfo['id']]) {
                                           if ($this->booksWorkloadNotPayed[$itemInfo['id']]) { // 分配人员了
                                               echo 'success';
                                           } else { // 没有分配人员
@@ -86,7 +90,7 @@
                                             $this->booksWorkload[$itemInfo['id']]['exercise_pages']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['function_book']==0 &&
                                             $this->booksWorkload[$itemInfo['id']]['function_answer']==0) {
-                                        echo 'book_is_payed danger';
+                                        echo 'book_is_payed primary';
 
                                       } else if($this->booksWorkload[$itemInfo['id']]['content_table_pages']>=$itemInfo['content_table_pages']
                                        &&       $this->booksWorkload[$itemInfo['id']]['text_pages']>=$itemInfo['text_pages']
@@ -154,7 +158,9 @@
                 <div class="mod-table-foot">
                     <div class="text-right">每页<?php echo $this->amountPerPage; ?> &nbsp; 共<?php echo $this->totalRows;?>本</div>
                     <?php echo $this->pagination; ?>
-
+                    <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['allow_editor_add_book']) { ?>
+                    <a class="btn btn-info" id="setBookVerifyStatus"><?php _e('审核通过'); ?></a>
+                    <?php }?>
                     <a class="btn btn-default" id="setBookCategory"><?php _e('设置学科'); ?></a>
                     <a class="btn btn-danger" id="deleteBatchBtn"><?php _e('删除书稿'); ?></a>
                 </div>
@@ -267,6 +273,28 @@ $(function(){
         	           $('#action').val('remove');
         	           ICB.ajax.postForm($('#batchs_form'));
         	       }
+            );
+        } else {
+            ICB.modal.alert(_t('请勾选书稿'));
+        }
+    	 return false;
+    });
+
+    /**
+     * 点击批量审核通过按钮
+     */
+    $('#setBookVerifyStatus').click(function () {
+        if($('.icheckbox_square-blue.checked').length){
+
+    	    ICB.modal.confirm(
+            	   _t('确认将选定书稿审核通过么？'),
+            	   function(){
+                       $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/set_book_verify_status/');
+        	           $('#action').val('setBookVerifyStatus');
+        	           ICB.ajax.postForm($('#batchs_form'));
+        	       },
+                   undefined,
+                  _t('上报书稿审核'),
             );
         } else {
             ICB.modal.alert(_t('请勾选书稿'));

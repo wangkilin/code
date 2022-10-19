@@ -24,6 +24,7 @@
                         echo '， ￥';
                         echo isset($this->totalChars[$this->thisUserId]) ? round($this->totalChars[$this->thisUserId]*2,2) : 0;
                         ?></td>
+                        <td class="danger">工作量审核中，审核通过允许核算</td>
                          <td class="success">工作量记录中，没有提交到核算</td>
                          <td class="info">工作量结算完成，绩效已支付</td>
                          <!-- <td class="sinho-red-background">有疑问数据，需确认重新提交</td> -->
@@ -38,7 +39,7 @@
                     <table class="table table-striped px10 no-padding no-margin workload-list workload-fill-list">
                         <thead>
                             <tr>
-                                <th class="text-left"><?php _e('日期'); ?></th>
+                                <th class=""><?php _e('日期'); ?></th>
                                 <!-- <th><?php _e('书稿<br/>类别'); ?></th> -->
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
@@ -71,9 +72,10 @@
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr data-db-id="<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['book_id'];?>" class="workload-line<?php
-                                if ($itemInfo['status']==sinhoWorkloadModel::STATUS_VERIFIED) echo ' verified-line';
-                                if ($itemInfo['status']==sinhoWorkloadModel::STATUS_VERIFYING) echo ' verifying-line';
-                                if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line'; ?>" data-verify-remark='<?php echo $itemInfo['verify_remark'];?>'>
+                                if ($this->booksList[$itemInfo['book_id']]['verify_status'] > 0) echo ' danger';
+                                else if ($itemInfo['status']==sinhoWorkloadModel::STATUS_VERIFIED) echo ' verified-line';
+                                else if ($itemInfo['status']==sinhoWorkloadModel::STATUS_VERIFYING) echo ' verifying-line';
+                                else if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line'; ?>" data-verify-remark='<?php echo $itemInfo['verify_remark'];?>'>
                                 <td class="text-left">
 
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo date('m-d', $itemInfo['add_time']);?> <?php _e('回稿日期'); echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):'';?>" data-toggle="tooltip"><?php echo date('m-d', $itemInfo['add_time']),'~';echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):''; ?></a>
@@ -115,7 +117,7 @@
                                   <?php if (! $itemInfo['is_branch']) {// 可以从分配过来的任务量，做分支处理 ?>
                                   <a href="admin/ajax/workload/fill_more/" onclick="fillMore(<?php echo $itemInfo['id']; ?>);" class="icon icon-add-to-list md-tip js-fill-more" title="<?php _e('继续补充工作量'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
-                                  <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING ) {// 加入核算队列 ?>
+                                  <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING &&$this->booksList[$itemInfo['book_id']]['verify_status'] == 0) {// 加入核算队列 ?>
                                   <a href="admin/ajax/workload/queue/" onclick="addQueue(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-coin-yen md-tip" title="<?php _e('加入核算'); ?>" data-toggle="tooltip"></a>
                                   <?php } ?>
                                   <?php if (($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) && $itemInfo['is_branch']) {// 工作量没有核算过，而且是分支处理，允许删除 ?>
