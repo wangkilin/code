@@ -143,8 +143,8 @@ $config[] = array(
             'cname'     => 'log',
             'url'       => 'admin/page/',
             'permission'=> array(
-                SinhoBaseController::IS_ROLE_ADMIN,            // 超级管理员
-                SinhoBaseController::PERMISSION_PAGE_ADMIN,    // 动态页面管理员
+                BaseController::PERMISSION_MAP[SinhoBaseController::IS_ROLE_ADMIN],            // 超级管理员
+                SinhoBaseController::PERMISSION_PAGE_ADMIN,                                    // 动态页面管理员
             )
         ),
     )
