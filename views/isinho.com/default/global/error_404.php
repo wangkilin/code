@@ -36,6 +36,7 @@
 			<img src="<?php echo G_STATIC_URL; ?>/common/404.jpg" alt="404">
 			<p><?php _e('你访问的页面不存在'); ?>，<?php _e('请'); ?><a href="javascript:history.go(-1)"><?php _e('返回'); ?></a><?php _e('或搜索相关内容'); ?></p>
 			<div class="icb-search-box  hidden-sm">
+                <!-- <?php echo loadClass('core_uri')->app_dir, '-', loadClass('core_uri')->controller, '-', loadClass('core_uri')->action ;?> -->
 				<form class="navbar-search" action="search/" id="global_search_form" method="post">
 					<div class="input-group">
 						<input class="form-control search-query" type="text" placeholder="<?php _e('搜索问题、话题或人'); ?>" autocomplete="off" name="q" id="icb-search-query" />
