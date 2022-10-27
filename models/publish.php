@@ -511,6 +511,9 @@ class publishModel extends Model
         ));
     }
 
+    /**
+     * 删除附件
+     */
     public function remove_attach($id, $access_key, $update_associate_table = true)
     {
         if (! $attach = $this->fetch_row('attach', "id = " . intval($id) . " AND access_key = '" . $this->quote($access_key) . "'"))
@@ -520,7 +523,8 @@ class publishModel extends Model
 
         $this->delete('attach', "id = " . intval($id) . " AND access_key = '" . $this->quote($access_key) . "'");
 
-        if (!$this->fetch_row('attach', 'item_id = ' . $attach['item_id']) AND $update_associate_table)
+        // 移除附件后，要查看对应的条目是否还有附件信息。
+        if ($attach['item_id'] && !$this->fetch_row('attach', 'item_id = ' . $attach['item_id']) AND $update_associate_table)
         {
             switch ($attach['item_type'])
             {

@@ -3,19 +3,19 @@
 <?php View::output('global/nav.php'); ?>
 	<div class="container icb-custom-page">
 		<div class="row">
-            <?php if ($this->categoryList) {?>
-            <?php if (count($this->categoryList) > 1 ) { //只有一个分类，不用显示了 ?>
+            <?php if ($this->navCategoryList) {?>
+            <?php if (count($this->navCategoryList) > 1 ) { //只有一个分类，不用显示了 ?>
             <div class="col-sm-2">
                 <ul class="text-left">
-                <?php foreach ($this->categoryList as $_itemInfo) {
+                <?php foreach ($this->navCategoryList as $_itemInfo) {
                         $_itemInfo['url_token'] == '' AND $_itemInfo['url_token'] = $_itemInfo['id'];
                 ?>
-                    <li class="btn <?php echo $_GET['category'] == $_itemInfo['url_token'] ? 'active' : '';?> btn-default btn-block"><a class="" href="/page/category-<?php echo $_itemInfo['url_token'];?>.html"><?php echo $_itemInfo['title'];?></a></li>
+                    <li class="btn <?php echo $_GET['category'] == $_itemInfo['url_token'] ? 'active' : '';?> btn-default btn-block"><a class="" href="/page/<?php echo $this->_isInside ? 'inside_square/' : ''; ?>category-<?php echo $_itemInfo['url_token'];?>.html"><?php echo $_itemInfo['title'];?></a></li>
                 <?php }?>
                 </ul>
             </div>
             <?php }?>
-			<div class="<?php echo count($this->categoryList) > 1 ? 'col-sm-10' : 'col-sm-12'?>">
+			<div class="<?php echo count($this->navCategoryList) > 1 ? 'col-sm-10' : 'col-sm-12'?>">
                 <ul class="nav nav-tabs icb-nav-tabs right padding-10">
 					<li class="nav-tabs-title"><h4 class=""><i class="icon icon-reader"></i> <?php echo $this->page_info['title'];?></h4></li>
                 </ul>
@@ -28,8 +28,8 @@
                 </div>
 
                 <div class="clearfix">
-                    <span class="col-sm-6 padding10">上一篇: <?php if($this->prevPageInfo) echo '<a href="/page/'.$this->prevPageInfo['url_token'].'.html">', $this->prevPageInfo['title'],'</a>'; else echo '没有了';?></span>
-                    <span class="col-sm-6 padding10 text-right">下一篇: <?php if($this->nextPageInfo) echo '<a href="/page/'.$this->nextPageInfo['url_token'].'.html">', $this->nextPageInfo['title'],'</a>'; else echo '没有了';?></span>
+                    <span class="col-sm-6 padding10">上一篇: <?php if($this->prevPageInfo) echo '<a href="/page/'. ($this->_isInside ? 'inside_index/' : '').$this->prevPageInfo['url_token'].'.html">', $this->prevPageInfo['title'],'</a>'; else echo '没有了';?></span>
+                    <span class="col-sm-6 padding10 text-right">下一篇: <?php if($this->nextPageInfo) echo '<a href="/page/'.( $this->_isInside ? 'inside_index/' : '').$this->nextPageInfo['url_token'].'.html">', $this->nextPageInfo['title'],'</a>'; else echo '没有了';?></span>
                 </div>
 			</div>
 

@@ -17,6 +17,36 @@
 				<tr>
 					<td>
 						<div class="form-group">
+							<span class="col-sm-2 col-xs-2 control-label"><?php _e('可见范围'); ?>:</span>
+							<div class="col-sm-2 col-xs-2">
+                                <select name="publish_area" class="form-control" >
+                                    <?php foreach (pageModel::PUBLIC_AREA_LIST as $_k => $_v) { ?>
+                                    <option value="<?php echo $_k;?>" <?php echo isset($this->page_info['publish_area']) && $this->page_info['publish_area']==$_k ? 'selected':''; ?>><?php echo $_v; ?></option>
+                                    <?php }?>
+                                </select>
+							</div>
+							<span class="col-sm-2 col-xs-2 control-label text-right"><?php _e('发布时间'); ?>:</span>
+                            <div class="col-sm-2 col-xs-2">
+                            <input type="text" name="publish_time" class="form-control mod-data date-start" value="<?php echo $this->page_info['publish_time']>0 ? date('Y-m-d H:i:s', $this->page_info['publish_time']) : ''; ?>" />
+                            </div>
+							<span class="col-sm-2 col-xs-2 control-label text-right"><?php _e('阅读回执'); ?>:</span>
+                            <div class="col-sm-2 col-xs-2">
+                                <div class="btn-group mod-btn">
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="is_receipt_required" value="1"<?php if ($this->page_info['is_receipt_required'] == '1') { ?> checked="checked"<?php } ?> /> <?php _e('是'); ?>
+                                    </label>
+
+                                    <label type="button" class="btn mod-btn-color">
+                                        <input type="radio" name="is_receipt_required" value="0"<?php if ($this->page_info['is_receipt_required'] != '1') { ?> checked="checked"<?php } ?> /> <?php _e('否'); ?>
+                                    </label>
+                                </div>
+                            </div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
 							<span class="col-sm-2 col-xs-3 control-label"><?php _e('页面 URL'); ?>:</span>
 							<div class="col-sm-10 col-xs-9">
 	                            <span class="col-sm-1 col-xs-3 mod-text-inline">/page/</span>

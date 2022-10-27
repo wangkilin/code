@@ -7,6 +7,18 @@ defined('iCodeBang_Com') OR die('Access denied!');
  */
 class pageModel extends Model
 {
+    const PUBLIC_AREA_NO_LIMIT = 1;
+    const PUBLIC_AREA_INSIDE   = 0;
+    const PUBLIC_AREA_OUTSIDE  = 2;
+    /**
+     * 页码发布的区域可见范围列表
+     * @var array
+     */
+    const PUBLIC_AREA_LIST = array (
+        self::PUBLIC_AREA_OUTSIDE => '外网',
+        self::PUBLIC_AREA_INSIDE  => '内网',
+        self::PUBLIC_AREA_NO_LIMIT => '不限',
+    );
     /**
      * 确定访问的域名id. 后续根据域名id，获取对应域名下的内容；
      */
@@ -50,9 +62,12 @@ class pageModel extends Model
         return $this->fetch_row('pages', 'id = ' . intval($id) . $where);
     }
 
-    public function add_page($title, $keywords, $description, $contents, $url_token)
+    /**
+     * 添加动态页面
+     */
+    public function add_page($title, $keywords, $description, $contents, $url_token, $moreInfo=array())
     {
-        return $this->insert('pages', array(
+        $data = array(
             'title'         => $title,
             'keywords'      => $keywords,
             'description'   => $description,
@@ -60,8 +75,16 @@ class pageModel extends Model
             'url_token'     => $url_token,
             'belong_domain' => $this->_domainId,
             'add_time'      => date('Y-m-d H:i:s'),
+            'modify_time'   => date('Y-m-d H:i:s'),
             'user_id'       => Application::user()->get_info('uid'),
-        ));
+        );
+        isset($moreInfo['is_top']) AND $data['is_top'] = $moreInfo['is_top'];
+        isset($moreInfo['publish_area']) AND $data['publish_area'] = $moreInfo['publish_area'];
+        isset($moreInfo['publish_time']) AND $data['publish_time'] = strtotime($moreInfo['publish_time']);
+        isset($moreInfo['category_id']) AND $data['category_id'] = $moreInfo['category_id'];
+        isset($moreInfo['is_receipt_required']) AND $data['is_receipt_required'] = $moreInfo['is_receipt_required'];
+
+        return $this->insert('pages', $data);
     }
 
     public function remove_page($id)
@@ -79,11 +102,14 @@ class pageModel extends Model
         return $this->delete('pages', 'id = ' . intval($id) . $where);
     }
 
-    public function update_page($id, $title, $keywords, $description, $contents, $url_token)
+    /**
+     * 更新动态页面
+     */
+    public function update_page($id, $title, $keywords, $description, $contents, $url_token, $moreInfo=array())
     {
         $where = is_null($this->_domainId) ? '' : ' AND belong_domain = ' . $this->_domainId;
 
-        return $this->update('pages', array(
+        $data = array(
             'title'         => $title,
             'keywords'      => $keywords,
             'description'   => $description,
@@ -91,7 +117,14 @@ class pageModel extends Model
             'url_token'     => $url_token,
             'modify_time'   => date('Y-m-d H:i:s'),
             'user_id'       => Application::user()->get_info('uid'),
-        ), 'id = ' . intval($id) . $where);
+        );
+        isset($moreInfo['is_top']) AND $data['is_top'] = $moreInfo['is_top'];
+        isset($moreInfo['publish_area']) AND $data['publish_area'] = $moreInfo['publish_area'];
+        isset($moreInfo['publish_time']) AND $data['publish_time'] = strtotime($moreInfo['publish_time']);
+        isset($moreInfo['category_id']) AND $data['category_id'] = $moreInfo['category_id'];
+        isset($moreInfo['is_receipt_required']) AND $data['is_receipt_required'] = $moreInfo['is_receipt_required'];
+
+        return $this->update('pages', $data, 'id = ' . intval($id) . $where);
     }
 
     public function fetch_page_list($page, $limit = 10)

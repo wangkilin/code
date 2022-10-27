@@ -28,7 +28,8 @@ class page extends SinhoBaseController
     public function index_action()
     {
         $where = is_null(self::$domainId) ? null : 'belong_domain = ' . self::$domainId;
-        $categoryList = $this->model()->fetch_all('page_category', $where);
+        $categoryList = $this->model('page')->fetch_all('page_category', $where);
+
         $categoryIds = array_column($categoryList, 'id');
         $categoryList= array_combine($categoryIds, $categoryList);
         View::assign('categoryList', $categoryList);
@@ -51,7 +52,7 @@ class page extends SinhoBaseController
         $this->crumb(Application::lang()->_t('添加页面'), "admin/page/add/");
 
         $where = is_null(self::$domainId) ? null : 'belong_domain = ' . self::$domainId;
-        $categoryList = $this->model()->fetch_all('page_category', $where);
+        $categoryList = $this->model('page')->fetch_all('page_category', $where);
         View::assign('categoryList', $categoryList);
         View::import_js('js/fileupload.js');
         if (get_setting('advanced_editor_enable') == 'Y') {

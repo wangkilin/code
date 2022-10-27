@@ -22,8 +22,43 @@
         <div class="col-md-12">
             <div class="row">
                 <?php if (property_exists($this, 'personalWorkloadList')) { // 有个人工作量数据展示个人数据统计图表 ?>
-                <div class="col-md-12 form-group">
-                    <div id="statistic_chart" class="echart_stat"></div>
+                <div class="<?php if ($this->intranetNewsList) echo 'col-md-6'; else echo 'col-md-12';?> form-group">
+
+                    <div class="mod">
+                        <div class="form-group nomargin mod-head">
+                                <div class="col-sm-12 col-xs-12 ">
+                                <h3>
+                                <span class="pull-left nopadding nomargin"><?php _e('我的工作量和质量考核'); ?></span>
+                                </h3>
+                                </div>
+                        </div>
+                        <div class="tab-content nopadding mod-content">
+                            <div id="statistic_chart" class="echart_stat"></div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+                <?php if ($this->intranetNewsList) { $i = 1;// 内网信息列表 ?>
+                <div class="col-md-6 form-group">
+                    <div class="mod">
+
+                        <div class="form-group nomargin mod-head">
+                                <div class="col-sm-3 col-xs-2 ">
+                                <h3>
+                                <span class="pull-left nopadding nomargin"><?php _e('内网信息'); ?></span>
+                                </h3>
+                                </div>
+                        </div>
+                        <div class="tab-content mod-content">
+                    <?php foreach ($this->intranetNewsList as $_itemInfo) { ?>
+                            <p class="clearfix">
+                                <span class="col-md-1"><?php echo $i++;?></span>
+                                <span><a href="page/inside_index/<?php echo $_itemInfo['url_token']==''? $_itemInfo['id'] : $_itemInfo['url_token'];?>" target="_blank"><?php echo $_itemInfo['title'];?></a></span>
+                                <span class="col-md-2 pull-right"><?php echo substr($_itemInfo['modify_time'], 5, 5);?></span>
+                            </p>
+                    <?php }?>
+                        </div>
+                    </div>
                 </div>
                 <?php } ?>
                 <?php if (property_exists($this, 'employeeWorkloadList')) {// 展示员工统计图表 ?>
@@ -422,7 +457,7 @@ $(function () {
     var echartOptions1 = Object.assign({}, echartOptions); // 克隆对象
     echartOptions1.legend.x = 'center';
     echartOptions1.legend.left = 'center';
-    echartOptions1.title.text =  '我的工作量和质量考核';
+    echartOptions1.title.text = '';// '我的工作量和质量考核';
     echartOptions1.series[1] = Object.assign({}, echartOptions1.series[0]);
     //echartOptions1.xAxis[1] = Object.assign({}, echartOptions1.xAxis[0]);
     echartOptions1.yAxis[1] = Object.assign({}, echartOptions1.yAxis[0]);

@@ -127,7 +127,7 @@ class CleanData
         $debug = false;
         // 1. 找到附件表中没有绑定内容的， 逐条操作
         // 将12小时前的文件，只要没有绑定内容，删除
-        $attachList = $this->getModel()->fetch_all('attach', 'item_id=0 and item_type="article" and add_time<' . strtotime('2022-10-10') . ' and add_time>' . strtotime('2022-7-31') , 'id desc');
+        $attachList = $this->getModel()->fetch_all('attach', 'item_id=0 and item_type="article" and add_time<' . (time() - 3600 * 12) , 'id desc');
         echo count($attachList) . "\r\n";
         foreach ($attachList as $_itemInfo) {
             $_itemInfo['add_date_time'] = date('Y-m-d H:i:s', $_itemInfo['add_time']);

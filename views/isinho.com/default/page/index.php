@@ -6,7 +6,7 @@
             <div class="col-sm-2">
                 <ul class="text-left">
                 <?php foreach ($this->page_list as $_itemInfo) {?>
-                    <li class="btn <?php echo $_GET['id'] == $_itemInfo['url_token'] ? 'active' : '';?> btn-default btn-block"><a class="" href="/page/<?php echo $_itemInfo['url_token'];?>.html"><?php echo $_itemInfo['title'];?></a></li>
+                    <li class="btn <?php echo $_GET['id'] == $_itemInfo['url_token'] ? 'active' : '';?> btn-default btn-block"><a class="" href="/page/<?php echo $this->_isInside ? 'inside_index/' : ''; echo $_itemInfo['url_token'];?>.html"><?php echo $_itemInfo['title'];?></a></li>
                 <?php }?>
                 </ul>
             </div>

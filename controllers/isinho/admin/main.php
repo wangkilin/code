@@ -9,6 +9,9 @@ class main extends SinhoBaseController
     {
         $this->crumb(Application::lang()->_t('概述'), 'admin/main/');
 
+        $this->hostConfig->sinho_feature_list['enable_page_manage'] == true
+         AND View::assign('intranetNewsList', $this->model()->fetch_page('pages', 'publish_area != ' . pageModel::PUBLIC_AREA_OUTSIDE . ' AND enabled = 1 AND publish_time <=' . time(), 'modify_time desc') );
+
         // 获取工作量表中的半年内记录的最大月份， 获取半年内记录的最小月份。 将这段数据展示出来
         $belongMonth = $this->model('sinhoWorkload')->max(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month', 'belong_month >= ' . date('Ym', strtotime('-6month')));
         $belongMinMonth = $this->model('sinhoWorkload')->min(sinhoWorkloadModel::WORKLOAD_TABLE, 'belong_month', 'belong_month >= ' . date('Ym', strtotime('-6month')));

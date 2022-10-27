@@ -6,7 +6,7 @@
             <div class="icb-article-title-box clearfix">
                 <span class="icb-article-title">
 				 <h4>
-					<a href="/page/<?php echo empty($_itemInfo['url_token']) ? $_itemInfo['id']: $_itemInfo['url_token']; ?>" target="blank"><?php echo $_itemInfo['title']; ?></a>
+					<a href="/page/<?php echo $this->_isInside ? 'inside_index/' : ''; ?><?php echo empty($_itemInfo['url_token']) ? $_itemInfo['id']: $_itemInfo['url_token']; ?>" target="blank"><?php echo $_itemInfo['title']; ?></a>
 				</h4>
                 </span>
             </div>
@@ -23,7 +23,7 @@
                         if (cjk_strlen($_itemInfo['contents']) > 130) {
                             ?> ...
                         <br/>
-                        <a class="more pull-right" href="/page/<?php echo empty($_itemInfo['url_token']) ? $_itemInfo['id']:$_itemInfo['url_token']; ?>" target="_blank">查看全部</a>
+                        <a class="more pull-right" href="/page/<?php echo $this->_isInside ? 'inside_index/' : ''; ?><?php echo empty($_itemInfo['url_token']) ? $_itemInfo['id']:$_itemInfo['url_token']; ?>" target="_blank">查看全部</a>
                         <?php
                         } ?>
                     </div>
@@ -35,11 +35,16 @@
             </div>
         </div>
         <div class="mod-footer clearfix">
+            <?php $_tmpCategoryId = $_itemInfo['category_id'];
+            while($_tmpCategoryId > 0 && isset($this->categoryList[$_tmpCategoryId])) { ?>
             <span class="pull-left article-tag">
-            <a class="text" href="/page/category-<?php
-               echo $_itemInfo['category_id']; ?>"><?php
-               echo $this->categoryList[$_itemInfo['category_id']]['title']; ?></a>
+            <a class="text" href="/page/<?php echo $this->_isInside ? 'inside_square/' : ''; ?>category-<?php
+               echo $_tmpCategoryId; ?>"><?php
+               echo $this->categoryList[$_tmpCategoryId]['title']; ?></a>
             </span>
+            <?php
+            $_tmpCategoryId = $this->categoryList[$_tmpCategoryId]['parent_id'];
+            }// end while ?>
             <span class="pull-right more-operate text-color-999">
             <?php   echo  $this->userList[$_itemInfo['user_id']] ['user_name']; ?>
             •

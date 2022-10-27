@@ -399,6 +399,21 @@ function doPublishArticle($userId, $title, $content, $categoryId=1, $topics=arra
     }
 }
 
+/**
+ * 根据key值移除没有绑定条目的附件
+ */
+function doRemoveUnbindAttachByAccessKey($accessKey)
+{
+    if (! $accessKey) {
+        return;
+    }
+    $accessKey = strval($accessKey);
+    $attachList = Application::model()->fetch_all('attach', 'access_key = "' . Application::model()->quote($accessKey) . '" and item_id = 0');
+    foreach ($attachList as $_itemInfo) {
+        Application::model('publish')->remove_attach($_itemInfo['id'], $accessKey, false);
+    }
+}
+
 function doPublishCourse ()
 {
 
