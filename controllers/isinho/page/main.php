@@ -315,6 +315,7 @@ class main extends Controller
             return;
         }
 
+        $page_info['is_receipt_required'] = $this->model()->fetch_one('page_read_record','id', 'page_id='.$page_info['id'].' AND user_id=' . $this->user_info['uid'])==0;
         $page_info['url_token'] = empty($page_info['url_token']) ? $page_info['id'] : $page_info['url_token'];
         // 文章设置了关键字， 将关键字设置到页面的meta中
         if ($page_info['keywords']) {

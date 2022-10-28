@@ -32,6 +32,24 @@ class page extends AdminController
 
         return;
     }
+
+    /**
+     * 设置已读
+     */
+    public function set_read_action ()
+    {
+        if (! $this->user_info['uid']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('没有权限')));
+        }
+        if (! $_POST['page_id']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+
+        if (! $this->model()->fetch_row('page_read_record', 'page_id = ' . $_POST['page_id'] . ' AND user_id = ' . $this->user_info['uid'])) {
+            $this->model()->insert('page_read_record', array('user_id'=>$this->user_info['uid'], 'page_id'=> $_POST['page_id'], 'read_time'=>date('Y-m-d H:i:s')));
+        }
+        H::ajax_json_output(Application::RSM( null, 1, Application::lang()->_t('完成设置')) );
+    }
 }
 
 /* EOF */

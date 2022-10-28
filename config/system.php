@@ -1,9 +1,17 @@
 <?php
 
 $config['debug'] = false;    // 网站 Debug 模式
+$config['page_domain_map'] = array( // 独立页面内容绑定域名和页面所属id . 不同域名可以使用同一个id，实现多域名使用同一个空间功能
+    'icodebang.com' => 1,
+    'icodebang.cn'  => 1,
+    'devboy.cn'     => 1,
+    'devboy.net'    => 1,
+    'isinho.com'    => 2,
+    'teacup.com.cn' => 3,
+);
 $config['sites'] = array(
     'www.isinho.com'    => array(
-        'debug'=>false
+        'debug' => false,
     ),
     'www1.isinho.com'    => array(
         'debug'=>true,

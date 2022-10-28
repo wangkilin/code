@@ -26,6 +26,14 @@
                 <div class="padding10">
 				    <?php echo $this->page_info['contents']; ?>
                 </div>
+                <?php if ($this->user_info['uid'] ) { ?>
+                <div class="row">
+                    <span class="col-sm-2"></span>
+                    <span class="col-sm-8">
+                        <button data-page-id="<?php echo $this->page_info['id']?>"  onclick="$(this).removeClass('btn-primary'); setItemRead($(this));return false;" class="btn btn-lg <?php echo $this->page_info['is_receipt_required']==1?'btn-primary':'';?> col-sm-12"><?php _e('阅读完成');?></button>
+                    </span>
+                </div>
+                <?php } ?>
 
                 <div class="clearfix">
                     <span class="col-sm-6 padding10">上一篇: <?php if($this->prevPageInfo) echo '<a href="/page/'. ($this->_isInside ? 'inside_index/' : '').$this->prevPageInfo['url_token'].'.html">', $this->prevPageInfo['title'],'</a>'; else echo '没有了';?></span>
@@ -37,4 +45,15 @@
 		</div>
 	</div>
 <div class="container margin20"></div>
+<script>
+function setItemRead($obj) {
+    var pageId = $obj.data('page-id');
+
+    if ($obj.hasClass('btn-primary')) {
+        ICB.ajax.requestJson("/admin/ajax/page/set_read/", {page_id:pageId}, function(){});
+    }
+
+    return false;
+}
+</script>
 <?php View::output('global/footer.php'); ?>
