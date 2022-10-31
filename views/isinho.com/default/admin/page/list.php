@@ -11,7 +11,6 @@
 
 		<div class="mod-body tab-content">
 			<div class="alert alert-success collapse error_message"></div>
-
 			<form action="admin/ajax/save_page_status/" method="post" id="page_list_form">
 			<div class="table-responsive">
 			<?php if ($this->page_list) { ?>
@@ -75,6 +74,7 @@
 							<td><?php echo $val['description']; ?></td>
 							<td>
 								<a href="admin/page/edit/id-<?php echo $val['id']; ?>" title="<?php _e('编辑'); ?>" data-toggle="tooltip" class="icon icon-edit md-tip"></a>
+								<a onclick="ICB.modal.confirm('<?php $val['is_top'] ? _e('取消置顶？'):_e('设置置顶');?>', function(){ ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/page/set_top/', {page_id:<?php echo $val['id']?>,top:<?php echo $val['is_top'] ? 0:1?>}) });"  title="<?php $val['is_top'] ? _e('取消置顶'):_e('设置置顶'); ?>" data-toggle="tooltip" class="icon <?php echo $val['is_top'] ? 'icon-down':'icon-up'; ?> md-tip"></a>
 								<a onclick="ICB.domEvents.deleteShowConfirmModal( _t('确认删除？'), function(){ ICB.ajax.requestJson(G_BASE_URL + '/admin/ajax/remove_page/', 'id=<?php echo $val['id']; ?>') });" title="<?php _e('删除'); ?>" data-toggle="tooltip" class="icon icon-trash md-tip"></a>
 							</td>
 						</tr>

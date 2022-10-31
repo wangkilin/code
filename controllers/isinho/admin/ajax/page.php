@@ -50,6 +50,23 @@ class page extends AdminController
         }
         H::ajax_json_output(Application::RSM( null, 1, Application::lang()->_t('完成设置')) );
     }
+
+    /**
+     * 设置/取消 置顶
+     */
+    public function set_top_action ()
+    {
+        if (! $this->user_info['uid']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('没有权限')));
+        }
+        if (! $_POST['page_id']) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+        }
+
+        $this->model()->update('pages', array('is_top'=>$_POST['top']), 'id='.$_POST['page_id']);
+
+        H::ajax_json_output(Application::RSM( array('url'=>''), 1, Application::lang()->_t('完成设置')) );
+    }
 }
 
 /* EOF */
