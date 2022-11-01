@@ -228,6 +228,9 @@
                                                 $_leaveInfo['weekend']['d'] += $_leaveDay;
                                                 $_leaveInfo['weekend']['h'] += $_leaveHour;
                                                 break;
+                                            case administration::LEAVE_TYPE_HOMEWORK: // 居家办公
+                                                _e('居家办公');
+                                                break;
                                             default:
                                                 _e('旷工');
                                                 break;
