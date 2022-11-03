@@ -34,7 +34,7 @@
                             <tr>
                                 <th class="text-left js-workload-ref"><?php _e('日期'); ?></th>
                                 <th><?php _e('责编'); ?></th>
-                                <th><?php _e('书稿<br/>类别'); ?></th>
+                                <th class="js-workload-ref"><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
                                 <th><?php _e('校次'); ?></th>
@@ -70,7 +70,7 @@
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5),'~',substr($itemInfo['return_date'], 5); ?></a>
                                 </td>
                                 <td></td>
-                                <td class="js-category"><?php echo $itemInfo['category']; ?></td>
+                                <td class="js-workload-ref js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                 <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
@@ -122,7 +122,7 @@
                                     ?>
                                 </td>
                                 <td class="no-word-break"><a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-user__id-<?php echo $workloadInfo['user_id'];?>"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></a></td>
-                                <td class="js-category"><?php echo $itemInfo['category']; ?></td>
+                                <td class="js-workload-ref js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                 <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
