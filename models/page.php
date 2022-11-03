@@ -130,7 +130,7 @@ class pageModel extends Model
     public function fetch_page_list($page, $limit = 10)
     {
         $where = is_null($this->_domainId) ? null : 'belong_domain = ' . $this->_domainId;
-        return $this->fetch_page('pages', $where, 'id DESC', $page, $limit);
+        return $this->fetch_page('pages', $where, 'is_top DESC,modify_time DESC,id DESC', $page, $limit);
     }
 
     public function update_page_enabled($page_id, $enabled)

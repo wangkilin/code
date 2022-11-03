@@ -166,7 +166,7 @@ class main extends Controller
         }
 
         $where[] = 'enabled = 1 AND publish_time <=' . time() . ' AND category_id IN (' . join(',', $categoryIdList) . ')';
-        $pageList  = $this->model()->fetch_page('pages', join(' AND ', $where), 'modify_time DESC,id DESC', $_GET['page'], $this->per_page, true, '*');
+        $pageList  = $this->model()->fetch_page('pages', join(' AND ', $where), 'is_top DESC,modify_time DESC,id DESC', $_GET['page'], $this->per_page, true, '*');
         $totalRows = $this->model()->found_rows();
         $userIds   = array_column($pageList, 'user_id');
         $userList  = array();
@@ -242,7 +242,7 @@ class main extends Controller
         View::assign('navCategoryList', $navCategoryList);
 
         $_sqlWhere = $this->_isInside ? 'publish_area != ' . pageModel::PUBLIC_AREA_OUTSIDE : 'publish_area != ' . pageModel::PUBLIC_AREA_INSIDE;
-        $pageList  = $this->model()->fetch_page('pages', $_sqlWhere . ' AND enabled = 1 AND publish_time <=' . time() . ' AND ' . $where, 'modify_time DESC, id DESC', $_GET['page'], $this->per_page, true, '*');
+        $pageList  = $this->model()->fetch_page('pages', $_sqlWhere . ' AND enabled = 1 AND publish_time <=' . time() . ' AND ' . $where, 'is_top DESC,modify_time DESC,id DESC', $_GET['page'], $this->per_page, true, '*');
         $totalRows = $this->model()->found_rows();
         $userIds   = array_column($pageList, 'user_id');
         $userList  = array();
