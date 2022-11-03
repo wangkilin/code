@@ -29,10 +29,10 @@
                     <input type="hidden" id="action" name="action" value="" />
                 <?php if ($this->itemsList) { ?>
 
-                    <table class="table table-striped px10 no-padding no-margin workload-list">
+                    <table id="workload_by_book" class="table table-striped px10 no-padding no-margin workload-list">
                         <thead>
                             <tr>
-                                <th class="text-left"><?php _e('日期'); ?></th>
+                                <th class="text-left js-workload-ref"><?php _e('日期'); ?></th>
                                 <th><?php _e('责编'); ?></th>
                                 <th><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('系列'); ?></th>
@@ -56,16 +56,16 @@
                                 <th><?php _e('功能册<br/>答案'); ?></th>
                                 <th class="red-right-border"><?php _e('千字/页'); ?></th>
                                 <th><?php _e('系数'); ?></th>
-                                <th><?php _e('核算总<br/>字数(千)'); ?></th>
-                                <th><?php _e('应发<br/>金额'); ?></th>
+                                <th class="js-workload-ref"><?php _e('核算总<br/>字数(千)'); ?></th>
+                                <th class="js-workload-ref"><?php _e('应发<br/>金额'); ?></th>
                                 <th><?php _e('备注'); ?></th>
-                                <th><?php _e('操作'); ?></th>
+                                <th class="js-workload-ref"><?php _e('操作'); ?></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($this->itemsList AS $itemInfo) { $bookInfo = $itemInfo; ?>
                             <tr data-book-id="<?php echo $itemInfo['id'];?>" class="book-line">
-                                <td class="text-left">
+                                <td class="js-workload-ref text-left">
 
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5),'~',substr($itemInfo['return_date'], 5); ?></a>
                                 </td>
@@ -92,11 +92,11 @@
                                 <td><?php echo $itemInfo['function_answer']; ?></td>
                                 <td class="red-right-border"><?php echo $itemInfo['function_answer_chars_per_page']; ?></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
-                                <td><?php echo $itemInfo['total_chars']; ?></td>
-                                <td>&nbsp;</td>
-                                <td><?php echo $itemInfo['remarks']; ?><span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
+                                <td class="js-workload-ref"><?php echo $itemInfo['total_chars']; ?></td>
+                                <td class="js-workload-ref">&nbsp;</td>
+                                <td ><?php echo $itemInfo['remarks']; ?><span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
 
-                                <td class="nowrap">
+                                <td class="js-workload-ref nowrap">
                                     <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                     <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                 </td>
@@ -105,7 +105,7 @@
 
                                 <?php foreach ($this->workloadList[$itemInfo['id']] AS $workloadInfo) { ?>
                             <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line': ($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
-                                <td class="text-left">
+                                <td class="js-workload-ref text-left">
                                     <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>"/>
                                     <?php
                                     if ($workloadInfo['add_time']) {
@@ -144,17 +144,17 @@
                                 <td data-td-name="function_answer" class="js-allow-mark"><a><?php echo $workloadInfo['function_answer']; ?></a></td>
                                 <td data-td-name="function_answer_chars_per_page" class="js-allow-mark red-right-border"><a><?php echo $workloadInfo['function_answer_chars_per_page']; ?></a></td>
                                 <td data-td-name="weight" class="js-allow-mark"><a><?php echo $workloadInfo['weight']; ?></a></td>
-                                <td data-td-name="total_chars" class=""><a><?php echo $workloadInfo['total_chars']; ?></a></td>
-                                <td data-td-name="payable_amount" class=""><a><?php echo $workloadInfo['payable_amount']; ?></a></td>
+                                <td data-td-name="total_chars"  class="js-workload-ref"><a><?php echo $workloadInfo['total_chars']; ?></a></td>
+                                <td data-td-name="payable_amount"  class="js-workload-ref"><a><?php echo $workloadInfo['payable_amount']; ?></a></td>
                                 <!-- 存在js-allow-diff-book-mark, 允许跨书稿间计算单元格；js-can-not-compute表示单元格不可以参与计算 -->
                                 <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
-                                <td>
+                                <td class="js-workload-ref">
                                     <a target="_blank"  onclick="show_quarlity(<?php echo $workloadInfo['id']; ?>); return false;" class="js-fill-quarlity icon icon-verify md-tip" href="admin/ajax/workload/fill_quarylity/workload_id-<?php echo $workloadInfo['id']; ?>" class="icon icon-order md-tip" title="<?php _e('质量考核'); ?>" data-toggle="tooltip"></a>
                                 </td>
                             </tr>
                             <?php if (isset($this->quarlityList[$workloadInfo['id']])) { ?>
                             <tr>
-                                <td class="text-left">
+                                <td class="js-workload-ref text-left">
                                     <?php
                                     echo date('m-d', strtotime($this->quarlityList[$workloadInfo['id']]['add_date']));
                                     ?>

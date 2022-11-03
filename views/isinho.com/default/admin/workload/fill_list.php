@@ -40,6 +40,7 @@
                         <thead>
                             <tr>
                                 <th class=""><?php _e('日期'); ?></th>
+                                <th><?php _e('责编'); ?></th>
                                 <!-- <th><?php _e('书稿<br/>类别'); ?></th> -->
                                 <th><?php _e('系列'); ?></th>
                                 <th><?php _e('书名'); ?></th>
@@ -80,6 +81,7 @@
 
                                     <a class="md-tip"  title="<?php _e('发稿日期'); echo date('m-d', $itemInfo['add_time']);?> <?php _e('回稿日期'); echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):'';?>" data-toggle="tooltip"><?php echo date('m-d', $itemInfo['add_time']),'~';echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):''; ?></a>
                                 </td>
+                                <td class="no-word-break"><?php echo $this->user_info['user_name']; ?></td>
                                 <!-- <td class="js-category"><?php //echo $this->booksList[$itemInfo['book_id']]['category']; ?></td> -->
                                 <td class="js-serial"><?php echo $this->booksList[$itemInfo['book_id']]['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $this->booksList[$itemInfo['book_id']]['book_name']; ?></td>
@@ -157,10 +159,14 @@ function editWorkload (id)
     $.get(url, {'id':id}, function (response) {
         ICB.modal.loading(false);
 
-
+        var refBookWorkload = $(response).find('#workload_by_book tr').length > 2 ? $(response).find('#workload_by_book').parent().html() : '';
         $('#workload-edit-form-container').remove();
         var $refTr = $('tr[data-db-id="'+id+'"]');
-        $refTr.after('<tr id="workload-edit-form-container"><td colspan="'+$refTr.find('td').length+'">'+$(response).find('#workload-edit-form').parent().html()+'</td></tr>');
+        $refTr.after('<tr id="workload-edit-form-container"><td colspan="'+$refTr.find('td').length+'">'
+        +refBookWorkload
+        +$(response).find('#workload-edit-form').parent().html()
+        +'</td></tr>');
+        $('#workload_by_book .js-workload-ref').remove();
         $('#workload-edit-form-container input').tooltip();
         compute_chars_ammount();
 

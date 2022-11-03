@@ -290,6 +290,41 @@ class main extends SinhoBaseController
             H::redirect_msg(Application::lang()->_t('操作失败'), 'admin/fill_list/');
         }
         $bookInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::BOOK_TABLE, 'id = ' . intval($itemInfo['book_id']));
+
+        // 根据书稿id ， 获取到对应的工作量
+        $allList = $this->model('sinhoWorkload')
+                        ->fetch_all ( sinhoWorkloadModel::WORKLOAD_TABLE,
+                                    'book_id = ' . intval($itemInfo['book_id'])
+                                    . ' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE
+                            );
+        // 获取用户信息列表,
+        $userIds = array_column($allList, 'user_id');
+        $userList = array();
+        if ($userIds) {
+            $userList = $this->model('sinhoWorkload')->getUserList('uid IN (' . join(',', $userIds) . ')', 'uid DESC', PHP_INT_MAX);
+        }
+        $userIds  = array_column($userList, 'uid');
+        $userList = array_combine($userIds, $userList);
+
+        // 将工作量按照书稿id分组
+        $workloadList = array();
+        foreach ($allList as $_itemInfo) {
+            isset($workloadList[$_itemInfo['book_id']]) OR $workloadList[$_itemInfo['book_id']] = array();
+
+            $workloadList[$_itemInfo['book_id']][] = $_itemInfo;
+        }
+
+        // 根据书稿id列表获取书稿信息
+        $bookList = array($bookInfo);
+
+        View::assign('itemsList', $bookList);
+        View::assign('workloadList', $workloadList);
+        View::assign('userList', $userList);
+        View::assign('quarlityList', array());
+
+
+
+
         View::assign('bookInfo', $bookInfo);
         View::assign('itemInfo', $itemInfo);
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/fill_list','sinho_admin_menu') ) );
