@@ -323,7 +323,7 @@ class main extends SinhoBaseController
         View::assign('quarlityList', array());
 
 
-
+        View::assign('doLoadFillWorkloadForm', true);
 
         View::assign('bookInfo', $bookInfo);
         View::assign('itemInfo', $itemInfo);

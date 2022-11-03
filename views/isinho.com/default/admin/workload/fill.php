@@ -6,7 +6,11 @@
         <div class="mod-head">
             <h3><?php View::output('admin/workload/nav_inc'); ?></h3>
         </div>
-        <div><?php  View::output('admin/workload/check_by_book.php'); ?></div>
+        <div><?php
+        if ($this->doLoadFillWorkloadForm) { // 如果需要加载书稿工作量内容， 载入对应的模板
+            View::output('admin/workload/check_by_book.php');
+        }
+        ?></div>
         <div class="mod-body tab-content">
             <div class="tab-pane active" id="book">
                 <div class="table-responsive" id="workload-edit-form-container">
