@@ -284,7 +284,12 @@ class main extends SinhoBaseController
     public function fill_workload_action ()
     {
         View::assign('hostConfig', $this->hostConfig);
-        $itemInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id = ' . intval($_GET['id']). ' AND `status`<>' . sinhoWorkloadModel::STATUS_DELETE );
+        $itemInfo = $this->model('sinhoWorkload')
+                         ->fetch_row(
+                            sinhoWorkloadModel::WORKLOAD_TABLE,
+                            'id = ' . intval($_GET['id'])
+                            . ' AND user_id = ' . $this->user_id
+                            . ' AND `status`<>' . sinhoWorkloadModel::STATUS_DELETE );
 
         if (! $itemInfo) {
             H::redirect_msg(Application::lang()->_t('操作失败'), 'admin/fill_list/');
