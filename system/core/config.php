@@ -93,7 +93,7 @@ class core_config
      */
 	public function set($config_id, $data, $writeIntoConfigFile=true)
 	{
-		if (!$data || ! is_array($data)) {
+		if (! is_array($data)) {
 			throw new Zend_Exception('config data type error');
 		}
         $this->config[$config_id] = (object)$data;
