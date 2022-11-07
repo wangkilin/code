@@ -98,6 +98,7 @@ class pageModel extends Model
                 $this->model('publish')->remove_attach($val['id'], $val['access_key'], false);
             }
         }
+        $this->delete('page_read_record', 'page_id = ' . intval($id));
 
         return $this->delete('pages', 'id = ' . intval($id) . $where);
     }
@@ -123,6 +124,9 @@ class pageModel extends Model
         isset($moreInfo['publish_time']) AND $data['publish_time'] = strtotime($moreInfo['publish_time']);
         isset($moreInfo['category_id']) AND $data['category_id'] = $moreInfo['category_id'];
         isset($moreInfo['is_receipt_required']) AND $data['is_receipt_required'] = $moreInfo['is_receipt_required'];
+
+
+        $this->delete('page_read_record', 'page_id = ' . intval($id));
 
         return $this->update('pages', $data, 'id = ' . intval($id) . $where);
     }
