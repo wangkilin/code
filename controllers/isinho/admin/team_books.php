@@ -376,7 +376,7 @@ class team_books extends SinhoBaseController
         $bookBelongYears = json_decode($bookBelongYears, true);
         View::assign('bookBelongYears', $bookBelongYears);
 
-        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/team_books','sinho_admin_menu') ) );
 
 
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');

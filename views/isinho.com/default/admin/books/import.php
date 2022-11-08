@@ -34,7 +34,7 @@
                             <div class="row"></div>
                             <div class="row hide hidden js-import-result">
                                 <div  class="col-sm-12">
-                                    <form action="admin/ajax/books/do_import/" method="post" id="item_form" onsubmit="return false;">
+                                    <form action="admin/ajax/<?php echo CONTROLLER;?>/do_import/" method="post" id="item_form" onsubmit="return false;">
                                         <input type="hidden" id="js-import-result-batchkey" name="batch_key" value="" />
                                         <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
                                         <input type="hidden" id="js-import-filename" name="filename" value=""/>
@@ -90,7 +90,7 @@ $(function () {
 		new FileUploader(
 				$('.js-upload-btn'), // 绑定上传文件按钮
 				$('.upload-container'),
-				G_BASE_URL + '/admin/ajax/books/import/id-sinho',
+				G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/import/id-sinho',
 				{
 					//'uploadingModalSelector' : '#avatar_uploading_status',
 					'showUploadImage': false,
