@@ -106,15 +106,16 @@ class team_workload extends SinhoBaseController
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
         }
 
-        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id = ' . intval($_POST['workload_id']));
         is_array($itemInfo) OR $itemInfo = array();
 
-
         $userList = $this->getUserList();
-        if (! isset($userList[$itemInfo['user_id']])) {
+        if (empty($itemInfo) || !isset($userList[$itemInfo['user_id']])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误，对应的编辑不在管理范围')));
         }
         //$itemInfo = array('good_or_bad'=>-1, 'rate_num'=>5, 'remarks'=>'hello world');
+        $itemInfo = Application::model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::QUARLITY_TABLE, 'workload_id = ' . intval($_POST['workload_id']));
+        is_array($itemInfo) OR $itemInfo = array();
 
         H::ajax_json_output(Application::RSM($itemInfo, 0));
     }
