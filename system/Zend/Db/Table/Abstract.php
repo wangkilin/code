@@ -1304,12 +1304,17 @@ abstract class Zend_Db_Table_Abstract
         $whereList = array();
         $numberTerms = 0;
         foreach ($args as $keyPosition => $keyValues) {
-            $keyValuesCount = count($keyValues);
+            //$keyValuesCount = count($keyValues);
             // Coerce the values to an array.
             // Don't simply typecast to array, because the values
             // might be Zend_Db_Expr objects.
-            if (!is_array($keyValues)) {
+            if ($keyValues instanceof Exception ) {
+                $keyValuesCount = 0;
+            } else  if (!is_array($keyValues)) {
                 $keyValues = array($keyValues);
+                $keyValuesCount = 1;
+            } else {
+                $keyValuesCount = count($keyValues);
             }
             if ($numberTerms == 0) {
                 $numberTerms = $keyValuesCount;
