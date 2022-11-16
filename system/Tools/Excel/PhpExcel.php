@@ -2,13 +2,14 @@
 /**
  * phpExcel 组件类
  */
-require_once( INC_PATH . 'vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
-/** Include PHPExcel_IOFactory */
-require_once INC_PATH .  'vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
 
 class Tools_Excel_PhpExcel
 {
     public $phpExcel;
+
+    const VENDOR_NAME_EXCEL = 'PhpExcel';
+    const VENDOR_NAME_SPREAD_SHEET = 'PhpSpreadsheet';
+    protected $vendorName = 'PhpExcel';
 
     protected $hookBeforeDownload = null;
 
@@ -16,6 +17,16 @@ class Tools_Excel_PhpExcel
     {
         if (isset($options['beforeDownload']) && is_callable($options['beforeDownload'])) {
             $this->hookBeforeDownload = $options['beforeDownload'];
+        }
+
+        if (isset($options['vendor_name']) && $options['vendor_name']==self::VENDOR_NAME_SPREAD_SHEET) {
+
+            require_once INC_PATH .  'vendor/autoload.php';
+            $this->vendorName = self::VENDOR_NAME_SPREAD_SHEET;
+        } else {
+            require_once( INC_PATH . 'vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
+            /** Include PHPExcel_IOFactory */
+            require_once INC_PATH .  'vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
         }
     }
 
@@ -28,7 +39,15 @@ class Tools_Excel_PhpExcel
      */
     public function parseFile ($filepath, $sheetIndex=null)
     {
-        $this->phpExcel = PHPExcel_IOFactory::load($filepath);
+        if ($this->vendorName == self::VENDOR_NAME_SPREAD_SHEET) {
+            $inputFileType =  @ ucfirst(pathinfo($filepath, PATHINFO_EXTENSION));
+            $inputFileType == '' AND $inputFileType = 'Xls';
+            $reader = PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+            $reader->setLoadAllSheets();
+            $this->phpExcel = $reader->load($filepath);
+        } else {
+            $this->phpExcel = PHPExcel_IOFactory::load($filepath);
+        }
         $sheets = $this->phpExcel->getAllSheets();
 
         if (is_null($sheetIndex)) {

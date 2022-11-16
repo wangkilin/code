@@ -66,6 +66,10 @@ class core_autoload
 			{
 				$class_file_location = INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php';
             }
+            else if (file_exists(INC_PATH . 'vendor/' . str_replace('\\', '/', $class_name) . '.php'))
+			{
+				$class_file_location = INC_PATH . 'vendor/' . str_replace('\\', '/', $class_name) . '.php';
+            }
             // 没找到文件， 抛出异常
             else {
                 //echo INC_PATH . 'thirdParty/' . str_replace('\\', '/', $class_name) . '.php';exit;

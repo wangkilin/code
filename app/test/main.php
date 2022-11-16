@@ -227,4 +227,19 @@ class main extends BaseController
         $phpExcelModel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
         $phpExcelModel->getActiveSheet()->getDefaultColumnDimension('B')->setWidth(20);
     }
+
+    /**
+     * 使用新版的PhpSpreadsheet解析excel
+     */
+    public function spread_sheet_read_action ()
+    {
+        $inputFileName = ROOT_PATH . '/tmp/test.xls';
+        $phpExcel = & loadClass('Tools_Excel_PhpExcel',
+                                array('vendor_name' => Tools_Excel_PhpExcel::VENDOR_NAME_SPREAD_SHEET) );
+        $returnData = $phpExcel->parseFile($inputFileName);
+
+        var_dump($returnData);
+
+        return $returnData;
+    }
 }
