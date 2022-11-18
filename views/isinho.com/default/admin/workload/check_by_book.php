@@ -74,7 +74,7 @@
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                 <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
-                                <td><?php echo $itemInfo['category']; ?></td>
+                                <td></td>
                                 <td><?php echo $itemInfo['working_times']; ?></td>
                                 <td><?php echo $itemInfo['content_table_pages']; ?></td>
                                 <td><?php echo $itemInfo['text_pages']; ?></td>
