@@ -109,20 +109,35 @@ class Tools_Excel_PhpExcel
     public function import($file, $sheet = 0, $flag = 0)
     {
         if ($flag == 1) {
-            $phpReader = new PHPExcel_Reader_Excel5();
-            $filename  = $file;
+
+            $filename = $file;
+            if ($this->vendorName == self::VENDOR_NAME_SPREAD_SHEET) {
+                $inputFileType =  @ ucfirst(pathinfo($filename, PATHINFO_EXTENSION));
+                $inputFileType == '' AND $inputFileType = 'Xls';
+                $reader = PhpOffice\PhpSpreadsheet\IOFactory::createReader($inputFileType);
+                $reader->setLoadAllSheets();
+            } else {
+                $reader = new PHPExcel_Reader_Excel5();
+            }
         } else {
             $exts = pathinfo($file['name'], PATHINFO_EXTENSION);
             $filename = $file['tmp_name'];
 
-            if ($exts == 'xls') {
-                $phpReader = new PHPExcel_Reader_Excel5();
-            }elseif ($exts == 'xlsx') {
-                $phpReader = new PHPExcel_Reader_Excel2007();
+            if ($this->vendorName == self::VENDOR_NAME_SPREAD_SHEET) {
+                $exts == '' AND $exts = 'Xls';
+                $reader = PhpOffice\PhpSpreadsheet\IOFactory::createReader($exts);
+                $reader->setLoadAllSheets();
+            } else {
+
+                if ($exts == 'xls') {
+                    $reader = new PHPExcel_Reader_Excel5();
+                }elseif ($exts == 'xlsx') {
+                    $reader = new PHPExcel_Reader_Excel2007();
+                }
             }
         }
 
-        $this->phpExcel = $phpReader->load($filename);
+        $this->phpExcel = $reader->load($filename);
 
         $currentSheet = $this->phpExcel->getSheet($sheet);
 
@@ -211,6 +226,9 @@ class Tools_Excel_PhpExcel
      */
     public function export($fileName, $headArr, $data, $bindHeadKey=false, $cellStyleInfoList=array())
     {
+        require_once( INC_PATH . 'vendor/phpoffice/phpexcel/Classes/PHPExcel.php');
+        /** Include PHPExcel_IOFactory */
+        require_once INC_PATH .  'vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.php';
         //创建PHPExcel对象
         $objPHPExcel = new PHPExcel();
         $objProps = $objPHPExcel->getProperties();
