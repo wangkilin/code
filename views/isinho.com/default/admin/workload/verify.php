@@ -85,7 +85,7 @@
                                             <td class="js-serial"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['serial']; ?></a></td>
                                             <td class="js-bookname"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['book_name']; ?></a></td>
                                             <td class="js-proofreading-times"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['proofreading_times']; ?></a></td>
-                                            <td data-td-name="category" ><?php echo $itemInfo['category']; ?></td>
+                                            <td data-td-name="category" ><!-- <?php echo $itemInfo['category']; ?> --></td>
                                             <td data-td-name="working_times" ><?php echo $itemInfo['working_times']; ?></td>
                                             <td data-td-name="content_table_pages" ><?php echo $itemInfo['content_table_pages']; ?></td>
                                             <td data-td-name="text_pages" ><?php echo $itemInfo['text_pages']; ?></td>
