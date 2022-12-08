@@ -39,11 +39,11 @@
                         <table class="table table-striped px10 no-padding no-margin workload-list" id="workload_list_for_verify">
                             <thead>
                                 <tr>
+                                    <th><?php _e('书稿<br/>类别'); ?></th>
                                     <th>#</th>
                                     <th class="text-left"><?php _e('日期'); ?></th>
                                     <th><?php _e('责编'); ?></th>
-                                    <th><a href="/admin/verify_list/orderby-<?php echo $_GET['orderby']=='book'? 'id':'book'; ?>"><?php _e('书稿<br/>类别'); ?></a><?php echo $_GET['orderby']=='book'? '<i class="icon-insert"></i>':''; ?></th>
-                                    <th><?php _e('系列'); ?></th>
+                                    <th><a href="/admin/verify_list/orderby-<?php echo $_GET['orderby']=='book'? 'id':'book'; ?>"><?php _e('系列'); ?></a><?php echo $_GET['orderby']=='book'? '<i class="icon-insert"></i>':''; ?></th>
                                     <th><?php _e('书名'); ?></th>
                                     <th><?php _e('校次'); ?></th>
                                     <th><?php _e('类别'); ?></th>
@@ -74,6 +74,7 @@
                                 <?php if ($this->itemsList) {  $totalChars = 0; $_index=0;?>
                                     <?php foreach ($this->itemsList as $itemInfo) { $_index++; ?>
                                         <tr data-book-id="<?php echo $itemInfo['id']; ?>" class="book-line">
+                                            <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                             <td><?php echo $_index;?></td>
                                             <td class="text-left">
                                                 <a class="md-tip" title="<?php _e('发稿日期');
@@ -81,7 +82,6 @@
                                                                                                                                 echo $itemInfo['return_date']; ?>" data-toggle="tooltip"><?php echo substr($itemInfo['delivery_date'], 5), '~', substr($itemInfo['return_date'], 5); ?></a>
                                             </td>
                                             <td><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></td>
-                                            <td class="js-category"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['category']; ?></a></td>
                                             <td class="js-serial"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['serial']; ?></a></td>
                                             <td class="js-bookname"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['book_name']; ?></a></td>
                                             <td class="js-proofreading-times"><a href="/admin/check_list/by-book__id-<?php echo $itemInfo['id'];?>" target="_blank"><?php echo $itemInfo['proofreading_times']; ?></a></td>
@@ -115,6 +115,7 @@
 
                                             <?php foreach ($this->workloadList[$itemInfo['id']] as $workloadInfo) { $totalChars += $workloadInfo['total_chars'] ;?>
                                                 <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php echo $workloadInfo['status'] == 1 ? ' verified-line' : ($workloadInfo['status'] == 3 ? ' recording-line':' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
+                                                    <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                                     <td><?php echo $_index,'.',$_indexWorkload++;?></td>
                                                     <td class="text-left">
                                                         <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>" />
@@ -128,7 +129,6 @@
                                                         ?></a>
                                                     </td>
                                                     <td class="no-word-break"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></td>
-                                                    <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                                     <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                                     <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
                                                     <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
