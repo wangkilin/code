@@ -373,7 +373,7 @@ class books extends SinhoBaseController
                     continue;
                 }
                 // 对重复的书稿， 做合并处理
-                $_uniqueKey = $dataLine[$category_key] . '/' . $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key];
+                $_uniqueKey = $dataLine[$delivery_date_key] . '/' . $dataLine[$category_key] . '/' . $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key];
                 if (isset($uniqueList[$_uniqueKey]) ) {
                     $dataLine[$content_table_pages_key            ] += doubleval($uniqueList[$_uniqueKey][$content_table_pages_key            ]);
                     $dataLine[$text_pages_key                     ] += doubleval($uniqueList[$_uniqueKey][$text_pages_key                     ]);
