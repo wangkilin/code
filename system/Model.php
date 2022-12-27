@@ -859,7 +859,7 @@ class Model
         {
             $this->_cacheKey = 'db_rows_cache_' . md5($table . '_' . $where . '_' .$column . '_' . intval($distinct));
 
-            $db_found_rows = Application::cache()->get($_cacheKey);
+            $db_found_rows = Application::cache()->get($this->_cacheKey);
         }
 
         if (!$db_found_rows)
@@ -873,7 +873,7 @@ class Model
 
         if ($rows_cache AND $db_found_rows)
         {
-            Application::cache()->set($_cacheKey, $db_found_rows, get_setting('cache_level_high'));
+            Application::cache()->set($this->_cacheKey, $db_found_rows, get_setting('cache_level_high'));
         }
 
         // Found rows
