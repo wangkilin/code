@@ -27,7 +27,7 @@ class administration extends SinhoBaseController
      */
     public function ask_leave_action()
     {
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid ASC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
         $year = date('Y');
