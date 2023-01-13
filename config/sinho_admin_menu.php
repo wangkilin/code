@@ -11,7 +11,7 @@ $config[] = array(
 $config[] = array(
     'id'        => 'admin/book_manage',
     'title'     => _t('书稿管理'), // 概述
-    'cname'     => 'home',
+    'cname'     => 'folder-open',
     'children'  => array(
 
         array(
