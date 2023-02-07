@@ -438,6 +438,7 @@ class main extends SinhoBaseController
                 break;
         }
 
+        View::assign('isSinhoAdmin', $this->hasRolePermission(self::IS_SINHO_ADMIN));
         View::assign('amountPerPage', $this->per_page);
         View::assign('userList', $userList);
         View::assign('bookList', $bookList);

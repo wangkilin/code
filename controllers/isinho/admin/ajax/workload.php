@@ -154,23 +154,38 @@ class workload extends SinhoBaseController
      */
     public function remove_action()
     {
-        $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
+        $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD | self::IS_SINHO_ADMIN);
         if (empty($_POST['id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作方法错误')));
         }
 
         $itemInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id='.intval($_POST['id']));
-        if (! $itemInfo || $itemInfo['user_id'] !=$this->user_id || $itemInfo['is_branch']!=1 || ($itemInfo['status']!=sinhoWorkloadModel::STATUS_RECORDING)) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+
+        // 超级管理员， 允许删除未核算的工作量
+        if ($this->hasRolePermission(self::IS_SINHO_ADMIN)) {
+            if (! $itemInfo || ($itemInfo['status']!=sinhoWorkloadModel::STATUS_VERIFYING && $itemInfo['status']!=sinhoWorkloadModel::STATUS_RECORDING) ) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误!')));
+            }
+
+
+            $this->model('sinhoWorkload')
+                ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
+                    array('status' => sinhoWorkloadModel::STATUS_DELETE),
+                    'id =' . intval($_POST['id']) . ' AND (status = ' . sinhoWorkloadModel::STATUS_RECORDING . ' OR status = ' . sinhoWorkloadModel::STATUS_VERIFYING . ') '
+                );
+        } else {
+        // 本人删除自己未核算的工作量
+            if (! $itemInfo || $itemInfo['user_id'] !=$this->user_id || $itemInfo['is_branch']!=1 || ($itemInfo['status']!=sinhoWorkloadModel::STATUS_RECORDING)) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
+            }
+
+
+            $this->model('sinhoWorkload')
+                ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
+                    array('status' => sinhoWorkloadModel::STATUS_DELETE),
+                    'id =' . intval($_POST['id']) . ' AND status = ' . sinhoWorkloadModel::STATUS_RECORDING
+                );
         }
-
-
-        $this->model('sinhoWorkload')
-             ->update(sinhoWorkloadModel::WORKLOAD_TABLE,
-                array('status' => sinhoWorkloadModel::STATUS_DELETE),
-                'id =' . intval($_POST['id']) . ' AND status = ' . sinhoWorkloadModel::STATUS_RECORDING
-             );
-        //Application::model()->delete(sinhoWorkloadModel::WORKLOAD_TABLE, 'id=' . intval($_POST['id']) . ' AND is_branch=1 AND status = 0 AND user_id = ' . $this->user_id);
 
         H::ajax_json_output(Application::RSM(null, 1, null));
     }

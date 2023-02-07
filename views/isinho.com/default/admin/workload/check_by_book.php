@@ -149,6 +149,10 @@
                                 <!-- 存在js-allow-diff-book-mark, 允许跨书稿间计算单元格；js-can-not-compute表示单元格不可以参与计算 -->
                                 <td data-td-name="remarks" class="js-allow-mark js-allow-diff-book-mark js-can-not-compute"><a><?php echo $workloadInfo['remarks']; ?></a></td>
                                 <td class="js-workload-ref">
+                                    <?php if ($this->isSinhoAdmin && ($workloadInfo['status']==sinhoWorkloadModel::STATUS_RECORDING || $workloadInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) ) {// 工作量没有核算过，允许删除 ?>
+                                    <a href="admin/ajax/workload/remove/" onclick="deleteItem(<?php echo $workloadInfo['id']; ?>); return false;" class="icon icon-delete md-tip" title="<?php _e('删除'); ?>" data-toggle="tooltip"></a>
+                                    <?php }
+                                    ?>
                                     <a target="_blank"  onclick="show_quarlity(<?php echo $workloadInfo['id']; ?>); return false;" class="js-fill-quarlity icon icon-verify md-tip" href="admin/ajax/workload/fill_quarylity/workload_id-<?php echo $workloadInfo['id']; ?>" class="icon icon-order md-tip" title="<?php _e('质量考核'); ?>" data-toggle="tooltip"></a>
                                 </td>
                             </tr>
@@ -259,6 +263,41 @@
         </div>
 
 <script type="text/javascript">
+/**
+ * 删除未核算过的工作量
+ */
+function deleteItem(id)
+{
+    ICB.modal.confirm (
+  	   _t('确认删除吗？'),
+  	   function(){
+      	   var url = G_BASE_URL + '/admin/ajax/workload/remove/',
+      	       params = {'id':id, '_post_type':'ajax'};
+  		   ICB.ajax.requestJson(
+  	      	   url,
+  	      	   params,
+  	      	   function (response) {
+      	      		if (!response) {
+      	      		    return false;
+	      	      	}
+
+	      	      	if (response.err) {
+	      	      		ICB.modal.alert(response.err);
+	      	      	} else if (response.errno == 1) {
+	      	      	    ICB.modal.alert(_t('已删除工作量条目'), {'hidden.bs.modal': function () {
+                            window.location.reload();
+		      	      	   }
+	      	      	    });
+	      	      	} else {
+	      	      	    ICB.modal.alert(_t('请求发生错误'));
+	      	      	}
+  	      	   }
+  	       );
+	       }
+    );
+
+    return false;
+}
 function show_quarlity (workloadId)
 {
     ICB.modal.loading(true);
