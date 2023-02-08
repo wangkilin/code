@@ -65,7 +65,7 @@ var echartOptions = {
             containLabel: true
         },
         title: {
-            text:  stockName + ' - ' + shOrSztong + '近期持股变化'
+            text:  stockName + ' - ' + shOrSztong + '近期持股变化 : 图片来自大涨网 www.idazhang.com '
         },
         tooltip: {
             trigger: 'axis'
