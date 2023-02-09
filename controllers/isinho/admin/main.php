@@ -558,10 +558,10 @@ class main extends SinhoBaseController
             // 2. 根据书稿， 统计具有工作量书稿的总数
             $where = array();
             if ($_GET['start_date']) {
-                $where[] = 'delivery_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['start_date'])) ) . '"';
+                $where[] = 'delivery_date >="' . date('Y-m-d', strtotime($_GET['start_date']) ) . '"';
             }
             if ($_GET['end_date']) {
-                $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
+                $where[] = 'delivery_date <="' . date('Y-m-d', strtotime($_GET['end_date']) ) . '"';
             }
             if ($_GET['serial']) {
                 //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
