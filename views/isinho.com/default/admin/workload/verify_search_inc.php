@@ -32,7 +32,7 @@
                         <div class="col-sm-9 col-xs-8">
                             <div class="row">
                                 <div class="col-xs-11  col-sm-5 mod-double icon-date-container">
-                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo base64_decode($_GET['start_date']); ?>" name="start_date" autocomplete="off" placeholder="开始日期"/>
+                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo $_GET['start_date']; ?>" name="start_date" autocomplete="off" placeholder="开始日期"/>
                                     <i class="icon- icon-date"></i>
                                     <i class="icon- icon-date-delete icon-delete"></i>
                                 </div>
@@ -40,7 +40,7 @@
                                 -
                                 </span>
                                 <div class="col-xs-11 col-sm-5 icon-date-container">
-                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo base64_decode($_GET['end_date']); ?>" name="end_date"  autocomplete="off" placeholder="结束日期"/>
+                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo $_GET['end_date']; ?>" name="end_date"  autocomplete="off" placeholder="结束日期"/>
                                     <i class="icon- icon-date"></i>
                                     <i class="icon- icon-date-delete icon-delete"></i>
                                 </div>
