@@ -186,10 +186,10 @@ class team_workload extends SinhoBaseController
             $where = array('(category_id IN ('. join(',', $this->user_info['sinho_manage_subject']).') OR user_id = '.$this->user_id.')');
 
             if ($_GET['start_date']) {
-                $where[] = 'delivery_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['start_date'])) ) . '"';
+                $where[] = 'delivery_date >="' . date('Y-m-d', strtotime($_GET['start_date']) ) . '"';
             }
             if ($_GET['end_date']) {
-                $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
+                $where[] = 'delivery_date <="' . date('Y-m-d', strtotime($_GET['end_date']) ) . '"';
             }
             if ($_GET['serial']) {
                 //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
