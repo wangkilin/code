@@ -45,7 +45,22 @@ class Controller
             {
                 HTTP::set_cookie('fromuid', $_GET['fromuid']);
             }
+
+            // 匿名访问， 限制ip访问次数
+            $ip_address = fetch_ip();
+            $cache_key = str_replace(array('.',':'), '_',$ip_address) . 'website_allow_visit_page_number';
+            if ($visitPageNumber = Application::cache()->get($cache_key) ) {
+                $visitPageNumber++;
+                if ($visitPageNumber > 200) {
+                    HTTP::error_404();
+                }
+            } else {
+                $visitPageNumber = 1;
+            }
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_high'));
+
         }
+
 
         $this->user_info['group_name'] = $user_group['group_name'];
         $this->user_info['permission'] = $user_group['permission'];
