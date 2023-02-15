@@ -284,9 +284,10 @@ class BaseController extends Controller
             'max_size'      => get_setting('upload_size_limit')
         ));
 
-        if (isset($_GET[$filename])) {
-            Application::upload()->do_upload($_GET[$filename], file_get_contents('php://input'));
-        } else if (isset($_FILES[$filename])) {
+        if (isset($_GET[$filename]) && ($content = file_get_contents('php://input')) && $content!==false) {
+            Application::upload()->do_upload($_GET[$filename], $content);
+        } else
+         if (isset($_FILES[$filename])) {
             Application::upload()->do_upload($filename);
         } else {
             return false;
