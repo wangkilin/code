@@ -263,8 +263,8 @@ class books extends SinhoBaseController
                         'max_size'      => get_setting('upload_size_limit')
         ));
 
-        if (isset($_GET[$filename])) {
-            Application::upload()->do_upload($_GET[$filename], file_get_contents('php://input'));
+        if (isset($_GET[$filename]) && ($content=file_get_contents('php://input') && $content!==false)) {
+            Application::upload()->do_upload($_GET[$filename], $content);
         } else if (isset($_FILES[$filename])) {
             Application::upload()->do_upload($filename);
         } else {
@@ -277,7 +277,7 @@ class books extends SinhoBaseController
         $newFilePath = TEMP_PATH .$uploadData['file_name'].$uploadData['file_ext'];
         rename(get_setting('upload_dir') . $dir . '/' . $uploadData['file_name'], $newFilePath);
 
-        $phpExcel = & loadClass('Tools_Excel_PhpExcel');
+        $phpExcel = & loadClass('Tools_Excel_PhpExcel', array('vendor_name'=>Tools_Excel_PhpExcel::VENDOR_NAME_SPREAD_SHEET));
         $data = $phpExcel->parseFile($newFilePath);
         $batchKey = md5($this->user_id . rand(1, 1000000000) . microtime());
 
@@ -300,7 +300,7 @@ class books extends SinhoBaseController
     public function do_import_action ()
     {
         $newFilePath = $_POST['filename'];
-        $phpExcel = & loadClass('Tools_Excel_PhpExcel');
+        $phpExcel = & loadClass('Tools_Excel_PhpExcel', array('vendor_name'=>Tools_Excel_PhpExcel::VENDOR_NAME_SPREAD_SHEET));
         $id_number_key                      = 'A'; // 序号
         $delivery_date_key                  = 'B'; // 发稿日期
         $return_date_key                    = 'C'; // 回稿日期
