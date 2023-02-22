@@ -474,7 +474,7 @@ class main extends SinhoBaseController
             $belongMonth['end'] = intval($_GET['end_month']);
         }
         // 如果是导出操作， 将分页调整成最大范围，全部导出
-        if (isset($_GET['export_user_workload'])) {
+        if (isset($_POST['export_user_workload'])) {
             $_GET['page'] = 1;
             $this->per_page = PHP_INT_MAX;
         }
