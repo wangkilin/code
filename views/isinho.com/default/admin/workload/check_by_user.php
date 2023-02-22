@@ -16,6 +16,7 @@
                 </div>
                 <br/>
                 <div class="">
+                 <form id="search_workload_form" target="_blank" action="" method="post" >
                     <div class="col-sm-5 text-right">
                         <!-- <label class="line-height-25">责编:</label> -->
                         <select id="sinho_editor" multiple><?php echo $this->itemOptions;?></select>
@@ -28,15 +29,19 @@
                         <i class="icon icon-date"></i>
                         <i class="icon icon-date-delete icon-delete"></i>
                     </div>
-                    <span class="mod-symbol col-xs-1 col-sm-1">-</span>
+                    <span class="mod-symbol pull-left">-</span>
                     <div class="col-sm-2 text-right icon-date-container">
                         <input id="end_month" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="结束月份" value="<?php echo $_GET['end_month']>0 ? date('Y-m', strtotime($_GET['end_month'].'01')) : ''; ?>" readonly>
                         <i class="icon icon-date"></i>
                         <i class="icon icon-date-delete icon-delete"></i>
                     </div>
                     <div class="col-sm-2 text-right">
-                        <a href="javascript:query_workload();" class="btn btn-primary btn-sm date-seach">确认查询</a>
+                        <a href="javascript:query_workload(0);" class="btn btn-primary btn-sm date-seach">确认查询</a>
+                        &nbsp;
+                        <a href="javascript:query_workload(1);" class="btn btn-info btn-sm date-seach">导 出</a>
                     </div>
+                    <input type="hidden" name="export_user_workload" value="1"/>
+                 </form>
                 </div>
                 <div class="table-responsive">
                 <form id="workload_verify_form" action="admin/ajax/workload/confirm/" method="post">
@@ -173,7 +178,7 @@
         </div>
 
 <script type="text/javascript">
-function query_workload () {
+function query_workload (isDownload) {
     var userIds = [];
     var $selectUsers = $('#sinho_editor>option:selected');
     for(var i = 0; i<$selectUsers.length; i++) {
@@ -182,7 +187,15 @@ function query_workload () {
     var startMonth = $('#start_month').val().replace('-','');
     var endMonth = $('#end_month').val().replace('-','');
     var url = '/admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-user'+'__'+'id'+'-' + userIds.join(',') + '__'+'start_month'+'-' + startMonth +'__'+'end_month'+'-'+endMonth;
-    window.location.href = url;
+
+
+    if (isDownload==1) {
+        console.info('here');
+        $('#search_workload_form').attr('action', url);
+        $('#search_workload_form').submit();
+    } else {
+        window.location.href = url;
+    }
 
     return false;
 }
