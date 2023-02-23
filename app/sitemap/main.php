@@ -73,8 +73,8 @@ class main extends BaseController
         }
         echo $pageContent;
         if($pageContent) {
-            // 缓存100天
-            Application::cache()->set($cache_key, $pageContent, 60*60*24*100);
+            // 缓存1天
+            Application::cache()->set($cache_key, $pageContent, 60*60*24);
         } else {
             foreach ($categoryList as $_itemInfo) {
                 echo base_url(true) . '/article/category-' . $_itemInfo['url_token'] . '.html' . "\r\n";
