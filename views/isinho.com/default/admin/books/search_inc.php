@@ -54,6 +54,7 @@
                             </div>
                         </div>
                     </div>
+                    <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
                     <div class="form-group">
                         <label class="col-sm-2 col-xs-3 control-label"><?php _e('所属阶段'); ?>:</label>
 
@@ -69,6 +70,7 @@
                             </select>
                         </div>
                     </div>
+                    <?php }?>
                     <div class="form-group">
                         <label class="col-sm-2 col-xs-3 control-label"><?php _e('支付状态'); ?>:</label>
 

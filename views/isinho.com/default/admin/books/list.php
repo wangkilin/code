@@ -130,6 +130,7 @@
                                 <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">
+                                  <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
                                   <span href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" title="<?php _e('设置书稿所属阶段'); ?>" data-toggle="tooltip" class="md-tip icon icon-score jsToggleSubIcon">
                                     <a data-grade-level="1" title="<?php _e('设置书稿所属阶段：小学'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">小学</a>
                                     <a data-grade-level="2" title="<?php _e('设置书稿所属阶段：初中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">初中</a>
@@ -138,6 +139,7 @@
                                     <a data-grade-level="5" title="<?php _e('设置书稿所属阶段：综合'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">综合</a>
                                     <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
+                                  <?php }?>
                                   <!-- <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/<?php echo CONTROLLER=='team_books' ? 'team_workload/':''; ?>check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
