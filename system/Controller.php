@@ -62,7 +62,7 @@ class Controller
             $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REQUEST_URI']) . '_website_allow_visit_page_number';
             if ($visitPageNumberUserAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserAgent++;
-                if ($visitPageNumberUserAgent > 100) {
+                if ($visitPageNumberUserAgent > 20) {
                     HTTP::error_404();
                 }
             } else {
