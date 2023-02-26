@@ -84,6 +84,24 @@ class HTTP
 		}
 	}
 
+	/**
+	 * 显示404页面不存在错误
+	 * @param string $tplPath 模板文件路劲
+	 */
+	public static function error_403($tplPath='')
+	{
+		if ($_POST['_post_type'] == 'ajax') {
+			H::ajax_json_output(Application::RSM(null, -1, 'HTTP/1.1 403 Forbidden'));
+		} else {
+			header('HTTP/1.1 403 Forbidden');
+
+			//$tplPath = $tplPath ? $tplPath : 'global/error_404';
+
+			//View::output($tplPath);
+			exit;
+		}
+	}
+
 	public static function parse_redirect_url($url)
 	{
 		if (substr($url, 0, 1) == '?')

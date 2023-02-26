@@ -60,15 +60,26 @@ class Controller
             Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_high'));
             // 匿名访问的网站攻击
             $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REQUEST_URI']) . '_website_allow_visit_page_number';
+            if ($visitPageNumberUserUriAgent = Application::cache()->get($cache_key) ) {
+                $visitPageNumberUserUriAgent++;
+                if ($visitPageNumberUserUriAgent > 20) {
+                    HTTP::error_404();
+                }
+            } else {
+                $visitPageNumberUserUriAgent = 1;
+            }
+            Application::cache()->set($cache_key, $visitPageNumberUserUriAgent, get_setting('cache_level_low'));
+            // 匿名访问的网站攻击
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT']) . '_website_allow_visit_page_number';
             if ($visitPageNumberUserAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserAgent++;
-                if ($visitPageNumberUserAgent > 20) {
-                    HTTP::error_404();
+                if ($visitPageNumberUserAgent > 300) {
+                    HTTP::error_403();
                 }
             } else {
                 $visitPageNumberUserAgent = 1;
             }
-            Application::cache()->set($cache_key, $visitPageNumberUserAgent, get_setting('cache_level_high'));
+            Application::cache()->set($cache_key, $visitPageNumberUserAgent, get_setting('cache_level_low'));
 
         }
 
