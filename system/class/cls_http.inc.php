@@ -95,9 +95,9 @@ class HTTP
 		} else {
 			header('HTTP/1.1 403 Forbidden');
 
-			//$tplPath = $tplPath ? $tplPath : 'global/error_404';
+			$tplPath = $tplPath ? $tplPath : 'global/error_403';
 
-			//View::output($tplPath);
+			View::output($tplPath);
 			exit;
 		}
 	}

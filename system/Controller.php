@@ -52,7 +52,7 @@ class Controller
             if ($visitPageNumber = Application::cache()->get($cache_key) ) {
                 $visitPageNumber++;
                 if ($visitPageNumber > 200) {
-                    HTTP::error_404();
+                    HTTP::error_403();
                 }
             } else {
                 $visitPageNumber = 1;
@@ -63,7 +63,7 @@ class Controller
             if ($visitPageNumberUserUriAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserUriAgent++;
                 if ($visitPageNumberUserUriAgent > 20) {
-                    HTTP::error_404();
+                    HTTP::error_403();
                 }
             } else {
                 $visitPageNumberUserUriAgent = 1;
