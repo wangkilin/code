@@ -33,7 +33,7 @@
 <body class="icb-404">
 	<div class="icb-404-wrap container">
 		<div class="row">
-			<img src="<?php echo G_STATIC_URL; ?>/common/403.jpg" alt="403">
+			<img src="<?php echo G_STATIC_URL; ?>/common/403.png" alt="403">
 			<p><?php _e('禁止访问'); ?>，<?php _e('请检查是否存在恶意访问行为！'); ?></p>
 		</div>
 	</div>
