@@ -48,7 +48,7 @@ class Controller
 
             // 匿名访问， 限制ip访问次数
             $ip_address = fetch_ip();
-            $cache_key = str_replace(array('.',':'), '_',$ip_address) . 'website_allow_visit_page_number';
+            $cache_key = str_replace(array('.',':'), '_',$ip_address . $_SERVER['HTTP_HOST']) . 'website_allow_visit_page_number';
             if ($visitPageNumber = Application::cache()->get($cache_key) ) {
                 $visitPageNumber++;
                 if ($visitPageNumber > 200) {
