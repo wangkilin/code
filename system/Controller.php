@@ -46,41 +46,6 @@ class Controller
                 HTTP::set_cookie('fromuid', $_GET['fromuid']);
             }
 
-            // 匿名访问， 限制ip访问次数
-            $ip_address = fetch_ip();
-            $cache_key = str_replace(array('.',':'), '_',$ip_address . $_SERVER['HTTP_HOST']) . 'website_allow_visit_page_number';
-            if ($visitPageNumber = Application::cache()->get($cache_key) ) {
-                $visitPageNumber++;
-                if ($visitPageNumber > 200) {
-                    HTTP::error_403();
-                }
-            } else {
-                $visitPageNumber = 1;
-            }
-            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_high'));
-            // 匿名访问的网站攻击
-            $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REQUEST_URI']. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
-            if ($visitPageNumberUserUriAgent = Application::cache()->get($cache_key) ) {
-                $visitPageNumberUserUriAgent++;
-                if ($visitPageNumberUserUriAgent > 200) {
-                    HTTP::error_403();
-                }
-            } else {
-                $visitPageNumberUserUriAgent = 1;
-            }
-            Application::cache()->set($cache_key, $visitPageNumberUserUriAgent, get_setting('cache_level_low'));
-            // 匿名访问的网站攻击
-            $cache_key = md5($_SERVER['HTTP_USER_AGENT']) . '_website_allow_visit_page_number';
-            if ($visitPageNumberUserAgent = Application::cache()->get($cache_key) ) {
-                $visitPageNumberUserAgent++;
-                if ($visitPageNumberUserAgent > 300) {
-                    HTTP::error_403();
-                }
-            } else {
-                $visitPageNumberUserAgent = 1;
-            }
-            Application::cache()->set($cache_key, $visitPageNumberUserAgent, get_setting('cache_level_low'));
-
         }
 
 

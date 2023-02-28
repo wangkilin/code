@@ -79,6 +79,47 @@ class Application
             $handle_controller->beforeAction();
         }
 
+        // 不是登录页面， 也不是注册用户， 限制访问次数
+        if (ACTION != 'login' && ! $handle_controller->user_id && !preg_match('/spider|bot/i', $_SERVER['HTTP_USER_AGENT'])) {
+            //var_dump(MODULE, CONTROLLER, ACTION);
+            // 匿名访问， 限制ip访问次数
+            $ip_address = fetch_ip();
+            $cache_key = str_replace(array('.',':'), '_',$ip_address . $_SERVER['HTTP_HOST']) . 'website_allow_visit_page_number';
+            if ($visitPageNumber = Application::cache()->get($cache_key) ) {
+                $visitPageNumber++;
+                if ($visitPageNumber > 200) {
+                    HTTP::error_403();
+                }
+            } else {
+                $visitPageNumber = 1;
+            }
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_high'));
+
+            // 匿名访问的网站攻击, 访问同一个页面次数
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REQUEST_URI']. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
+            if ($visitPageNumberUserUriAgent = Application::cache()->get($cache_key) ) {
+                $visitPageNumberUserUriAgent++;
+                if ($visitPageNumberUserUriAgent > 30) {
+                    HTTP::error_403();
+                }
+            } else {
+                $visitPageNumberUserUriAgent = 1;
+            }
+            Application::cache()->set($cache_key, $visitPageNumberUserUriAgent, get_setting('cache_level_low'));
+
+            // 匿名访问的网站攻击. 同一个浏览器，每天访问次数
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT']) . '_website_allow_visit_page_number';
+            if ($visitPageNumberUserAgent = Application::cache()->get($cache_key) ) {
+                $visitPageNumberUserAgent++;
+                if ($visitPageNumberUserAgent > 200) {
+                    HTTP::error_403();
+                }
+            } else {
+                $visitPageNumberUserAgent = 1;
+            }
+            Application::cache()->set($cache_key, $visitPageNumberUserAgent, get_setting('cache_level_low'));
+        }
+
         // 执行
         if (empty($_GET['id']) AND method_exists($handle_controller, loadClass('core_uri')->action . '_square_action')) {
             $action_method = loadClass('core_uri')->action . '_square_action';
