@@ -80,7 +80,7 @@ class Application
         }
 
         // 不是登录页面， 也不是注册用户， 限制访问次数
-        if (ACTION != 'login' && ACTION!='captcha' && ACTION!='logout' && ! $handle_controller->user_id && !preg_match('/spider|bot/i', $_SERVER['HTTP_USER_AGENT'])) {
+        if (ACTION != 'login' && ACTION!='captcha' && ACTION!='logout' && CONTROLLER!='crond' && ! $handle_controller->user_id && !preg_match('/spider|bot/i', $_SERVER['HTTP_USER_AGENT'])) {
             //var_dump(MODULE, CONTROLLER, ACTION);
             // 匿名访问， 限制ip访问次数
             $ip_address = fetch_ip();
@@ -110,10 +110,10 @@ class Application
             Application::cache()->set($cache_key, $visitPageNumberUserUriAgent, get_setting('cache_level_low'));
 
             // 匿名访问的网站攻击. 同一个浏览器，每天访问次数
-            $cache_key = md5($_SERVER['HTTP_USER_AGENT']) . '_website_allow_visit_page_number';
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT']. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
             if ($visitPageNumberUserAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserAgent++;
-                if ($visitPageNumberUserAgent > 200) {
+                if ($visitPageNumberUserAgent > 500) {
                     View::assign('visitPageNumberUserAgent', $visitPageNumberUserAgent);
                     HTTP::error_403();
                 }
