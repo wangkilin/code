@@ -87,7 +87,8 @@ class Application
             $cache_key = str_replace(array('.',':'), '_',$ip_address . $_SERVER['HTTP_HOST']) . 'website_allow_visit_page_number';
             if ($visitPageNumber = Application::cache()->get($cache_key) ) {
                 $visitPageNumber++;
-                if ($visitPageNumber > 200) {
+                if ($visitPageNumber > 2) {
+                    View::assign('visitPageNumber', $visitPageNumber);
                     HTTP::error_403();
                 }
             } else {
@@ -100,6 +101,7 @@ class Application
             if ($visitPageNumberUserUriAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserUriAgent++;
                 if ($visitPageNumberUserUriAgent > 30) {
+                    View::assign('visitPageNumberUserUriAgent', $visitPageNumberUserUriAgent);
                     HTTP::error_403();
                 }
             } else {
@@ -112,6 +114,7 @@ class Application
             if ($visitPageNumberUserAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserAgent++;
                 if ($visitPageNumberUserAgent > 200) {
+                    View::assign('visitPageNumberUserAgent', $visitPageNumberUserAgent);
                     HTTP::error_403();
                 }
             } else {

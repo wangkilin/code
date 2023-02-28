@@ -35,6 +35,24 @@
 		<div class="row">
 			<img src="<?php echo G_STATIC_URL; ?>/common/403.png" alt="403">
 			<p><?php _e('禁止访问'); ?>，<?php _e('请检查是否存在恶意访问行为！'); ?></p>
+            <!--
+            <?php
+            $keys = array('HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR', 'HTTP_HOST', 'REQUEST_URI', 'HTTP_USER_AGENT');
+            foreach ($keys as $_key) {
+                if (isset($_SERVER[$_key])) {
+                    echo $_key, ': ', $_SERVER[$_key], "\r\n";
+                }
+            }
+            echo "\r\n\r\n";
+            $properties = get_object_vars($this);
+            foreach ($properties as $_key => $_value) {
+                if ($_key[0]=='_') {
+                    continue;
+                }
+                echo $_key, ': ', var_export($_value), "\r\n";
+            }
+            ?>
+            -->
 		</div>
 	</div>
 	<?php View::output('global/footer.php'); ?>
