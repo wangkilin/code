@@ -87,7 +87,7 @@ class Application
             $cache_key = str_replace(array('.',':'), '_',$ip_address . $_SERVER['HTTP_HOST']) . 'website_allow_visit_page_number';
             if ($visitPageNumber = Application::cache()->get($cache_key) ) {
                 $visitPageNumber++;
-                if ($visitPageNumber > 2) {
+                if ($visitPageNumber > 200) {
                     View::assign('visitPageNumber', $visitPageNumber);
                     HTTP::error_403();
                 }
