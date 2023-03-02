@@ -271,7 +271,7 @@ class workload extends SinhoBaseController
         $start = $_POST['start_month'] >= $_POST['end_month'] ? $_POST['end_month'] : $_POST['start_month'];
         $end   = $_POST['start_month'] >= $_POST['end_month'] ? $_POST['start_month'] : $_POST['end_month'];
 
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
         // 获取每个人的工作量
@@ -302,7 +302,7 @@ class workload extends SinhoBaseController
     {
         $this->checkPermission(self::IS_SINHO_CHECK_WORKLOAD);
 
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, array_column($userList, 'user_name') );
 

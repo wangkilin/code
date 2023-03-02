@@ -86,7 +86,7 @@ class workload extends SinhoBaseController
         View::import_js('js/functions.js');
 
         // 获取用户信息列表,
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
 
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
 

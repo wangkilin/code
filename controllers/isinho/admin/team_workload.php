@@ -451,7 +451,7 @@ class team_workload extends SinhoBaseController
         $userIds = array_column($allList, 'user_id');
         $userList = array();
         if ($userIds) {
-            $userList = $this->model('sinhoWorkload')->getUserList('uid IN (' . join(',', $userIds) . ')', 'uid DESC', PHP_INT_MAX);
+            $userList = $this->model('sinhoWorkload')->getUserList('uid IN (' . join(',', $userIds) . ')', 'forbidden ASC,uid DESC', PHP_INT_MAX);
         }
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
