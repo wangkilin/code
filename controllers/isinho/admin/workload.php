@@ -14,13 +14,27 @@ class workload extends SinhoBaseController
     public function quarlity_list_action ()
     {
         $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD | self::IS_SINHO_CHECK_WORKLOAD);
-        $where = null;
-        if (! $this->hasRolePermission(self::IS_SINHO_CHECK_WORKLOAD)) {
-            $where = 'user_id = '. intval($this->user_id);
-        } else if ($_GET['user_id']) {
-            $where = 'user_id = '. intval($_GET['user_id']);
+
+        $isSinhoCheckWorkload = $this->hasRolePermission(self::IS_SINHO_CHECK_WORKLOAD);
+        $queryUserIds = array();
+        $where = array();
+        if (! $isSinhoCheckWorkload) {
+            $where[] = 'user_id = '. intval($this->user_id);
+        } else if ($_GET['user_id']) {// 解析用户id
+            $queryUserIds = explode(',', $_GET['user_id']);
+            foreach ($queryUserIds as & $_id) {
+                $_id = intval($_id);
+            }
+            $where[] = 'user_id IN ( ' . join(', ',  $queryUserIds). ') ';
         }
-        $quarlityList = (array) $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::QUARLITY_TABLE, $where, 'id DESC', $_GET['page'], $this->per_page);
+        // 设置了时间范围， 获取指定时间范围内的数据
+        if ($_GET['start_month']) {
+            $where[] = '(belong_month >= ' . intval($_GET['start_month']) . ' OR belong_month IS NULL )';
+        }
+        if ($_GET['end_month'] && $_GET['end_month']!=date('Ym')) {
+            $where[] = 'belong_month <= ' . intval($_GET['end_month']);
+        }
+        $quarlityList = (array) $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::QUARLITY_TABLE, join(' AND ', $where), 'id DESC', $_GET['page'], $this->per_page);
         $totalRows     = $this->model('sinhoWorkload')->found_rows();
 
         $bookIds  = array_column($quarlityList, 'book_id');
@@ -71,8 +85,23 @@ class workload extends SinhoBaseController
         View::import_js('js/icb_template_isinho.com.js');
         View::import_js('js/functions.js');
 
+        // 获取用户信息列表,
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+
+        View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
+
+
+        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
+        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
+        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+        View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
+        View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
+
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/workload/quarlity_list', 'sinho_admin_menu') ) );
         View::output('admin/workload/quarlity_list');
+
+
+
     }
 
 

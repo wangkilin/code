@@ -33,7 +33,34 @@
                     </table>
                 </div>
                 <br/>
+                <?php if ($this->hasCheckPermission) { ?>
+                <div class="">
+                 <form id="search_workload_form" target="_blank" action="/admin/workload/quarlity_list/" method="get" >
+                    <div class="col-sm-5 text-left">
+                        <!-- <label class="line-height-25">责编:</label> -->
+                        <select id="sinho_editor" name="" multiple><?php echo $this->itemOptions;?></select>
+                    </div>
+                    <div class="col-sm-1 text-right">
+                        <label class="line-height-25">月份:</label>
+                    </div>
+                    <div class="col-sm-2 text-right icon-date-container">
+                        <input id="start_month" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="开始月份" value="<?php echo $_GET['start_month'] > 0 ? date('Y-m', strtotime($_GET['start_month'].'01')) : ''; ?>" readonly>
+                        <i class="icon icon-date"></i>
+                        <i class="icon icon-date-delete icon-delete"></i>
+                    </div>
+                    <span class="mod-symbol pull-left">-</span>
+                    <div class="col-sm-2 text-right icon-date-container">
+                        <input id="end_month" type="text" class="form-control icon-indent js-date-input js-monthpicker" placeholder="结束月份" value="<?php echo $_GET['end_month']>0 ? date('Y-m', strtotime($_GET['end_month'].'01')) : ''; ?>" readonly>
+                        <i class="icon icon-date"></i>
+                        <i class="icon icon-date-delete icon-delete"></i>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                      <a href="javascript:query_quarlity();" class="btn btn-primary btn-sm date-seach">确认查询</a>
 
+                    </div>
+                 </form>
+                </div>
+                <?php } ?>
                 <div class="table-responsive">
                 <?php if ($this->itemsList) { ?>
 
@@ -112,8 +139,48 @@
 
 <script type="text/javascript">
 
+function query_quarlity () {
+    var userIds = [];
+    var $selectUsers = $('#sinho_editor>option:selected');
+    for(var i = 0; i<$selectUsers.length; i++) {
+        userIds.push($selectUsers.eq(i).val());
+    }
+    var startMonth = $('#start_month').val().replace('-','');
+    var endMonth = $('#end_month').val().replace('-','');
+    var url = '/admin/workload/quarlity_list/'+'user_id'+'-' + userIds.join(',') + '__'+'start_month'+'-' + startMonth +'__'+'end_month'+'-'+endMonth;
 
+
+    window.location.href = url;
+
+    return false;
+}
 $(function(){
+
+$("#sinho_editor").multiselect({
+                nonSelectedText : '<?php _e('---- 选择责编 ----');?>',
+                maxHeight       : 200,
+                buttonWidth     : 400,
+                allSelectedText : '<?php _e('已选择所有人');?>',
+                numberDisplayed : 7, // 选择框最多提示选择多少个人名
+});
+
+
+// 月份输入框
+$( ".js-monthpicker" ).datetimepicker({
+            format  : 'yyyy-mm',
+            language:  'zh-CN',
+            weekStart: 1, // 星期一 为一周开始
+            todayBtn:  1, // 显示今日按钮
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
+            forceParse: 0,
+            minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+        });
+
+$('.icon-delete.icon-date-delete').click (function () {
+    $(this).siblings('.js-date-input').val('');
+});
 });
 </script>
 
