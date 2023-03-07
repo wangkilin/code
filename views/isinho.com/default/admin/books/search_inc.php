@@ -54,6 +54,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('所属学科'); ?>:</label>
+
+                        <div class="col-sm-5 col-xs-8">
+                            <select id="sinho_book_category_id" multiple name="book_category_id[]">
+                               <?php echo $this->searchBookSubjectListOptions;?>
+                            </select>
+                        </div>
+                    </div>
                     <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
                     <div class="form-group">
                         <label class="col-sm-2 col-xs-3 control-label"><?php _e('所属阶段'); ?>:</label>
@@ -103,6 +112,13 @@ $(function () {
         $(this).siblings('.js-date-input').val('');
     });
 
+    $("#sinho_book_category_id").multiselect({
+        			nonSelectedText : '<?php _e('---- 选择书稿所属学科 ----');?>',
+                    maxHeight       : 200,
+                    buttonWidth     : 400,
+                    allSelectedText : '<?php _e('已选择全部');?>',
+                    numberDisplayed : 7, // 选择框最多提示选择多少个人名
+    });
 
     $("#sinho_grade_level,#sinho_is_payed").multiselect({
         			nonSelectedText : '<?php _e('---- 选择书稿所属阶段 ----');?>',
