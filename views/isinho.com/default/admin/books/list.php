@@ -143,7 +143,7 @@
                                   <!-- <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <a href="admin/<?php echo CONTROLLER=='team_books' ? 'team_workload/':''; ?>check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
-                                  <?php if (CONTROLLER == 'books') {// 支付状态 只能在书稿总管理页面出现 ?>
+                                  <?php if (CONTROLLER == 'books' && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) {// 支付状态 只能在书稿总管理页面出现 ?>
                                   <a href="" data-book-id="<?php echo $itemInfo['id']; ?>"  class="icon icon-coin-yen md-tip jsSinhoSetBookPayedStatus <?php echo $itemInfo['is_payed']==1 ? 'payed " title="已支付" style="' :'" title="未支付" style="color:#f00;';?>" data-toggle="tooltip"></a>
                                   <?php } ?>
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
@@ -161,7 +161,13 @@
                     <div class="text-right">每页<?php echo $this->amountPerPage; ?> &nbsp; 共<?php echo $this->totalRows;?>本</div>
                     <?php echo $this->pagination; ?>
                     <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['allow_editor_add_book']) { ?>
-                    <a class="btn btn-info" id="setBookVerifyStatus"><?php _e('审核通过'); ?></a>
+                    <a class="btn btn-success" id="setBookVerifyStatus"><?php _e('审核通过'); ?></a>
+                    &nbsp;
+                    <?php }?>
+                    <?php if (CONTROLLER == 'books' && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) { ?>
+                    <a class="btn btn-default" id="setBookPrePayStatus"><?php _e('记录对账'); ?></a>
+                    <a class="btn btn-info" id="setBookPayStatus"><?php _e('完成支付'); ?></a>
+                    &nbsp;
                     <?php }?>
                     <a class="btn btn-default" id="setBookCategory"><?php _e('设置学科'); ?></a>
                     <a class="btn btn-danger" id="deleteBatchBtn"><?php _e('删除书稿'); ?></a>
@@ -302,6 +308,50 @@ $(function(){
             ICB.modal.alert(_t('请勾选书稿'));
         }
     	 return false;
+    });
+
+    /**
+     * 点击批量设置对账按钮
+     */
+    $('#setBookPrePayStatus').click(function () {
+        if($('.icheckbox_square-blue.checked').length){
+
+            ICB.modal.confirm(
+                _t('确认记录选定书稿的对账信息么？'),
+                function(){
+                    $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/set_book_prepay_status/');
+                    $('#action').val('setBookPrePayStatus');
+                    ICB.ajax.postForm($('#batchs_form'));
+                },
+                undefined,
+                _t('记录书稿对账'),
+            );
+        } else {
+            ICB.modal.alert(_t('请勾选书稿'));
+        }
+        return false;
+    });
+
+    /**
+     * 点击批量设置支付按钮
+     */
+    $('#setBookPayStatus').click(function () {
+        if($('.icheckbox_square-blue.checked').length){
+
+            ICB.modal.confirm(
+                _t('确认将选定书稿设置支付完成状态么？'),
+                function(){
+                    $('#batchs_form').attr('action', G_BASE_URL + '/admin/ajax/<?php echo CONTROLLER;?>/set_book_pay_status/');
+                    $('#action').val('setBookPayStatus');
+                    ICB.ajax.postForm($('#batchs_form'));
+                },
+                undefined,
+                _t('设置书稿支付'),
+            );
+        } else {
+            ICB.modal.alert(_t('请勾选书稿'));
+        }
+        return false;
     });
     /**
      * 点击提交批量设置书稿隶属学科

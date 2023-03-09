@@ -528,9 +528,16 @@ class books extends SinhoBaseController
         if (empty($_POST['book_id'])) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作错误')));
         }
+
+        $bookInfo = $this->model('sinhoWorkload')->getById($_POST['book_id'], sinhoWorkloadModel::BOOK_TABLE);
+        if (! $bookInfo) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作错误，书稿不存在！')));
+        }
+        $set = array('is_payed'=> $_POST['is_payed']);
+        $_POST['is_payed']==1 AND $set['admin_remarks'] = trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'结账', ';');
         $this->model('sinhoWorkload')
              ->update(sinhoWorkloadModel::BOOK_TABLE,
-                    array('is_payed'=> $_POST['is_payed']),
+                    $set,
                     array('id = ? ' => $_POST['book_id'])
             );
 
@@ -582,6 +589,57 @@ class books extends SinhoBaseController
         );
 
         H::ajax_json_output(Application::RSM(array('url'=>''), 1, Application::lang()->_t('书稿审核通过！')));
+    }
+
+    /**
+     * 设置书稿对账信息
+     */
+    public function set_book_prepay_status_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        if (empty($_POST['ids'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
+        }
+
+        $bookList = $this->model('sinhoWorkload')
+                         ->getByIds($_POST['ids'], sinhoWorkloadModel::BOOK_TABLE);
+        foreach ($bookList as $bookInfo) {
+            $set = array('admin_remarks' => trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'对账', ';') );
+            $this->model('sinhoWorkload')
+                 ->update(sinhoWorkloadModel::BOOK_TABLE,
+                        $set,
+                        array('id = ? ' => $bookInfo['id'])
+                );
+        }
+
+        H::ajax_json_output(Application::RSM(array('url'=>''), 1, Application::lang()->_t('设置书稿对账信息完成！')));
+    }
+
+    /**
+     * 批量设置书稿支付状态
+     */
+    public function set_book_pay_status_action ()
+    {
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
+        if (empty($_POST['ids'])) {
+            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('请选择书稿进行操作')));
+        }
+        $bookList = $this->model('sinhoWorkload')
+                         ->getByIds($_POST['ids'], sinhoWorkloadModel::BOOK_TABLE);
+        foreach ($bookList as $bookInfo) {
+            $set = array('is_payed'=> 1);
+            $set['admin_remarks'] = trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'已结', ';');
+            $this->model('sinhoWorkload')
+                 ->update(sinhoWorkloadModel::BOOK_TABLE,
+                        $set,
+                        array('id = ? ' => $bookInfo['id'])
+                );
+        }
+
+        H::ajax_json_output(Application::RSM(
+            array('url' => ''),
+            1,
+            Application::lang()->_t('支付状态设置成功')));
     }
 
     /**
