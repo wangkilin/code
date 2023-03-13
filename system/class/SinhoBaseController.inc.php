@@ -237,9 +237,44 @@ class SinhoBaseController extends BaseController
 
         $newAdminMenu = array();
         foreach ($adminMenuList as $_key => $_menuInfo) {
+            if (isset($_menuInfo['config'])) {
+                foreach ($_menuInfo['config'] as $_configKey=>$_configValue) {
+                    if (is_array($_configValue)) {
+                        foreach ($_configValue as $_configKey2 => $_configValue2) {
+                            if ($hostConfig->$_configKey[$_configKey2] !== $_configValue2) {
+                                $hasPermission = false;
+                                continue 3;
+                            }
+                        }
+                    } else {
+                        if ($hostConfig->$_configKey !== $_configValue) {
+                            $hasPermission = false;
+                            continue 2;
+                        }
+                    }
+                }
+            }
             if ($_menuInfo['children']) {
                 $_children = array();
                 foreach ($_menuInfo['children'] as $_key2=>$_menuInfo2) {
+
+                    if (isset($_menuInfo2['config'])) {
+                        foreach ($_menuInfo['config'] as $_configKey=>$_configValue) {
+                            if (is_array($_configValue)) {
+                                foreach ($_configValue as $_configKey2 => $_configValue2) {
+                                    if ($hostConfig->$_configKey[$_configKey2] !== $_configValue2) {
+                                        $hasPermission = false;
+                                        continue 3;
+                                    }
+                                }
+                            } else {
+                                if ($hostConfig->$_configKey !== $_configValue) {
+                                    $hasPermission = false;
+                                    continue 2;
+                                }
+                            }
+                        }
+                    }
                     empty($_menuInfo2['permission']) OR settype($_menuInfo2['permission'], 'array');
                     $hasPermission = false;
 

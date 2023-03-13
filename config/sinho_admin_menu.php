@@ -153,6 +153,8 @@ $config[] = array(
     'id'    => 'admin/finance',
     'title' => '财务数据',
     'cname' => 'coin-yen',
+    // 系统配置检查。 至多支持到二维数组
+    'config' => array('sinho_feature_list'=>array('enable_module_finance'=>true)),
     'children' => array(
         array (
             'id'        => 'admin/finance/salary',
