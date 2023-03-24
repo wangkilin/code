@@ -79,6 +79,20 @@ class Application
             $handle_controller->beforeAction();
         }
 
+        if (CONTROLLER=='crond' || CONTROLLER =='ajax') {
+            // 匿名访问， 限制ip访问次数
+            $ip_address = fetch_ip();
+            $cache_key = str_replace(array('.',':'), '_',$ip_address . $_SERVER['HTTP_HOST']) . 'website_allow_visit_page_number';
+            $visitPageNumber = 0;
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_normal'));
+            // 匿名访问的网站攻击. 同一个浏览器，每天访问次数
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT']. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_normal'));
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . '/course/'. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_normal'));
+            $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . '/article/'. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_normal'));
+        }
         // 不是登录页面， 也不是注册用户， 限制访问次数
         if ($_SERVER['REQUEST_URI'] !='/'
             && ACTION != 'login' && ACTION!='captcha' && ACTION!='logout'  && ACTION!='login_process'
@@ -97,13 +111,13 @@ class Application
             } else {
                 $visitPageNumber = 1;
             }
-            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_high'));
+            Application::cache()->set($cache_key, $visitPageNumber, get_setting('cache_level_normal'));
 
             // 匿名访问的网站攻击, 访问同一个页面次数
             $cache_key = md5($_SERVER['HTTP_USER_AGENT'] . $_SERVER['REQUEST_URI']. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
             if ($visitPageNumberUserUriAgent = Application::cache()->get($cache_key) ) {
                 $visitPageNumberUserUriAgent++;
-                if ($visitPageNumberUserUriAgent > 30) {
+                if ($visitPageNumberUserUriAgent > 50) {
                     View::assign('visitPageNumberUserUriAgent', $visitPageNumberUserUriAgent);
                     HTTP::error_403();
                 }
