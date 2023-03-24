@@ -110,7 +110,7 @@ class Application
             } else {
                 $visitPageNumberUserUriAgent = 1;
             }
-            Application::cache()->set($cache_key, $visitPageNumberUserUriAgent, get_setting('cache_level_low'));
+            Application::cache()->set($cache_key, $visitPageNumberUserUriAgent, get_setting('cache_level_normal'));
 
             // 匿名访问的网站攻击. 同一个浏览器，每天访问次数
             $cache_key = md5($_SERVER['HTTP_USER_AGENT']. $_SERVER['HTTP_HOST']) . '_website_allow_visit_page_number';
@@ -123,7 +123,7 @@ class Application
             } else {
                 $visitPageNumberUserAgent = 1;
             }
-            Application::cache()->set($cache_key, $visitPageNumberUserAgent, get_setting('cache_level_low'));
+            Application::cache()->set($cache_key, $visitPageNumberUserAgent, get_setting('cache_level_normal'));
         }
 
         // 执行
