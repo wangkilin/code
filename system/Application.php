@@ -96,7 +96,7 @@ class Application
         // 不是登录页面， 也不是注册用户， 限制访问次数
         if ($_SERVER['REQUEST_URI'] !='/'
             && ACTION != 'login' && ACTION!='captcha' && ACTION!='logout'  && ACTION!='login_process'
-            && CONTROLLER!='crond' && CONTROLLER !='ajax'
+            && CONTROLLER!='crond' && CONTROLLER !='ajax' && CONTROLLER!='sitemap'
             && ! $handle_controller->user_id && !preg_match('/spider|bot/i', $_SERVER['HTTP_USER_AGENT'])) {
             //var_dump(MODULE, CONTROLLER, ACTION);
             // 匿名访问， 限制ip访问次数
