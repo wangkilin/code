@@ -88,6 +88,13 @@ class team_books extends SinhoBaseController
             }
             $where[] = 'grade_level IN (' . join(',', $_GET['grade_level']) . ')';
         }
+        if (isset($_GET['book_category_id']) && $_GET['book_category_id']!=='') { // 按照书稿学科
+            $_GET['book_category_id'] = explode(',', $_GET['book_category_id']);
+            foreach($_GET['book_category_id'] as & $_bookCategoryId) {
+                $_bookCategoryId = intval($_bookCategoryId);
+            }
+            $where[] = 'category_id IN (' . join(',', $_GET['book_category_id']) . ')';
+        }
         if (isset($_GET['is_payed']) && $_GET['is_payed']!=='') { // 按照支付状态搜索。 设置了支付状态
             $where[] = 'is_payed = ' . intval($_GET['is_payed']) ;
         }
@@ -271,6 +278,15 @@ class team_books extends SinhoBaseController
                     )
                 );
 
+        View::assign('searchBookSubjectListOptions',
+                buildSelectOptions(
+                    $bookSubjectList,
+                    'name',
+                    'id',
+                    isset($_GET['book_category_id'])? $_GET['book_category_id'] : array(),
+                    array()
+               )
+           );
         View::assign('bookSubjectListOptions',
                 buildSelectOptions(
                     $bookSubjectList,
