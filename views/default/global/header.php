@@ -7,7 +7,7 @@
                       strpos($_SERVER['HTTP_HOST'], 'devboy.cn')     === false ) {
            ?>
 		<div class="hidden-xs bg-primary">
-        &nbsp;  &nbsp; Interested in this domain ? Email: icodebang#126.com (#->@)&nbsp;  &nbsp; 本站寻求合作
+        &nbsp;  &nbsp; Interested in this domain name? Email: icodebang#126.com (#->@)&nbsp;  &nbsp; 本站寻求合作
         </div>
         <?php } ?>
 		<div class="container">
