@@ -263,11 +263,15 @@
 
                             <div class="row">
                                 <div class="col-sm-1"></div>
-                                <div class="col-sm-4 mod-footer clearfix">
+                                <div class="col-sm-3 mod-footer clearfix">
                                     <a class="btn btn-large btn-success col-sm-8" id="publish_submit" onclick="submit_workload_edit_form();"><?php _e('保 存'); ?></a>
                                 </div>
-                                <div class="col-sm-2"></div>
-                                <div class="col-sm-4 mod-footer clearfix">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-3 mod-footer clearfix">
+                                    <a class="btn btn-large btn-default col-sm-8 md-tip" title="<?php _e("书稿工作量是独自完成，快速将书稿参考工作量直接填充到输入框中");?>" id="quick_fill_button" onclick="quick_fill_form();"><?php _e('独自完成速填'); ?></a>
+                                </div>
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-3 mod-footer clearfix">
                                     <a class="btn btn-large btn-warning col-sm-8" onclick="concel_form();"><?php _e('取 消'); ?></a>
                                 </div>
                                 <div class="col-sm-1"></div>
@@ -284,11 +288,17 @@
 
 <?php View::output('admin/workload/fill_workload_js'); ?>
 <script type="text/javascript">
+/**
+ * 取消填写工作量填充表单
+ */
 function concel_form ()
 {
     window.location.href = G_BASE_URL + '/admin/fill_list/';
 }
 
+/**
+ *
+ */
 function submit_workload_edit_form ()
 {
     $inputs = $('#workload-edit-form input');
@@ -344,7 +354,9 @@ $(function () {
     });
 
 
-
+    /**
+     * 工作量输入表单内容发生变化时，计算变化后的总字数
+     */
     $('#workload-edit-form input').change(function () {
         compute_chars_ammount();
         console.info($(this).data('default'));

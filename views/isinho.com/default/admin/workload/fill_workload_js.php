@@ -54,6 +54,20 @@ function concel_form ()
     $('#workload-edit-form-container').remove();
     return false;
 }
+/**
+ * 独立完成的工作量， 快速将书稿内容填充上
+ */
+function quick_fill_form ()
+{
+    $('#workload-edit-form input[name!="remarks"]').each(function () {
+        var defaultValue = $(this).attr('data-default');
+        if (undefined !== defaultValue && defaultValue !=='') {
+            $(this).val(defaultValue);
+        }
+    });
+    $('#workload-edit-form input[name="remarks"]').last().focus();
+    compute_chars_ammount();
+}
 
 function submit_workload_edit_form ()
 {

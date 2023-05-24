@@ -162,12 +162,16 @@ function editWorkload (id)
         var refBookWorkload = $(response).find('#workload_by_book tr').length > 2 ? $(response).find('#workload_by_book').parent().html() : '';
         $('#workload-edit-form-container').remove();
         var $refTr = $('tr[data-db-id="'+id+'"]');
+        var workloadLineNumber = $(response).find('.workload-line').length; // 获取书稿工作量条数
         $refTr.after('<tr id="workload-edit-form-container"><td colspan="'+$refTr.find('td').length+'">'
         +refBookWorkload
         +$(response).find('#workload-edit-form').parent().html()
         +'</td></tr>');
         $('#workload_by_book .js-workload-ref').remove();
         $('#workload-edit-form-container input').tooltip();
+        $('#workload-edit-form-container .btn').tooltip();
+        // 如果书稿工作量只有一条，属于独立完成情形， 允许快速填写书稿工作量。
+        workloadLineNumber > 1 ? $('#quick_fill_button').hide() : $('#quick_fill_button').show();
         compute_chars_ammount();
 
         /**
