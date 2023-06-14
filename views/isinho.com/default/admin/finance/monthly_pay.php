@@ -177,11 +177,11 @@
                         <h3 class="nomargin">
                             <ul class="nav nav-tabs">
                                 <?php
-                                    $_tmpI = 1;
+                                    $_tmpK = 1;
                                     $_monthlyData['data'] = json_decode($_monthlyData['data_json'], true);
                                     foreach ($_monthlyData['data']['sheetDatas'] as $_key=>$_sheetDataInfo) {
                                 ?>
-                                <li class="bg-info <?php if ($_tmpI++ == 1) echo 'active';?>">
+                                <li class="bg-info <?php if ($_tmpK++ == 1) echo 'active';?>">
                                 <a href="#tab_id_<?php echo $_monthlyData['belong_year_month'];?>_sheet_<?php echo $_key;?>" data-toggle="tab"><?php echo $_monthlyData['data']['sheetNames'][$_key];?></a>
                                 </li>
                                 <?php }?>
@@ -190,12 +190,12 @@
                     </div>
                 <?php
 
-                    $_tmpI = 1;
+                    $_tmpJ = 1;
                     $_monthlyData['data'] = json_decode($_monthlyData['data_json'], true);
                     foreach ($_monthlyData['data']['sheetDatas'] as $_key=>$_sheetDataInfo) {
                    ?>
 
-                <table class="<?php if ($_tmpI++ == 1) echo 'active';?> tab-pane table table-bordered table-condensed" id="tab_id_<?php echo $_monthlyData['belong_year_month'];?>_sheet_<?php echo $_key;?>">
+                <table class="<?php if ($_tmpJ++ == 1) echo 'active';?> tab-pane table table-bordered table-condensed" id="tab_id_<?php echo $_monthlyData['belong_year_month'];?>_sheet_<?php echo $_key;?>">
                     <?php foreach ($_sheetDataInfo as $_rowKey=>$_rowData) { ?>
                         <?php
                         $_isEmpty = true;

@@ -69,6 +69,9 @@ class books extends SinhoBaseController
         }
         $keywordSubjectList = array_merge($keywordSubjectList, $keywordSubjectList1);
 
+        isset($_POST['editor_price']) OR $_POST['editor_price'] = $this->hostConfig->sinho_feature_list['default_book_editor_price'];
+        isset($_POST['editor_price_method']) OR $_POST['editor_price_method'] = 1;
+
         $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
         if ($_POST['id']) { // 更新
             $_checkKeys = array (
@@ -533,8 +536,8 @@ class books extends SinhoBaseController
         if (! $bookInfo) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('操作错误，书稿不存在！')));
         }
-        $set = array('is_payed'=> $_POST['is_payed']);
-        $_POST['is_payed']==1 AND $set['admin_remarks'] = trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'结账', ';');
+        $set = array('is_payed'=> $_POST['is_payed'], 'pay_date'=>date('Y-m-d H:i:s'));
+        //$_POST['is_payed']==1 AND $set['admin_remarks'] = trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'结账', ';');
         $this->model('sinhoWorkload')
              ->update(sinhoWorkloadModel::BOOK_TABLE,
                     $set,
@@ -604,7 +607,11 @@ class books extends SinhoBaseController
         $bookList = $this->model('sinhoWorkload')
                          ->getByIds($_POST['ids'], sinhoWorkloadModel::BOOK_TABLE);
         foreach ($bookList as $bookInfo) {
-            $set = array('admin_remarks' => trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'对账', ';') );
+            $set = array(
+                //'admin_remarks' => trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'对账', ';'),
+                'is_prepayed'   => 1,
+                'prepay_date'   => date('Y-m-d H:i:s'),
+             );
             $this->model('sinhoWorkload')
                  ->update(sinhoWorkloadModel::BOOK_TABLE,
                         $set,
@@ -627,8 +634,8 @@ class books extends SinhoBaseController
         $bookList = $this->model('sinhoWorkload')
                          ->getByIds($_POST['ids'], sinhoWorkloadModel::BOOK_TABLE);
         foreach ($bookList as $bookInfo) {
-            $set = array('is_payed'=> 1);
-            $set['admin_remarks'] = trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'已结', ';');
+            $set = array('is_payed'=> 1, 'pay_date'=>date('Y-m-d H:i:s'));
+            //$set['admin_remarks'] = trim($bookInfo['admin_remarks'] . ';'.date('Y.n.j').'已结', ';');
             $this->model('sinhoWorkload')
                  ->update(sinhoWorkloadModel::BOOK_TABLE,
                         $set,

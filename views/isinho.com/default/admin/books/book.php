@@ -248,8 +248,67 @@
                                 </div>
 
                             </div>
+                            <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_editor_price']) {?>
 
-							<div class="row mod-footer clearfix">
+                            <div class=" clearfix">
+                                <!-- 编辑绩效汇算方式 -->
+                                <div class="col-sm-1 nopadding">
+                                    <label class="icb-label text-right"><?php _e('编辑绩效方式'); ?>:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                <label class="radio-inline">
+                                <input type="radio" name="editor_price_method" id="inlineRadio1" value="1" <?php echo empty($this->itemInfo['editor_price_method']) || $this->itemInfo['editor_price_method']==1?'checked' : ''; ?>><?php _e('字数'); ?>
+                                </label>
+                                <label class="radio-inline">
+                                <input type="radio" name="editor_price_method" id="inlineRadio2" value="2" <?php echo $this->itemInfo['editor_price_method']==2?'checked' : ''; ?>><?php _e('页'); ?>
+                                </label>
+                                <label class="radio-inline">
+                                <input type="radio" name="editor_price_method" id="inlineRadio3" value="3" <?php echo $this->itemInfo['editor_price_method']==3?'checked' : ''; ?>><?php _e('小时'); ?>
+                                </label>
+                                <label class="radio-inline">
+                                <input type="radio" name="editor_price_method" id="inlineRadio4" value="4" <?php echo $this->itemInfo['editor_price_method']==4?'checked' : ''; ?>><?php _e('任务(套/本 等)'); ?>
+                                </label>
+                                <span class="help-block">编辑绩效核算方式，可以按字数，页码，小时或者整个任务打包核算。按照字数，页面，小时核算时，价钱输入基数单价；按照任务核算，价钱输入总价；</span>
+                                </div>
+
+                                <div class="col-sm-1 nopadding text-right">
+                                    <label class="icb-label"><?php _e('价钱'); ?>:</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" name="editor_price" value="<?php echo $this->itemInfo['editor_price']==0 ? $this->hostConfig->sinho_feature_list['default_book_editor_price']:$this->itemInfo['editor_price']; ?>" class="form-control" />
+                                </div>
+                            </div>
+                            <?php }?>
+                            <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_sale_price']) {?>
+                            <div class=" clearfix">
+                                <!-- 编辑绩效汇算方式 -->
+                                <div class="col-sm-1 nopadding">
+                                    <label class="icb-label text-right"><?php _e('外社核算方式'); ?>:</label>
+                                </div>
+                                <div class="col-sm-6">
+                                <label class="radio-inline">
+                                <input type="radio" name="provider_price_method" id="inlineRadio11" value="1" <?php echo $this->itemInfo['provider_price_method']==1?'checked' : ''; ?>><?php _e('字数'); ?>
+                                </label>
+                                <label class="radio-inline">
+                                <input type="radio" name="provider_price_method" id="inlineRadio12" value="2" <?php echo $this->itemInfo['provider_price_method']==2?'checked' : ''; ?>><?php _e('页'); ?>
+                                </label>
+                                <label class="radio-inline">
+                                <input type="radio" name="provider_price_method" id="inlineRadio13" value="3" <?php echo $this->itemInfo['provider_price_method']==3?'checked' : ''; ?>><?php _e('小时'); ?>
+                                </label>
+                                <label class="radio-inline">
+                                <input type="radio" name="provider_price_method" id="inlineRadio14" value="4" <?php echo $this->itemInfo['provider_price_method']==4?'checked' : ''; ?>><?php _e('任务(套/本 等)'); ?>
+                                </label>
+                                <span class="help-block">外社稿件核算方式，可以按字数，页码，小时或者整个任务打包核算。按照字数，页面，小时核算时，价钱输入基数单价；按照任务核算，价钱输入总价；</span>
+                                </div>
+                                <div class="col-sm-1 nopadding text-right">
+                                    <label class="icb-label"><?php _e('价钱'); ?>:</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input type="text" name="provider_price" value="<?php echo $this->itemInfo['provider_price']; ?>" class="form-control" />
+                                </div>
+                            </div>
+                            <?php }?>
+                            <div class="row mod-footer clearfix">
 								<?php if ($this->itemInfo['id'] ) { ?>
 								<a class="btn btn-large btn-danger" id="deleteBatchBtn" onclick="deleteItem(<?php echo $this->itemInfo['id'];?>); return false;"><?php _e('删除书稿'); ?></a>
 								<?php } ?>

@@ -126,7 +126,12 @@
                                 <td><a class="md-tip"  title="<?php echo $itemInfo['function_answer_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['function_answer']; ?>    </a></td>
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
-                                <td class="px10"><?php echo $itemInfo['remarks']; ?> <span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
+                                <td class="px10"><?php echo $itemInfo['remarks'];
+                                ?> <span class="text-primary"><?php
+                                echo $itemInfo['admin_remarks'];
+                                echo $itemInfo['is_prepayed']==1 && substr($itemInfo['prepay_date'],0,4)!='1970' ? (substr($itemInfo['prepay_date'],0,10).'已对账') :'';
+                                echo $itemInfo['is_payed']==1 && substr($itemInfo['pay_date'],0,4)!='1970' ? (substr($itemInfo['pay_date'],0,10).'已结账') : '';
+                                ?></span></td>
                                 <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">

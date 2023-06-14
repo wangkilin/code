@@ -599,6 +599,9 @@ class books extends SinhoBaseController
         $bookBelongYears = json_decode($bookBelongYears, true);
         View::assign('bookBelongYears', $bookBelongYears);
 
+
+        View::assign('hostConfig', $this->hostConfig);
+
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/books','sinho_admin_menu') ) );
 
         View::import_js('js/functions.js');
