@@ -30,7 +30,7 @@
                 <div class="row">
                     <span class="col-sm-2"></span>
                     <span class="col-sm-8">
-                        <button data-page-id="<?php echo $this->page_info['id']?>"  onclick="$(this).removeClass('btn-primary'); setItemRead($(this));return false;" class="btn btn-lg <?php echo $this->page_info['is_receipt_required']==1?'btn-primary':'';?> col-sm-12"><?php _e('阅读完成');?></button>
+                        <button data-page-id="<?php echo $this->page_info['id']?>"  onclick="setItemRead($(this));return false;" class="btn btn-lg <?php echo $this->page_info['is_receipt_required']==1?'btn-primary':'';?> col-sm-12"><?php _e('阅读完成');?></button>
                     </span>
                 </div>
                 <?php } ?>
@@ -48,8 +48,10 @@
 <script>
 function setItemRead($obj) {
     var pageId = $obj.data('page-id');
-
+    // 没有阅读过， 点击阅读完成按钮， 设置阅读状态；
     if ($obj.hasClass('btn-primary')) {
+        $obj.removeClass('btn-primary'); // 移除按钮可以点击的状态
+        // 发送阅读完成请求
         ICB.ajax.requestJson("/admin/ajax/page/set_read/", {page_id:pageId}, function(){});
     }
 

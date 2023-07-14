@@ -358,6 +358,7 @@ class main extends Controller
         switch ($categoryInfo['display_mode']) {
             case 3:
             case 2:
+
                 $this->categoryIsNavMenuAndShowPage($page_info);
                 break;
             case 1:

@@ -2824,7 +2824,7 @@ class ajax extends AdminController
         $dir = '/temp/' . gmdate('Ymd', APP_START_TIME);
 
         Application::upload()->initialize(array(
-                        'allowed_types' => 'jpg,jpeg,png,gif',
+                        'allowed_types' => '*',
                         'upload_path'   => get_setting('upload_dir') . $dir,
                         'is_image'      => TRUE,
                         'max_size'      => get_setting('upload_avatar_size_limit')
@@ -2834,10 +2834,26 @@ class ajax extends AdminController
         $uploadData = Application::upload()->data();
         $filePath = $dir . '/' . $uploadData['file_name'];
 
+        switch(strtolower($uploadData['file_ext'])) {
+            case '.doc':
+            case '.docx':
+                //break;
+
+            default:
+                if ($uploadData['is_image']) {
+                    $_tmpThumb = get_setting('upload_url') . $filePath;
+                } else {
+                    $_tmpThumb = '/static/images/icon/file.png';
+                }
+                break;
+        }
+
         echo htmlspecialchars(json_encode(array(
                         'success' => true,
-                        'thumb'   => get_setting('upload_url') . $filePath,
+                        'thumb'   => $_tmpThumb,
                         'file'    => $filePath,
+                        'ext'     => $uploadData['file_ext'],
+                        //'data'    => $uploadData,
         )), ENT_NOQUOTES);
 
         /**

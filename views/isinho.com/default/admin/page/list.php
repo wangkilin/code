@@ -55,6 +55,10 @@
 
 							<td>
                             <?php
+                            // 条目不限制显示范围，分类限制显示范围， 这种情况，显示范围由分类来决定
+                            if ($val['publish_area']==pageModel::PUBLIC_AREA_NO_LIMIT && $this->categoryList[$val['category_id']]['publish_area']!==pageModel::PUBLIC_AREA_NO_LIMIT) {
+                                $val['publish_area']= $this->categoryList[$val['category_id']]['publish_area'];
+                            }
                             if ($val['publish_area']==pageModel::PUBLIC_AREA_NO_LIMIT) { ?>
                                 <?php echo $val['title']; ?>
                                 <br/>

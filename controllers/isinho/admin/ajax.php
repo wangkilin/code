@@ -1461,6 +1461,17 @@ class ajax extends AdminController
             }
         }
 
+        if ($_POST['category_id']) {
+            $categoryInfo = $this->model()->getById($_POST['category_id'], 'page_category');
+            if (! $categoryInfo) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('所选分类不存在！')));
+            }
+
+            if ( ($categoryInfo['publish_area'] == pageModel::PUBLIC_AREA_INSIDE && $_POST['publish_area'] == pageModel::PUBLIC_AREA_OUTSIDE)
+              || ($categoryInfo['publish_area'] == pageModel::PUBLIC_AREA_OUTSIDE && $_POST['publish_area'] == pageModel::PUBLIC_AREA_INSIDE)) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('内容可见范围与所选分类不一致')));
+            }
+        }
 
         $this->model('page')->update_page($_POST['page_id'], $_POST['title'], $_POST['keywords'], $_POST['description'], $_POST['contents'], $_POST['url_token'], $_POST);
 
