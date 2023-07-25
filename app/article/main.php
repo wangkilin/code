@@ -1,22 +1,16 @@
 <?php
-/*
-+--------------------------------------------------------------------------
-|   WeCenter [#RELEASE_VERSION#]
-|   ========================================
-|   by WeCenter Software
-|   © 2011 - 2014 WeCenter. All Rights Reserved
-|   http://www.wecenter.com
-|   ========================================
-|   Support: WeCenter@qq.com
-|
-+---------------------------------------------------------------------------
-*/
+/**
+ * +-------------------------------------------+
+ *    iCodeBang CMS [#RELEASE_VERSION#]
+ *    by iCodeBang.com Team
+ *    © iCodeBang.com. All Rights Reserved
+ *    ------------------------------------
+ *    Support: icodebang@126.com
+ *    WebSite: http://www.icodebang.com
+ * +-------------------------------------------+
+ */
 
-
-if (!defined('iCodeBang_Com'))
-{
-    die;
-}
+ defined('iCodeBang_Com') OR die();
 
 class main extends BaseController
 {
@@ -206,7 +200,17 @@ class main extends BaseController
         $relatedList = array();
         View::assign('recommend_posts', $relatedList);
 
-        $latestArticleList = $this->model('article')->get_articles_list($article_info['category_id'], 1, 20, 'id DESC');
+        // 获取文章对应的分类下的最新文章内容。 启用数据缓存
+        $cache_key = str_replace(array('.',':'), '_',$_SERVER['HTTP_HOST']) . '_' . CONTROLLER . '_' . ACTION . '_latestArticleList_' . $article_info['category_id'];
+        if ($latestArticleList = Application::cache()->get($cache_key)) {
+        // 获取到数据缓存， 使用对应的缓存内容
+            View::assign('latestArticleList', $latestArticleList);
+        } else {
+        // 没有缓存数据， 获取数据库中的数据，并缓存
+            $latestArticleList = $this->model('article')->get_articles_list($article_info['category_id'], 1, 20, 'id DESC');
+            Application::cache()->set($cache_key, $latestArticleList, get_setting('cache_level_low'));
+
+        }
         View::assign('latestArticleList', $latestArticleList);
 
         View::output('article/index');
