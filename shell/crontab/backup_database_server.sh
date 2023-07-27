@@ -39,20 +39,27 @@ ONE_WEEK_AGO_DATE="${ONE_WEEK_AGO_DATE}_${AM_PM}"
 
 if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份
-    mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE  $DB_TABLES> $DIR_STORE/isinho_$NOW_DATE.sql
+    mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE  $DB_TABLES> $DIR_STORE/${DB_DATABASE}_$NOW_DATE.sql
+    mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE_SY  $DB_TABLES> $DIR_STORE/${DB_DATABASE_SY}_$NOW_DATE.sql
 else
     # 1. 数据库备份
-    mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE  $DB_TABLES> $DIR_STORE/isinho_$NOW_DATE.sql
+    mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE  $DB_TABLES> $DIR_STORE/${DB_DATABASE}_$NOW_DATE.sql
+    mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE_SY  $DB_TABLES> $DIR_STORE/${DB_DATABASE_SY}_$NOW_DATE.sql
 fi
 # 1.1 打包数据库备份文件
 cd $DIR_STORE
-tar zcf $DIR_STORE/sinho_db_$NOW_DATE.tgz  isinho_$NOW_DATE.sql
+tar zcf $DIR_STORE/${DB_DATABASE}_$NOW_DATE.tgz  ${DB_DATABASE}_$NOW_DATE.sql
+tar zcf $DIR_STORE/${DB_DATABASE_SY}_$NOW_DATE.tgz  ${DB_DATABASE_SY}_$NOW_DATE.sql
 # 1.2 打包后，将刚生成的sql文件删除，只保留打包文件，释放空间。
-rm -f $DIR_STORE/isinho_$NOW_DATE.sql
+rm -f $DIR_STORE/${DB_DATABASE}_$NOW_DATE.sql
+rm -f $DIR_STORE/${DB_DATABASE_SY}_$NOW_DATE.sql
 
-# 2. 删除7点前的打包文件， 释放空间
-if [ -e $DIR_STORE/sinho_db_$ONE_WEEK_AGO_DATE.tgz ]; then
-    rm -f $DIR_STORE/sinho_db_$ONE_WEEK_AGO_DATE.tgz
+# 2. 删除7天前的打包文件， 释放空间
+if [ -e $DIR_STORE/${DB_DATABASE}_$ONE_WEEK_AGO_DATE.tgz ]; then
+    rm -f $DIR_STORE/${DB_DATABASE}_$ONE_WEEK_AGO_DATE.tgz
+fi
+if [ -e $DIR_STORE/${DB_DATABASE_SY}_$ONE_WEEK_AGO_DATE.tgz ]; then
+    rm -f $DIR_STORE/${DB_DATABASE_SY}_$ONE_WEEK_AGO_DATE.tgz
 fi
 
 cd $CWD

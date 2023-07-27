@@ -4,6 +4,7 @@ DB_HOST=localhost               # 数据库主机地址
 DB_USERNAME=root		# 数据库用户名
 DB_PASSWORD=""            # 数据库密码
 DB_DATABASE=WeCenter            # 数据库名
+DB_DATABASE_SY=sy_isinho_com    # 沈阳这边的数据库
 
 # ssh设置信息
 SSH_HOST=www.ekotlin.com           # 远程主机地址
