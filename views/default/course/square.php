@@ -11,7 +11,7 @@
                     <h3 class="course-table-name">HTML/CSS</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/html5/id-html_tutorial__table_id-25.html" title="HTML 教程">
+                            <a class="clearfix-item" href="/course/html5/id-html_tutorial__table_id-25" title="HTML 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/html5.png" alt="HTML&H5 教程">
                                 </div>
@@ -22,7 +22,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/css_css3/id-css_tutorial__table_id-16.html" title="CSS 教程">
+                            <a class="clearfix-item" href="/course/css_css3/id-css_tutorial__table_id-16" title="CSS 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/css.png" alt="CSS 教程">
                                 </div>
@@ -33,7 +33,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/css_css3/id-css3_tutorial__table_id-62.html" title="CSS3 教程">
+                            <a class="clearfix-item" href="/course/css_css3/id-css3_tutorial__table_id-62" title="CSS3 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/css3.png" alt="CSS3 教程">
                                 </div>
@@ -44,7 +44,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/bootstrap/id-bootstrap_tutorial__table_id-11.html" title="Bootstrap 教程">
+                            <a class="clearfix-item" href="/course/bootstrap/id-bootstrap_tutorial__table_id-11" title="Bootstrap 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/bootstrap.png" alt="Bootstrap 教程">
                                 </div>
@@ -55,7 +55,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/bootstrap/id-bootstrap4_tutorial__table_id-42.html" title="Bootstrap 教程">
+                            <a class="clearfix-item" href="/course/bootstrap/id-bootstrap4_tutorial__table_id-42" title="Bootstrap 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/bootstrap4.png" alt="Bootstrap4 教程">
                                 </div>
@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/foundation/id-foundation_tutorial__table_id-66.html" title="Foundation5 教程">
+                            <a class="clearfix-item" href="/course/foundation/id-foundation_tutorial__table_id-66" title="Foundation5 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/foundation.png" alt="Foundation5 教程">
                                 </div>
@@ -77,7 +77,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/html5/id-html_reference__table_id-36.html" title="HTML 参考手册">
+                            <a class="clearfix-item" href="/course/html5/id-html_reference__table_id-36" title="HTML 参考手册">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/html.png" alt="HTML 参考手册">
                                 </div>
@@ -88,7 +88,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/css_css3/id-css_reference__table_id-63.html" title="CSS 参考手册">
+                            <a class="clearfix-item" href="/course/css_css3/id-css_reference__table_id-63" title="CSS 参考手册">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/cssref.png" alt="CSS 参考手册">
                                 </div>
@@ -104,7 +104,7 @@
                     <h3 class="course-table-name">JavaScript</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/javascript/id-js_tutorial__table_id-19.html" title="JavaScript 教程">
+                            <a class="clearfix-item" href="/course/javascript/id-js_tutorial__table_id-19" title="JavaScript 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/javascript.png" alt="JavaScript 教程">
                                 </div>
@@ -115,7 +115,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/es6/es6_tutorial.html" title="ES6 教程">
+                            <a class="clearfix-item" href="/course/es6/es6_tutorial" title="ES6 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/es6.png" alt="ES6 教程">
                                 </div>
@@ -126,7 +126,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/javascript/id-jsref_tutorial__table_id-8.html" title="JavaScript 和 HTML DOM 参考手册">
+                            <a class="clearfix-item" href="/course/javascript/id-jsref_tutorial__table_id-8" title="JavaScript 和 HTML DOM 参考手册">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/jsref.png" alt="JavaScript 和 HTML DOM 参考手册">
                                 </div>
@@ -137,7 +137,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/vue/id-vue_tutorial__table_id-37.html" title="Vue 教程">
+                            <a class="clearfix-item" href="/course/vue/id-vue_tutorial__table_id-37" title="Vue 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/vue.png" alt="Vue 教程">
                                 </div>
@@ -148,7 +148,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/react/id-react_tutorial__table_id-56.html" title="React 教程">
+                            <a class="clearfix-item" href="/course/react/id-react_tutorial__table_id-56" title="React 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/react.png" alt="React 教程">
                                 </div>
@@ -159,7 +159,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/jq/id-jquery_tutorial__table_id-22.html" title="jQuery 教程">
+                            <a class="clearfix-item" href="/course/jq/id-jquery_tutorial__table_id-22" title="jQuery 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/jquery.png" alt="jQuery 教程">
                                 </div>
@@ -170,7 +170,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/nodejs/id-nodejs_tutorial__table_id-4.html" title="Node.js 教程">
+                            <a class="clearfix-item" href="/course/nodejs/id-nodejs_tutorial__table_id-4" title="Node.js 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/nodejs.png" alt="Node.js 教程">
                                 </div>
@@ -181,7 +181,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/TypeScript/id-ts_tutorial__table_id-67.html" title="TypeScript 教程">
+                            <a class="clearfix-item" href="/course/TypeScript/id-ts_tutorial__table_id-67" title="TypeScript 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/typescript.png" alt="TypeScript 教程">
                                 </div>
@@ -192,7 +192,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/angularjs/id-angularjs_tutorial__table_id-5.html" title="AngularJS 教程">
+                            <a class="clearfix-item" href="/course/angularjs/id-angularjs_tutorial__table_id-5" title="AngularJS 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/angular.png" alt="AngularJS 教程">
                                 </div>
@@ -203,7 +203,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/json/id-json_tutorial__table_id-41.html" title="JSON 教程">
+                            <a class="clearfix-item" href="/course/json/id-json_tutorial__table_id-41" title="JSON 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/json.png" alt="JSON 教程">
                                 </div>
@@ -214,7 +214,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/js_ajax/id-ajax_tutorial__table_id-61.html" title="AJAX 教程">
+                            <a class="clearfix-item" href="/course/js_ajax/id-ajax_tutorial__table_id-61" title="AJAX 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/ajax.png" alt="AJAX 教程">
                                 </div>
@@ -225,7 +225,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/angularjs/id-angularjs2_tutorial__table_id-49.html" title="Angular2 教程">
+                            <a class="clearfix-item" href="/course/angularjs/id-angularjs2_tutorial__table_id-49" title="Angular2 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/angular2.png" alt="Angular2 教程">
                                 </div>
@@ -236,7 +236,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/jq/id-jqueryui_tutorial__table_id-3.html" title="jQuery UI 教程">
+                            <a class="clearfix-item" href="/course/jq/id-jqueryui_tutorial__table_id-3" title="jQuery UI 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/jqui.png" alt="jQuery UI 教程">
                                 </div>
@@ -247,7 +247,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/jq/id-jqueryeasyui_tutorial__table_id-45.html" title="jQuery EasyUI 教程">
+                            <a class="clearfix-item" href="/course/jq/id-jqueryeasyui_tutorial__table_id-45" title="jQuery EasyUI 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/easyui.png" alt="jQuery EasyUI 教程">
                                 </div>
@@ -258,7 +258,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/dom/id-htmldom_tutorial__table_id-40.html" title="HTML DOM 教程">
+                            <a class="clearfix-item" href="/course/dom/id-htmldom_tutorial__table_id-40" title="HTML DOM 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/dom.png" alt="HTML DOM 教程">
                                 </div>
@@ -274,7 +274,7 @@
                     <h3 class="course-table-name">后端语言</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/python/id-python3_tutorial__table_id-12.html" title="Python3 教程">
+                            <a class="clearfix-item" href="/course/python/id-python3_tutorial__table_id-12" title="Python3 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/python.png" alt="Python3 教程">
                                 </div>
@@ -285,7 +285,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/java/id-java_tutorial__table_id-24.html" title="Java 教程">
+                            <a class="clearfix-item" href="/course/java/id-java_tutorial__table_id-24" title="Java 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/java.png" alt="Java 教程">
                                 </div>
@@ -296,7 +296,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/nodejs/id-nodejs_tutorial__table_id-4.html" title="Node.js 教程">
+                            <a class="clearfix-item" href="/course/nodejs/id-nodejs_tutorial__table_id-4" title="Node.js 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/nodejs.png" alt="Node.js 教程">
                                 </div>
@@ -307,7 +307,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/php/id-php_arrays__table_id-30.html" title="PHP 教程">
+                            <a class="clearfix-item" href="/course/php/id-php_arrays__table_id-30" title="PHP 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/php.png" alt="PHP 教程">
                                 </div>
@@ -318,7 +318,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/golang/id-go_tutorial__table_id-7.html" title="Go 教程">
+                            <a class="clearfix-item" href="/course/golang/id-go_tutorial__table_id-7" title="Go 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/go.png" alt="Go 教程">
                                 </div>
@@ -329,7 +329,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/c/id-c_tutorial__table_id-38.html" title="C 教程">
+                            <a class="clearfix-item" href="/course/c/id-c_tutorial__table_id-38" title="C 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/c.png" alt="C 教程">
                                 </div>
@@ -340,7 +340,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/cplusplus/id-cpp_tutorial__table_id-10.html" title="C++ 教程">
+                            <a class="clearfix-item" href="/course/cplusplus/id-cpp_tutorial__table_id-10" title="C++ 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/cplusplus.png" alt="C++ 教程">
                                 </div>
@@ -351,7 +351,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/csharp/id-csharp_tutorial__table_id-52.html" title="C# 教程">
+                            <a class="clearfix-item" href="/course/csharp/id-csharp_tutorial__table_id-52" title="C# 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/csharp.png" alt="C# 教程">
                                 </div>
@@ -375,7 +375,7 @@
                         </li>
                         -->
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/ruby/id-ruby_tutorial__table_id-58.html" title="Ruby 教程">
+                            <a class="clearfix-item" href="/course/ruby/id-ruby_tutorial__table_id-58" title="Ruby 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/ruby.png" alt="Ruby 教程">
                                 </div>
@@ -386,7 +386,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/jsp/id-jsp_tutorial__table_id-64.html" title="JSP 教程">
+                            <a class="clearfix-item" href="/course/jsp/id-jsp_tutorial__table_id-64" title="JSP 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/jsp.png" alt="JSP 教程">
                                 </div>
@@ -397,7 +397,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/Lua/id-lua_tutorial__table_id-34.html" title="Lua 教程">
+                            <a class="clearfix-item" href="/course/Lua/id-lua_tutorial__table_id-34" title="Lua 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/lua.png" alt="Lua 教程">
                                 </div>
@@ -408,7 +408,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/asp/id-aspnet_tutorial__table_id-55.html" title="ASP.NET 教程">
+                            <a class="clearfix-item" href="/course/asp/id-aspnet_tutorial__table_id-55" title="ASP.NET 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/aspnet.png" alt="ASP.NET 教程">
                                 </div>
@@ -419,7 +419,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/perl/id-perl_tutorial__table_id-21.html" title="Perl 教程">
+                            <a class="clearfix-item" href="/course/perl/id-perl_tutorial__table_id-21" title="Perl 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/perl.png" alt="Perl 教程">
                                 </div>
@@ -443,7 +443,7 @@
                         </li>
 -->
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/Scala/id-scala_tutorial__table_id-43.html" title="Scala 教程">
+                            <a class="clearfix-item" href="/course/Scala/id-scala_tutorial__table_id-43" title="Scala 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/scala.png" alt="Scala 教程">
                                 </div>
@@ -472,7 +472,7 @@
                     <h3 class="course-table-name">开发框架</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/django/id-django_tutorial__table_id-54.html" title="Django 教程">
+                            <a class="clearfix-item" href="/course/django/id-django_tutorial__table_id-54" title="Django 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/django.png" alt="Django 教程">
                                 </div>
@@ -488,7 +488,7 @@
                     <h3 class="course-table-name">数据库</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/mysql_mariadb/id-mysql_tutorial__table_id-48.html" title="MySQL 教程">
+                            <a class="clearfix-item" href="/course/mysql_mariadb/id-mysql_tutorial__table_id-48" title="MySQL 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/mysql.png" alt="MySQL 教程">
                                 </div>
@@ -499,7 +499,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/Redis/id-redis_tutorial__table_id-18.html" title="Redis 教程">
+                            <a class="clearfix-item" href="/course/Redis/id-redis_tutorial__table_id-18" title="Redis 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/redis.png" alt="Redis 教程">
                                 </div>
@@ -510,7 +510,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/db/id-sql_tutorial__table_id-65.html" title="SQL 教程">
+                            <a class="clearfix-item" href="/course/db/id-sql_tutorial__table_id-65" title="SQL 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/sql.png" alt="SQL 教程">
                                 </div>
@@ -521,7 +521,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/SQLite/id-sqlite_tutorial__table_id-28.html" title="SQLite 教程">
+                            <a class="clearfix-item" href="/course/SQLite/id-sqlite_tutorial__table_id-28" title="SQLite 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/sqlite.png" alt="SQLite 教程">
                                 </div>
@@ -532,7 +532,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/MongoDB/id-mongodb_tutorial__table_id-33.html" title="MongoDB 教程">
+                            <a class="clearfix-item" href="/course/MongoDB/id-mongodb_tutorial__table_id-33" title="MongoDB 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/mongodb.png" alt="MongoDB 教程">
                                 </div>
@@ -543,7 +543,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/memcached/id-memcached_tutorial_2__table_id-68.html" title="Memcached 教程">
+                            <a class="clearfix-item" href="/course/memcached/id-memcached_tutorial_2__table_id-68" title="Memcached 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/memcached.png" alt="Memcached 教程">
                                 </div>
@@ -559,7 +559,7 @@
                     <h3 class="course-table-name">移动开发</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/Android/id-android_tutorial_intro__table_id-70.html" title="Android 教程">
+                            <a class="clearfix-item" href="/course/Android/id-android_tutorial_intro__table_id-70" title="Android 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/android.png" alt="Android 教程">
                                 </div>
@@ -570,7 +570,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/IOS/id-ios_tutorial__table_id-32.html" title="iOS 开发手册">
+                            <a class="clearfix-item" href="/course/IOS/id-ios_tutorial__table_id-32" title="iOS 开发手册">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/ios.png" alt="iOS 开发手册">
                                 </div>
@@ -581,7 +581,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/jq/id-jquerymobile_tutorial__table_id-26.html" title="jQuery Mobile 教程">
+                            <a class="clearfix-item" href="/course/jq/id-jquerymobile_tutorial__table_id-26" title="jQuery Mobile 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/jqmobile.png" alt="jQuery Mobile 教程">
                                 </div>
@@ -592,7 +592,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/Swift/id-swift_tutorial__table_id-44.html" title="Swift 教程">
+                            <a class="clearfix-item" href="/course/Swift/id-swift_tutorial__table_id-44" title="Swift 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/swift.png" alt="Swift 教程">
                                 </div>
@@ -603,7 +603,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/Kotlin/id-kotlin_tutorial__table_id-27.html" title="Kotlin 教程">
+                            <a class="clearfix-item" href="/course/Kotlin/id-kotlin_tutorial__table_id-27" title="Kotlin 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/kotlin.png" alt="Kotlin 教程">
                                 </div>
@@ -614,7 +614,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/react/id-react_tutorial__table_id-56.html" title="React 教程">
+                            <a class="clearfix-item" href="/course/react/id-react_tutorial__table_id-56" title="React 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/react.png" alt="React 教程">
                                 </div>
@@ -625,7 +625,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/ionic/id-ionic_tutorial__table_id-69.html" title="ionic 教程">
+                            <a class="clearfix-item" href="/course/ionic/id-ionic_tutorial__table_id-69" title="ionic 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/ionic.png" alt="ionic 教程">
                                 </div>
@@ -641,7 +641,7 @@
                     <h3 class="course-table-name">服务器相关</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/linux_unix/id-linux_tutorial__table_id-46.html" title="Linux 教程">
+                            <a class="clearfix-item" href="/course/linux_unix/id-linux_tutorial__table_id-46" title="Linux 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/linux.png" alt="Linux 教程">
                                 </div>
@@ -652,7 +652,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/docker/id-docker_tutorial__table_id-6.html" title="Docker 教程">
+                            <a class="clearfix-item" href="/course/docker/id-docker_tutorial__table_id-6" title="Docker 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/docker.png" alt="Docker 教程">
                                 </div>
@@ -680,7 +680,7 @@
                     <h3 class="course-table-name">XML教程</h3>
                     <ul class="clearfix">
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/xml/id-xml_tutorial__table_id-35.html" title="XML 教程">
+                            <a class="clearfix-item" href="/course/xml/id-xml_tutorial__table_id-35" title="XML 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/xml.png" alt="XML 教程">
                                 </div>
@@ -691,7 +691,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/xml/id-xsl_tutorial__table_id-53.html" title="XSLT 教程">
+                            <a class="clearfix-item" href="/course/xml/id-xsl_tutorial__table_id-53" title="XSLT 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/xsl.png" alt="XSLT 教程">
                                 </div>
@@ -702,7 +702,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/xml/id-xpath_tutorial__table_id-13.html" title="XPath 教程">
+                            <a class="clearfix-item" href="/course/xml/id-xpath_tutorial__table_id-13" title="XPath 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/xpath.png" alt="XPath 教程">
                                 </div>
@@ -713,7 +713,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/xml/id-xquery_tutorial__table_id-14.html" title="XQuery 教程">
+                            <a class="clearfix-item" href="/course/xml/id-xquery_tutorial__table_id-14" title="XQuery 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/xquery.png" alt="XQuery 教程">
                                 </div>
@@ -724,7 +724,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/xml/id-schema_tutorial__table_id-39.html" title="XML Schema 教程">
+                            <a class="clearfix-item" href="/course/xml/id-schema_tutorial__table_id-39" title="XML Schema 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/xmlschema.png" alt="XML Schema 教程">
                                 </div>
@@ -735,7 +735,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/xml/id-xslfo_tutorial__table_id-51.html" title="XSL-FO 教程">
+                            <a class="clearfix-item" href="/course/xml/id-xslfo_tutorial__table_id-51" title="XSL-FO 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/xslfo.png" alt="XSL-FO 教程">
                                 </div>
@@ -746,7 +746,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/html5/id-svg_tutorial__table_id-1.html" title="SVG 教程">
+                            <a class="clearfix-item" href="/course/html5/id-svg_tutorial__table_id-1" title="SVG 教程">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/svg.png" alt="SVG 教程">
                                 </div>
@@ -762,7 +762,7 @@
                     <h3 class="course-table-name">程序开发知识</h3>
                     <ul>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/design_pattern/id-design_pattern_tutorial__table_id-57.html" title="设计模式">
+                            <a class="clearfix-item" href="/course/design_pattern/id-design_pattern_tutorial__table_id-57" title="设计模式">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/designpattern.png" alt="设计模式">
                                 </div>
@@ -773,7 +773,7 @@
                             </a>
                         </li>
                         <li class="col-sm-6 col-xs-6 col-md-4 col-lg-3">
-                            <a class="clearfix-item" href="/course/pattern/id-regexp_tutorial__table_id-9.html" title="正则表达式">
+                            <a class="clearfix-item" href="/course/pattern/id-regexp_tutorial__table_id-9" title="正则表达式">
                                 <div class="course_img  hidden-xs col-sm-3 col-md-3 col-lg-3">
                                     <img src="//www.icodebang.cn/uploads/nav_menu/regex.png" alt="正则表达式">
                                 </div>

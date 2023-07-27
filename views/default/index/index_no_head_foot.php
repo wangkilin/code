@@ -366,7 +366,7 @@ if ($('#J_dotLine').length) {
                                 $_tmpIndex++;
                             ?>
                                 <li class="nopadding col-sm-12 col-xs-12 col-md-12 col-lg-12">
-                                    <a class="clearfix-item" href="/course/<?php echo $this->categoryList[$_courseTableInfo['category_id']]['title']?>/id-<?php echo $this->courseFirstPageList[$_courseTableInfo['id']]['article_id'];?>__table_id-<?php echo $_courseTableInfo['id']?>.html" title="<?php echo $_courseTableInfo['title'];?>">
+                                    <a class="clearfix-item" href="/course/<?php echo $this->categoryList[$_courseTableInfo['category_id']]['title']?>/id-<?php echo $this->courseFirstPageList[$_courseTableInfo['id']]['article_id'];?>__table_id-<?php echo $_courseTableInfo['id']?>" title="<?php echo $_courseTableInfo['title'];?>">
                                         <div class="course_img  padding5 col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                             <img src="//www.icodebang.cn/uploads/nav_menu/<?php echo $_courseTableInfo['icon'];?>" alt="<?php echo $_courseTableInfo['title'];?>教程">
                                         </div>

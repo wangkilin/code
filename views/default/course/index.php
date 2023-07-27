@@ -21,7 +21,7 @@
                                 echo $_item['parent_id'] > 0 ? ' hidden' : '';
                             ?>" data-parent-id="<?php echo $_item['parent_id'];?>" data-id="<?php echo $_item['id'];?>"><i class="icon-log<?php
                                  echo $_item['parent_id'] > 0 ? ' sub-level' : ' icon-add-to-list';
-                                 ?>"></i><a href="./id-<?php echo empty($this->courseList[$_item['article_id']]['url_token']) ? $_item['article_id']:$this->courseList[$_item['article_id']]['url_token'];?>__table_id-<?php echo $_item['table_id'];?>.html"><?php echo $_item['title'];?></a></li>
+                                 ?>"></i><a href="./id-<?php echo empty($this->courseList[$_item['article_id']]['url_token']) ? $_item['article_id']:$this->courseList[$_item['article_id']]['url_token'];?>__table_id-<?php echo $_item['table_id'];?>"><?php echo $_item['title'];?></a></li>
                             <?php
                                         break;
                                     case 'link':
