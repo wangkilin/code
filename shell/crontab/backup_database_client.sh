@@ -38,7 +38,9 @@ fi
 # 解压打包文件， 执行sql内容，导入数据
 cd $LOCAL_STORE_DIR
 tar zxf ${DB_DATABASE_SY}_$NOW_DATE.tgz
-
+# 替换mysql8到mysql5不支持的字符集
+sed -ie 's/COLLATE=utf8mb4_0900_ai_ci//g' $LOCAL_STORE_DIR/${DB_DATABASE_SY}_$NOW_DATE.sql
+#sed -ie 's/CHARSET=utf8mb3/CHARSET=utf8/g' $LOCAL_STORE_DIR/${DB_DATABASE_SY}_$NOW_DATE.sql
 
 # 根据数据库密码是否为空， 执行不同的命令
 if [[ "$DB_PASSWORD" = "" ]]; then
