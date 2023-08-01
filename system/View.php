@@ -173,13 +173,19 @@ class View
             }
 
             //$output = preg_replace("/([a-zA-Z0-9]+_?[a-zA-Z0-9]+)-__|(__[a-zA-Z0-9]+_?[a-zA-Z0-9]+)-$/i", '', $output);
-
+            // 将传递的空变量过滤掉
             $output = preg_replace('/[a-zA-Z0-9]+_?[a-zA-Z0-9]*\-__/', '', $output);
+            // 此处替换的目的是啥？？
             $output = preg_replace('/(__)?[a-zA-Z0-9]+_?[a-zA-Z0-9]*\-([\'|"])/', '\2', $output);
 
             if (Application::config()->get('system')->debug)
             {
                 $output .= "\r\n<!-- Template End: " . $display_template_filename . " -->\r\n";
+            } else { // 去除生成的HTML中的多余空白字符， 节省流量
+                $output = preg_replace('/( ){2,}/', ' ', $output);
+                $output = preg_replace('/(\t){2,}/', "\t", $output);
+                $output = preg_replace('/(\n){2,}/', "\n", $output);
+                $output = preg_replace('/>\s+</', "><", $output);
             }
         }
 
