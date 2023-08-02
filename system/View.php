@@ -182,10 +182,10 @@ class View
             {
                 $output .= "\r\n<!-- Template End: " . $display_template_filename . " -->\r\n";
             } else { // 去除生成的HTML中的多余空白字符， 节省流量
-                $output = preg_replace('/( ){2,}/', ' ', $output);
-                $output = preg_replace('/(\t){2,}/', "\t", $output);
-                $output = preg_replace('/(\n){2,}/', "\n", $output);
-                $output = preg_replace('/>\s+</', "><", $output);
+                $output = preg_replace('/( ){2,}/', ' ', $output);   // 用一个空格 替换连续多个空格
+                $output = preg_replace('/(\t){2,}/', "\t", $output); // 用一个制表符 替换连续多个制表符
+                $output = preg_replace('/(\n){2,}/', "\n", $output); // 用一个换行， 替换连续多个换行
+                $output = preg_replace('/>\s+</', "><", $output);    // 将HTML代码缩减行数;
             }
         }
 

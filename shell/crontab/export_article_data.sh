@@ -7,9 +7,9 @@ DIR=${BASH_SOURCE%/*} # /dir1/dir2/dir3
 . $DIR/global.config.sh  # 引入配置
 
 # 获取服务器端的文章最大的id值。 根据这个id值， 获取到最新的数据。
-scp -P $SSH_PORT $SSH_USERNAME@$SSH_HOST:$SSH_STORE_DIR/MAX_ARTICLE_ID.txt $LOCAL_STORE_DIR/ > /dev/null 2>&1;
+scp -P $SSH_PORT_ARTICLE $SSH_USERNAME_ARTICLE@$SSH_HOST_ARTICLE:$SSH_STORE_DIR/MAX_ARTICLE_ID.txt $LOCAL_STORE_DIR/ > /dev/null 2>&1;
 
-scp -P $SSH_PORT $SSH_USERNAME@$SSH_HOST:$SSH_STORE_DIR/MAX_ARTICLE_POST_ID.txt $LOCAL_STORE_DIR/ > /dev/null 2>&1;
+scp -P $SSH_PORT_ARTICLE $SSH_USERNAME_ARTICLE@$SSH_HOST_ARTICLE:$SSH_STORE_DIR/MAX_ARTICLE_POST_ID.txt $LOCAL_STORE_DIR/ > /dev/null 2>&1;
 # 如果没有从服务器端获取到文章id数据，直接退出
 if [ ! -e $LOCAL_STORE_DIR/MAX_ARTICLE_ID.txt ]; then
     exit 0
@@ -51,7 +51,7 @@ tar zcf $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.tgz  article_great_tha
 # 1.2 打包后，将刚生成的sql文件删除，只保留打包文件，释放空间。
 rm -f $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
 # 将打包的数据文件包远程复制到服务器
-scp -P $SSH_PORT $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.tgz $SSH_USERNAME@$SSH_HOST:$SSH_STORE_DIR/
+scp -P $SSH_PORT_ARTICLE $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.tgz $SSH_USERNAME_ARTICLE@$SSH_HOST_ARTICLE:$SSH_STORE_DIR/
 
 
 # 2. 删除打包文件， 释放空间

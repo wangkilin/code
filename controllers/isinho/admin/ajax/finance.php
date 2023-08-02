@@ -344,7 +344,7 @@ class finance extends SinhoBaseController
                 $match[2][0] = strlen($match[2][0]) > 2 ? round(substr($match[2][0], 0, 3)/10, 0) : $match[2][0];
                 $dataLine[$riqi_key] = $match[1][0] . "月" . $match[2][0] . '日';
             }
-            $itemData['deal_date'] = is_numeric($dataLine[$riqi_key]) ? date('n月j日',($dataLine[$riqi_key]-2) * 24*60*60) : $dataLine[$riqi_key];
+            $itemData['deal_date'] = is_numeric($dataLine[$riqi_key]) ? date('n月j日',($dataLine[$riqi_key]-1) * 24*60*60) : $dataLine[$riqi_key];
             $data['sheetDatas'][$sheetIndex][$_rowNumber][$riqi_key] = $itemData['deal_date'];
             $itemData['remark']    = $dataLine[$beizhu_key];
             if ($direction==1) { // 收入表
