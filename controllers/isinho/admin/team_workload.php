@@ -133,8 +133,8 @@ class team_workload extends SinhoBaseController
             $headArr = array(
                 'date'                              => '日期',
                 'user_name'                         => '责编',
-                //'delivery_date'                     => '发稿日期',
-                //'return_date'                       => '回稿日期',
+                'delivery_date'                     => '发稿日期',
+                'return_date'                       => '回稿日期',
                 'category'                          => '类别',
                 'serial'                            => '系列',
                 'book_name'                         => '书名',
@@ -168,6 +168,8 @@ class team_workload extends SinhoBaseController
                 $_item2['serial'            ] = $bookList[$_item2['book_id']]['serial'            ];
                 $_item2['book_name'         ] = $bookList[$_item2['book_id']]['book_name'         ];
                 $_item2['proofreading_times'] = $bookList[$_item2['book_id']]['proofreading_times'];
+                $_item2['delivery_date'     ] = $bookList[$_item2['book_id']]['delivery_date'];
+                $_item2['return_date'       ] = $bookList[$_item2['book_id']]['return_date'];
                 if ($_item2['add_time']) {
                     $_item2['date'] = date('m-d', $_item2['add_time']);
                 } else {
@@ -186,10 +188,10 @@ class team_workload extends SinhoBaseController
 
             // 导出书稿
             $style = array(
-                'width'   => array('A'=>12, 'B'=>10, 'C'=>10, 'D'=>15,'E'=>20,'G'=>4,'H'=>4, 'Y'=>40,), // 字符数算
+                'width'   => array('A'=>12, 'B'=>10, 'C'=>10,'D'=>10, 'E'=>10, 'F'=>15,'G'=>20,'I'=>4,'J'=>4, 'AA'=>40,), // 字符数算
                 'height'  => array(1 => 24),      // 按照 磅 算
                 'style'   => array (
-                    'A1:Y1'=> array (
+                    'A1:AA1'=> array (
                                 'font'    => array(
                                                     'size'      => 9
                                 ),
@@ -217,7 +219,7 @@ class team_workload extends SinhoBaseController
                 ),
             );
             foreach ($payedLines as $_line) {
-                $style['style']['A' . $_line . ':Y' .$_line] = array(
+                $style['style']['A' . $_line . ':AA' .$_line] = array(
                     'alignment'  => array('wrap' => TRUE),
                     'fill'    => array(
                                         'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
@@ -241,7 +243,7 @@ class team_workload extends SinhoBaseController
                 );
             }
             foreach ($verifyingLines as $_line) {
-                $style['style']['A' . $_line . ':Y' .$_line] = array(
+                $style['style']['A' . $_line . ':AA' .$_line] = array(
                     'alignment'  => array('wrap' => TRUE),
                     'fill'    => array(
                                         'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
@@ -265,7 +267,7 @@ class team_workload extends SinhoBaseController
                 );
             }
             foreach ($recordingLines as $_line) {
-                $style['style']['A' . $_line . ':Y' .$_line] = array(
+                $style['style']['A' . $_line . ':AA' .$_line] = array(
                     'fill'    => array(
                                         'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
                                         'color' => array('rgb' => 'e7ffde'),
@@ -478,8 +480,8 @@ class team_workload extends SinhoBaseController
             $headArr = array(
                 'date'                              => '日期',
                 'user_name'                         => '责编',
-                //'delivery_date'                     => '发稿日期',
-                //'return_date'                       => '回稿日期',
+                'delivery_date'                     => '发稿日期',
+                'return_date'                       => '回稿日期',
                 'category'                          => '类别',
                 'serial'                            => '系列',
                 'book_name'                         => '书名',
@@ -517,6 +519,8 @@ class team_workload extends SinhoBaseController
                     $bookLines[] = $_bookLine++;
                 }
                 foreach ($workloadList[$_item['id']] as $_item2) {
+                    $_item2['delivery_date'     ] = $_item['delivery_date'          ];
+                    $_item2['return_date'       ] = $_item['return_date'            ];
                     $_item2['category'          ] = $_item['category'          ];
                     $_item2['serial'            ] = $_item['serial'            ];
                     $_item2['book_name'         ] = $_item['book_name'         ];
@@ -538,10 +542,10 @@ class team_workload extends SinhoBaseController
 
             // 导出书稿
             $style = array(
-                'width'   => array('A'=>12, 'B'=>10, 'C'=>10, 'D'=>15,'E'=>20,'G'=>4,'H'=>4, 'Y'=>40,), // 字符数算
+                'width'   => array('A'=>12, 'B'=>10, 'C'=>10, 'D'=>10, 'E'=>10, 'F'=>15,'G'=>20,'I'=>4,'J'=>4, 'AA'=>40,), // 字符数算
                 'height'  => array(1 => 24),      // 按照 磅 算
                 'style'   => array (
-                    'A1:Y1'=> array (
+                    'A1:AA1'=> array (
                                 'font'    => array(
                                                     'size'      => 9
                                 ),
@@ -570,7 +574,7 @@ class team_workload extends SinhoBaseController
             );
             if (isset($_GET['export_all'])) {
                 foreach ($bookLines as $_bookLine) {
-                    $style['style']['A' . $_bookLine . ':Y' .$_bookLine] = array(
+                    $style['style']['A' . $_bookLine . ':AA' .$_bookLine] = array(
                         'font'    => array(
                             'size'      => 9
                         ),
@@ -597,7 +601,7 @@ class team_workload extends SinhoBaseController
                 }
             }
                 foreach ($workloadLines as $_line) {
-                    $style['style']['A' . $_line . ':Y' .$_line] = array(
+                    $style['style']['A' . $_line . ':AA' .$_line] = array(
                         'alignment'  => array('wrap' => TRUE),
 
                         'borders' => array(
@@ -617,7 +621,7 @@ class team_workload extends SinhoBaseController
                     );
                 }
                 foreach ($payedLines as $_line) {
-                    $style['style']['A' . $_line . ':Y' .$_line] = array(
+                    $style['style']['A' . $_line . ':AA' .$_line] = array(
                         'fill'    => array(
                                             'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
                                             'color' => array('rgb' => 'dbedf7'),
