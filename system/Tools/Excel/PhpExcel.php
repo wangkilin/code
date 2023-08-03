@@ -272,9 +272,12 @@ class Tools_Excel_PhpExcel
         }
 
         //设置表头
-        $key = ord("A");
+        $key = ord("A"); $maxKey = ord("Z");
+        $columPre = '';
         foreach($headArr as $v){
-            $colum = chr($key);
+            // 超过26列， 增加前缀
+            $key > $maxKey AND $key = ord("A") AND $columPre = 'A';
+            $colum = $columPre . chr($key);
             $objPHPExcel->setActiveSheetIndex(0) ->setCellValue($colum.'1', $v);
             $key += 1;
         }
@@ -283,17 +286,23 @@ class Tools_Excel_PhpExcel
         $objActSheet = $objPHPExcel->getActiveSheet();
 
         foreach($data as $key => $row){
+            $columPre = '';
             $span = ord("A");
             if ($bindHeadKey) {
                 foreach ($headArr as $_k=>$_v) {
                     $value = isset($row[$_k]) ? $row[$_k] : '';
-                    $j = chr($span);
+                    // 超过26列， 增加前缀
+                    $span > $maxKey AND $span = ord("A") AND $columPre = 'A';
+                    $j = $columPre . chr($span);
                     $objActSheet->setCellValue($j.$column, $value);
                     $span++;
                 }
             } else {
                 foreach($row as $keyName=>$value){
-                    $j = chr($span);
+                    //$j = chr($span);
+                    // 超过26列， 增加前缀
+                    $span > $maxKey AND $span = ord("A") AND $columPre = 'A';
+                    $j = $columPre . chr($span);
                     $objActSheet->setCellValue($j.$column, $value);
                     $span++;
                 }
