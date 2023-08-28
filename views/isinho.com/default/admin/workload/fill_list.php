@@ -31,6 +31,64 @@
                         </tr>
                     </table>
                 </div>
+
+                <!-- start::搜索工作量 -->
+
+                <!-- Theme switcher -->
+                <div class="theme-switch" style="width:410px;right:-410px;top:35%;">
+                    <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
+                    <div class="tab-pane" id="search">
+
+                        <form method="get" action="/admin/fill_list/" id="search_form" method="GET" class="form-horizontal" role="form" target="">
+                            <input name="action" type="hidden" value="search" />
+
+                            <div class="form-group">
+                                <label class="col-sm-3 col-xs-3 control-label"><?php _e('系列'); ?>:</label>
+
+                                <div class="col-sm-8 col-xs-7">
+                                    <input class="form-control" type="text" value="<?php echo rawurldecode($_GET['serial']); ?>" name="serial" placeholder="系列关键字"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 col-xs-3 control-label"><?php _e('书名'); ?>:</label>
+
+                                <div class="col-sm-8 col-xs-7">
+                                    <input class="form-control" type="text" value="<?php echo rawurldecode($_GET['book_name']); ?>" name="book_name"  placeholder="书名关键字"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 col-xs-3 control-label"><?php _e('校次'); ?>:</label>
+
+                                <div class="col-sm-8 col-xs-7">
+                                    <input class="form-control" type="text" value="<?php echo rawurldecode($_GET['proofreading_times']); ?>" name="proofreading_times"  placeholder="校次关键字"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-3 col-xs-3 control-label"><?php _e('月份'); ?>:</label>
+
+                                <div class="col-sm-8 col-xs-8">
+                                    <div class="row">
+                                        <div class="col-xs-12  col-sm-12 mod-double icon-date-container">
+                                            <input type="text" class="form-control js-date-input js-monthpicker" style="text-indent:14px;" value="<?php echo $_GET['start_date']; ?>" name="start_date" autocomplete="off" placeholder="开始日期"/>
+                                            <i class="icon- icon-date"></i>
+                                            <i class="icon- icon-date-delete icon-delete"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-8 col-xs-8">
+                                    <input type="submit" class="btn btn-primary" value="<?php _e('搜 索'); ?>"/>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end::搜索工作量 -->
+
                 <br/>
 
                 <div class="table-responsive">
@@ -117,7 +175,7 @@
                                   <a href="admin/fill_workload/id-<?php echo $itemInfo['id']; ?>" onclick="editWorkload(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-edit md-tip" title="<?php _e('填写工作量'); ?>" data-toggle="tooltip"></a>
                                   <?php } ?>
                                   <?php if (! $itemInfo['is_branch']) {// 可以从分配过来的任务量，做分支处理 ?>
-                                  <a href="admin/ajax/workload/fill_more/" onclick="fillMore(<?php echo $itemInfo['id']; ?>);" class="icon icon-add-to-list md-tip js-fill-more" title="<?php _e('继续补充工作量'); ?>" data-toggle="tooltip"></a>
+                                  <a href="admin/ajax/workload/fill_more/" onclick="fillMore(<?php echo $itemInfo['id']; ?>);" class="icon icon-add-to-list md-tip js-fill-more" title="<?php _e('拆分任务，对工作量进行分叉处理'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
                                   <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING &&$this->booksList[$itemInfo['book_id']]['verify_status'] == 0) {// 加入核算队列 ?>
                                   <a href="admin/ajax/workload/queue/" onclick="addQueue(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-coin-yen md-tip" title="<?php _e('加入核算'); ?>" data-toggle="tooltip"></a>
@@ -387,6 +445,39 @@ $(function(){
         //console.info(verifyRemark);
     });
 });
+
+
+$(function(){
+
+    $('.theme-switch').width(400);
+    $('.theme-switch .icon').click (function(event){
+            event.preventDefault();
+            if( $ (this).hasClass('inOut')  ){
+                $('.theme-switch').stop().animate({right:'0px'},1000 );
+            } else{
+                $('.theme-switch').stop().animate({right:'-410px'},1000 );
+            }
+            $(this).toggleClass('inOut');
+            return false;
+
+        }  );
+
+});
+
+
+
+    // 月份输入框
+    $( ".js-monthpicker" ).datetimepicker({
+                format  : 'yyyy-mm',
+                language:  'zh-CN',
+                weekStart: 1, // 星期一 为一周开始
+                todayBtn:  1, // 显示今日按钮
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 3, // 显示的日期级别： 0:到分钟， 1：到小时， 2：到天
+                forceParse: 0,
+                minView : 3, // 0:选择到分钟， 1：选择到小时， 2：选择到天
+            });
 </script>
 
 <?php View::output('admin/global/footer.php'); ?>

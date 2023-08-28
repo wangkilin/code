@@ -242,10 +242,50 @@ class main extends SinhoBaseController
     {
         $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
 
-        $assigned = (array) $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE, 'user_id = ' . intval($this->user_id) . ' AND `status`<>' . sinhoWorkloadModel::STATUS_DELETE , 'id DESC', $_GET['page'], $this->per_page);
 
+        // 1. 根据书稿关键信息， 获取到对应的书稿id;
+        $where = array();
+        if ($_GET['serial']) {
+            //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
+            $where[] = 'serial like "%' . $this->model()->quote(rawurldecode($_GET['serial'])) .'%"';
+        }
+        if ($_GET['book_name']) {
+            //$where[] = ' (MATCH(book_name) AGAINST("' . $this->model()->quote(rawurldecode($_GET['book_name'])) . '") )';
+            $where[] = 'book_name like "%' . $this->model()->quote(rawurldecode($_GET['book_name'])) .'%"';
+        }
+        if ($_GET['proofreading_times']) {
+            //$where[] = ' (MATCH(proofreading_times) AGAINST("' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) . '") )';
+            $where[] = 'proofreading_times like "%' . $this->model()->quote(rawurldecode($_GET['proofreading_times'])) .'%"';
+        }
+        if ($where) {
+            $where = join(' AND ', $where);
+            $booksList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::BOOK_TABLE, $where, null, null, PHP_INT_MAX, true, 'id');
+            $bookIds = array_column($booksList, 'id');
+        } else {
+            $bookIds =  null;
+        }
+        // 2. 获取用户的工作量。 如果涉及到书稿搜索，设定搜索到对应书稿的范围
+        $where = array(
+                    'user_id = ' . intval($this->user_id),
+                    '`status`<>' . sinhoWorkloadModel::STATUS_DELETE,
+                 );
+        if ($bookIds) { // 在指定书稿范围内搜索
+            $where[] = 'book_id IN (' . join(',', $bookIds) . ')';
+        }
+        if ($_GET['start_date']) { // 在工作量的对应月份中搜索
+            $where[] = 'belong_month ="' . str_replace('-','',$_GET['start_date']) . '"';
+        }
+        $assigned = (array) $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::WORKLOAD_TABLE,
+                                                                      join(' AND ', $where),
+                                                                     'id DESC',
+                                                                     $_GET['page'],
+                                                                     $this->per_page
+                                                            );
+
+        $totalRows= $this->model('sinhoWorkload')->found_rows();
         $bookIds  = array_column($assigned, 'book_id');
         $bookList = array();
+
         if ($bookIds) {
             $bookList = $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::BOOK_TABLE, 'id IN (' . join(', ', $bookIds) . ')') ;
             $bookIds  = array_column($bookList, 'id');
@@ -255,7 +295,8 @@ class main extends SinhoBaseController
         View::assign('hostConfig', $this->hostConfig);
         View::assign('itemsList', $assigned);
         View::assign('booksList', $bookList);
-        $totalRows     = $this->model('sinhoWorkload')->found_rows();
+        View::assign('totalRows', $totalRows);
+        View::assign('start_date', $_GET['start_date']);
 
         $url_param = array();
         foreach($_GET as $key => $val) {
@@ -277,6 +318,9 @@ class main extends SinhoBaseController
         View::import_js('js/functions.js');
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');
+        View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
+        View::import_js('js/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js');
+        View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
 
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/fill_list', 'sinho_admin_menu') ) );
         View::output('admin/workload/fill_list');
