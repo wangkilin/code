@@ -245,6 +245,7 @@ class main extends SinhoBaseController
 
         // 1. 根据书稿关键信息， 获取到对应的书稿id;
         $where = array();
+        $bookIds = array();
         if ($_GET['serial']) {
             //$where[] = ' (MATCH(serial) AGAINST("' . $this->model()->quote(rawurldecode($_GET['serial'])) . '") )';
             $where[] = 'serial like "%' . $this->model()->quote(rawurldecode($_GET['serial'])) .'%"';
@@ -261,8 +262,9 @@ class main extends SinhoBaseController
             $where = join(' AND ', $where);
             $booksList  = $this->model('sinhoWorkload')->fetch_page(sinhoWorkloadModel::BOOK_TABLE, $where, null, null, PHP_INT_MAX, true, 'id');
             $bookIds = array_column($booksList, 'id');
-        } else {
-            $bookIds =  null;
+            if(! $bookIds) {
+                $bookIds =  array(-1);
+            }
         }
         // 2. 获取用户的工作量。 如果涉及到书稿搜索，设定搜索到对应书稿的范围
         $where = array(
