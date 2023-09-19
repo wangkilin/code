@@ -12,7 +12,7 @@ SSH_USERNAME=root            # 远程主机用户名
 #SSH_PASSWORD=password         # 远程主机密码
 SSH_PORT=22                  # 远程主机端口
 # ssh设置信息
-SSH_HOST_ARTICLE=www.isinho.com           # 远程主机地址
+SSH_HOST_ARTICLE=www.ekotlin.com           # 远程主机地址
 SSH_USERNAME_ARTICLE=root            # 远程主机用户名
 #SSH_PASSWORD=password         # 远程主机密码
 SSH_PORT_ARTICLE=8433                  # 远程主机端口
