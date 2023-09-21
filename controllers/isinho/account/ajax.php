@@ -70,7 +70,7 @@ class ajax extends SinhoBaseController
         $url = '/admin/';
         $this->model('account')->setcookie_login($user_info['uid'], $_POST['user_name'], $_POST['password'], $user_info['salt'], $expire);
         if ($_POST['return_url'] AND !strstr($_POST['return_url'], '/logout') ) {
-            $url = get_js_url($_POST['return_url']);
+            $url = get_js_url(base64_decode($_POST['return_url']));
         }
         $this->model('admin')->set_admin_login($user_info['uid']);
 
