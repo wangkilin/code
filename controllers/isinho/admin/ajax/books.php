@@ -407,9 +407,9 @@ class books extends SinhoBaseController
                 $dataLine[$id_number_key]==='' AND $dataLine[$id_number_key]=$prevInfo[$id_number_key];
 
                 // 发稿日期 字符串不包含年份， 需要将年份处理下. 如果单元格是数字，需要将数字转换成日期;
-                $dataLine[$delivery_date_key] = is_numeric($dataLine[$delivery_date_key]) ? date('Y.m.d',($dataLine[$delivery_date_key]-1) * 24*60*60) : $dataLine[$delivery_date_key];
+                $dataLine[$delivery_date_key] = is_numeric($dataLine[$delivery_date_key]) ? date('Y.m.d',($dataLine[$delivery_date_key]-1) * 24*60*60 +strtotime('18991231')) : $dataLine[$delivery_date_key];
                 $dataLine[$delivery_date_key] = str_replace(array('.','年','月','日', ' ',' '),array('-','-','-','','',''),$dataLine[$delivery_date_key]);
-                $dataLine[$return_date_key] = is_numeric($dataLine[$return_date_key]) ? date('Y.m.d',($dataLine[$return_date_key]-1) * 24*60*60) : $dataLine[$delivery_date_key];
+                $dataLine[$return_date_key] = is_numeric($dataLine[$return_date_key]) ? date('Y.m.d',($dataLine[$return_date_key]-1) * 24*60*60 +strtotime('18991231')) : $dataLine[$delivery_date_key];
                 $dataLine[$return_date_key] = str_replace(array('.','年','月','日', ' ',' '),array('-','-','-','','',''),$dataLine[$return_date_key]);
                 if (strpos($dataLine[$delivery_date_key], '0000000000001') || strpos($dataLine[$delivery_date_key], '9999999999999') ) {
                     $dataLine[$delivery_date_key] = substr($dataLine[$delivery_date_key], 0, -13);
