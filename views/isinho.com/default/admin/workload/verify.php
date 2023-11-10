@@ -335,7 +335,17 @@
                         }
                     }
                 } else {// 页码数， 汇总求和的数比较， 不一样， 要把对应的单元格都标红
-
+                    var totalWorkloadWeight = 0;
+                    for(i in workload[bookId]['weight']) {
+                        totalWorkloadWeight += float(workload[bookId]['weight'][i], 4);
+                    }
+                    //console.info(bookId, baseRef[bookId][keyName],float(workload[bookId][keyName], 4), baseRef[bookId]['weight'],totalWorkloadWeight);
+                    // 工作任务做了合并情况， 将工作量系数和书稿系数比较，如果比较的倍数正好是工作量页码和书稿页码比较的倍数相等，那说明工作量页码没问题，不用标红
+                    if (baseRef[bookId][keyName] !=0
+                      && baseRef[bookId]['weight'] !=0
+                      && float(workload[bookId][keyName], 4) / baseRef[bookId][keyName] === totalWorkloadWeight / baseRef[bookId]['weight']) {
+                        continue;
+                    }
                     //console.info(bookId, float(baseRef[bookId][keyName],4), float(workload[bookId][keyName],4), '---');
                     $('tr.verifying-line[data-book-id="'+bookId+'"] td[data-td-name="'+keyName+'"]').addClass('sinho-red-background');
                 }
@@ -345,7 +355,7 @@
             }
         }
 
-        console.info(workload);
+        // console.info(baseRef,workload);
     }
     /**
      * 按时间查询工作量, 通过URL跳转方式，传递时间参数
