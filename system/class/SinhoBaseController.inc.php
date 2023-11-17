@@ -214,7 +214,7 @@ class SinhoBaseController extends BaseController
 
                 // 将旧信息失效
                 $this->model('account')->logout();
-                HTTP::redirect('/account/login/url-' . base64_current_path());
+                HTTP::redirect('/account/login/return_url-' . base64_current_path());
             }
         }
 
