@@ -116,6 +116,8 @@ class sinhoWorkloadModel extends Model
             'weight', // varchar(255) DEFAULT NULL COMMENT '难度系数',
             'total_chars', // varchar(255) DEFAULT NULL COMMENT '字数（合计）',
             'total_chars_without_weight', // varchar(255) DEFAULT NULL COMMENT '字数（未乘系数）',
+            'editor_price', // decimal(5,2) DEFAULT 2 COMMENT '编辑绩效价钱',
+            'provider_price',// decimal(5,2) DEFAULT 0 COMMENT '外社稿件价钱',
         );
         // 转换成整数的数据
         $intVars   = array(
@@ -124,6 +126,8 @@ class sinhoWorkloadModel extends Model
             'category_id',
             'user_id',
             'verify_status', // 是否是主动上报
+            'editor_price_method',// tinyint(1) default 1 comment '编辑绩效核算方式： 1-字数，2-页，3-小时，4-全包',
+            'provider_price_method',// tinyint(1) default 0 comment '外社稿件核算方式： 1-字数，2-页，3-小时，4-全包';
         );
         $allowVars = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
@@ -158,6 +162,11 @@ class sinhoWorkloadModel extends Model
             'user_id',     // 书稿创建者id
             'is_import',
             'verify_status',
+
+            'editor_price', // decimal(5,2) DEFAULT 2 COMMENT '编辑绩效价钱',
+            'provider_price',// decimal(5,2) DEFAULT 0 COMMENT '外社稿件价钱',
+            'editor_price_method',// tinyint(1) default 1 comment '编辑绩效核算方式： 1-字数，2-页，3-小时，4-全包',
+            'provider_price_method',// tinyint(1) default 0 comment '外社稿件核算方式： 1-字数，2-页，3-小时，4-全包';
         ); // 允许存在的数据
 
         $set = array();
