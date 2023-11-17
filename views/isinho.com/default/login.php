@@ -38,8 +38,8 @@
         <h1><img src="<?php echo G_STATIC_URL; ?>/isinho.com/logo-blue-fat-small.png" alt="" /></h1>
 
         <form role="form" id="login_form"  onsubmit="return false" action="account/ajax/login_process/" method="post">
-            <?php if ($_GET['url']){ ?>
-            <input type="hidden" name="url" value="<?php echo htmlspecialchars($_GET['url']); ?>">
+            <?php if ($_GET['return_url']){ ?>
+            <input type="hidden" name="return_url" value="<?php echo htmlspecialchars($_GET['return_url']); ?>">
             <?php } ?>
 
             <div class="alert alert-danger collapse error_message"></div>
