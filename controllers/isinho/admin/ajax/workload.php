@@ -61,7 +61,13 @@ class workload extends SinhoBaseController
             Application::model('sinhoWorkload')->update(sinhoWorkloadModel::WORKLOAD_TABLE, array('fill_time'=>time()), 'id = ' . intval($_POST['id']) );
         }
 
-        H::ajax_json_output(Application::RSM(array('url' => get_js_url('/admin/fill_list/')), 1, Application::lang()->_t('工作量保存成功')));
+        H::ajax_json_output(Application::RSM(
+            array(
+               // 'url' => get_js_url('/admin/fill_list/')
+            ),
+            1,
+            Application::lang()->_t('工作量保存成功') )
+        );
 
     }
 
