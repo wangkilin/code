@@ -1,5 +1,5 @@
 <?php
-require_once( INC_PATH . 'vendor/AliyunApi/Util/Autoloader.php');
+require_once( INC_PATH . 'thirdParty/AliyunApi/Util/Autoloader.php');
 
 class Aliyun_ApiCurlRequest extends ApiCurlRequest
 {
