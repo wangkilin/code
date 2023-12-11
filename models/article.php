@@ -201,7 +201,9 @@ class articleModel extends Model
         $sql = 'SELECT MAX(id) AS id FROM ' . $this->get_table() . ' WHERE category_id IN (' . join(',',$categoryIdList) . ') GROUP BY category_id';
 
         $_idList = $this->query_all($sql);
-        $_idList = rsort(array_column($_idList,'id'));
+        $_idList = array_column($_idList,'id');
+        rsort($_idList);
+
         return $this->fetch_all($this->table, 'id IN(' . join(',', array_slice($_idList, 0, $limit) ) . ')', $sort, $limit);
 
         foreach ($categoryIdList as $_id) {
