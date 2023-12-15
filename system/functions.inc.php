@@ -1495,3 +1495,19 @@ function sendLinkToBaiduSearch ($urlList, $apiSitelink, $apiToken)
 
     echo $result;
 }
+
+/**
+ * 生成要缓存内容对应的key
+ * @param string  class name
+ * @param stirng  method name
+ * @param mixed   参数1
+ * ...
+ *可以若干参数
+ * @return string
+ */
+function generateCacheKey ()
+{
+    $cacheKey = md5( serialize(func_get_args() ) );
+
+    return $cacheKey;
+}

@@ -355,7 +355,11 @@ class main extends BaseController
 
 
             //$posts_list = $this->model('posts')->get_posts_list(null, $_GET['page'], get_setting('contents_per_page'), $_GET['sort_type'], null, $category_info['id'], $_GET['answer_count'], $_GET['day'], $_GET['is_recommend']);
-            $posts_list = $this->model('article')->getListInDiffCategory($showCategoryList, 'id DESC', 14);
+            $cache_key = generateCacheKey('Article', 'getListInDiffCategory', $showCategoryList, 'id DESC', 14);
+            $posts_list = Application::cache()->get($cache_key);
+            if (! $posts_list) {
+                $posts_list = $this->model('article')->getListInDiffCategory($showCategoryList, 'id DESC', 14);
+            }
             foreach ($posts_list as & $_itemInfo) {
                 $_itemInfo['post_type'] = 'article';
                 $_itemInfo['category_info'] = $allCategoryList[$_itemInfo['category_id']];
