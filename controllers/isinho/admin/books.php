@@ -309,7 +309,7 @@ class books extends SinhoBaseController
         $orderBy = 'delivery_date DESC, id DESC'; // 默认按照日期排序
         switch ($_GET['orderby']) {
             case 'book': // 按照书名排序
-                $orderBy = 'book_name,proofreading_times,text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer';
+                $orderBy = 'book_name,serial,proofreading_times,text_pages,answer_pages,test_pages,test_answer_pages,exercise_pages,function_book,function_answer';
                 break;
 
             case 'page': // 按照页码排序
