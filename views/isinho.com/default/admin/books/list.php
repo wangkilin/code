@@ -113,8 +113,8 @@
                                 </td>
                                 <td class="px10 js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="px10"><?php echo $this->bookSubjectList[$itemInfo['category_id']]['name'];?></td>
-                                <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
-                                <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
+                                <td class="js-serial"><a href="admin/<?php echo CONTROLLER; ?>/index/action-search__serial-<?php echo $itemInfo['serial']; ?>"><?php echo $itemInfo['serial']; ?></a></td>
+                                <td class="js-bookname"><a href="admin/<?php echo CONTROLLER; ?>/index/action-search__serial-<?php echo $itemInfo['serial']; ?>__book_name-<?php echo $itemInfo['book_name']; ?>"><?php echo $itemInfo['book_name']; ?></a></td>
                                 <td class="js-proofreading-times"><?php echo $itemInfo['proofreading_times']; ?></td>
                                 <td><a class="md-tip"  title="<?php echo $itemInfo['text_table_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['content_table_pages']; ?></td>
                                 <td><a class="md-tip"  title="<?php echo $itemInfo['text_table_chars_per_page']; _e('千字/页');?>" data-toggle="tooltip"><?php echo $itemInfo['text_pages']; ?>         </a></td>
