@@ -446,7 +446,7 @@ class books extends SinhoBaseController
 
         View::assign('hostConfig', $this->hostConfig);
         View::assign('urlQuery', implode('__', $url_param));
-        View::assign('backUrl', get_js_url('/admin/books/index/page-'.$_GET['page']));
+        View::assign('backUrl', get_js_url('/admin/books/index/page-'.$_GET['page']  . '__' . implode('__', $url_param) ) );
         View::assign('pagination', Application::pagination()->initialize(array(
             'base_url'   => get_js_url('/admin/books/index/') . implode('__', $url_param),
             'total_rows' => $totalRows,
