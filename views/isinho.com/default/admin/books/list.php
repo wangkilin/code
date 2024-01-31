@@ -127,10 +127,12 @@
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
                                 <td class="px10 textBreak"><?php echo $itemInfo['remarks'];
-                                ?> <span class="text-primary"><?php
+                                ?> <span class="text-primary"><u><?php
                                 echo $itemInfo['admin_remarks'];
+                                ?></u></span>
+                                <span class="text-success"><?php
                                 echo $itemInfo['is_prepayed']==1 && substr($itemInfo['prepay_date'],0,4)!='1970' ? (substr($itemInfo['prepay_date'],0,10).'已对账') :'';
-                                echo $itemInfo['is_payed']==1 && substr($itemInfo['pay_date'],0,4)!='1970' ? (substr($itemInfo['pay_date'],0,10).'已结账') : '';
+                                echo $itemInfo['is_payed']==1 && substr($itemInfo['pay_date'],0,4)!='1970' ? ('; '.substr($itemInfo['pay_date'],0,10).'已结账') : '';
                                 ?></span></td>
                                 <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
