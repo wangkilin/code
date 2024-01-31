@@ -216,6 +216,12 @@
                                                 $_leaveInfo['event']['d'] += $_leaveDay;
                                                 $_leaveInfo['event']['h'] += $_leaveHour;
                                                 break;
+                                            case administration::LEAVE_TYPE_OVERTIME_REST: // 调休
+                                                _e('调休');
+                                                $_leaveInfo['overtime_rest']['m'] += $_leaveMonth;
+                                                $_leaveInfo['overtime_rest']['d'] += $_leaveDay;
+                                                $_leaveInfo['overtime_rest']['h'] += $_leaveHour;
+                                                break;
                                             case administration::LEAVE_TYPE_OVERTIME: // 加班
                                                 _e('加班');
                                                 $_leaveInfo['overtime']['m'] += $_leaveMonth;

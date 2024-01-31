@@ -25,6 +25,7 @@ class SinhoBaseController extends BaseController
     CONST LEAVE_TYPE_BODY_CHECK             = 8  ; // '产检',
     CONST LEAVE_TYPE_FUNERAL                = 9  ; // '丧假',
     CONST LEAVE_TYPE_NO_REASON              = 20 ; // '旷工',
+    CONST LEAVE_TYPE_OVERTIME_REST          = 40 ; // '调休',
     CONST LEAVE_TYPE_OVERTIME               = 50 ; // '++ 加班',
     CONST LEAVE_TYPE_WEEKEND_WORKLOAD       = 51 ; // 周末带稿
     CONST LEAVE_TYPE_HOMEWORK               = 55 ; // '🏠居家办公'
@@ -39,6 +40,7 @@ class SinhoBaseController extends BaseController
         self::LEAVE_TYPE_BODY_CHECK         => array('name' => '产检',          'icon' => 'icon-body-check'),
         self::LEAVE_TYPE_FUNERAL            => array('name' => '丧假',          'icon' => 'icon-funeral-leave'),
         self::LEAVE_TYPE_NO_REASON          => array('name' => '旷工',          'icon' => 'icon-leave'),
+        self::LEAVE_TYPE_OVERTIME_REST      => array('name' => '调休',          'icon' => 'icon-transfer'),
         self::LEAVE_TYPE_OVERTIME           => array('name' => '++ 加班',       'icon' => 'icon-add-to-list'),
         self::LEAVE_TYPE_WEEKEND_WORKLOAD   => array('name' => '周末带稿',       'icon' => 'icon-attach'),
         self::LEAVE_TYPE_HOMEWORK           => array('name' => '🏠居家办公',     'icon' => 'icon-home'),
