@@ -345,6 +345,7 @@ class main extends SinhoBaseController
             H::redirect_msg(Application::lang()->_t('操作失败'), 'admin/fill_list/');
         }
         $bookInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::BOOK_TABLE, 'id = ' . intval($itemInfo['book_id']));
+        $bookInfo['admin_remarks'] = '';
 
         // 根据书稿id ， 获取到对应的工作量
         $allList = $this->model('sinhoWorkload')
