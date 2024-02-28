@@ -42,6 +42,15 @@
                                             <div class="col-sm-5">
                                             <select id="payed_sheets" name="payed_sheets[]" multiple ></select>
                                             </div>
+                                        <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) { ?>
+                                            <div class="col-sm-5">
+                                                <label class="icb-label"><?php _e('已支付'); ?></label>
+                                                <input name="is_payed" type="radio" value="1"/>
+                                                &nbsp;
+                                                <label class="icb-label"><?php _e('未支付'); ?></label>
+                                                <input name="is_payed" type="radio" value="0" checked="checked"/>
+                                            </div>
+                                        <?php }?>
                                         </div>
                                         <br/>
                                         <br/>

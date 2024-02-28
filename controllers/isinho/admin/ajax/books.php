@@ -482,6 +482,7 @@ class books extends SinhoBaseController
                         $bookData[$_tmpKey] = '';
                     }
                 }
+                $bookData['is_payed'] = intval($_POST['is_payed']);
                 // 获取书稿所属学科id
                 $bookData['category_id'] = 0;
                 foreach ($keywordSubjectList as $_keyword=>$_subjectCode) {

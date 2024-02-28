@@ -210,6 +210,10 @@ defined('iCodeBang_Com') OR die('Access denied!');
 
 class books extends SinhoBaseController
 {
+    public function setup ()
+    {
+        View::assign('hostConfig', $this->hostConfig);
+    }
     /**
      * 书稿列表
      */
