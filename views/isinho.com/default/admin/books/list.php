@@ -45,7 +45,9 @@
                                 ?></th>
                                 <th><?php _e('书稿<br/>类别'); ?></th>
                                 <th><?php _e('学科'); ?></th>
-                                <th><?php _e('系列'); ?></th>
+                                <th class="text-left"><?php if ($_GET['orderby']!='serial') { ?><a href="/admin/books/index/<?php echo $this->urlQuery; ?>__orderby-serial"><?php
+                                   _e('系列'); ?></a><?php } else {  _e('系列'); ?><i class="icon-insert"></i> <?php }
+                                   ?></th>
                                 <th class="text-left"><?php if ($_GET['orderby']!='book') { ?><a href="/admin/books/index/<?php echo $this->urlQuery; ?>__orderby-book"><?php
                                    _e('书名'); ?></a><?php } else {  _e('书名'); ?><i class="icon-insert"></i> <?php }
                                 ?></th>
