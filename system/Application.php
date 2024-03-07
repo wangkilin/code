@@ -145,7 +145,11 @@ class Application
             $action_method = loadClass('core_uri')->action . '_square_action';
         }
 
-        $handle_controller->$action_method();
+        if ('HEAD' == $_SERVER['REQUEST_METHOD']) {
+            echo '';
+        } else {
+            $handle_controller->$action_method();
+        }
     }
 
     /**
