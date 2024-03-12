@@ -79,11 +79,12 @@
                             </select>
                         </div>
                     </div>
-                    <?php }?>
+                    <?php }
+                    if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) { ?>
                     <div class="form-group">
                         <label class="col-sm-2 col-xs-3 control-label"><?php _e('支付状态'); ?>:</label>
 
-                        <div class="col-sm-5 col-xs-8">
+                        <div class="col-sm-2 col-xs-4">
                             <select id="sinho_is_payed" name="is_payed">
                                <option value="" <?php echo in_array(array('0','1'), $_GET['is_payed']) ? '' : 'selected'; ?>>全部</option>
                                <option value="0" <?php echo '0'===$_GET['is_payed'] ? 'selected' : ''; ?>>未支付</option>
@@ -92,6 +93,50 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('支付时间'); ?>:</label>
+
+                        <div class="col-sm-6 col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-11  col-sm-5 mod-double icon-date-container">
+                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo base64_decode($_GET['pay_start_date']); ?>" name="pay_start_date" autocomplete="off" placeholder="开始日期"/>
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                -
+                                </span>
+                                <div class="col-xs-11 col-sm-5 icon-date-container">
+                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo base64_decode($_GET['pay_end_date']); ?>" name="pay_end_date"  autocomplete="off" placeholder="结束日期"/>
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('对账时间'); ?>:</label>
+
+                        <div class="col-sm-6 col-xs-9">
+                            <div class="row">
+                                <div class="col-xs-11  col-sm-5 mod-double icon-date-container">
+                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo base64_decode($_GET['prepay_start_date']); ?>" name="prepay_start_date" autocomplete="off" placeholder="开始日期"/>
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                                <span class="mod-symbol col-xs-1 col-sm-1">
+                                -
+                                </span>
+                                <div class="col-xs-11 col-sm-5 icon-date-container">
+                                    <input type="text" class="form-control mod-data js-date-input" value="<?php echo base64_decode($_GET['prepay_end_date']); ?>" name="prepay_end_date"  autocomplete="off" placeholder="结束日期"/>
+                                    <i class="icon icon-date"></i>
+                                    <i class="icon icon-date-delete icon-delete"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php } ?>
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-5 col-xs-8">

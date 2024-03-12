@@ -222,7 +222,7 @@ class books extends SinhoBaseController
         // post参数，搜索书稿。 组装参数变更get方式获取搜索列表
         if ($this->is_post()) {
             foreach ($_POST as $key => $val) {
-                if ($key == 'start_date' OR $key == 'end_date') {// 按照日期搜索
+                if (in_array($key, array('start_date','end_date','pay_start_date','pay_end_date','prepay_start_date','prepay_end_date') )  ){// 按照日期搜索
                     $val = base64_encode($val);
                 } else if (is_array($_POST[$key])) {
                     $val = rawurlencode(join(',', $_POST[$key]));
@@ -283,6 +283,18 @@ class books extends SinhoBaseController
         }
         if (isset($_GET['is_payed']) && $_GET['is_payed']!=='') { // 按照支付状态搜索。 设置了支付状态
             $where[] = 'is_payed = ' . intval($_GET['is_payed']) ;
+        }
+        if ($_GET['pay_start_date']) { // 支付开始日期
+            $where[] = 'pay_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['pay_start_date'])) ) . '"';
+        }
+        if ($_GET['pay_end_date']) { // 支付结束日期
+            $where[] = 'pay_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['pay_end_date'])) ) . '"';
+        }
+        if ($_GET['prepay_start_date']) { // 对账开始日期
+            $where[] = 'prepay_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['prepay_start_date'])) ) . '"';
+        }
+        if ($_GET['prepay_end_date']) { // 对账结束日期
+            $where[] = 'prepay_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['prepay_end_date'])) ) . '"';
         }
 
         if ($where) { // 组装搜索条件
