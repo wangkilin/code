@@ -102,6 +102,18 @@ class HTTP
 		}
 	}
 
+	/**
+	 * 点击页面链接， 重新加载页面
+	 * @param string $tplPath 模板文件路劲
+	 */
+	public static function click_and_reload($tplPath='')
+	{
+			$tplPath = $tplPath ? $tplPath : 'global/click_and_reload';
+
+			View::output($tplPath);
+			exit;
+	}
+
 	public static function parse_redirect_url($url)
 	{
 		if (substr($url, 0, 1) == '?')

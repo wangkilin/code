@@ -250,7 +250,7 @@ class books extends SinhoBaseController
             $where[] = 'delivery_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['start_date'])) ) . '"';
         }
         if ($_GET['end_date']) { // 发稿结束日期
-            $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date'])) ) . '"';
+            $where[] = 'delivery_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['end_date']))+ 3600*24 ) . '"';
         }
         if ($_GET['category']) { // 按照分类搜素
             $where[] = 'category like "%' . $this->model()->quote(rawurldecode($_GET['category'])) .'%"';
@@ -288,13 +288,13 @@ class books extends SinhoBaseController
             $where[] = 'pay_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['pay_start_date'])) ) . '"';
         }
         if ($_GET['pay_end_date']) { // 支付结束日期
-            $where[] = 'pay_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['pay_end_date'])) ) . '"';
+            $where[] = 'pay_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['pay_end_date'])) + 3600*24 ) . '"';
         }
         if ($_GET['prepay_start_date']) { // 对账开始日期
             $where[] = 'prepay_date >="' . date('Y-m-d', strtotime(base64_decode($_GET['prepay_start_date'])) ) . '"';
         }
         if ($_GET['prepay_end_date']) { // 对账结束日期
-            $where[] = 'prepay_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['prepay_end_date'])) ) . '"';
+            $where[] = 'prepay_date <="' . date('Y-m-d', strtotime(base64_decode($_GET['prepay_end_date']))+ 3600*24 ) . '"';
         }
 
         if ($where) { // 组装搜索条件
