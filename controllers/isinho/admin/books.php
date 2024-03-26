@@ -348,6 +348,7 @@ class books extends SinhoBaseController
                 'id_number'                         => '序号',
                 'delivery_date'                     => '发稿日期',
                 'return_date'                       => '回稿日期',
+                'category'                          => '类别',
                 'serial'                            => '系列',
                 'book_name'                         => '书名',
                 'proofreading_times'                => '校次',
@@ -375,10 +376,12 @@ class books extends SinhoBaseController
 
             // 导出书稿
             $style = array(
-                'width'   => array('A'=>4, 'B'=>10, 'C'=>10, 'D'=>15,'E'=>20,'G'=>4,'H'=>4, 'Y'=>20,), // 字符数算
+                'width'   => array('A'=>4, 'B'=>10, 'C'=>10, //隐藏列，设置列宽为0 'D'=>0,
+                                   'E'=>15,'F'=>20,'H'=>4,
+                                   'I'=>4, 'Z'=>20,), // 字符数算
                 'height'  => array(1 => 20),      // 按照 磅 算
                 'style'   => array (
-                    'A1:Y1'=> array (
+                    'A1:Z1'=> array (
                                 'font'    => array(
                                                     'size'      => 9
                                 ),

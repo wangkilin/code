@@ -49,7 +49,9 @@ class books extends SinhoBaseController
 
         ) ;
         if ($itemInfo && $itemInfo['id']!=$_POST['id']) {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完全相同的书稿')));
+            if ($itemInfo['weight']=='' || $_POST['weight']=='' || $itemInfo['weight']==$_POST['weight']) {
+                H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('已存在系列、书名、校次完全相同的书稿')));
+            }
         }
 
         // 解析每个学科中用于搜索书名匹配的关键字。 匹配到关键字， 将书稿设置成对应的学科
@@ -376,7 +378,7 @@ class books extends SinhoBaseController
                     continue;
                 }
                 // 对重复的书稿， 做合并处理
-                $_uniqueKey = $dataLine[$delivery_date_key] . '/' . $dataLine[$category_key] . '/' . $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key];
+                $_uniqueKey = $dataLine[$delivery_date_key] . '/' . $dataLine[$category_key] . '/' . $dataLine[$serial_key] . '/' . $dataLine[$book_name_key] . '/' . $dataLine[$proofreading_times_key]. '/' . $dataLine[$weight_key];
                 if (isset($uniqueList[$_uniqueKey]) ) {
                     $dataLine[$content_table_pages_key            ] += doubleval($uniqueList[$_uniqueKey][$content_table_pages_key            ]);
                     $dataLine[$text_pages_key                     ] += doubleval($uniqueList[$_uniqueKey][$text_pages_key                     ]);
@@ -492,7 +494,7 @@ class books extends SinhoBaseController
                     }
                 }
 
-                if ($bookInfo) { // 已存在书稿信息， 更新
+                if ($bookInfo && $bookInfo['weight']==$bookData['weight']) { // 已存在书稿信息， 更新
                     $bookInfo['user_id'] == 0 AND $bookData['user_id'] = $this->user_id;
                     if (1==$bookInfo['is_import']) { // 只有导入的数据可以更新
                         $bookData['modify_time']                    = time();
