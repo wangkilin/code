@@ -494,7 +494,7 @@ class books extends SinhoBaseController
                     }
                 }
 
-                if ($bookInfo && $bookInfo['weight']==$bookData['weight']) { // 已存在书稿信息， 更新
+                if ($bookInfo && $bookInfo['weight']==$bookData['weight']) { // 已存在书稿信息，系数也要相同 更新
                     $bookInfo['user_id'] == 0 AND $bookData['user_id'] = $this->user_id;
                     if (1==$bookInfo['is_import']) { // 只有导入的数据可以更新
                         $bookData['modify_time']                    = time();
