@@ -146,7 +146,7 @@ class Application
         }
 
         // 不是搜索引擎的可疑机器人访问，要求点击页面
-        if ($_SERVER['REQUEST_METHOD']=='GET' && preg_match('/Chrome\/\d+\.\d+\.[0-9]{3,}/i', $_SERVER['HTTP_USER_AGENT']) && !preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) ){
+        if ($_SERVER['REQUEST_METHOD']=='GET' && preg_match('/Chrome\/\d+\.\d+\.[0-9]{3,}|mobile/i', $_SERVER['HTTP_USER_AGENT']) && !preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) ){
             if (empty($_SESSION['_isAccessOk']) ) {
                 $_SESSION['_isAccessOk'] = true;
                 HTTP::click_and_reload();
