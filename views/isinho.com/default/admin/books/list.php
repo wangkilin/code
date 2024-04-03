@@ -136,7 +136,7 @@
                                 echo $itemInfo['is_prepayed']==1 && substr($itemInfo['prepay_date'],0,4)!='1970' ? (substr($itemInfo['prepay_date'],0,10).'已对账') :'';
                                 echo $itemInfo['is_payed']==1 && substr($itemInfo['pay_date'],0,4)!='1970' ? ('; '.substr($itemInfo['pay_date'],0,10).'已结账') : '';
                                 ?></span></td>
-                                <td><?php $_list=array('-','小学','初中','高中','外社','综合');echo $_list[$itemInfo['grade_level'] ]; ?></td>
+                                <td><?php $_list=array('-','小学','初中','高中','外社','综合','新禾');echo $_list[$itemInfo['grade_level'] ]; ?></td>
 
                                 <td style="white-space: nowrap;">
                                   <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
@@ -146,6 +146,7 @@
                                     <a data-grade-level="3" title="<?php _e('设置书稿所属阶段：高中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">高中</a>
                                     <a data-grade-level="4" title="<?php _e('设置书稿所属阶段：外社'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">外社</a>
                                     <a data-grade-level="5" title="<?php _e('设置书稿所属阶段：综合'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">综合</a>
+                                    <a data-grade-level="6" title="<?php _e('设置书稿所属阶段：新禾'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">新禾</a>
                                     <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
                                   <?php }?>
@@ -225,8 +226,11 @@
 .jsToggleSubIcon a[data-grade-level="5"] {
     top: 45px;
 }
-.jsToggleSubIcon a[data-grade-level="0"] {
+.jsToggleSubIcon a[data-grade-level="6"] {
     top: 65px;
+}
+.jsToggleSubIcon a[data-grade-level="0"] {
+    top: 85px;
 }
 </style>
 <script>
