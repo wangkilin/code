@@ -15,9 +15,9 @@
 			<div class="icb-logo hidden-xs">
 				<a href="<?php echo base_url(); ?>"><?php
                   if (strpos($_SERVER['HTTP_HOST'], 'devboy.cn')===false) {
-                    echo '爱码帮';
+                    echo '大牛教程';
                   } else {
-                    echo '开发者';
+                    echo '大牛教程';
                   }
                 ?></a>
 			</div>

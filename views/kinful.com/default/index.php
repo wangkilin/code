@@ -172,7 +172,7 @@ foreach ($domains as $_domain) {
             <div id="text_style_02_1490783125869" class="view style_02 text  none lockHeightView" data-wow-duration="0s" data-wow-delay="0s" data-wow-offset="0" data-wow-iteration="1">
                 <div class="view_contents">
                     友情链接 &nbsp; (
-                    <a id="auto-click-link" target="_blank" data-localize-url="no" href="http://www.icodebang.com/index.html">爱码帮</a> |
+                    <a id="auto-click-link" target="_blank" data-localize-url="no" href="http://www.icodebang.com/index.html">大牛教程</a> |
                     <a data-localize-url="no" href="//www.mysqlworkbench.cn/">MySQLWorkbench</a> |
                     <a data-localize-url="no" href="//www.sequelpro.cn">SequelPro</a> |
                     <a data-localize-url="no" href="//www.heidisql.cn">HeidiSql</a> |

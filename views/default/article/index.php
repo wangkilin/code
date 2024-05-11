@@ -99,7 +99,7 @@
                                     <!-- 推荐内容 -->
                                     <div class="icb-mod clearfix">
                                         <div class="mod-head">
-                                            <h3><?php _e('爱码帮推荐相关阅读'); ?></h3>
+                                            <h3><?php _e('大牛教程推荐相关阅读'); ?></h3>
                                         </div>
                                         <div class="mod-body">
                                             <ul class="prefix-dot">
