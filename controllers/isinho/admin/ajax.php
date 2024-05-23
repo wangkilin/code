@@ -13,7 +13,7 @@
 defined('iCodeBang_Com') OR die('Access denied!');
 define('IN_AJAX', TRUE);
 
-class ajax extends AdminController
+class ajax extends SinhoBaseController
 {
     public function setup()
     {

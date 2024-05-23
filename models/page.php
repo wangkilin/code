@@ -131,9 +131,14 @@ class pageModel extends Model
         return $this->update('pages', $data, 'id = ' . intval($id) . $where);
     }
 
-    public function fetch_page_list($page, $limit = 10)
+    public function fetch_page_list($page, $limit = 10, $where='')
     {
-        $where = is_null($this->_domainId) ? null : 'belong_domain = ' . $this->_domainId;
+        $_whereMore = is_null($this->_domainId) ? null : 'belong_domain = ' . $this->_domainId;
+        if ($where && $_whereMore) {
+            $where = $where . ' AND ' . $_whereMore;
+        } else if ($_whereMore) {
+            $where = $_whereMore;
+        }
         return $this->fetch_page('pages', $where, 'is_top DESC,modify_time DESC,id DESC', $page, $limit);
     }
 
