@@ -426,7 +426,7 @@ class main extends SinhoBaseController
                 $_id = intval($_id);
             }
         }
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
 
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
         $userIds  = array_column($userList, 'uid');
@@ -551,7 +551,7 @@ class main extends SinhoBaseController
         }
 
         // 获取用户信息列表,
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'uid DESC', PHP_INT_MAX);
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
 
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
         // 将用户id和用户信息绑定关系

@@ -69,7 +69,7 @@ class team_workload extends SinhoBaseController
         }
         // 根据组id获取用户列表
         $userList = array();
-        $userList = $this->model('sinhoWorkload')->fetch_all('users', 'group_id IN (' . join(', ', $groupIds) . ')') ;
+        $userList = $this->model('sinhoWorkload')->fetch_all('users', 'group_id IN (' . join(', ', $groupIds) . ')', 'forbidden ASC,uid DESC') ;
         $userIds  = array_column($userList, 'uid');
         $userList = array_combine($userIds, $userList);
 
