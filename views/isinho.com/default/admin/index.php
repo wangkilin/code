@@ -123,7 +123,7 @@
                                 } ?>
                             <tr>
                                 <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $i++;?></td>
-                                <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $this->userList[$_userId]['user_name']; ?></td>
+                                <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><a href="/admin/check_list/by-user__id-<?php echo $_userId;?>__start_month-<?php echo $this->currentYearMonth;?>__end_month-<?php echo $this->currentYearMonth;?>" target="_blank"><?php echo $this->userList[$_userId]['user_name']; ?></a></td>
                                 <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $_totalChars; ?></td>
                                 <td class="<?php if($_totalChars < $this->nowPassedDays * 50) echo 'bg-danger'; ?>"><?php echo $_totalChars - $this->nowPassedDays * 50; ?></td>
                             </tr>
@@ -191,7 +191,7 @@
                             <?php $i=1; foreach ($this->totalCharsListLastMonth as $_userId => $_totalChars) { ?>
                             <tr>
                                 <td><?php echo $i++;?></td>
-                                <td><?php echo $this->userList[$_userId]['user_name']; ?></td>
+                                <td><a href="/admin/check_list/by-user__id-<?php echo $_userId;?>__start_month-<?php echo $this->belongMonth;?>__end_month-<?php echo $this->belongMonth;?>" target="_blank"><?php echo $this->userList[$_userId]['user_name']; ?></a></td>
                                 <td><?php echo $this->totalCharsWeightLt1ListLastMonth[$_userId]; ?></td>
                                 <td><?php echo $_totalChars; ?></td>
                                 <td><?php echo round($_totalChars*2,2);?></td>

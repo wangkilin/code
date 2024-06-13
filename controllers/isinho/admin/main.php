@@ -214,6 +214,7 @@ class main extends SinhoBaseController
             View::assign('employeeWorkloadList', $employeeWorkloadList);
         }
 
+        View::assign('currentYearMonth', $currentYearMonth);
         View::assign('belongMonth', $belongMonth);
         View::assign('belongMinMonth', $belongMinMonth);
         View::assign('warningMsgList', $warningMsgList);
