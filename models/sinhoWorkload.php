@@ -128,6 +128,7 @@ class sinhoWorkloadModel extends Model
             'verify_status', // 是否是主动上报
             'editor_price_method',// tinyint(1) default 1 comment '编辑绩效核算方式： 1-字数，2-页，3-小时，4-全包',
             'provider_price_method',// tinyint(1) default 0 comment '外社稿件核算方式： 1-字数，2-页，3-小时，4-全包';
+            'grade_level', // tinyint(1) NOT NULL DEFAULT '0' COMMENT '书稿对应的年级： 0-无，1-小学，2-初中，3-高中'
         );
         $allowVars = array(
             'id_number', // int(11) DEFAULT NULL COMMENT '序号',
