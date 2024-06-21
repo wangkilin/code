@@ -1499,7 +1499,7 @@ class ajax extends SinhoBaseController
             }
         }
 
-        H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('启用状态已自动保存')));
+        H::ajax_json_output(Application::RSM(array('url'=>''), -1, Application::lang()->_t('启用状态已自动保存')));
     }
 
     public function question_manage_action()
