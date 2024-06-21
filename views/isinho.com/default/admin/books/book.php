@@ -19,6 +19,7 @@
 						<input type="hidden" name="post_hash" value="<?php echo new_post_hash(); ?>" />
 						<input type="hidden" name="batchKey" value="<?php echo $this->batchKey; ?>" />
                         <input type="hidden" name="id" id="item_id" value="<?php echo $this->itemInfo['id']; ?>" />
+                        <input type="hidden" name="grade_level" value="<?php echo $this->itemInfo['grade_level']; ?>" />
                         <input type="hidden" name="backUrl" value="<?php echo isset($_GET['url'])? $_GET['url']:'';?>"/>
 
 						<div class="icb-mod icb-book-infos">
