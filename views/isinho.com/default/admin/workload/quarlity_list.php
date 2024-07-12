@@ -96,13 +96,13 @@
                                     <a class="md-tip"  title="<?php _e('日期'); echo $itemInfo['add_date'];?> " data-toggle="tooltip"><?php echo substr($itemInfo['add_date'], 5, 5); ?></a>
                                 </td>
                                 <?php if (property_exists($this, 'userList')) { ?>
-                                <td><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></td>
+                                <td><a href="admin/check_list/by-user__id-<?php echo $itemInfo['user_id'];?>" target="_blank"><?php echo $this->userList[$itemInfo['user_id']]['user_name']; ?></a></td>
                                 <?php }?>
                                 <?php if ($this->hasCheckPermission) { ?>
                                 <td class="js-category"><?php echo $this->booksList[$itemInfo['book_id']]['category']; ?></td>
                                 <?php } ?>
                                 <td class="js-serial"><?php echo $this->booksList[$itemInfo['book_id']]['serial']; ?></td>
-                                <td class="js-bookname"><?php echo $this->booksList[$itemInfo['book_id']]['book_name']; ?></td>
+                                <td class="js-bookname"><a href="admin/check_list/by-book__id-<?php echo $itemInfo['book_id'];?>" target="_blank"><?php echo $this->booksList[$itemInfo['book_id']]['book_name']; ?></a></td>
                                 <td class="js-proofreading-times"><?php echo $this->booksList[$itemInfo['book_id']]['proofreading_times']; ?></td>
 
 
