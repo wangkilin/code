@@ -62,6 +62,79 @@ class workload extends SinhoBaseController
             View::assign('userList', $userList);
         }
 
+        // 获取用户信息列表,
+        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
+
+
+        if ($_GET['action']=='export') {
+            $itemList  = array();
+            foreach ($quarlityList AS $itemInfo) {
+                $itemInfo['good_or_bad']         = $itemInfo['good_or_bad'] == 1 ? '⇧' : '⇩';
+                $itemInfo['add_date']            = substr($itemInfo['add_date'], 0, 10);
+                $itemInfo['user_name']           = $userList[$itemInfo['user_id']]['user_name'];
+                $itemInfo['category']            = $bookList[$itemInfo['book_id']]['category'];
+                $itemInfo['serial']              = $bookList[$itemInfo['book_id']]['serial'];
+                $itemInfo['book_name']           = $bookList[$itemInfo['book_id']]['book_name'];
+                $itemInfo['proofreading_times']  = $bookList[$itemInfo['book_id']]['proofreading_times'];
+                $itemInfo['payable_amount']      = round($workloadList[$itemInfo['workload_id']]['payable_amount'] * $itemInfo['rate_num'] / 100 * $itemInfo['good_or_bad'], 2);
+                $itemList[] = $itemInfo;
+            }
+            $phpExcel = & loadClass('Tools_Excel_PhpExcel');
+            $headArr = array(
+                'add_date'                    => '日期',
+                'user_name'                   => '编辑',
+                'category'                    => '书稿类别',
+                'serial'                      => '系列',
+                'book_name'                   => '书名',
+                'proofreading_times'          => '校次',
+                'content_table_pages'         => '类别',
+                'working_times'               => '遍次',
+                'good_or_bad'                 => '奖惩',
+                'rate_num'                    => '考核比例',
+                'payable_amount'              => '核算金额',
+                'remarks'                     => '备注',
+                'belong_month'                => '核算月份',
+            );
+            $fileName = '导出质量考核-' . date('Y-m-d') . '.xls';
+
+            // 导出书稿
+            $style = array(
+                'width'   => array('A'=>10, 'B'=>10, 'C'=>10, //隐藏列，设置列宽为0 'D'=>0,
+                                   'E'=>15,'F'=>20,'H'=>4,
+                                   'I'=>4, 'L'=>20,), // 字符数算
+                'height'  => array(1 => 20),      // 按照 磅 算
+                'style'   => array (
+                    'A1:M1'=> array (
+                                'font'    => array(
+                                                    'size'      => 9
+                                ),
+                                'fill'    => array(
+                                                    'type'		=> PHPExcel_Style_Fill::FILL_SOLID,
+                                                    'color' => array('rgb' => 'E8F1E2'),
+                                ),
+                                'borders' => array(
+                                                    'bottom'     => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array(
+                                                            'rgb' => '999999'
+                                                        )
+                                                    ),
+                                                    'right' => array(
+                                                        'style' => PHPExcel_Style_Border::BORDER_THIN,
+                                                        'color' => array(
+                                                            'rgb' => '999999'
+                                                        ),
+                                                    )
+                                ),
+
+                                'alignment'  => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+                    )
+                ),
+            );
+            $phpExcel->export($fileName, $headArr, $itemList, true, $style);
+            return;
+        }
+
         View::assign('hasCheckPermission', $this->hasRolePermission(self::IS_SINHO_CHECK_WORKLOAD));
         View::assign('itemsList', $quarlityList);
         View::assign('booksList', $bookList);
@@ -84,9 +157,6 @@ class workload extends SinhoBaseController
 
         View::import_js('js/icb_template_isinho.com.js');
         View::import_js('js/functions.js');
-
-        // 获取用户信息列表,
-        $userList = $this->model('sinhoWorkload')->getUserList(null, 'forbidden ASC,uid DESC', PHP_INT_MAX);
 
         View::assign('itemOptions', buildSelectOptions($userList, 'user_name', 'uid', $queryUserIds ) );
 

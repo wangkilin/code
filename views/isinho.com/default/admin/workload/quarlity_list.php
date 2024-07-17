@@ -55,7 +55,8 @@
                         <i class="icon icon-date-delete icon-delete"></i>
                     </div>
                     <div class="col-sm-2 text-right">
-                      <a href="javascript:query_quarlity();" class="btn btn-primary btn-sm date-seach">确认查询</a>
+                      <a onclick="$(this).attr('href', query_quarlity('export'));" href="" target="_blank" class="btn btn-info btn-sm">导 出</a>
+                      <a href="javascript:query_quarlity();" class="btn btn-primary btn-sm">确认查询</a>
 
                     </div>
                  </form>
@@ -139,7 +140,7 @@
 
 <script type="text/javascript">
 
-function query_quarlity () {
+function query_quarlity (action) {
     var userIds = [];
     var $selectUsers = $('#sinho_editor>option:selected');
     for(var i = 0; i<$selectUsers.length; i++) {
@@ -148,7 +149,11 @@ function query_quarlity () {
     var startMonth = $('#start_month').val().replace('-','');
     var endMonth = $('#end_month').val().replace('-','');
     var url = '/admin/workload/quarlity_list/'+'user_id'+'-' + userIds.join(',') + '__'+'start_month'+'-' + startMonth +'__'+'end_month'+'-'+endMonth;
+    if ('export'===action) { // 导出数据
+        url = url + '__action-export';
 
+        return url;
+    }
 
     window.location.href = url;
 
