@@ -55,7 +55,9 @@
                         <i class="icon icon-date-delete icon-delete"></i>
                     </div>
                     <div class="col-sm-2 text-right">
+                     <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_workload_quarlity_export']) { ?>
                       <a onclick="$(this).attr('href', query_quarlity('export'));" href="" target="_blank" class="btn btn-info btn-sm">导 出</a>
+                     <?php } ?>
                       <a href="javascript:query_quarlity();" class="btn btn-primary btn-sm">确认查询</a>
 
                     </div>

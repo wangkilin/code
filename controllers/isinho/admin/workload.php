@@ -3,6 +3,11 @@ defined('iCodeBang_Com') OR die('Access denied!');
 
 class workload extends SinhoBaseController
 {
+    public function setup ()
+    {
+        View::assign('hostConfig', $this->hostConfig);
+    }
+
     public function index_action()
     {
         HTTP::redirect('/admin/');
