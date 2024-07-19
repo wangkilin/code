@@ -190,5 +190,13 @@ $('.icon-delete.icon-date-delete').click (function () {
 });
 });
 </script>
+<style>
+.icon-good:before {
+    color: #0C0;
+}
+.icon-bad:before {
+    color: #C00;
+}
+</style>
 
 <?php View::output('admin/global/footer.php'); ?>
