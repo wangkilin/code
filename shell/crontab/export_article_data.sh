@@ -34,8 +34,8 @@ rm -f $LOCAL_STORE_DIR/MAX_ARTICLE_ID.txt $LOCAL_STORE_DIR/MAX_ARTICLE_POST_ID.t
 # 根据是否设置了数据库密码，使用不用的命令
 if [[ "$DB_PASSWORD" = "" ]]; then
     # 1. 数据库备份, 获取到 > id 的数据
-    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_posts_index --column-statistics=0 --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
-    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_article --column-statistics=0 --no-create-info  -w "id>${ARTICLE_ID}"  > $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql
+    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_posts_index  --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
+    /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME $DB_DATABASE icb_article  --no-create-info  -w "id>${ARTICLE_ID}"  > $LOCAL_STORE_DIR/article_great_than_${ARTICLE_ID}.sql
 else
     # 1. 数据库备份
     /usr/local/bin/mysqldump -h $DB_HOST -u $DB_USERNAME -p$DB_PASSWORD $DB_DATABASE icb_posts_index --column-statistics=0 --no-create-info  -w "post_id>${ARTICLE_POST_ID}"  > $LOCAL_STORE_DIR/article_post_great_than_${ARTICLE_POST_ID}.sql
