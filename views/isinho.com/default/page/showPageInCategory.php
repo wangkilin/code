@@ -26,11 +26,11 @@
                 <div class="padding10">
 				    <?php echo $this->page_info['contents']; ?>
                 </div>
-                <?php if ($this->user_info['uid'] ) { ?>
+                <?php if ($this->user_info['uid'] && $this->page_info['is_receipt_required']==1) {?>
                 <div class="row">
                     <span class="col-sm-2"></span>
                     <span class="col-sm-8">
-                        <button data-page-id="<?php echo $this->page_info['id']?>"  onclick="setItemRead($(this));return false;" class="btn btn-lg <?php echo $this->page_info['is_receipt_required']==1?'btn-primary':'';?> col-sm-12"><?php _e('阅读完成');?></button>
+                        <button data-page-id="<?php echo $this->page_info['id']?>"  onclick="setItemRead($(this));return false;" class="btn btn-lg <?php echo $this->page_info['has_read']==1?'btn-primary':'';?> col-sm-12"><?php _e('阅读完成');?></button>
                     </span>
                 </div>
                 <?php } ?>
