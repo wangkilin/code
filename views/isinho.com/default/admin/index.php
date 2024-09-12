@@ -49,11 +49,11 @@
                                 </h3>
                                 </div>
                         </div>
-                        <div class="tab-content mod-content">
+                        <div class="tab-content mod-content  intranet-news-list">
                     <?php foreach ($this->intranetNewsList as $_itemInfo) { ?>
                             <p class="clearfix">
                                 <span class="col-md-1"><?php echo $i++;?></span>
-                                <span><a href="page/inside_index/<?php echo $_itemInfo['url_token']==''? $_itemInfo['id'] : $_itemInfo['url_token'];?>" target="_blank"><?php echo $_itemInfo['title'];?></a></span>
+                                <span><a href="page/inside_index/<?php echo $_itemInfo['url_token']==''? $_itemInfo['id'] : $_itemInfo['url_token'];?>" target="_blank"><?php echo $_itemInfo['title'];?></a><?php if (time() - $_itemInfo['publish_time'] < 7*24*60*60) {?><i class="icon icon-new"></i><?php } ?></span>
                                 <span class="col-md-2 pull-right"><?php echo substr($_itemInfo['modify_time'], 5, 5);?></span>
                             </p>
                     <?php }?>
@@ -250,6 +250,12 @@
         <?php } ?>
     </div>
 </div>
+<style>
+.intranet-news-list .icon-new {
+background: none;
+color: #d33;
+}
+</style>
 <script type="text/javascript">
 $(function () {
 
