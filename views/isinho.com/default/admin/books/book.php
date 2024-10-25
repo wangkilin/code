@@ -239,6 +239,8 @@
 
                             </div>
 
+                            <?php
+                                if (CONTROLLER == 'books') { ?>
                             <div class="row">
                                 <!-- 管理员备注信息 -->
                                 <div class="col-sm-1">
@@ -249,6 +251,7 @@
                                 </div>
 
                             </div>
+                            <?php }?>
                             <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_editor_price']) {?>
 
                             <div class=" clearfix">

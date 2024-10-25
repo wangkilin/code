@@ -65,7 +65,10 @@
                                 <th><?php _e('系数'); ?></th>
                                 <th><?php _e('字数'); ?></th>
                                 <th><?php _e('备注'); ?></th>
-                                <th><?php _e('阶段'); ?></th>
+                                <?php
+                                if (CONTROLLER == 'books') { ?>
+                                <th><?php _e('阶段'); ?></th><?php
+                                }?>
                                 <th style="white-space: nowrap;"><?php _e('操作'); ?></th>
                             </tr>
                         </thead>
@@ -130,14 +133,21 @@
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
                                 <td class="px10 textBreak"><?php echo $itemInfo['remarks'];
                                 ?> <span class="text-primary"><u><?php
-                                echo $itemInfo['admin_remarks'];
+                                if (CONTROLLER == 'books') {
+                                    echo $itemInfo['admin_remarks'];
+                                }
                                 ?></u></span>
                                 <span class="text-success"><?php
                                 echo $itemInfo['is_prepayed']==1 && substr($itemInfo['prepay_date'],0,4)!='1970' ? (substr($itemInfo['prepay_date'],0,10).'已对账') :'';
                                 echo $itemInfo['is_payed']==1 && substr($itemInfo['pay_date'],0,4)!='1970' ? ('; '.substr($itemInfo['pay_date'],0,10).'已结账') : '';
                                 ?></span></td>
-                                <td><?php $_list=array('-','小学','初中','高中','外社','综合','新禾');echo $_list[$itemInfo['grade_level'] ]; ?></td>
-
+                                <?php
+                                if (CONTROLLER == 'books') { ?>
+                                <td><?php
+                                    isset($_levelList) OR $_levelList=array('-','小学','初中','高中','外社','综合','新禾');
+                                    echo $_levelList[$itemInfo['grade_level'] ];
+                                ?></td>
+                                <?php } ?>
                                 <td style="white-space: nowrap;">
                                   <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
                                   <span href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" title="<?php _e('设置书稿所属阶段'); ?>" data-toggle="tooltip" class="md-tip icon icon-score jsToggleSubIcon">

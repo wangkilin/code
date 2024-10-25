@@ -72,3 +72,10 @@
         <h2 class="text-center text-color-999">&copy;iSinho.com 沈阳新禾文化传媒有限公司</h2>
     </div>
 </div>
+<?php
+if (Application::config()->get('system')->debug && Application::config()->get('system')->sites[$_SERVER['HTTP_HOST']]['debug']) {
+     View::output('global/debuger.php');
+}
+?>
+</body>
+</html>
