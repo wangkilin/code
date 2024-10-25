@@ -94,7 +94,7 @@
                                 <td><?php echo $itemInfo['weight']; ?></td>
                                 <td class="js-workload-ref"><?php echo $itemInfo['total_chars']; ?></td>
                                 <td class="js-workload-ref">&nbsp;</td>
-                                <td ><?php echo $itemInfo['remarks']; ?><span class="text-primary"><?php echo $itemInfo['admin_remarks']; ?></span></td>
+                                <td ><?php echo $itemInfo['remarks']; ?><span class="text-primary"><?php if(CONTROLLER=='main') echo $itemInfo['admin_remarks']; ?></span></td>
 
                                 <td class="js-workload-ref nowrap">
                                     <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
