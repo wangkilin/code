@@ -4,16 +4,21 @@
           echo ACTION=='index'?'#index" data-toggle="tab':'admin/'.CONTROLLER.'/index/'
         ?>"><?php _e('书稿管理'); ?></a>
     </li>
+    <?php if ($this->hostConfig && ($this->hostConfig->sinho_permission['allow_team_leader_add_book']===true
+               || ($this->hostConfig->sinho_permission['allow_team_leader_add_book']===true && isset($_GET['id']) ) ) ) {?>
     <li<?php echo ACTION=='book'?' class="active"':''?>>
       <a href="<?php
           echo ACTION=='book'?'#book" data-toggle="tab':'admin/'.CONTROLLER.'/book/'
         ?>"><?php isset($_GET['id']) ? _e('编辑书稿'):_e('新建书稿'); ?></a>
     </li>
+    <?php }?>
+    <?php if ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_import_book']===true) {?>
     <li<?php echo ACTION=='import'?' class="active"':''?>>
       <a href="<?php
           echo ACTION=='import'?'#import" data-toggle="tab':'admin/'.CONTROLLER.'/import/'
         ?>"><?php _e('书稿导入'); ?></a>
     </li>
+    <?php }?>
     <?php if (CONTROLLER == 'books') { ?>
     <li<?php echo ACTION=='category'?' class="active"':''?>>
       <a href="<?php

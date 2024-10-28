@@ -15,8 +15,10 @@ defined('iCodeBang_Com') OR die('Access denied!');
 class team_books extends SinhoBaseController
 {
     protected $bookSubjectList = array();
+
     public function setup()
     {
+        View::assign('hostConfig', $this->hostConfig);
         $this->checkPermission(self::IS_SINHO_TEAM_LEADER);
 
         $this->user_info['sinho_manage_subject'] = @json_decode($this->user_info['sinho_manage_subject'], true);
