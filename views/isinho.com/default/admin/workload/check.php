@@ -11,11 +11,13 @@
                         echo $_GET['by']=='book'?'#index" data-toggle="tab':'admin/'.(CONTROLLER=='team_workload'?'team_workload/':'').'check_list/by-book'
                         ?>"><?php _e('书稿工作量'); ?></a>
                     </li>
+                    <?php if (CONTROLLER=='main' || ($this->hostConfig && $this->hostConfig->sinho_feature_list['allow_team_leader_see_workload'])) { ?>
                     <li class="<?php if($_GET['by']=='user') echo 'active'; ?>">
                     <a href="<?php
                         echo $_GET['by']=='user'?'#index" data-toggle="tab':'admin/'.(CONTROLLER=='team_workload'?'team_workload/':'').'check_list/by-user'
                         ?>"><?php _e('编辑工作量'); ?></a>
                     </li>
+                    <?php } ?>
                 </ul>
             </h3>
         </div>

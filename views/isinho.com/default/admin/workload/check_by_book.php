@@ -97,8 +97,12 @@
                                 <td ><?php echo $itemInfo['remarks']; ?><span class="text-primary"><?php if(CONTROLLER=='main') echo $itemInfo['admin_remarks']; ?></span></td>
 
                                 <td class="js-workload-ref nowrap">
+                                    <?php if (CONTROLLER!='team_workload' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_add_book']===true)) {?>
                                     <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/from_id-<?php echo $itemInfo['id']; ?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
+                                    <?php }?>
+                                    <?php if (CONTROLLER!='team_workload' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_edit_book']===true) ) {?>
                                     <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_books':'books';?>/book/id-<?php echo $itemInfo['id']; ?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
+                                    <?php }?>
                                 </td>
                             </tr>
                             <?php if (isset($this->workloadList[$itemInfo['id']])) { ?>
@@ -121,7 +125,13 @@
                                     }
                                     ?>
                                 </td>
-                                <td class="no-word-break"><a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-user__id-<?php echo $workloadInfo['user_id'];?>"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></a></td>
+                                <td class="no-word-break">
+                                <?php if (CONTROLLER!='team_workload' || ($this->hostConfig && $this->hostConfig->sinho_feature_list['allow_team_leader_see_workload'])) { ?>
+                                    <a target="_blank" href="admin/<?php echo CONTROLLER=='team_workload'?'team_workload/':'';?>check_list/by-user__id-<?php echo $workloadInfo['user_id'];?>"><?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?></a>
+                                <?php } else {?>
+                                    <?php echo $this->userList[$workloadInfo['user_id']]['user_name']; ?>
+                                <?php }?>
+                                </td>
                                 <td class="js-workload-ref js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="js-serial"><?php echo $itemInfo['serial']; ?></td>
                                 <td class="js-bookname"><?php echo $itemInfo['book_name']; ?></td>
@@ -153,7 +163,9 @@
                                     <a href="admin/ajax/workload/remove/" onclick="deleteItem(<?php echo $workloadInfo['id']; ?>); return false;" class="icon icon-delete md-tip" title="<?php _e('删除'); ?>" data-toggle="tooltip"></a>
                                     <?php }
                                     ?>
+                                    <?php if(CONTROLLER!='team_workload' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_edit_quality']===true)) { ?>
                                     <a target="_blank"  onclick="show_quarlity(<?php echo $workloadInfo['id']; ?>); return false;" class="js-fill-quarlity icon icon-verify md-tip" href="admin/ajax/workload/fill_quarylity/workload_id-<?php echo $workloadInfo['id']; ?>" class="icon icon-order md-tip" title="<?php _e('质量考核'); ?>" data-toggle="tooltip"></a>
+                                    <?php }?>
                                 </td>
                             </tr>
                             <?php if (isset($this->quarlityList[$workloadInfo['id']])) { ?>
