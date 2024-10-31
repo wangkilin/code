@@ -243,7 +243,10 @@ class books extends SinhoBaseController
                     $set,
                     'id = ' . $bookInfo['id']
             );
-            H::ajax_json_output(Application::RSM(null, 1, Application::lang()->_t('日期保存成功')));
+            H::ajax_json_output(Application::RSM(
+                array(
+                    'url' => '',
+                ), 1, Application::lang()->_t('日期保存成功')));
 
         } else {
 

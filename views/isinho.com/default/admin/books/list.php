@@ -160,7 +160,9 @@
                                     <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
                                   <?php }?>
-                                  <!-- <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date md-tip jsSinhoSetBookDate" title="<?php _e('设置日期'); ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a> -->
+                                  <?php if (CONTROLLER=='books' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_set_book_date']===true)) {?>
+                                  <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date <?php echo $itemInfo['return_date']=='' ? ' icon-date-green ':''; ?>md-tip jsSinhoSetBookDate" title="<?php echo $itemInfo['return_date']=='' ? _t('设置日期'):_t('当前回稿日期：').$itemInfo['return_date']; ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a>
+                                  <?php }?>
                                   <?php if (CONTROLLER=='books' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_add_book']===true)) {?>
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/from_id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
@@ -208,6 +210,9 @@
 </div>
 
 <style>
+.icb-content-wrap .icon-date-green{
+    background: #8bbf61 !important;
+}
 .textBreak{
     word-break: break-all;
 }
