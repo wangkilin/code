@@ -144,7 +144,7 @@
                                 <?php
                                 if (CONTROLLER == 'books') { ?>
                                 <td><?php
-                                    isset($_levelList) OR $_levelList=array('-','小学','初中','高中','外社','综合','新禾');
+                                    isset($_levelList) OR $_levelList=array('-','小学','初中','高中','外社','综合','乐读','渠道');
                                     echo $_levelList[$itemInfo['grade_level'] ];
                                 ?></td>
                                 <?php } ?>
@@ -156,7 +156,8 @@
                                     <a data-grade-level="3" title="<?php _e('设置书稿所属阶段：高中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">高中</a>
                                     <a data-grade-level="4" title="<?php _e('设置书稿所属阶段：外社'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">外社</a>
                                     <a data-grade-level="5" title="<?php _e('设置书稿所属阶段：综合'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">综合</a>
-                                    <a data-grade-level="6" title="<?php _e('设置书稿所属阶段：新禾'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">新禾</a>
+                                    <a data-grade-level="6" title="<?php _e('设置书稿所属阶段：乐读'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">乐读</a>
+                                    <a data-grade-level="7" title="<?php _e('设置书稿所属阶段：渠道'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">渠道</a>
                                     <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
                                   <?php }?>
@@ -221,31 +222,35 @@
 }
 .jsToggleSubIcon .jsSinhoSetGradeLevel{
     position: absolute;
-    left:-35px;
+    left:-38px;
     display: none;
     background-color: #8bbf61;
     font-size: 11px !important;
-    border-radius: 5px;
+    border-radius: 3px;
+    padding:0 5px;
 }
 .jsToggleSubIcon.on .jsSinhoSetGradeLevel{
     display: inline-block;
 }
 .jsToggleSubIcon a[data-grade-level="1"] {
-    top: -35px;
+    top: -55px;
 }
 .jsToggleSubIcon a[data-grade-level="2"] {
-    top: -15px;
+    top: -35px;
 }
 .jsToggleSubIcon a[data-grade-level="3"] {
-    top: 5px;
+    top: -15px;
 }
 .jsToggleSubIcon a[data-grade-level="4"] {
-    top: 25px;
+    top: 5px;
 }
 .jsToggleSubIcon a[data-grade-level="5"] {
-    top: 45px;
+    top: 25px;
 }
 .jsToggleSubIcon a[data-grade-level="6"] {
+    top: 45px;
+}
+.jsToggleSubIcon a[data-grade-level="7"] {
     top: 65px;
 }
 .jsToggleSubIcon a[data-grade-level="0"] {
