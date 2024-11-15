@@ -236,6 +236,8 @@ class books extends SinhoBaseController
         }
         if ($_POST['return_date']) {
             $set['return_date'] = $_POST['return_date'];
+        } else {
+            $set['return_date'] = NULL;
         }
         if ($set) {
             $this->model('sinhoWorkload')
