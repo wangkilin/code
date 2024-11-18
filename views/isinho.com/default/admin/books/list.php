@@ -256,9 +256,29 @@
 .jsToggleSubIcon a[data-grade-level="0"] {
     top: 85px;
 }
+.modal-dialog .icon-delete.icon-date-delete {
+    position: absolute;
+    bottom: 2px;
+    right: 0;
+    background: none;
+    color:#666;
+    display:none;
+}
+.modal-dialog .icon-date-container:hover .icon-delete.icon-date-delete {
+    display:block;
+    cursor:pointer;
+}
 </style>
 <script>
 $(function(){
+
+
+    /**
+     * 日期输入框， 点击清除图标，将输入框内容清除
+     */
+    $('body').on('click', '.icon-delete.icon-date-delete', function () {
+        $(this).siblings('.js-date-input').val('');
+    });
     $('body').click(function (event) {
         if (! $(event.target).hasClass('jsToggleSubIcon') && ! $(event.target).hasClass('jsSinhoSetGradeLevel')) {
             $('.jsToggleSubIcon').removeClass('on');
