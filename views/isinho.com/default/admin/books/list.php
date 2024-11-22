@@ -114,7 +114,7 @@
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>
                                 <td class="text-left px10">
 
-                                    <a class="md-tip"  title="<?php _e('发稿日期'); echo $itemInfo['delivery_date'];?> <?php _e('回稿日期'); echo $itemInfo['return_date'];?>" data-toggle="tooltip"><?php echo $itemInfo['delivery_date']; ?></a>
+                                    <a class="md-tip"  title="<?php _e('来稿'); echo str_replace('-','.',$itemInfo['delivery_date']);?> <?php _e('回稿'); echo str_replace('-','.',$itemInfo['return_date']);?>" data-toggle="tooltip"><?php echo str_replace('-','.',$itemInfo['delivery_date']);if($itemInfo['return_date']) echo '<br/>'.str_replace('-','.',$itemInfo['return_date']); ?></a>
                                 </td>
                                 <td class="px10 js-category"><?php echo $itemInfo['category']; ?></td>
                                 <td class="px10"><?php echo $this->bookSubjectList[$itemInfo['category_id']]['name'];?></td>

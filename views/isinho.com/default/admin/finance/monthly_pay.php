@@ -62,7 +62,7 @@
                             <td class="xl70" ><?php echo $_itemInfo['price'];?></td>
                             <td class="xl70" ><?php echo $_itemInfo['amount'];?></td>
                             <td class="xl70" ><?php echo $_itemInfo['total'];?></td>
-                            <td class="xl70" ><?php echo $_itemInfo['deal_date'];?></td>
+                            <td class="xl70" ><?php echo substr($_itemInfo['belong_year_month'],0,4).'年';echo $_itemInfo['deal_date'];?></td>
                             <td class="xl70" ><?php echo $_itemInfo['remark'];?></td>
                         </tr>
                         <?php } ?>
