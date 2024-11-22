@@ -406,9 +406,20 @@ class books extends SinhoBaseController
                                 ),
 
                                 'alignment'  => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
-                    )
+                            ),
                 ),
             );
+            $_tmpExcelMoreStyle = array ('A2:Z' . (count($itemList) + 1 ) => array (
+                    'font'    => array(
+                                        'size'      => 10
+                                ),
+                    'alignment' => array(
+                        'wrap' => true, // 设置自动换行
+                        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER,
+                    ),
+                ),
+            );
+            $style['style'] = $style['style'] + $_tmpExcelMoreStyle;
             $phpExcel->export($fileName, $headArr, $itemList, true, $style);
         } else {
             $itemList  = $this->model('sinhoWorkload')->getBookList($where, $orderBy, $this->per_page, $_GET['page']);
