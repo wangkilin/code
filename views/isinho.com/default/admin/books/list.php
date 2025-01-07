@@ -549,7 +549,7 @@ $(function(){
         var onshowCallback = function () {
             //$('.js-datepicker').date_input(); // 已有日期输入。 后台管理首页，有示例
 
-            $( ".js-datepicker" ).datetimepicker({
+            $( ".js-datepicker" ).attr('readonly','readonly').datetimepicker({
                 format  : 'yyyy-mm-dd',
                 language:  'zh-CN',
                 weekStart: 1, // 星期一 为一周开始
