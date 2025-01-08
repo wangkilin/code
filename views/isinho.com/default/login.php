@@ -69,7 +69,7 @@
             <button type="submit" class="btn btn-primary" id="login_submit" onclick="AWS.ajax_post($('#login_form'), AWS.ajax_processer, 'error_message');"><?php _e('登录'); ?></button>
         </form>
 
-        <h2 class="text-center text-color-999">&copy;iSinho.com 沈阳新禾文化传媒有限公司</h2>
+        <h2 class="text-center text-color-999">&copy;iSinho.com 沈阳乐读文化传媒有限公司</h2>
     </div>
 </div>
 <?php

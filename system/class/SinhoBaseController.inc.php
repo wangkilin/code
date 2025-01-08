@@ -94,7 +94,7 @@ class SinhoBaseController extends BaseController
     // const PERMISSION_FILL_WORKLOAD   = SinhoBaseController::PERMISSION_FILL_WORKLOAD;
     // const PERMISSION_CHECK_WORKLOAD  = SinhoBaseController::PERMISSION_CHECK_WORKLOAD;
 
-    const IS_SINHO_BOOK_ADMIN = 0x04; // 新禾图书编辑
+    const IS_SINHO_BOOK_ADMIN = 0x04; // 乐读图书编辑
     const IS_SINHO_FILL_WORKLOAD = 0x08; // 填充工作量
     const IS_SINHO_VERIFY_WORKLOAD = 0x10; // 核对工作量
     const IS_SINHO_CHECK_WORKLOAD  = 0x20; // 查看工作量

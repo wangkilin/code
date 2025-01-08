@@ -68,7 +68,7 @@ class main extends SinhoBaseController
     }
 
     /**
-     * 新禾员工登录
+     * 乐读员工登录
      */
     public function login_action()
     {

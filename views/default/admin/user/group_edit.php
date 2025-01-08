@@ -14,7 +14,7 @@
                 <ul class="nav nav-tabs">
                     <li></li>
                     <li class="js-toggle-class" data-toggle-class="default"><a><?php _e('系统权限'); ?></a></li>
-                    <li class="js-toggle-class" data-toggle-class="js-sinho"><a><?php _e('新禾权限'); ?></a></li>
+                    <li class="js-toggle-class" data-toggle-class="js-sinho"><a><?php _e('乐读权限'); ?></a></li>
                 </ul>
             </h3>
         </div>
@@ -172,7 +172,7 @@
 					</td>
 				</tr>
 				<?php } ?>
-                <!-- 新禾网站权限  -->
+                <!-- 乐读网站权限  -->
                 <?php if (check_extension_package('sinhoWorkload')) {
                 foreach ($this->booleanParamList['sinho'] as $_varName => $_varText) {?>
 				<tr class="js-sinho hide">

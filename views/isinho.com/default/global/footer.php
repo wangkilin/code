@@ -11,7 +11,7 @@
                             <div class="footer-logo">
                                 <img src="<?php echo G_STATIC_URL; ?>/isinho.com/logo-stamp.png" alt="#"><h4 class="slogan">怀匠心，造精品；立诚信，谋共赢</h4>
                             </div>
-                            <p>新禾怀揣匠心，努力将每个经手项目打造成精品。新禾期待与每个客户谋求共同发展，共创佳绩！</p>
+                            <p>沈阳乐读文化传媒有限公司怀揣匠心，努力将每个经手项目打造成精品。沈阳乐读文化传媒有限公司期待与每个客户谋求共同发展，共创佳绩！</p>
                         </div>
                     </div>
                     <!--/ End Single Widget -->
@@ -54,9 +54,9 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="text">
-                            <p>版权所有 &copy; 2020~<?php echo date('Y'); ?> 新禾
+                            <p>版权所有 &copy; 2020~<?php echo date('Y'); ?> 乐读
                             <span class="hidden-xs">备案号：<a href="https://beian.miit.gov.cn/" target="blank">京ICP备10215645号</a></span>
-                            <span class="hidden">新禾&reg;,新禾文化&trade;,沈阳新禾,图书出版,编辑校对,软件开发,沈阳新禾文化传媒有限公司[官网]</span></p>
+                            <span class="hidden">乐读&reg;,乐读文化&trade;,沈阳乐读,图书出版,编辑校对,软件开发,沈阳乐读文化传媒有限公司[官网]</span></p>
                         </div>
                     </div>
                 </div>

@@ -20,7 +20,7 @@
 		<div class="tab-content mod-content">
 
 			<table class="table table-striped">
-                <!-- 新禾网站权限  -->
+                <!-- 乐读网站权限  -->
                 <?php if (check_extension_package('sinhoWorkload')) {
                 foreach ($this->booleanParamList['sinho'] as $_varName => $_varText) {?>
 				<tr class="js-sinho hide">

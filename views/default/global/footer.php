@@ -16,7 +16,7 @@
             </div>
             <div>
                 友情链接：
-                <a href="http://www.isinho.com">新禾文化</a>
+                <a href="http://www.isinho.com">乐读文化</a>
                 •
                 <a href="//www.devboy.cn">开发者</a>
                 •

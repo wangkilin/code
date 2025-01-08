@@ -5,10 +5,10 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="沈阳新禾文化传媒有限公司">
+    <meta name="description" content="沈阳乐读文化传媒有限公司">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>沈阳新禾文化传媒有限公司</title>
+    <title>沈阳乐读文化传媒有限公司</title>
     <link rel="icon" type="image/png" href="./static/favicon.png">
 
     <!-- Font Awesome CSS -->
@@ -73,7 +73,7 @@
                     <img class="black-logo" src="./static/logo-black-stamp.png" style="float:left" />
                     <img class="blue-logo" src="./static/logo-stamp.png" style="float:left" />
                     <div class="logo">
-                        <a href="./">沈阳<span>新禾</span>文化传媒有限公司</a>
+                        <a href="./">沈阳<span>乐读</span>文化传媒有限公司</a>
                     </div>
                     <!--/ End Logo -->
                 </div>
@@ -472,7 +472,7 @@
                 <div class="col-md-12 col-sm-12 col-xs-12 wow fadeIn" style="visibility: visible; animation-name: fadeIn;">
                     <div class="section-title center">
                         <h2>图书出版</h2>
-                        <p>新禾始终坚持“专业、高效、优质、诚信”的服务宗旨，不断赢得客户的信赖和口碑，一站式出版助力客户出书省心、省力、省钱！
+                        <p>乐读始终坚持“专业、高效、优质、诚信”的服务宗旨，不断赢得客户的信赖和口碑，一站式出版助力客户出书省心、省力、省钱！
                            在选题申报，排版设计，编辑校对，书号申请，印刷装订等图书出版的各项业务中，公司员工均具有杰出的职业技能，为客户提供高效优质的服务。
                            公司从图书出版的专业技术到图书内容的语言文字两个方面进行严格把关，致力于传播优质文化，努力实现推广社会文明的梦想和价值。
                         </p>
@@ -1845,7 +1845,7 @@
                 <div class="row">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="text">
-                            <p>版权所有 &copy; <?php echo date('Y'); ?> 沈阳新禾文化传媒有限公司</p>
+                            <p>版权所有 &copy; <?php echo date('Y'); ?> 沈阳乐读文化传媒有限公司</p>
                         </div>
                     </div>
                 </div>

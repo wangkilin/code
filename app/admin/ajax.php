@@ -1807,7 +1807,7 @@ class ajax extends AdminController
             'edit_question_topic',
             'publish_comment',
 
-            /* ----------- 新禾核算工作量 */
+            /* ----------- 乐读核算工作量 */
             SinhoBaseController::PERMISSION_BOOKLIST,    // 是否允许修改稿件参数
             SinhoBaseController::PERMISSION_VERIFY_WORKLOAD,            // 是否允许核算工作量
             SinhoBaseController::PERMISSION_FILL_WORKLOAD,              // 是否允许添加个人工足量

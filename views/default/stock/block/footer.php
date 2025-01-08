@@ -9,7 +9,7 @@
 		<?php _e("友情链接");?> ：</span>
 		<span class="hidden-xs"><a href="//www.icodebang.com" target="blank">大牛教程</a></span>
         <span> | </span>
-        <span class="hidden-xs"><a href="//www.isinho.com" target="blank">新禾文化</a></span>
+        <span class="hidden-xs"><a href="//www.isinho.com" target="blank">乐读文化</a></span>
         <span> | </span>
         <span class="hidden-xs"><a href="//www.kinful.com" target="blank">Kinful</a></span>
         <span> | </span>

@@ -11,7 +11,7 @@
                         <img class="black-logo" src="<?php echo G_STATIC_URL; ?>/isinho.com/logo-black-stamp.png" style="float:left" />
                         <img class="blue-logo" src="<?php echo G_STATIC_URL; ?>/isinho.com/logo-stamp.png" style="float:left" />
                         <div class="logo">
-                            <!-- <a href="./">沈阳<span>新禾</span>文化传媒有限公司</a> -->
+                            <!-- <a href="./">沈阳<span>乐读</span>文化传媒有限公司</a> -->
                         </div>
                         <!--/ End Logo -->
                     </div>
