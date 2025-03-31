@@ -137,7 +137,7 @@
                                 else if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) echo ' recording-line'; ?>" data-verify-remark='<?php echo $itemInfo['verify_remark'];?>'>
                                 <td class="text-left">
 
-                                    <a class="md-tip"  title="<?php _e('发稿日期'); echo date('m-d', $itemInfo['add_time']);?> <?php _e('回稿日期'); echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):'';?>" data-toggle="tooltip"><?php echo date('m-d', $itemInfo['add_time']),'~';echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):''; ?></a>
+                                    <a class="md-tip"  title="<?php _e('发稿日期'); echo date('m-d', $this->booksList[$itemInfo['book_id']]['add_time']);?> <?php _e('回稿日期'); echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):'';?>" data-toggle="tooltip"><?php echo date('m-d', $itemInfo['add_time']),'~';echo $itemInfo['fill_time']>0 ? date('m-d', $itemInfo['fill_time']):''; ?></a>
                                 </td>
                                 <td class="no-word-break"><?php echo $this->user_info['user_name']; ?></td>
                                 <!-- <td class="js-category"><?php //echo $this->booksList[$itemInfo['book_id']]['category']; ?></td> -->
