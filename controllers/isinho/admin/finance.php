@@ -184,7 +184,7 @@ class finance extends SinhoBaseController
         View::import_js('js/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js');
         View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
 
-        View::assign('beginningValue', floatval($beginningValue['total']));
+        View::assign('beginningValue', round(floatval($beginningValue['total']),2));
         View::assign('startMonth', $_GET['start_month']);
         View::assign('endMonth',   $_GET['end_month']);
         View::assign('incomeItemList',   $incomeItemList);
