@@ -126,11 +126,11 @@
                         <tr height="16.80" style='height:16.80pt;'>
                             <td class="xl70" >金额</td>
                             <td class="xl70"><?php echo $this->beginningValue;?></td>
-                            <td class="xl70"><?php echo array_sum(array_column($this->incomeItemList, 'total')) ;?></td>
-                            <td class="xl70"><?php echo array_sum(array_column($this->outputItemList, 'total')) ;?></td>
+                            <td class="xl70"><?php echo round(array_sum(array_column($this->incomeItemList, 'total')),2) ;?></td>
+                            <td class="xl70"><?php echo round(array_sum(array_column($this->outputItemList, 'total')),2) ;?></td>
                             <td class="xl70"><?php
-                                echo floatval($this->beginningValue) + array_sum(array_column($this->incomeItemList, 'total'))
-                                    - array_sum(array_column($this->outputItemList, 'total'));
+                                echo floatval($this->beginningValue) + round(array_sum(array_column($this->incomeItemList, 'total')),2)
+                                    - round(array_sum(array_column($this->outputItemList, 'total')),2);
                             ?></td>
                         </tr>
                         <tr height="16.80">
@@ -196,10 +196,23 @@
                    ?>
 
                 <table class="<?php if ($_tmpJ++ == 1) echo 'active';?> tab-pane table table-bordered table-condensed" id="tab_id_<?php echo $_monthlyData['belong_year_month'];?>_sheet_<?php echo $_key;?>">
-                    <?php foreach ($_sheetDataInfo as $_rowKey=>$_rowData) { ?>
-                        <?php
+                    <?php
+                      // 确认表格最多有多少列。 多余的空列，过滤掉；
+                      $maxColumnIndex = 0;
+                      foreach ($_sheetDataInfo as $_rowKey=>$_rowData) {
+                        $_tmpKey = 0;
+                        // 从每行数据，找到有数据的最后的一列。 超过这个列，不再有数据了。
+                        foreach ($_rowData as $_colKey=>$_cellData) {
+
+                            ($_tmpKey>$maxColumnIndex && !is_null($_cellData)&&$_cellData!=='') AND  $maxColumnIndex = $_tmpKey;
+                            $_tmpKey++;
+                        }
+                      }
+
+                      foreach ($_sheetDataInfo as $_rowKey=>$_rowData) {
                         $_isEmpty = true;
                         $_trBgStyle = '';
+                        // 去除空行
                         foreach ($_rowData as $_colKey=>$_cellData) {
 
                             if (!is_null($_cellData)&&$_cellData!=='') {
@@ -213,7 +226,7 @@
                         ?>
                     <tr>
                         <?php
-                        $_tdCount = count($_rowData);
+                        $_tdCount = $maxColumnIndex;
                         foreach ($_rowData as $_colKey=>$_cellData) {
                         ?>
                         <td style="<?php
@@ -224,7 +237,7 @@
                         ?>"
                         class="<?php
                         // 如果后面单元格的内容都为空， 做单元格跨列处理
-                        echo join('', $_rowData)===$_cellData ? 'xl66" colspan="'.$_tdCount : '';
+                        echo join('', $_rowData)===$_cellData ? 'xl66" colspan="'.($_tdCount + 1) : '';
                         ?>"><?php
                         // 数字类型， 保留小数点后2位
                         echo is_numeric($_cellData) ? round($_cellData, 2) : $_cellData;
@@ -232,6 +245,9 @@
                         <?php
                         $_tdCount--; // 如果后面单元格的内容都为空， 已做跨列处理， 跳过当前行
                             if (join('', $_rowData)===$_cellData) {
+                                break;
+                            }
+                            if ($_tdCount<0) {
                                 break;
                             }
                         } ?>
