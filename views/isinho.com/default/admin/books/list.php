@@ -461,6 +461,7 @@ $(function(){
      */
     $('.jsAssign').click(function() {
         var bookId = $(this).data('book-id');
+        var $tr    = $(this).closest('tr');
         var subjectCode = '' + $(this).data('subject-code');
         var url = "admin/ajax/<?php echo CONTROLLER;?>/assigned/id"+"-"+bookId;
         var onshowCallback = function () {
@@ -522,7 +523,21 @@ $(function(){
             });
             // 分配编辑
             $('#js-submit-assign').click(function() {
-                ICB.ajax.requestJson($(this).closest('form').attr('action'), $(this).closest('form').serialize());
+                // 分配书稿成功， 修改当前书稿行的样式；
+                ICB.ajax.requestJson(
+                    $(this).closest('form').attr('action'),
+                    $(this).closest('form').serialize(),
+                    function (response) {
+                        // 如果是分配书稿，添加分配样式； 否则取消样式；
+                        if($('#sinho_editor option:selected').length) {
+                            $tr.addClass('success');
+                        } else {
+                            $tr.removeClass('success');
+                        }
+                        // 继续执行默认程序
+                        ICB.ajax._onSuccess(response);
+                    }
+                );
             });
         };
         var html = Hogan.compile(ICB.template.sinhoBindBookWithEditor).render(
