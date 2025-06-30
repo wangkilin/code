@@ -178,7 +178,7 @@
                                   <a href="admin/ajax/workload/fill_more/" onclick="fillMore(<?php echo $itemInfo['id']; ?>);" class="icon icon-add-to-list md-tip js-fill-more" title="<?php _e('拆分任务，对工作量进行分叉处理'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
                                   <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING &&$this->booksList[$itemInfo['book_id']]['verify_status'] == 0) {// 加入核算队列 ?>
-                                  <a href="admin/ajax/workload/queue/" onclick="addQueue(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-coin-yen md-tip" title="<?php _e('加入核算'); ?>" data-toggle="tooltip"></a>
+                                  <a href="admin/ajax/workload/queue/" onclick="addQueue(<?php echo $itemInfo['id']; ?>, this); return false;" class="icon icon-coin-yen md-tip" title="<?php _e('加入核算'); ?>" data-toggle="tooltip"></a>
                                   <?php } ?>
                                   <?php if (($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) && $itemInfo['is_branch']) {// 工作量没有核算过，而且是分支处理，允许删除 ?>
                                   <a href="admin/ajax/workload/remove/" onclick="deleteItem(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-delete md-tip" title="<?php _e('删除'); ?>" data-toggle="tooltip"></a>
@@ -309,8 +309,14 @@ function deleteItem(id)
  * 将工作量加入到绩效审核中
  * @param int id 工作量记录id
  */
-function addQueue (id)
+function addQueue (id, obj)
 {
+    // 检查备注信息是否为空。不能提交备注为空的条目
+    var _remarks = $.trim($(obj).closest('tr').find('[data-td-name="remarks"]').text());
+    if(_remarks === '') {
+        ICB.modal.alert(_t('备注信息不能为空！'));
+        return false;
+    }
     // 弹框询问是否确认加入工作量审核
     ICB.modal.confirm(
   	   _t('确认将本条加入绩效核算中么？'),
