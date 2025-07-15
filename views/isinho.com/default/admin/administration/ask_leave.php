@@ -309,9 +309,10 @@ function loadLeaveDataIntoTable (leaveList) {
         userId = leaveList[i].user_id;
         tmpStartTime = Math.max(startTime, leaveList[i].leave_start_time);
         tmpEndTime   = Math.min(endTime, leaveList[i].leave_end_time);
-        //console.info(tmpStartTime, tmpEndTime);
+        console.info(leaveList[i], tmpStartTime, tmpEndTime);
         while(tmpStartTime < tmpEndTime) {
             tmpDate = new Date(tmpStartTime * 1000);
+            console.info(tmpDate.toLocaleDateString());
             // if (tmpDate.getDay() % 6 == 0) { // 周六日不显示请假状态
             //     tmpStartTime += 24 * 60 * 60;
             //     continue;
@@ -327,7 +328,13 @@ function loadLeaveDataIntoTable (leaveList) {
                     $(tmpTdId).html($(tmpTdId).html() + '<i class="icon icon-leave"/>');
                     break;
             }
+            // 获取第二天的时间。 如果请假截止时间 大于  第二天上班时间，那么第二天也是请假
             tmpStartTime += 24 * 60 * 60;
+            tmpDateObj   = new Date(tmpStartTime*1000);
+            // 获取第二天8点钟的时间。 此处的上班时间，应该是从配置文件中读取，不应该写固定的时间点
+            tmpDateObj   = new Date(tmpDateObj.getFullYear(), tmpDateObj.getMonth(), tmpDateObj.getDate(), 8,0,0);
+            //console.info(tmpDateObj.getFullYear(), tmpDateObj.getMonth(), tmpDateObj.getDate(), tmpDateObj.getHours());
+            tmpStartTime = tmpDateObj.getTime()/1000;
         }
     }
 }
