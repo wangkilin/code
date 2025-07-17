@@ -4,11 +4,15 @@
 <!-- Theme switcher -->
 <div class="theme-switch">
     <div class="icon inOut"><i class="rotate icon-setting"></i></div>
+    <a class="btn btn-danger btn-sm icon-left" onclick="goto_pre_highlight_issue();" title="<?php _e('上一个疑义'); ?>"></a>
+    &nbsp;
+    <a class="btn btn-danger btn-sm icon-right" onclick="goto_next_highlight_issue();" title="<?php _e('下一个疑义'); ?>"></a>
+    <br/>
     <a class="btn btn-large btn-danger row" onclick="highlight_issue();"><?php _e('疑义标红'); ?></a>
     <br/><br/>
-                        <a class="btn btn-large btn-primary row" onclick="confirm_workload();"><?php _e('确认核算'); ?></a>
-                        <br/><br/>
-                        <a class="btn btn-large btn-warning row" onclick="send_warning();"><?php _e('弹回错误'); ?></a>
+    <a class="btn btn-large btn-primary row" onclick="confirm_workload();"><?php _e('确认核算'); ?></a>
+    <br/><br/>
+    <a class="btn btn-large btn-warning row" onclick="send_warning();"><?php _e('弹回错误'); ?></a>
 </div>
 
 <div class="icb-content-wrap">
@@ -279,6 +283,78 @@
 </div>
 
 <script type="text/javascript">
+    /**
+     * 滚动屏幕到当前屏幕位置的前面的高亮错误位置
+     */
+    function goto_pre_highlight_issue () {
+        // 当前窗口距离顶部的位置
+        var currentTop = $('html,body').scrollTop();
+        // 当前浏览器窗口高度
+        var currentHeight = $(window).height();
+        var totalHeight   =$(document).height();
+        var currentBottom = currentTop + currentHeight;
+        var $redTdList = $('td.sinho-red-background');
+
+        if ($redTdList.length == 0) {
+            ICB.modal.alert(_t('当前没有工作量疑义'));
+
+            return;
+        }
+
+        var hasMore = false; // 是否能定位到下一屏幕疑义部分
+        for(var i=$redTdList.length-1; i>=0; i--) {
+            if ($redTdList.eq(i).offset().top <= currentTop) {
+                hasMore =true; // 还有疑义部分能够定位到
+                // console.info(currentTop, currentHeight, currentBottom, $redTdList.eq(i).offset().top - currentHeight + $redTdList.eq(i).height());
+                // console.info($(document).height(), $(window).height(), $('html,body').height(), i, $redTdList.eq(i).offset(), $redTdList.eq(i).scrollTop());
+                // $('html,body').scrollTop($redTdList.eq(i).offset().top - currentHeight + $redTdList.eq(i).height());
+                $('html, body').animate({
+                   scrollTop: $redTdList.eq(i).offset().top - currentHeight + $redTdList.eq(i).height()
+                }, 500); // 500毫秒内滚动到指定元素位置
+                break;
+            }
+        }
+
+        if (hasMore === false) {
+            ICB.modal.alert(_t('已经定位到最前面的疑义部分啦'));
+        }
+    }
+    /**
+     * 滚动屏幕到当前屏幕位置的后面的高亮错误位置
+     */
+    function goto_next_highlight_issue () {
+        // 当前窗口距离顶部的位置
+        var currentTop = $('html,body').scrollTop();
+        // 当前浏览器窗口高度
+        var currentHeight = $(window).height();
+        var totalHeight   =$(document).height();
+        var currentBottom = currentTop + currentHeight;
+        var $redTdList = $('td.sinho-red-background');
+
+        if ($redTdList.length == 0) {
+            ICB.modal.alert(_t('当前没有工作量疑义'));
+
+            return;
+        }
+
+        var hasMore = false; // 是否能定位到下一屏幕疑义部分
+        for(var i=0; i<$redTdList.length; i++) {
+            if ($redTdList.eq(i).offset().top >= currentBottom) {
+                hasMore =true; // 还有疑义部分能够定位到
+                // console.info(currentTop, currentHeight, currentBottom, $redTdList.eq(i).offset().top - currentHeight + $redTdList.eq(i).height());
+                // console.info($(document).height(), $(window).height(), $('html,body').height(), i, $redTdList.eq(i).offset(), $redTdList.eq(i).scrollTop());
+                // $('html,body').scrollTop($redTdList.eq(i).offset().top - currentHeight + $redTdList.eq(i).height());
+                $('html, body').animate({
+                   scrollTop: $redTdList.eq(i).offset().top - $redTdList.eq(i).height()/2
+                }, 500); // 500毫秒内滚动到指定元素位置
+                break;
+            }
+        }
+
+        if (hasMore === false) {
+            ICB.modal.alert(_t('已经定位到最后的疑义部分啦'));
+        }
+    }
     /**
      * 自动计算书稿， 将疑义部分自动标红
      */
