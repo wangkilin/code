@@ -282,23 +282,36 @@ class workload extends SinhoBaseController
         $userList = array_combine($userIds, $userList);
         // 获取每个人的工作量
         $quarlityStat = $this->model('sinhoWorkload')->getQuarlityStatByUserIds (array(), array('start'=>$start, 'end'=>$end));
+
         $quarlityStat = array_combine(array_column($quarlityStat,'user_id'), array_column($quarlityStat,'quarlity_num'));
         $workloadStatLastMonth = $this->model('sinhoWorkload')->getWorkloadStatByUserIds (array(), sinhoWorkloadModel::STATUS_VERIFIED, array('start'=>$start, 'end'=>$end));
         $totalCharsList = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars'));
         $totalCharsWithoutWeightListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_without_weight'));
         $totalCharsWeightLt1ListLastMonth = array_combine(array_column($workloadStatLastMonth,'user_id'), array_column($workloadStatLastMonth,'total_chars_weight_lt_1'));
-        arsort($totalCharsList);
-        foreach ($totalCharsList as $_userId=> & $_item) {
+        // 补充有绩效，但是没做质量考核的数据；
+        foreach ($totalCharsList as $_tmpUserId => $_tmpV) {
+            isset($quarlityStat[$_tmpUserId]) OR $quarlityStat[$_tmpUserId] = 0;
+        }
+        // 补充有质量考核，但是没有绩效的数据
+        foreach ($quarlityStat as $_tmpUserId => $_tmpV) {
+            isset($totalCharsList[$_tmpUserId]) OR $totalCharsList[$_tmpUserId] = 0;
+        }
+        arsort($totalCharsList); // 对绩效数据进行排序
+        arsort($quarlityStat);   // 对质量考核数据进行排序
+        $_sortList = isset($_POST['sort']) && $_POST['sort']=='quarlity' ? $quarlityStat : $totalCharsList;
+        //H::ajax_json_output(Application::RSM($_sortList));
+        // 组装返回数据
+        foreach ($_sortList as $_userId=> & $_item) {
             $_item = array(
                 'name'                  => $userList[$_userId]['user_name'],
-                'total'                 => $_item,
+                'total'                 => $totalCharsList[$_userId],
                 'totalWithoutWeight'    => $totalCharsWithoutWeightListLastMonth[$_userId],
                 'totalCharsWeightLt1'   => $totalCharsWeightLt1ListLastMonth[$_userId],
                 'quarlityStat'          => $quarlityStat[$_userId],
             );
         }
 
-        H::ajax_json_output(Application::RSM(array_values($totalCharsList)));
+        H::ajax_json_output(Application::RSM(array_values($_sortList)));
     }
 
     /**

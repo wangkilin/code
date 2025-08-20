@@ -147,7 +147,7 @@
             <div class="mod">
 
                 <div class="form-group echart-date mod-head">
-                    <form action="admin/ajax/workload/statistic_total_chars/" method="post" onsubmit="return false">
+                    <form id="statistic_total_chars_form" action="admin/ajax/workload/statistic_total_chars/" method="post" onsubmit="return false">
                         <div class="col-sm-3 col-xs-2 nopadding">
                         <h3>
                         <span class="pull-left nopadding nomargin"><?php _e('工作榜单'); ?></span>
@@ -171,6 +171,7 @@
                             </div>
                         </div>
                         <div class="col-sm-2 col-xs-12 nopadding nomargin">
+                            <input type="hidden" name="sort" value="total"/>
                             <a href="javascript:;" class="btn btn-primary  btn-sm js-load-workload-top-list pull-right">确认查询</a>
                         </div>
                     </form>
@@ -183,8 +184,8 @@
                                 <th><?php _e('责编');?></th>
                                 <th ><b class="js-tooltip" data-toggle="tooltip" title="大于1的系数转换成系数为1"><?php _e('字数X转换系数?');?></b></th>
                                 <th><?php _e('字数X系数');?></th>
-                                <th><?php _e('绩效');?></th>
-                                <th><?php _e('考核奖惩');?></th>
+                                <th><o style="cursor:pointer" onclick="loadTotalWorkload('total');"><?php _e('绩效');?></o><o class="js-icon js-total icon-down"></o></th>
+                                <th><o style="cursor:pointer" onclick="loadTotalWorkload('quarlity');"><?php _e('考核奖惩');?></o><o class="js-icon js-quarlity"></o></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -258,6 +259,56 @@ line-height: normal;
 }
 </style>
 <script type="text/javascript">
+/**
+ * 获取工作量列表数据
+ *
+ * param sort string 工作量排序的方式
+ */
+function loadTotalWorkload(sort) {
+
+    var $form = $('#statistic_total_chars_form');
+    $form.find('input[name="sort"]').val(sort);
+
+    var successCallback = function (response) {
+        $('#total-chars-list > tbody > tr').remove();
+        $('#total-chars-list > tfoot > tr').remove();
+        var html = '';
+        var total = 0;
+        var totalCharsWeightLt1 = 0;
+        var totalQuarlity = 0;
+        for(var i = 0; i<response.rsm.length; i++) {
+            if (! response.rsm[i].name) {
+                continue;
+            }
+            total += response.rsm[i].total;
+            totalCharsWeightLt1 += response.rsm[i].totalCharsWeightLt1;
+            totalQuarlity += response.rsm[i].quarlityStat;
+
+            html = '<tr><td>' + (i+1)
+                + '</td><td>' + response.rsm[i].name
+                + '</td><td>' + response.rsm[i].totalCharsWeightLt1
+                + '</td><td>' + response.rsm[i].total
+                + '</td><td>' + float(response.rsm[i].total*2, 2)
+                + '</td><td>' + float(response.rsm[i].quarlityStat, 2)
+                + '</td></tr>';
+            $('#total-chars-list > tbody').append(html);
+        }
+        html = '<tr class="info">' +
+                    '<td colspan="2">合计</td>' +
+                    '<td>' + float(totalCharsWeightLt1, 4) + '</td>' +
+                    '<td>' + float(total, 4) + '</td>' +
+                    '<td>'+ float(total*2, 2) +'</td>' +
+                    '<td>'+ float(totalQuarlity, 2) +'</td>' +
+                '</tr>';
+        $('#total-chars-list > tfoot').append(html);
+    };
+    $('#total-chars-list').find('.js-icon').removeClass('icon-down');
+
+    $('#total-chars-list').find('.js-icon.js' + '-'+sort).addClass('icon-down');
+
+    ICB.ajax.requestJson($form.attr('action'), $form.serialize(), successCallback);
+}
+
 $(function () {
 
     $('.js-tooltip').tooltip();
@@ -509,41 +560,7 @@ $(function () {
      * 工作量榜单。 根据起止月份，获取员工工作量统计榜。
      */
     $('.js-load-workload-top-list').click(function () {
-        var $form = $(this).closest('form');
-        var successCallback = function (response) {
-            $('#total-chars-list > tbody > tr').remove();
-            $('#total-chars-list > tfoot > tr').remove();
-            var html = '';
-            var total = 0;
-            var totalCharsWeightLt1 = 0;
-            var totalQuarlity = 0;
-            for(var i = 0; i<response.rsm.length; i++) {
-                if (! response.rsm[i].name) {
-                    continue;
-                }
-                total += response.rsm[i].total;
-                totalCharsWeightLt1 += response.rsm[i].totalCharsWeightLt1;
-                totalQuarlity += response.rsm[i].quarlityStat;
-
-                html = '<tr><td>' + (i+1)
-                      + '</td><td>' + response.rsm[i].name
-                      + '</td><td>' + response.rsm[i].totalCharsWeightLt1
-                      + '</td><td>' + response.rsm[i].total
-                      + '</td><td>' + float(response.rsm[i].total*2, 2)
-                      + '</td><td>' + float(response.rsm[i].quarlityStat, 2)
-                      + '</td></tr>';
-                $('#total-chars-list > tbody').append(html);
-            }
-            html = '<tr class="info">' +
-                        '<td colspan="2">合计</td>' +
-                        '<td>' + float(totalCharsWeightLt1, 4) + '</td>' +
-                        '<td>' + float(total, 4) + '</td>' +
-                        '<td>'+ float(total*2, 2) +'</td>' +
-                        '<td>'+ float(totalQuarlity, 2) +'</td>' +
-                    '</tr>';
-            $('#total-chars-list > tfoot').append(html);
-        };
-        ICB.ajax.requestJson($form.attr('action'), $form.serialize(), successCallback);
+        loadTotalWorkload($('#statistic_total_chars_form').find('input[name="sort"]').val());
     });
 
     /**
