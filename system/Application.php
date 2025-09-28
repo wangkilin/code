@@ -6,6 +6,7 @@ class Application
      * @var core_db $db DB instance
      */
     private static $db;
+    private static $mongo;
     private static $form;
     private static $upload;
     private static $image;
@@ -145,6 +146,11 @@ class Application
             $action_method = loadClass('core_uri')->action . '_square_action';
         }
 
+        if ($_SERVER['REQUEST_URI'] =='/' && empty($_SESSION['_isAccessOk']) ) {
+            $_SESSION['_isAccessOk'] = true;
+            HTTP::click_and_reload();
+        }
+
         // 不是搜索引擎的可疑机器人访问，要求点击页面
         if ($_SERVER['REQUEST_METHOD']=='GET' && preg_match('/Chrome\/\d+\.\d+\.[0-9]{3,}|mobile|iphone|mac/i', $_SERVER['HTTP_USER_AGENT']) && !preg_match('/bot/i', $_SERVER['HTTP_USER_AGENT']) ){
             if (empty($_SESSION['_isAccessOk']) ) {
@@ -174,7 +180,31 @@ class Application
 
         self::$plugins = loadClass('core_plugins');
 
-        self::$settings = self::model('setting')->get_settings();
+
+        //self::$settings = self::model('setting')->get_settings();
+        switch (self::$config->get('database')->baseType) {
+            case 'mongo':
+
+                self::$settings = self::model('mongo_setting')->get_settings();
+                break;
+                require_once INC_PATH .  'vendor/autoload.php';
+                $mongoConfig = self::$config->get('database')->mongodb;
+                self::$mongo = loadClass('\MongoDB\Client', 'mongodb://'.$mongoConfig['host'].':'.$mongoConfig['port']);
+                // 选择数据库
+                $_mongoDbClient = self::$mongo->selectDatabase($mongoConfig['dbname']);
+                self::$settings = array();
+                $cursor = $_mongoDbClient->selectCollection(get_table($mongoConfig['collections']['system_setting']))->find();
+
+
+                foreach ($cursor as $row) {
+                    self::$settings[] = (array)$row;
+                }
+                break;
+
+            default:
+                self::$settings = self::model('setting')->get_settings();
+                break;
+        }
 
         if ((!defined('G_SESSION_SAVE') OR G_SESSION_SAVE == 'db') AND get_setting('db_version') > 20121123)
         {
@@ -195,8 +225,20 @@ class Application
             'cookie_domain' => G_COOKIE_DOMAIN
         ));
 
-        if (G_SESSION_SAVE == 'file' AND G_SESSION_SAVE_PATH)
-        {
+        if (G_SESSION_SAVE == 'mongodb') {
+            Zend_Session::setSaveHandler(new core_Session_SaveHandler_Mongo(array(
+                core_Session_SaveHandler_Mongo::MONGO_DB_CLIENT  => self::mongo(),
+                core_Session_SaveHandler_Mongo::COLLECTION_NAME  => get_table(self::$config->get('database')->mongodb['collections']['sessions']),
+                'primary'               => '_id',
+                'modifiedColumn'        => 'modified',
+                'dataColumn'            => 'data',
+                'lifetimeColumn'        => 'lifetime',
+            )));
+
+            self::$session_type = G_SESSION_SAVE;
+
+        } else if (G_SESSION_SAVE == 'file' AND G_SESSION_SAVE_PATH) {
+
             Zend_Session::setOptions(array(
                 'save_path' => G_SESSION_SAVE_PATH
             ));
@@ -204,19 +246,15 @@ class Application
 
         Zend_Session::start();
 
-        self::$session = new Zend_Session_Namespace(G_COOKIE_PREFIX . '_Anwsion');
+        self::$session = new Zend_Session_Namespace(G_COOKIE_PREFIX);
 
-        if ($default_timezone = get_setting('default_timezone'))
-        {
+        if ($default_timezone = get_setting('default_timezone')) {
             date_default_timezone_set($default_timezone);
         }
 
-        if ($img_url = get_setting('img_url'))
-        {
+        if ($img_url = get_setting('img_url')) {
             define('G_STATIC_URL', $img_url);
-        }
-        else
-        {
+        } else {
             define('G_STATIC_URL', base_url() . '/static');
         }
 
@@ -323,7 +361,7 @@ class Application
             // ajax请求， 回话已过期
                 H::ajax_json_output(self::RSM(null, -1, Application::lang()->_t('会话超时, 请重新登录')));
             } else {
-            // 中心登录
+            // 重新登录
                 HTTP::redirect('/account/login/url-' . base64_current_path());
             }
         }
@@ -521,6 +559,21 @@ class Application
         return self::$db->setObject($db_object_name);
     }
 
+    public static function mongo()
+    {
+        if (!self::$mongo) {
+
+            require_once INC_PATH .  'vendor/autoload.php';
+            $mongoConfig = self::$config->get('database')->mongodb;
+            $mongoConnection = loadClass('\MongoDB\Client', 'mongodb://'.$mongoConfig['host'].':'.$mongoConfig['port']);
+            // 选择数据库
+            self::$mongo  = $mongoConnection->selectDatabase($mongoConfig['dbname']);
+        }
+
+        return self::$mongo;
+    }
+
+
     /**
      * 加密处理类
      *
@@ -579,5 +632,33 @@ class Application
         }
 
         return self::$models[$model_class];
+    }
+
+    /**
+     * 调用系统 Model
+     *
+     * 根据命名规则调用相应的 Model 并初始化类库保存于 self::$models 数组, 防止重复初始化
+     *
+     * @access   public
+     * @param    string
+     * @return   Model object
+     */
+    public static function mongoModel($mongoModelClass = null, $options=null)
+    {
+        if (! $mongoModelClass) {
+            $mongoModelClass = 'MongoModel';
+        } else if (! strstr($model_class, 'MongoModel')) {
+            $mongoModelClass .= 'MongoModel';
+        }
+
+        if (! isset(self::$models[$mongoModelClass])) {
+            self::$models[$mongoModelClass] = new $mongoModelClass();
+        }
+
+        if ($options) {
+            self::$models[$mongoModelClass]->setOptions($options);
+        }
+
+        return self::$models[$mongoModelClass];
     }
 }
