@@ -84,6 +84,22 @@
                         </div>
                     </td>
                 </tr>
+                <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_annual_leave']) {?>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-2 control-label"><?php _e('入职日期'); ?>:</span>
+                            <div class="col-sm-2 col-xs-2">
+                                <input class="form-control js-datepicker js-date-input" name="attributes[sinho_join_date]" type="text" value="" autocomplete="off"/>
+                            </div>
+                            <span class="col-sm-2 col-xs-2 control-label"><?php _e('年假天数'); ?>:</span>
+                            <div class="col-sm-2 col-xs-2">
+                                <input class="form-control " name="attributes[sinho_annual_leave_days]" type="text" value="<?php echo $this->hostConfig->sinho_feature_list['default_annual_leave_days'];?>" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <?php }?>
 
                 <tfoot>
                 <tr>
@@ -106,6 +122,7 @@ $(function(){
                     buttonWidth     : '100%',
                     allSelectedText : '<?php _e('已选择所有学科');?>',
                     numberDisplayed : 7, // 选择框最多提示选择多少个人名
+                    nSelectedText   : '<?php _e('已选中');?>',
         		});
 });
 </script>

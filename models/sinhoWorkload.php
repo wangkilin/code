@@ -54,7 +54,7 @@ class sinhoWorkloadModel extends Model
     const GONGHUI_FEE_IGNORE_USER_ID = 10003;
 
     // /**
-    //  * 新禾各种权限常量
+    //  * 乐读各种权限常量
     //  */
     // const PERMISSION_VERIFY_WORKLOAD = 'sinho_verify_workload';
     // const PERMISSION_FILL_WORKLOAD   = 'sinho_fill_workload';

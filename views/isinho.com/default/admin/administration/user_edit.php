@@ -104,6 +104,24 @@
                                 </div>
                             </div>
 
+                            <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_annual_leave']) {?>
+                            <div class="row">
+                                <!-- 入职时间 和年假 -->
+                                <div class="col-sm-2">
+                                    <label class="icb-label"><?php _e('入职日期'); ?>:</label>
+                                </div>
+                                <div class="col-sm-2 icb-item-title">
+                                    <input class="form-control mod-data date-start no-padding" name="attributes[sinho_join_date]" type="text" value="<?php echo empty($this->userAttributes['sinho_join_date']) ? date('Y-m-d', $this->userInfo['reg_time']) : $this->userAttributes['sinho_join_date'];?>" autocomplete="off"/>
+                                </div>
+                                <div class="col-sm-1">
+                                    <label class="icb-label"><?php _e('年假天数'); ?>:</label>
+                                </div>
+                                <div class="col-sm-1 icb-item-title">
+                                    <input class="form-control " name="attributes[sinho_annual_leave_days]" type="text" value="<?php echo empty($this->userAttributes['sinho_annual_leave_days']) ? $this->hostConfig->sinho_feature_list['default_annual_leave_days']:$this->userAttributes['sinho_annual_leave_days'];?>" />
+                                </div>
+                            </div>
+                            <?php }?>
+
 							<div class="row mod-footer clearfix">
                                 <div class="col-sm-6 col-sm-offset-1">
 								    <a class="btn btn-large btn-success" onclick="ICB.ajax.postForm($('#item_form')); return false;"><?php _e('保存设置'); ?></a>
@@ -127,6 +145,7 @@ $(function () {
                 buttonWidth     : '100%',
                 allSelectedText : '<?php _e('已选择所有学科');?>',
                 numberDisplayed : 7, // 选择框最多提示选择多少个人名
+                nSelectedText   : '<?php _e('已选中');?>',
             });
 
 

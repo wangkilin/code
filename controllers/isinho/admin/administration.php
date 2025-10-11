@@ -14,6 +14,10 @@ defined('iCodeBang_Com') OR die('Access denied!');
 
 class administration extends SinhoBaseController
 {
+    public function setup ()
+    {
+        View::assign('hostConfig', $this->hostConfig);
+    }
 
     /**
      * 教程文章列表
@@ -41,12 +45,89 @@ class administration extends SinhoBaseController
         if(! $_GET['end_year_month'] || $_GET['end_year_month'] < $_GET['year_month']) {
             $_GET['end_year_month'] = $_GET['year_month'];
         }
+        // 获取指定时间段的请假数据
         $leaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date("$year-$month-01"), date("Y-m-t", strtotime($_GET['end_year_month'] . '01')));
         $userLeaveList = array();
         foreach ($leaveList as $_itemInfo) {
             isset($userLeaveList[$_itemInfo['user_id']]) OR $userLeaveList[$_itemInfo['user_id']] = array();
             $userLeaveList[$_itemInfo['user_id']][] = $_itemInfo;
         }
+
+
+        $userAttributes = array();
+        $itemList = array();
+        if ($userIds) {
+            $itemList = $this->model()->fetch_all('users_attribute', 'uid IN ('.join(',', $userIds).')');
+        }
+
+        $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
+        $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
+
+        foreach ($itemList as $_itemInfo) {
+            isset($userAttributes[$_itemInfo['uid']]) OR $userAttributes[$_itemInfo['uid']] = array();
+            if ($_itemInfo['decode_method'] && function_exists($_itemInfo['decode_method'])) {
+                if ($_itemInfo['decode_method']=='json_decode') {
+                    $_itemInfo['attr_value'] = json_decode($_itemInfo['attr_value'], true);
+                } else {
+                    $_itemInfo['attr_value'] = $_itemInfo['decode_method'] ($_itemInfo['attr_value']);
+                }
+            }
+            // 转换学科id对应学科名称
+            if($_itemInfo['attr_key']=='sinho_more_subject') {
+                foreach ($_itemInfo['attr_value'] as & $_subject) {
+                    $_subject = $bookSubjectList[$_subject]['name'];
+                }
+            }
+            if($_itemInfo['attr_key']=='sinho_manage_subject') {
+                foreach ($_itemInfo['attr_value'] as & $_subject) {
+                    $_subject = $bookSubjectList[$_subject]['name'];
+                }
+            }
+            $userAttributes[$_itemInfo['uid']][$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
+        }
+
+        $nowMonth = date('n');
+
+        // 获取员工的入职时间
+        foreach($userList as $_userId => $_userInfo) {
+            isset($userAttributes[$_userId]) OR $userAttributes[$_userId] = array();
+            isset($userAttributes[$_userId]['sinho_join_date']) OR $userAttributes[$_userId]['sinho_join_date'] = date('Y-m-d', $_userInfo['reg_time']);
+            // 计算入职近一年的起始时间，用于计算用户的休假间隔时间点；
+            $isTwoYearComputed = $nowMonth < intval(substr($userAttributes[$_userId]['sinho_join_date'],5,2)) ? 1 : 0;
+            $userAttributes[$_userId]['sinho_recent_one_year_date_time_start'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . 12*(1+$isTwoYearComputed) . ' months');
+            $userAttributes[$_userId]['sinho_recent_one_year_date_time_end'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . (12*($isTwoYearComputed)) . ' months') -1;
+            $userAttributes[$_userId]['sinho_recent_one_year_date_start'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_start']);
+            $userAttributes[$_userId]['sinho_recent_one_year_date_end'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_end']);
+            $userAttributes[$_userId]['sinho_join_date_time'] = strtotime($userAttributes[$_userId]['sinho_join_date']);
+        }
+        //var_dump($userAttributes);
+        // 获取最近2年的请假数据；
+    $recent2YearLeaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date(date('Y') -2 ."-m-t"), date("Y-m-d")/*date("Y-m-t", strtotime('-1 months'))*/);
+        //var_dump(date(date('Y') -2 ."-m-t"), date("Y-m-t", strtotime('-1 months')),$userAttributes[10010], $recent2YearLeaveList);
+        $userRecentLeaveList = array();
+        // 将近2年的请假数据，按照用户的今年请假和去年请假汇总
+        foreach ($recent2YearLeaveList as $_itemInfo) {
+            $_itemInfo['user_name'] = $userList[$_itemInfo['user_id']]['user_name'];
+            $_itemInfo['sinho_recent_one_year_date_start'] = $userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_start'];
+            $_itemInfo['sinho_recent_one_year_date_end'] = $userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_end'];
+            isset($userRecentLeaveList[$_itemInfo['user_id']]) OR $userRecentLeaveList[$_itemInfo['user_id']] = array('lastYear'=>array(), 'thisYear'=>array());
+
+            if ($_itemInfo['leave_end_time'] < $userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_end']
+             && $_itemInfo['leave_end_time'] >=$userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_start']) {
+                isset($userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']]) OR $userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']] = array();
+                $userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']][] = $_itemInfo;
+
+             } else if ($_itemInfo['leave_end_time'] >=$userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_end']) {
+                isset($userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']]) OR $userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']] = array();
+
+                $userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']][] = $_itemInfo;
+             }
+
+        }
+        //var_dump($userRecentLeaveList);
+
+        View::assign('userRecentLeaveList', $userRecentLeaveList);
+        View::assign('userAttributes', $userAttributes);
         View::assign('leaveTypeList', $this->leaveTypeList);
 
         View::assign('itemOptions',

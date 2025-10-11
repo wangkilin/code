@@ -103,25 +103,41 @@
                         <table  class="table table-striped table-bordered" >
                             <thead>
                                 <tr>
-                                    <th style="width:20px">#</th>
-                                    <th class="col-sm-1"><span class="col-sm-12 no-padding">姓名</span></th>
-                                    <th>请假统计信息:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
-                                    <th class="col-sm-1">事假</th>
-                                    <th class="col-sm-1">病假</th>
-                                    <th class="col-sm-1">全部请假</th>
+                                    <th rowspan=2 style="width:20px">#</th>
+                                    <th rowspan=2 class="col-sm-1"><span class="col-sm-12 no-padding">姓名&入职时间</span></th>
+                                    <th rowspan=2>请假统计信息:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
+                                    <th colspan=5 class="col-sm-2">报告周期</th>
+                                    <th colspan=3 class="col-sm-2">上年度</th>
+                                    <th colspan=4 class="col-sm-2">本年度</th>
+                                </tr>
+                                <tr>
+                                    <th>事假</th>
+                                    <th>病假</th>
+                                    <th>年假</th>
+                                    <th>全部请假</th>
                                     <!-- <th class="col-sm-1">加班</th> -->
-                                    <th class="col-sm-1">周末带稿量</th>
+                                    <th>周末带稿量</th>
+                                    <!-- 上年度 -->
+                                    <th>事假</th>
+                                    <th>病假</th>
+                                    <th>年假</th>
+                                    <!-- 本年度 -->
+                                    <th>事假</th>
+                                    <th>病假</th>
+                                    <th>年假</th>
+                                    <th>剩余年假</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php $i=1;
+                                $nowDateObj = date_create();
                                 $startMonthTime = strtotime($this->leaveYear.$this->leaveMonth.'01');
                                 $endMonthTime = strtotime($_GET['end_year_month'].'01 +1month');
                                 foreach ($this->userList as $_userInfo) {
                                 ?>
                                 <tr data-user-id="<?php echo $_userInfo['uid'];?>" data-user-name="<?php echo $_userInfo['user_name'];?>">
                                     <td style="width:20px"><?php echo $i++;?></td>
-                                    <td class="col-sm-1"><?php echo $_userInfo['user_name'];?></td>
+                                    <td class="col-sm-1"><?php echo $_userInfo['user_name'], '<br/>',empty($this->userAttributes[$_userInfo['uid']]['sinho_join_date']) ? date('Y-m-d', $_userInfo['reg_time']) : $this->userAttributes[$_userInfo['uid']]['sinho_join_date'];?></td>
 
                                     <td><?php
                                     $_leaveInfo = array(
@@ -129,6 +145,7 @@
                                         'sick'      => array('m'=>0, 'd'=>0, 'h'=>0), // 病假信息
                                         'weekend'   => array('m'=>0, 'd'=>0, 'h'=>0), // 周末带稿
                                         'overtime'  => array('m'=>0, 'd'=>0, 'h'=>0), // 加班
+                                        'annual'    => array('m'=>0, 'd'=>0, 'h'=>0), // 年假
                                         'total'     => array('m'=>0, 'd'=>0, 'h'=>0), // 全部请假信息
                                     );
                                     foreach ($this->userLeaveList[$_userInfo['uid']] as $_itemInfo) {
@@ -193,6 +210,9 @@
                                                 break;
                                             case administration::LEAVE_TYPE_ANNUAL: // 年假
                                                 _e('年假');
+                                                $_leaveInfo['annual']['m'] += $_leaveMonth;
+                                                $_leaveInfo['annual']['d'] += $_leaveDay;
+                                                $_leaveInfo['annual']['h'] += $_leaveHour;
                                                 break;
                                             case administration::LEAVE_TYPE_WEDDING: // 婚假
                                                 _e('婚假');
@@ -265,6 +285,11 @@
                                     echo $_leaveInfo['sick']['h']>0 ?$_leaveInfo['sick']['h'] .'小时' : '';
                                     ?></td>
                                     <td><?php
+                                    echo $_leaveInfo['annual']['m']>0 ?$_leaveInfo['annual']['m'] .'月' : '';
+                                    echo $_leaveInfo['annual']['d']>0 ?$_leaveInfo['annual']['d'] .'天' : '';
+                                    echo $_leaveInfo['annual']['h']>0 ?$_leaveInfo['annual']['h'] .'小时' : '';
+                                    ?></td>
+                                    <td><?php
                                     echo $_leaveInfo['total']['m']>0 ?$_leaveInfo['total']['m'] .'月' : '';
                                     echo $_leaveInfo['total']['d']>0 ?$_leaveInfo['total']['d'] .'天' : '';
                                     echo $_leaveInfo['total']['h']>0 ?$_leaveInfo['total']['h'] .'小时' : '';
@@ -278,6 +303,86 @@
                                     echo $_leaveInfo['weekend']['m']>0 ?$_leaveInfo['weekend']['m'] .'月' : '';
                                     echo $_leaveInfo['weekend']['d']>0 ?$_leaveInfo['weekend']['d'] .'天' : '';
                                     echo $_leaveInfo['weekend']['h']>0 ?$_leaveInfo['weekend']['h'] .'小时' : '';
+                                    ?></td>
+                                    <!-- 上年度 -->
+                                    <td><?php
+                                    $lastYearPrivateLeaveHours = 0;
+                                    if (isset($this->userRecentLeaveList[$_userInfo['uid']], $this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_PRIVATE])) {
+                                        $lastYearPrivateLeaveHours = array_sum(array_column($this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_PRIVATE], 'leave_period'));
+                                        //var_dump($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PRIVATE]);
+                                        echo $lastYearPrivateLeaveHours;
+                                    }
+                                    ?></td>
+                                    <td><?php
+                                    $lastYearSickLeaveHours = 0;
+                                    if (isset($this->userRecentLeaveList[$_userInfo['uid']], $this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_SICK])) {
+                                        isset($this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_PERIOD]) OR $this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_PERIOD] = array();
+                                        $lastYearSickLeaveHours = array_sum(
+                                                array_merge(
+                                                    array_column($this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_SICK], 'leave_period'),
+                                                    array_column($this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_PERIOD], 'leave_period')
+                                                )
+                                            );
+                                        echo $lastYearSickLeaveHours;
+                                    }
+                                    ?></td>
+                                    <td><?php
+                                    $lastYearAnnualLeaveHours = 0;
+                                    if (isset($this->userRecentLeaveList[$_userInfo['uid']], $this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_ANNUAL])) {
+                                        $lastYearAnnualLeaveHours = array_sum(array_column($this->userRecentLeaveList[$_userInfo['uid']]['lastYear'][administration::LEAVE_TYPE_ANNUAL], 'leave_period'));
+                                        echo $lastYearAnnualLeaveHours;
+                                    }
+                                    ?></td>
+                                    <!-- 本年度 -->
+                                    <td><?php
+                                    $thisYearPrivateLeaveHours = 0;
+                                    if (isset($this->userRecentLeaveList[$_userInfo['uid']], $this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PRIVATE])) {
+                                        $thisYearPrivateLeaveHours = array_sum(array_column($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PRIVATE], 'leave_period'));
+                                        echo $thisYearPrivateLeaveHours;
+                                        //var_dump($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PRIVATE]);
+                                    }
+                                    ?></td>
+                                    <td><?php
+                                    $thisYearSickLeaveHours = 0;
+                                    if (isset($this->userRecentLeaveList[$_userInfo['uid']], $this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_SICK])) {
+                                        isset($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PERIOD]) OR $this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PERIOD] = array();
+                                        $thisYearSickLeaveHours =  array_sum(
+                                            array_merge(
+                                               array_column($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_SICK], 'leave_period'),
+                                               array_column($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_PERIOD], 'leave_period')
+                                            )
+                                        );
+                                        echo $thisYearSickLeaveHours;
+                                    }
+                                    ?></td>
+                                    <td><?php
+                                    $thisYearAnnualLeaveHours = 0;
+                                    if (isset($this->userRecentLeaveList[$_userInfo['uid']], $this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_ANNUAL])) {
+                                        $thisYearAnnualLeaveHours = array_sum(array_column($this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_ANNUAL], 'leave_period'));
+                                        echo $thisYearAnnualLeaveHours;
+                                    }
+                                    ?></td>
+                                    <td><?php
+                                    $_annualDays = empty($this->userAttributes[$_userInfo['uid']]['sinho_annual_leave_days']) ? $this->hostConfig->sinho_feature_list['default_annual_leave_days'] : $this->userAttributes[$_userInfo['uid']]['sinho_annual_leave_days'];
+                                    $_userJoinDateObj = empty($this->userAttributes[$_userInfo['uid']]['sinho_join_date']) ? date_create(date('Y-m-d', $_userInfo['reg_time'])) : date_create($this->userAttributes[$_userInfo['uid']]['sinho_join_date']);
+                                    $_dateDiffObj = date_diff($nowDateObj, $_userJoinDateObj);
+                                    //echo $_annualDays, '/' . $_dateDiffObj->y, '/' . $_userJoinDateObj->format('Y-m-d') ;
+                                    if ($_dateDiffObj->y == 0) {
+                                        _e('入职不满一年');
+                                    } else if ($_userInfo['forbidden'] == 1) {
+                                        echo '---';
+                                    } else {
+                                        if ($thisYearAnnualLeaveHours >=$_annualDays) {
+                                            _e('今年年假余额不足');
+                                        } else if ( ($thisYearPrivateLeaveHours + $thisYearSickLeaveHours) >= 21.75 * 8) {
+                                            _e('当年事假病假过多，禁止请年假');
+                                        } else if ( ($lastYearPrivateLeaveHours + $lastYearSickLeaveHours) >=21.75 * 8 && $lastYearAnnualLeaveHours>0) {
+                                            _e('去年年假后的事假病假过多,禁止今年请年假');
+                                        } else {
+                                            echo $_annualDays * 8 - $thisYearAnnualLeaveHours;
+                                        }
+                                    }
+                                    //echo '(' . $_userJoinDateObj->format('Y-m-d') . ')';
                                     ?></td>
                                 </tr>
                                 <?php } ?>
