@@ -27,6 +27,98 @@ class administration extends SinhoBaseController
     }
 
     /**
+     * 我的休假&加班
+     */
+    public function my_ask_leave_action()
+    {
+        $userList = $this->model('sinhoWorkload')->getUserList('uid = ' . $this->user_info['uid'], 'forbidden ASC,uid DESC', PHP_INT_MAX);
+        $userIds  = array_column($userList, 'uid');
+        $userList = array_combine($userIds, $userList);
+        $year = date('Y');
+        $month = date('m');
+        if ($_GET['year_month']) {
+            $year = substr($_GET['year_month'], 0, 4);
+            $month = substr($_GET['year_month'], 4);
+        } else {
+            $_GET['year_month'] = $year . $month;
+        }
+        if(! $_GET['end_year_month'] || $_GET['end_year_month'] < $_GET['year_month']) {
+            $_GET['end_year_month'] = $_GET['year_month'];
+        }
+        // 获取指定时间段的请假数据
+        $leaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date("$year-$month-01"), date("Y-m-t", strtotime($_GET['end_year_month'] . '01')));
+        $userLeaveList = array();
+        foreach ($leaveList as $_itemInfo) {
+            isset($userLeaveList[$_itemInfo['user_id']]) OR $userLeaveList[$_itemInfo['user_id']] = array();
+            $userLeaveList[$_itemInfo['user_id']][] = $_itemInfo;
+        }
+
+
+        $userAttributes = array();
+        $itemList = array();
+        if ($userIds) {
+            $itemList = $this->model()->fetch_all('users_attribute', 'uid IN ('.join(',', $userIds).')');
+        }
+
+        $nowMonth = date('n');
+
+        // 获取员工的入职时间
+        foreach($userList as $_userId => $_userInfo) {
+            isset($userAttributes[$_userId]) OR $userAttributes[$_userId] = array();
+            isset($userAttributes[$_userId]['sinho_join_date']) OR $userAttributes[$_userId]['sinho_join_date'] = date('Y-m-d', $_userInfo['reg_time']);
+            // 计算入职近一年的起始时间，用于计算用户的休假间隔时间点；
+            $isTwoYearComputed = $nowMonth < intval(substr($userAttributes[$_userId]['sinho_join_date'],5,2)) ? 1 : 0;
+            $userAttributes[$_userId]['sinho_recent_one_year_date_time_start'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . 12*(1+$isTwoYearComputed) . ' months');
+            $userAttributes[$_userId]['sinho_recent_one_year_date_time_end'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . (12*($isTwoYearComputed)) . ' months') -1;
+            $userAttributes[$_userId]['sinho_recent_one_year_date_start'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_start']);
+            $userAttributes[$_userId]['sinho_recent_one_year_date_end'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_end']);
+            $userAttributes[$_userId]['sinho_this_year_date_time_end'] = strtotime(date('Y-m-d 23:59:59', $userAttributes[$_userId]['sinho_recent_one_year_date_time_end']) . ' +12 months');
+            $userAttributes[$_userId]['sinho_this_year_date_end'] = date('Y-m-d', $userAttributes[$_userId]['sinho_this_year_date_time_end']);
+            $userAttributes[$_userId]['sinho_join_date_time'] = strtotime($userAttributes[$_userId]['sinho_join_date']);
+        }
+        //var_dump($userAttributes);
+        // 获取最近2年的请假数据；
+        $recent2YearLeaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date(date('Y') -2 ."-m-t"), (date('Y')+1) . date("-m-d")/*date("Y-m-t", strtotime('-1 months'))*/);
+        //var_dump(date(date('Y') -2 ."-m-t"), date("Y-m-t", strtotime('-1 months')),$userAttributes[10010], $recent2YearLeaveList);
+        $userRecentLeaveList = array();
+        // 将近2年的请假数据，按照用户的今年请假和去年请假汇总
+        foreach ($recent2YearLeaveList as $_itemInfo) {
+            $_itemInfo['user_name'] = $userList[$_itemInfo['user_id']]['user_name'];
+            $_itemInfo['sinho_recent_one_year_date_start'] = $userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_start'];
+            $_itemInfo['sinho_recent_one_year_date_end'] = $userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_end'];
+            isset($userRecentLeaveList[$_itemInfo['user_id']]) OR $userRecentLeaveList[$_itemInfo['user_id']] = array('lastYear'=>array(), 'thisYear'=>array());
+
+            if ($_itemInfo['leave_end_time'] < $userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_end']
+             && $_itemInfo['leave_end_time'] >=$userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_start']) {
+                isset($userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']]) OR $userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']] = array();
+                $userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']][] = $_itemInfo;
+
+             } else if ($_itemInfo['leave_end_time'] >=$userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_end']
+              && $_itemInfo['leave_end_time'] <=$userAttributes[$_itemInfo['user_id']]['sinho_this_year_date_time_end']) {
+                isset($userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']]) OR $userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']] = array();
+
+                $userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']][] = $_itemInfo;
+             }
+
+        }
+        //var_dump($userRecentLeaveList);
+
+        View::assign('userRecentLeaveList', $userRecentLeaveList);
+        View::assign('userAttributes', $userAttributes);
+        View::assign('leaveTypeList', $this->leaveTypeList);
+
+        View::assign('leaveYear', $year);
+        View::assign('leaveMonth', $month);
+        View::assign('userList', $userList);
+        View::assign('leaveList', $leaveList);
+        View::assign('userLeaveList', $userLeaveList);
+        View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/administration/my_ask_leave','sinho_admin_menu') ) );
+
+        View::import_js('js/functions.js');
+        View::output('admin/administration/my_ask_leave');
+    }
+
+    /**
      * 考勤管理
      */
     public function ask_leave_action()
@@ -98,11 +190,13 @@ class administration extends SinhoBaseController
             $userAttributes[$_userId]['sinho_recent_one_year_date_time_end'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . (12*($isTwoYearComputed)) . ' months') -1;
             $userAttributes[$_userId]['sinho_recent_one_year_date_start'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_start']);
             $userAttributes[$_userId]['sinho_recent_one_year_date_end'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_end']);
+            $userAttributes[$_userId]['sinho_this_year_date_time_end'] = strtotime(date('Y-m-d 23:59:59', $userAttributes[$_userId]['sinho_recent_one_year_date_time_end']) . ' +12 months');
+            $userAttributes[$_userId]['sinho_this_year_date_end'] = date('Y-m-d', $userAttributes[$_userId]['sinho_this_year_date_time_end']);
             $userAttributes[$_userId]['sinho_join_date_time'] = strtotime($userAttributes[$_userId]['sinho_join_date']);
         }
         //var_dump($userAttributes);
         // 获取最近2年的请假数据；
-    $recent2YearLeaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date(date('Y') -2 ."-m-t"), date("Y-m-d")/*date("Y-m-t", strtotime('-1 months'))*/);
+        $recent2YearLeaveList = $this->model('sinhoWorkload')->getAskLeaveByDate(date(date('Y') -2 ."-m-t"), (date('Y')+1) . date("-m-d")/*date("Y-m-t", strtotime('-1 months'))*/);
         //var_dump(date(date('Y') -2 ."-m-t"), date("Y-m-t", strtotime('-1 months')),$userAttributes[10010], $recent2YearLeaveList);
         $userRecentLeaveList = array();
         // 将近2年的请假数据，按照用户的今年请假和去年请假汇总
@@ -117,7 +211,8 @@ class administration extends SinhoBaseController
                 isset($userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']]) OR $userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']] = array();
                 $userRecentLeaveList[$_itemInfo['user_id']]['lastYear'][$_itemInfo['leave_type']][] = $_itemInfo;
 
-             } else if ($_itemInfo['leave_end_time'] >=$userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_end']) {
+             } else if ($_itemInfo['leave_end_time'] >=$userAttributes[$_itemInfo['user_id']]['sinho_recent_one_year_date_time_end']
+              && $_itemInfo['leave_end_time'] <=$userAttributes[$_itemInfo['user_id']]['sinho_this_year_date_time_end']) {
                 isset($userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']]) OR $userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']] = array();
 
                 $userRecentLeaveList[$_itemInfo['user_id']]['thisYear'][$_itemInfo['leave_type']][] = $_itemInfo;
