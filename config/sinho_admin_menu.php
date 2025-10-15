@@ -150,6 +150,21 @@ $config[] = array(
     )
 );
 $config[] = array(
+    'id'    => 'admin/my_administration',
+    'title' => '我的统计',
+    'cname' => 'cogs',
+    'config' => array('sinho_feature_list'=>array('enable_annual_leave'=>true)),
+    'children' => array(
+        array (
+            'id'        => 'admin/administration/my_ask_leave',
+            'title'     => _t('休假&加班'),
+            'cname'     => 'order',
+            'url'       => 'admin/administration/my_ask_leave/',
+            'permission'=> '',
+        ),
+    )
+);
+$config[] = array(
     'id'    => 'admin/finance',
     'title' => '财务数据',
     'cname' => 'coin-yen',

@@ -71,9 +71,9 @@
                 </div>
 
 
-                <div class="row padding20">
+                <div class="table-responsive">
                     <div class="col-sm-12">&nbsp;<br/><br/><br/></div>
-                    <div class="col-sm-12 text-center">我的休假&加班统计</div>
+                    <div class="col-sm-12 text-center bg-info"><p>我的休假&加班统计</p></div>
                 </div>
 
                 <div class="table-responsive">
