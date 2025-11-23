@@ -240,7 +240,10 @@
                             </div>
 
                             <?php
-                                if (CONTROLLER == 'books') { ?>
+                                if ( CONTROLLER=='books' &&
+                                (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ADMIN_REMARKS, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                ) ) { ?>
                             <div class="row">
                                 <!-- 管理员备注信息 -->
                                 <div class="col-sm-1">
