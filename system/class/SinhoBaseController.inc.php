@@ -89,6 +89,39 @@ class SinhoBaseController extends BaseController
         self::PERMISSION_PAGE_ADMIN,
     );
 
+    /**
+     * 书稿管理权限键值
+     */
+    const SINHO_PERMISSION_BOOKLIST_ALL             = 1;
+    const SINHO_PERMISSION_BOOKLIST_ADD             = 2;
+    const SINHO_PERMISSION_BOOKLIST_EDIT            = 3;
+    const SINHO_PERMISSION_BOOKLIST_DELETE          = 4;
+    const SINHO_PERMISSION_BOOKLIST_SET_LEVEL       = 5;
+    const SINHO_PERMISSION_BOOKLIST_RETURN_DATE     = 6;
+    const SINHO_PERMISSION_BOOKLIST_CHECK_WORKLOAD  = 7;
+    const SINHO_PERMISSION_BOOKLIST_SET_PAY         = 8;
+    const SINHO_PERMISSION_BOOKLIST_SET_PREPAY      = 9;
+    const SINHO_PERMISSION_BOOKLIST_ASSIGN          = 10;
+    const SINHO_PERMISSION_BOOKLIST_ADMIN_REMARKS   = 11;
+    const SINHO_PERMISSION_BOOKLIST_SET_SUBJECT     = 12;
+    /**
+     * 书稿管理权限列表
+     */
+    const SINHO_PERMISSION_BOOKLIST_LIST = array(
+        self::SINHO_PERMISSION_BOOKLIST_ALL             => '全部权限',
+        self::SINHO_PERMISSION_BOOKLIST_ADD             => '新建',
+        self::SINHO_PERMISSION_BOOKLIST_EDIT            => '编辑',
+        self::SINHO_PERMISSION_BOOKLIST_DELETE          => '删除',
+        self::SINHO_PERMISSION_BOOKLIST_SET_LEVEL       => '设置阶段',
+        self::SINHO_PERMISSION_BOOKLIST_RETURN_DATE     => '设置返稿日期',
+        self::SINHO_PERMISSION_BOOKLIST_CHECK_WORKLOAD  => '查看工作量',
+        self::SINHO_PERMISSION_BOOKLIST_SET_PAY         => '设置支付状态',
+        self::SINHO_PERMISSION_BOOKLIST_SET_PREPAY      => '标记对账',
+        self::SINHO_PERMISSION_BOOKLIST_ASSIGN          => '分配任务',
+        self::SINHO_PERMISSION_BOOKLIST_ADMIN_REMARKS   => '管理员备注',
+        self::SINHO_PERMISSION_BOOKLIST_SET_SUBJECT     => '设置学科',
+    );
+
     // const PERMISSION_BOOKLIST        = SinhoBaseController::PERMISSION_MODIFY_MANUSCRIPT_PARAM;
     // const PERMISSION_VERIFY_WORKLOAD = SinhoBaseController::PERMISSION_VERIFY_WORKLOAD;
     // const PERMISSION_FILL_WORKLOAD   = SinhoBaseController::PERMISSION_FILL_WORKLOAD;

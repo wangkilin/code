@@ -1,6 +1,9 @@
+<?php
+// 将管理书稿的权限，转换为数组，兼容早期的书稿权限不区分问题；
+settype($this->user_info['permission']['sinho_modify_manuscript_param'] , 'array');
+?>
 <?php View::output('admin/global/header.php'); ?>
 <?php View::output('admin/global/nav_menu.php'); ?>
-
 <div class="icb-content-wrap">
     <div class="mod">
         <div class="mod-head">
@@ -133,7 +136,11 @@
                                 <td><?php echo doubleval($itemInfo['total_chars']); ?></td>
                                 <td class="px10 textBreak"><?php echo $itemInfo['remarks'];
                                 ?> <span class="text-primary"><u><?php
-                                if (CONTROLLER == 'books') {
+                                if (CONTROLLER == 'books' &&
+                                     (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ADMIN_REMARKS, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                     in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                     )
+                                 ) {
                                     echo $itemInfo['admin_remarks'];
                                 }
                                 ?></u></span>
@@ -149,7 +156,12 @@
                                 ?></td>
                                 <?php } ?>
                                 <td style="white-space: nowrap;">
-                                  <?php if (CONTROLLER == 'books' && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
+                                  <?php if (CONTROLLER == 'books'  &&
+                                     (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ADMIN_REMARKS, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                     in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                     )
+
+                                  && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_level']) { ?>
                                   <span href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" title="<?php _e('设置书稿所属阶段'); ?>" data-toggle="tooltip" class="md-tip icon icon-score jsToggleSubIcon">
                                     <a data-grade-level="1" title="<?php _e('设置书稿所属阶段：小学'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">小学</a>
                                     <a data-grade-level="2" title="<?php _e('设置书稿所属阶段：初中'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">初中</a>
@@ -161,20 +173,53 @@
                                     <a data-grade-level="0" title="<?php _e('设置书稿所属阶段：其他'); ?>" data-toggle="tooltip"  class="md-tip jsSinhoSetGradeLevel ft12">其他</a>
                                   </span>
                                   <?php }?>
-                                  <?php if (CONTROLLER=='books' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_set_book_date']===true)) {?>
+                                  <?php if ( (CONTROLLER=='books' &&
+                                              (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_RETURN_DATE, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                              in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                              ) )
+                                  || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_set_book_date']===true)) {?>
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-date <?php echo $itemInfo['return_date']=='' ? ' icon-date-green ':''; ?>md-tip jsSinhoSetBookDate" title="<?php echo $itemInfo['return_date']=='' ? _t('设置日期'):_t('当前回稿日期：').$itemInfo['return_date']; ?>" data-toggle="tooltip" data-delivery-date="<?php echo $itemInfo['delivery_date']; ?>" data-return-date="<?php echo $itemInfo['return_date']; ?>"></a>
                                   <?php }?>
-                                  <?php if (CONTROLLER=='books' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_add_book']===true)) {?>
+                                  <?php if ( (CONTROLLER=='books' &&
+                                              (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ADD, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                              in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                              ) )
+                                   || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_add_book']===true)) {?>
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/from_id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-cogs md-tip" title="<?php _e('书稿照抄'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
+
+                                  <?php if ( (CONTROLLER=='books' &&
+                                              (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_CHECK_WORKLOAD, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                              in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                              ) )
+
+                                  || (CONTROLLER!='books') ) {?>
                                   <a href="admin/<?php echo CONTROLLER=='team_books' ? 'team_workload/':''; ?>check_list/by-book__id-<?php echo $itemInfo['id']; ?>" class="icon icon-job md-tip" title="<?php _e('查看工作量'); ?>" data-toggle="tooltip"></a>
-                                  <?php if (CONTROLLER == 'books' && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) {// 支付状态 只能在书稿总管理页面出现 ?>
+                                  <?php }?>
+                                  <?php if ( (CONTROLLER=='books' &&
+                                              (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_SET_PAY, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                              in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                              ) )
+
+                                  && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) {// 支付状态 只能在书稿总管理页面出现 ?>
                                   <a href="" data-book-id="<?php echo $itemInfo['id']; ?>"  class="icon icon-coin-yen md-tip jsSinhoSetBookPayedStatus <?php echo $itemInfo['is_payed']==1 ? 'payed " title="已支付" style="' :'" title="未支付" style="color:#f00;';?>" data-toggle="tooltip"></a>
                                   <?php } ?>
-                                  <?php if (CONTROLLER=='books' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_edit_book']===true) ) {?>
+                                  <?php if ( (CONTROLLER=='books' &&
+                                              (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_EDIT, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                              in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                              ) )
+
+                                  || (CONTROLLER=='team_books' && $this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_edit_book']===true) ) {?>
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/id-<?php echo $itemInfo['id']; ?>__url-<?php echo base64_encode($this->backUrl);?>" class="icon icon-edit md-tip" title="<?php _e('编辑'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
+                                  <?php if ( (CONTROLLER=='books' &&
+                                              (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ASSIGN, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                              in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                              ) )
+
+                                  || (CONTROLLER=='team_books') ) {?>
                                   <a href="admin/<?php echo CONTROLLER; ?>/book/#id-<?php echo $itemInfo['id']; ?>" data-subject-code="<?php echo $itemInfo['subject_code'];?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="icon icon-users md-tip jsAssign" title="<?php _e('分派'); ?>" data-toggle="tooltip"></a>
+                                  <?php }?>
                                 </td>
                             </tr>
                             <?php } ?>
@@ -192,12 +237,28 @@
                     &nbsp;
                     <?php }?>
                     <?php if (CONTROLLER == 'books' && $this->hostConfig && $this->hostConfig->sinho_feature_list['enable_set_book_pay_status']) { ?>
-                    <a class="btn btn-default" id="setBookPrePayStatus"><?php _e('记录对账'); ?></a>
+                    <?php if (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_SET_PREPAY, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                ) { ?>
+                        <a class="btn btn-default" id="setBookPrePayStatus"><?php _e('记录对账'); ?></a>
+                    <?php }?>
+                    <?php if (in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_SET_PAY, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                ) { ?>
                     <a class="btn btn-info" id="setBookPayStatus"><?php _e('完成支付'); ?></a>
+                    <?php }?>
                     &nbsp;
                     <?php }?>
+                    <?php if ((CONTROLLER == 'books' && in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_SET_SUBJECT, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                ) || CONTROLLER !='books') { ?>
                     <a class="btn btn-default" id="setBookCategory"><?php _e('设置学科'); ?></a>
+                    <?php }?>
+                    <?php if ((CONTROLLER == 'books' && in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_DELETE, $this->user_info['permission']['sinho_modify_manuscript_param']) ||
+                                in_array(SinhoBaseController::SINHO_PERMISSION_BOOKLIST_ALL, $this->user_info['permission']['sinho_modify_manuscript_param'])
+                                ) || CONTROLLER !='books') { ?>
                     <a class="btn btn-danger" id="deleteBatchBtn"><?php _e('删除书稿'); ?></a>
+                    <?php }?>
                 </div>
 
             </div>

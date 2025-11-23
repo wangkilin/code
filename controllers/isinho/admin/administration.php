@@ -462,7 +462,7 @@ class administration extends SinhoBaseController
 
         $booleanParamList = array (
             'sinho'     => array (
-                SinhoBaseController::PERMISSION_BOOKLIST        => Application::lang()->_t('允许管理全部图书'),
+                //SinhoBaseController::PERMISSION_BOOKLIST        => Application::lang()->_t('允许管理全部图书'),
                 SinhoBaseController::PERMISSION_FILL_WORKLOAD   => Application::lang()->_t('允许添加个人工作量'),
                 SinhoBaseController::PERMISSION_VERIFY_WORKLOAD => Application::lang()->_t('允许核算工作量'),
                 SinhoBaseController::PERMISSION_CHECK_WORKLOAD  => Application::lang()->_t('允许查阅工作量'),
@@ -474,6 +474,7 @@ class administration extends SinhoBaseController
         $bookSubjectList = $this->model()->fetch_all('sinho_book_category');
         $bookSubjectList = array_combine(array_column($bookSubjectList, 'id'), $bookSubjectList);
 
+        View::assign('manageManuscripList', SinhoBaseController::SINHO_PERMISSION_BOOKLIST_LIST);
         View::assign('bookSubjectList',  $bookSubjectList);
         View::assign('booleanParamList', $booleanParamList);
         View::assign('group', $group);

@@ -21,8 +21,25 @@
 
 			<table class="table table-striped">
                 <!-- 乐读网站权限  -->
-                <?php if (check_extension_package('sinhoWorkload')) {
-                foreach ($this->booleanParamList['sinho'] as $_varName => $_varText) {?>
+                <?php if (check_extension_package('sinhoWorkload')) {?>
+				<tr class="js-sinho hide">
+					<td>
+						<div class="form-group">
+							<span class="col-sm-4 col-xs-3 control-label"><?php _e('图书管理权限'); ?>:</span>
+							<div class="col-sm-6 col-xs-7">
+                                <select multiple name="permission[<?php echo SinhoBaseController::PERMISSION_BOOKLIST;?>][]" class="js_manage_manuscript form-control">
+                                     <?php
+                                     settype($this->group_pms[SinhoBaseController::PERMISSION_BOOKLIST], 'array');
+                                     var_dump($this->group_pms[SinhoBaseController::PERMISSION_BOOKLIST]);
+                                     foreach ($this->manageManuscripList as $_manageManuscriptKey => $_manageManuscriptName) {?>
+                                        <option value="<?php echo $_manageManuscriptKey;?>" <?php if ( in_array($_manageManuscriptKey, $this->group_pms[SinhoBaseController::PERMISSION_BOOKLIST])) { ?> selected<?php } ?>><?php echo $_manageManuscriptName;?></option>
+                                     <?php }?>
+                                </select>
+							</div>
+						</div>
+					</td>
+				</tr>
+                <?php foreach ($this->booleanParamList['sinho'] as $_varName => $_varText) {?>
 				<tr class="js-sinho hide">
 					<td>
 						<div class="form-group">
@@ -46,7 +63,7 @@
 					<td>
 						<div class="form-group">
 							<span class="col-sm-4 col-xs-3 control-label"><?php _e('首选学科'); ?>:</span>
-							<div class="col-sm-2 col-xs-4">
+							<div class="col-sm-6 col-xs-7">
                                 <select name="permission[sinho_subject]" class="js_select form-control">
                                      <option value="0">-- 选择学科 --</option>
                                      <?php foreach ($this->bookSubjectList as $_subjectKey => $_subjectInfo) {?>
@@ -93,6 +110,13 @@ $(function () {
                     maxHeight       : 200,
                     buttonWidth     : '100%',
                     allSelectedText : '<?php _e('已选择所有学科');?>',
+                    numberDisplayed : 7, // 选择框最多提示选择多少个人名
+        		});
+    $(".js_manage_manuscript").multiselect({
+        			nonSelectedText : '<?php _e('-- 选择图书管理权限 --');?>',
+                    maxHeight       : 200,
+                    buttonWidth     : '100%',
+                    allSelectedText : '<?php _e('已选择所有权限');?>',
                     numberDisplayed : 7, // 选择框最多提示选择多少个人名
         		});
 
