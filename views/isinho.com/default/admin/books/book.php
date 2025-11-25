@@ -1,3 +1,7 @@
+<?php
+// 将管理书稿的权限，转换为数组，兼容早期的书稿权限不区分问题；
+settype($this->user_info['permission']['sinho_modify_manuscript_param'] , 'array');
+?>
 <?php View::output('admin/global/header.php'); ?>
 <?php View::output('admin/global/nav_menu.php'); ?>
 
