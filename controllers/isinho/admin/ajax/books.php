@@ -28,7 +28,7 @@ class books extends SinhoBaseController
      */
     public function save_action()
     {
-        $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
+        $this->checkPermission(self::IS_SINHO_BOOK_ADMIN);
 
         $bookId = $this->saveBook($_POST);
         $backurl = empty($_POST['backUrl']) ? get_js_url('/admin/books/') : base64_decode($_POST['backUrl']) ;
