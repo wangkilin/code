@@ -233,7 +233,8 @@ class sinhoWorkloadModel extends Model
         foreach ($customGroupList as $_item) {
             $_item['permission'] = unserialize($_item['permission']);
             foreach ($_item['permission'] as $_key=>$_v) {
-                if ($_v == 1 && in_array($_key, SinhoBaseController::SINHO_PERMISSION_LIST)) {
+                // 设置了权限，并且权限关键字属于sinho权限中的
+                if (!empty($_v) && in_array($_key, SinhoBaseController::SINHO_PERMISSION_LIST)) {
                     $requiredGroupdIds[] = $_item['group_id'];
                     break;
                 }
