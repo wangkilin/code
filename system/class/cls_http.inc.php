@@ -108,10 +108,11 @@ class HTTP
 	 */
 	public static function click_and_reload($tplPath='')
 	{
-			$tplPath = $tplPath ? $tplPath : 'global/click_and_reload';
+        sleep(1);
+		$tplPath = $tplPath ? $tplPath : 'global/click_and_reload';
 
-			View::output($tplPath);
-			exit;
+		View::output($tplPath);
+		exit;
 	}
 
 	public static function parse_redirect_url($url)
