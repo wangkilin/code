@@ -61,13 +61,15 @@ class administration extends SinhoBaseController
         }
 
         $nowMonth = date('n');
+        $nowDateTime = strtotime(date('Y-m-d'));
 
         // 获取员工的入职时间
         foreach($userList as $_userId => $_userInfo) {
             isset($userAttributes[$_userId]) OR $userAttributes[$_userId] = array();
             isset($userAttributes[$_userId]['sinho_join_date']) OR $userAttributes[$_userId]['sinho_join_date'] = date('Y-m-d', $_userInfo['reg_time']);
             // 计算入职近一年的起始时间，用于计算用户的休假间隔时间点；
-            $isTwoYearComputed = $nowMonth < intval(substr($userAttributes[$_userId]['sinho_join_date'],5,2)) ? 1 : 0;
+            //$isTwoYearComputed = $nowMonth < intval(substr($userAttributes[$_userId]['sinho_join_date'],5,2)) ? 1 : 0;
+            $isTwoYearComputed = $nowDateTime < strtotime(date('Y-' . substr($userAttributes[$_userId]['sinho_join_date'],5,5))) ? 1 : 0;
             $userAttributes[$_userId]['sinho_recent_one_year_date_time_start'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . 12*(1+$isTwoYearComputed) . ' months');
             $userAttributes[$_userId]['sinho_recent_one_year_date_time_end'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . (12*($isTwoYearComputed)) . ' months') -1;
             $userAttributes[$_userId]['sinho_recent_one_year_date_start'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_start']);
@@ -179,13 +181,15 @@ class administration extends SinhoBaseController
         }
 
         $nowMonth = date('n');
+        $nowDateTime = strtotime(date('Y-m-d'));
 
         // 获取员工的入职时间
         foreach($userList as $_userId => $_userInfo) {
             isset($userAttributes[$_userId]) OR $userAttributes[$_userId] = array();
             isset($userAttributes[$_userId]['sinho_join_date']) OR $userAttributes[$_userId]['sinho_join_date'] = date('Y-m-d', $_userInfo['reg_time']);
             // 计算入职近一年的起始时间，用于计算用户的休假间隔时间点；
-            $isTwoYearComputed = $nowMonth < intval(substr($userAttributes[$_userId]['sinho_join_date'],5,2)) ? 1 : 0;
+            //$isTwoYearComputed = $nowMonth <= intval(substr($userAttributes[$_userId]['sinho_join_date'],5,2)) ? 1 : 0;
+            $isTwoYearComputed = $nowDateTime < strtotime(date('Y-' . substr($userAttributes[$_userId]['sinho_join_date'],5,5))) ? 1 : 0;
             $userAttributes[$_userId]['sinho_recent_one_year_date_time_start'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . 12*(1+$isTwoYearComputed) . ' months');
             $userAttributes[$_userId]['sinho_recent_one_year_date_time_end'] = strtotime(date('Y-'). substr($userAttributes[$_userId]['sinho_join_date'],5,2) . '-'. substr($userAttributes[$_userId]['sinho_join_date'],8,2) .'  -' . (12*($isTwoYearComputed)) . ' months') -1;
             $userAttributes[$_userId]['sinho_recent_one_year_date_start'] = date('Y-m-d', $userAttributes[$_userId]['sinho_recent_one_year_date_time_start']);
@@ -219,7 +223,7 @@ class administration extends SinhoBaseController
              }
 
         }
-        //var_dump($userRecentLeaveList);
+        //var_dump($userRecentLeaveList['10032'],$userAttributes['10032']);
 
         View::assign('userRecentLeaveList', $userRecentLeaveList);
         View::assign('userAttributes', $userAttributes);

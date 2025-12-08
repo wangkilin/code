@@ -383,7 +383,9 @@
                                             echo $_annualDays * 8 - $thisYearAnnualLeaveHours;
                                         }
                                     }
+                                    //var_dump( $this->userRecentLeaveList[$_userInfo['uid']]['thisYear'][administration::LEAVE_TYPE_ANNUAL]);
                                     //echo '(' . $_userJoinDateObj->format('Y-m-d') . ')';
+                                    //echo $this->userAttributes[$_userInfo['uid']]['sinho_recent_one_year_date_end'];
                                     ?></td>
                                 </tr>
                                 <?php } ?>
