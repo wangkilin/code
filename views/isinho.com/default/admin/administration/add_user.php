@@ -88,7 +88,7 @@
                 <tr>
                     <td>
                         <div class="form-group">
-                            <span class="col-sm-4 col-xs-2 control-label"><?php _e('入职日期'); ?>:</span>
+                            <span class="col-sm-4 col-xs-2 control-label"><?php _e('年假起始日期'); ?>:</span>
                             <div class="col-sm-2 col-xs-2">
                                 <input class="form-control js-datepicker js-date-input" name="attributes[sinho_join_date]" type="text" value="" autocomplete="off"/>
                             </div>

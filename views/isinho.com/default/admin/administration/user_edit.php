@@ -108,7 +108,7 @@
                             <div class="row">
                                 <!-- 入职时间 和年假 -->
                                 <div class="col-sm-2">
-                                    <label class="icb-label"><?php _e('入职日期'); ?>:</label>
+                                    <label class="icb-label"><?php _e('年假起始日期'); ?>:</label>
                                 </div>
                                 <div class="col-sm-2 icb-item-title">
                                     <input class="form-control mod-data date-start no-padding" name="attributes[sinho_join_date]" type="text" value="<?php echo empty($this->userAttributes['sinho_join_date']) ? date('Y-m-d', $this->userInfo['reg_time']) : $this->userAttributes['sinho_join_date'];?>" autocomplete="off"/>

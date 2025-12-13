@@ -104,7 +104,7 @@
                             <thead>
                                 <tr>
                                     <th rowspan=2 style="width:20px">#</th>
-                                    <th rowspan=2 class="col-sm-1"><span class="col-sm-12 no-padding">姓名&入职时间</span></th>
+                                    <th rowspan=2 class="col-sm-1"><span class="col-sm-12 no-padding">姓名&年假起始</span></th>
                                     <th rowspan=2>请假统计信息:<?php if ($_GET['year_month']!=$_GET['end_year_month']) { echo date('Y-m', strtotime($_GET['year_month'].'01')), ' ~ ', date('Y-m', strtotime($_GET['end_year_month'].'01')); } else {echo date('Y-m', strtotime($_GET['year_month'].'01')) ;}?></th>
                                     <th colspan=5 class="col-sm-2">报告周期</th>
                                     <th colspan=3 class="col-sm-2">上年度</th>
