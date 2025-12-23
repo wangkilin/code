@@ -756,10 +756,16 @@ class main extends SinhoBaseController
            // return;
         }
 
+        $parttimeUserIds = array();
+        if ($userIds) {
+            $_tmpList = $this->model()->fetch_all('users_attribute', 'attr_key = "sinho_is_parttime" AND attr_value="1" AND uid IN(' .join(',', $userIds) . ')');
+            $parttimeUserIds = array_column($_tmpList, 'uid');
+        }
+
 
         $url_param = array();
         foreach($_GET as $key => $val) {
-            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
+            if (!in_array($key, array('app', 'c', 'act', 'page')) && $val!=='') {
                 $url_param[] = $key . '-' . $val;
             }
         }
@@ -784,6 +790,7 @@ class main extends SinhoBaseController
                                     );
             //var_dump($totalCharsList);
         }
+        View::assign('parttimeUserIds', $parttimeUserIds);
         View::assign('itemsList', $allList);
         View::assign('workloadList', $allList);
         View::assign('totalRows', $totalRows);
@@ -1099,10 +1106,15 @@ class main extends SinhoBaseController
            // $phpExcel->export($fileName, $headArr, $itemList, true);
            // return;
         }
+        $parttimeUserIds = array();
+        if ($userIds) {
+            $_tmpList = $this->model()->fetch_all('users_attribute', 'attr_key = "sinho_is_parttime" AND attr_value="1" AND uid IN(' .join(',', $userIds) . ')');
+            $parttimeUserIds = array_column($_tmpList, 'uid');
+        }
 
         $url_param = array();
         foreach($_GET as $key => $val) {
-            if (!in_array($key, array('app', 'c', 'act', 'page'))) {
+            if (!in_array($key, array('app', 'c', 'act', 'page')) && $val!=='') {
                 $url_param[] = $key . '-' . $val;
             }
         }
@@ -1113,6 +1125,7 @@ class main extends SinhoBaseController
             'per_page'   => $this->per_page
         ))->create_links());
 
+        View::assign('parttimeUserIds', $parttimeUserIds);
         View::assign('itemsList', $bookList);
         View::assign('workloadList', $workloadList);
         View::assign('quarlityList', $quarlityList);

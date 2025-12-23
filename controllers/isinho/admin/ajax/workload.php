@@ -110,7 +110,7 @@ class workload extends SinhoBaseController
         }
 
         $itemInfo = $this->model('sinhoWorkload')->fetch_row(sinhoWorkloadModel::WORKLOAD_TABLE, 'id='.intval($_POST['id']));
-        if (! $itemInfo || $itemInfo['user_id'] !=$this->user_id || ($itemInfo['status']!=sinhoWorkloadModel::STATUS_RECORDING)) {
+        if (! $itemInfo || ($itemInfo['user_id'] !=$this->user_id&&$this->user_info['permission']['sinho_administration']!='1') || ($itemInfo['status']!=sinhoWorkloadModel::STATUS_RECORDING)) {
             H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('参数错误')));
         }
 

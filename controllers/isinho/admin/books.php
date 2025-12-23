@@ -296,6 +296,15 @@ class books extends SinhoBaseController
         if ($_GET['prepay_end_date']) { // 对账结束日期
             $where[] = 'prepay_date <"' . date('Y-m-d', strtotime(base64_decode($_GET['prepay_end_date']))+ 3600*24 ) . '"';
         }
+        if (isset($_GET['parttime_fulltime']) && in_array($_GET['parttime_fulltime'], array('0','1') ) ) {
+            $tmpAttrList = $this->model()->fetch_all('users_attribute', "attr_key='sinho_is_parttime' and attr_value='1'");
+            if ($tmpAttrList && $_GET['parttime_fulltime']=='0') {// 只搜索全职负责的书稿
+                $where[] = 'id NOT IN(select book_id from ' . $this->model()->get_table('sinho_employee_workload') . ' where user_id IN(' . join(',',array_column($tmpAttrList, 'uid')) . ') )';
+            } else if ($tmpAttrList && $_GET['parttime_fulltime']==1) {  // 搜索兼职参与的书稿
+                $where[] = 'id IN(select book_id from ' . $this->model()->get_table('sinho_employee_workload') . ' where user_id IN(' . join(',',array_column($tmpAttrList, 'uid')) . ') )';
+            }
+
+        }
 
         if ($where) { // 组装搜索条件
             $where = join(' AND ', $where);
@@ -480,6 +489,9 @@ class books extends SinhoBaseController
 
         $url_param = array();
         foreach($_GET as $key => $val) {
+            if($val==='') {
+                continue;
+            }
             if (is_array($val)) { // 如果是数组参数， 将参数用逗号连接
                 $val = join(',', $val);
             }
@@ -487,7 +499,6 @@ class books extends SinhoBaseController
                 $url_param[] = $key . '-' . $val;
             }
         }
-
 
         View::assign('parttimeBookIds', $parttimeBookIds);
         View::assign('hostConfig', $this->hostConfig);

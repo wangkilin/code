@@ -1,5 +1,9 @@
 
-
+<style>
+    .text-warning a {
+        color:#8a6d3b;
+    }
+</style>
         <div class="mod-body tab-content padding5px">
             <div class="tab-pane active" id="user-workload">
 
@@ -85,7 +89,8 @@
                             <?php if ($this->workloadList) { ?>
 
                                 <?php foreach ($this->workloadList AS $workloadInfo) { ?>
-                            <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line':($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
+                            <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line':($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line');
+                            if(in_array($workloadInfo['user_id'], $this->parttimeUserIds)) echo " text-warning";?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
                                 <td class="text-left">
                                     <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>"/>
                                     <a class="md-tip" title="<?php _e('发稿日期');

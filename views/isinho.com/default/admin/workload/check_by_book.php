@@ -1,4 +1,8 @@
-
+<style>
+    .text-warning a {
+        color:#8a6d3b;
+    }
+</style>
 <!-- Theme switcher -->
 <div class="theme-switch" style="width:600px;right:-610px;top:35%;">
     <div class="icon inOut" style="z-index:100"><i class="rotate icon-setting"></i></div>
@@ -108,7 +112,8 @@
                             <?php if (isset($this->workloadList[$itemInfo['id']])) { ?>
 
                                 <?php foreach ($this->workloadList[$itemInfo['id']] AS $workloadInfo) { ?>
-                            <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line': ($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
+                            <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line': ($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line');
+                              if(in_array($workloadInfo['user_id'], $this->parttimeUserIds)) echo " text-warning";?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
                                 <td class="js-workload-ref text-left">
                                     <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>"/>
                                     <?php
@@ -165,6 +170,12 @@
                                     ?>
                                     <?php if(CONTROLLER!='team_workload' || ($this->hostConfig && $this->hostConfig->sinho_permission['allow_team_leader_edit_quality']===true)) { ?>
                                     <a target="_blank"  onclick="show_quarlity(<?php echo $workloadInfo['id']; ?>); return false;" class="js-fill-quarlity icon icon-verify md-tip" href="admin/ajax/workload/fill_quarylity/workload_id-<?php echo $workloadInfo['id']; ?>" class="icon icon-order md-tip" title="<?php _e('质量考核'); ?>" data-toggle="tooltip"></a>
+                                    <?php }?>
+                                    <?php if (in_array($workloadInfo['user_id'], $this->parttimeUserIds) && $workloadInfo['status']==sinhoWorkloadModel::STATUS_RECORDING && $bookInfo['verify_status'] == 0) {// 加入核算队列 ?>
+                                    <a href="admin/ajax/workload/queue/" onclick="addQueue(<?php echo $workloadInfo['id']; ?>, this); return false;" class="icon icon-coin-yen md-tip" title="<?php _e('加入核算'); ?>" data-toggle="tooltip"></a>
+                                    <?php } ?>
+                                    <?php if (in_array($workloadInfo['user_id'], $this->parttimeUserIds) && $workloadInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) { ?>
+                                    <a target="_blank" onclick="rollback(<?php echo $workloadInfo['id']; ?>)" class="icon icon-undo2 md-tip" title="<?php _e('撤回核算'); ?>" data-toggle="tooltip"></a>
                                     <?php }?>
                                 </td>
                             </tr>
@@ -410,6 +421,89 @@ function remove_quarlity ($form)
                         ICB.modal.alert(response.err);
                     } else if (response.errno === 0) {
                         window.location.reload();
+                    } else {
+                        ICB.modal.alert(_t('请求发生错误'));
+                    }
+                }
+            );
+        }
+    );
+
+    return false;
+}
+/**
+ * 将工作量加入到绩效审核中
+ * @param int id 工作量记录id
+ */
+function addQueue (id, obj)
+{
+    // 检查备注信息是否为空。不能提交备注为空的条目
+    var _remarks = $.trim($(obj).closest('tr').find('[data-td-name="remarks"]').text());
+    if(_remarks === '') {
+        ICB.modal.alert(_t('备注信息不能为空！'));
+        return false;
+    }
+    // 弹框询问是否确认加入工作量审核
+    ICB.modal.confirm(
+  	   _t('确认将本条加入绩效核算中么？'),
+  	   function(){
+      	   var url = G_BASE_URL + '/admin/ajax/workload/queue/', // 提交url
+      	       params = {'id':id, '_post_type':'ajax'};
+  		   ICB.ajax.requestJson( // 发送请求
+  	      	   url,
+  	      	   params,
+  	      	   function (response) {
+      	      		if (!response) {
+      	      		    return false;
+	      	      	}
+
+	      	      	if (response.err) {// 响应错误数据， 错误提示
+	      	      		ICB.modal.alert(response.err);
+	      	      	} else if (response.errno == 1) { // 成功加入到绩效核算， 页面刷新
+	      	      	    ICB.modal.alert(_t('工作量已加入到绩效核算中'), {'hidden.bs.modal': function () {
+                                window.location.reload();
+		      	      		    //window.location.href = G_BASE_URL + '/admin/fill_list/';
+		      	      	    }
+	      	      	    });
+	      	      	} else {
+	      	      	    ICB.modal.alert(_t('请求发生错误'));
+	      	      	}
+  	      	   }
+  	       );
+	    }
+    );
+
+    return false;
+}
+/**
+ * 撤回书稿工作量核算
+ */
+function rollback(id) {
+    ICB.modal.confirm(
+        _t('确认撤回核算？'),
+        function() {
+            var url = G_BASE_URL + '/admin/ajax/workload/rollback/',
+                params = {
+                    'id': id,
+                    '_post_type': 'ajax'
+                };
+            ICB.ajax.requestJson(
+                url,
+                params,
+                function(response) {
+                    if (!response) {
+                        return false;
+                    }
+
+                    if (response.err) {
+                        ICB.modal.alert(response.err);
+                    } else if (response.errno == 1) {
+                        ICB.modal.alert(_t('核算已撤回'), {
+                            'hidden.bs.modal': function() {
+                                window.location.reload();
+                                //window.location.href = G_BASE_URL + '/admin/fill_list/';
+                            }
+                        });
                     } else {
                         ICB.modal.alert(_t('请求发生错误'));
                     }

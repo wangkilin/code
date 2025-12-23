@@ -88,7 +88,7 @@
 
                         <div class="col-sm-2 col-xs-4">
                             <select id="sinho_is_payed" name="is_payed">
-                               <option value="" <?php echo in_array(array('0','1'), $_GET['is_payed']) ? '' : 'selected'; ?>>全部</option>
+                               <option value="" <?php echo in_array($_GET['is_payed'], array('0','1')) ? '' : 'selected'; ?>>全部</option>
                                <option value="0" <?php echo '0'===$_GET['is_payed'] ? 'selected' : ''; ?>>未支付</option>
                                <option value="1" <?php echo 1==$_GET['is_payed'] ? 'selected' : ''; ?>>已支付</option>
                             </select>
@@ -139,6 +139,17 @@
                         </div>
                     </div>
                     <?php } ?>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-xs-3 control-label"><?php _e('兼职范围'); ?>:</label>
+
+                        <div class="col-sm-2 col-xs-4">
+                            <select id="sinho_parttime_fulltime" name="parttime_fulltime">
+                               <option value="" <?php echo in_array($_GET['parttime_fulltime'], array('0','1')) ? '' : 'selected'; ?>>不限</option>
+                               <option value="0" <?php echo '0'===$_GET['parttime_fulltime'] ? 'selected' : ''; ?>>不含兼职</option>
+                               <option value="1" <?php echo 1==$_GET['parttime_fulltime'] ? 'selected' : ''; ?>>包含兼职</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-5 col-xs-8">
@@ -167,7 +178,7 @@ $(function () {
                     numberDisplayed : 7, // 选择框最多提示选择多少个人名
     });
 
-    $("#sinho_grade_level,#sinho_is_payed").multiselect({
+    $("#sinho_grade_level,#sinho_is_payed, #sinho_parttime_fulltime").multiselect({
         			nonSelectedText : '<?php _e('---- 选择书稿所属阶段 ----');?>',
                     maxHeight       : 200,
                     buttonWidth     : 400,
