@@ -464,6 +464,17 @@ class books extends SinhoBaseController
                 $_item['subject_category'] = '';
             }
         }
+        $parttimeBookIds = array();
+
+        if ($bookIds) {
+            $parttimeUsers = $this->model()->fetch_all('users_attribute', 'attr_key = "sinho_is_parttime" AND attr_value="1"');
+            if ($parttimeUsers) {
+                $parttimeUserIds = array_column($parttimeUsers, 'uid');
+                $parttimeBooks = $this->model()->fetch_all('sinho_employee_workload', 'book_id IN('.join(',', $bookIds).') AND user_id IN ('.join(',', $parttimeUserIds).')');
+                $parttimeBookIds = array_column($parttimeBooks, 'book_id');
+            }
+        }
+
 
         $this->crumb(Application::lang()->_t('书稿列表'), 'admin/books/index/');
 
@@ -478,6 +489,7 @@ class books extends SinhoBaseController
         }
 
 
+        View::assign('parttimeBookIds', $parttimeBookIds);
         View::assign('hostConfig', $this->hostConfig);
         View::assign('urlQuery', implode('__', $url_param));
         View::assign('backUrl', get_js_url('/admin/books/index/page-'.$_GET['page']  . '__' . implode('__', $url_param) ) );

@@ -84,13 +84,30 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <span class="col-sm-4 col-xs-3 control-label"><?php _e('兼职'); ?>:</span>
+                            <input type="hidden" name="remark[sinho_is_parttime]" value="是否为兼职"/>
+                            <div class="col-sm-5 col-xs-8 btn-group mod-btn">
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" value="1" name="attributes[sinho_is_parttime]"<?php if ($this->userAttributes['sinho_is_parttime']) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+									</label>
+
+									<label type="button" class="btn mod-btn-color">
+										<input type="radio" value="0" name="attributes[sinho_is_parttime]"<?php if (! $this->userAttributes['sinho_is_parttime']) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+									</label>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                 <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_annual_leave']) {?>
                 <tr>
                     <td>
                         <div class="form-group">
                             <span class="col-sm-4 col-xs-2 control-label"><?php _e('年假起始日期'); ?>:</span>
                             <div class="col-sm-2 col-xs-2">
-                                <input class="form-control js-datepicker js-date-input" name="attributes[sinho_join_date]" type="text" value="" autocomplete="off"/>
+                                <input class="form-control mod-data date-start" name="attributes[sinho_join_date]" type="text" value="" autocomplete="off"/>
                             </div>
                             <span class="col-sm-2 col-xs-2 control-label"><?php _e('年假天数'); ?>:</span>
                             <div class="col-sm-2 col-xs-2">

@@ -4,6 +4,11 @@ settype($this->user_info['permission']['sinho_modify_manuscript_param'] , 'array
 ?>
 <?php View::output('admin/global/header.php'); ?>
 <?php View::output('admin/global/nav_menu.php'); ?>
+<style>
+.text-warning a{
+    color:#8a6d3b;
+}
+</style>
 <div class="icb-content-wrap">
     <div class="mod">
         <div class="mod-head">
@@ -76,7 +81,9 @@ settype($this->user_info['permission']['sinho_modify_manuscript_param'] , 'array
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($this->itemsList AS $itemInfo) { ?>
+                            <?php
+                            empty($this->parttimeBookIds) AND $this->parttimeBookIds = array();
+                            foreach ($this->itemsList AS $itemInfo) { ?>
                             <tr class="<?php
                                       if ($itemInfo['verify_status']!=0) {
                                         echo 'danger';
@@ -112,6 +119,10 @@ settype($this->user_info['permission']['sinho_modify_manuscript_param'] , 'array
                                           echo 'book_is_payed info';
                                       } else {
                                           echo 'warning';
+                                      }
+
+                                      if (in_array($itemInfo['id'], $this->parttimeBookIds)) {
+                                          echo ' text-warning';
                                       }
                             ?>">
                                 <td><input type="checkbox" name="ids[]" value="<?php echo $itemInfo['id']; ?>"></td>

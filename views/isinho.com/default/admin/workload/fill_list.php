@@ -174,17 +174,17 @@
                                   <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING || $itemInfo['status']==sinhoWorkloadModel::STATUS_VERIFYING) {// 没有核算过，允许修改 ?>
                                   <a href="admin/fill_workload/id-<?php echo $itemInfo['id']; ?>" onclick="editWorkload(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-edit md-tip" title="<?php _e('填写工作量'); ?>" data-toggle="tooltip"></a>
                                   <?php } ?>
-                                  <?php if (! $itemInfo['is_branch']) {// 可以从分配过来的任务量，做分支处理 ?>
+                                  <?php if (!$this->user_info['sinho_is_parttime'] && ! $itemInfo['is_branch']) {// 可以从分配过来的任务量，做分支处理 ?>
                                   <a href="admin/ajax/workload/fill_more/" onclick="fillMore(<?php echo $itemInfo['id']; ?>);" class="icon icon-add-to-list md-tip js-fill-more" title="<?php _e('拆分任务，对工作量进行分叉处理'); ?>" data-toggle="tooltip"></a>
                                   <?php }?>
-                                  <?php if ($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING &&$this->booksList[$itemInfo['book_id']]['verify_status'] == 0) {// 加入核算队列 ?>
+                                  <?php if (!$this->user_info['sinho_is_parttime'] && $itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING &&$this->booksList[$itemInfo['book_id']]['verify_status'] == 0) {// 加入核算队列 ?>
                                   <a href="admin/ajax/workload/queue/" onclick="addQueue(<?php echo $itemInfo['id']; ?>, this); return false;" class="icon icon-coin-yen md-tip" title="<?php _e('加入核算'); ?>" data-toggle="tooltip"></a>
                                   <?php } ?>
                                   <?php if (($itemInfo['status']==sinhoWorkloadModel::STATUS_RECORDING) && $itemInfo['is_branch']) {// 工作量没有核算过，而且是分支处理，允许删除 ?>
                                   <a href="admin/ajax/workload/remove/" onclick="deleteItem(<?php echo $itemInfo['id']; ?>); return false;" class="icon icon-delete md-tip" title="<?php _e('删除'); ?>" data-toggle="tooltip"></a>
                                   <?php }
                                   ?>
-                                  <?php if ($itemInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) { ?><a target="_blank" onclick="rollback(<?php echo $itemInfo['id']; ?>)" class="icon icon-undo2 md-tip" title="<?php _e('撤回核算'); ?>" data-toggle="tooltip"></a><?php }?>
+                                  <?php if (!$this->user_info['sinho_is_parttime'] && $itemInfo['status'] == sinhoWorkloadModel::STATUS_VERIFYING) { ?><a target="_blank" onclick="rollback(<?php echo $itemInfo['id']; ?>)" class="icon icon-undo2 md-tip" title="<?php _e('撤回核算'); ?>" data-toggle="tooltip"></a><?php }?>
                                 </td>
                             </tr>
                             <?php } ?>

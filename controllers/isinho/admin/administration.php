@@ -384,6 +384,7 @@ class administration extends SinhoBaseController
         View::assign('totalRows', $totalRows);
         View::assign('amountPerPage', $this->per_page);
 
+        View::import_js(G_STATIC_URL . '/js/functions.js');
         View::import_js(G_STATIC_URL . '/js/bootstrap-multiselect.js');
         View::import_js('js/icb_template_isinho.com.js');
         View::import_css(G_STATIC_URL . '/css/bootstrap-multiselect.css');

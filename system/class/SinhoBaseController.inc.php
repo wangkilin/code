@@ -253,6 +253,7 @@ class SinhoBaseController extends BaseController
             }
         }
 
+        View::assign('user_info', $this->user_info);
         //View::assign('menu_list', $this->model('admin')->fetch_menu_list(null, 'sinho_admin_menu'));
 
         $this->setup();
@@ -320,7 +321,17 @@ class SinhoBaseController extends BaseController
                             break;
                         }
                     }
-                    if (!$_menuInfo2['permission'] || $hasPermission)  {
+                    /*
+                     * 判断是否检测用户属性设置。如果设置了用户属性检查，需要进行对比 */
+                    empty($_menuInfo2['user_attribute']) OR settype($_menuInfo2['user_attribute'], 'array');
+                    foreach ($_menuInfo2['user_attribute'] as $_tmpAttributeName=>$_tmpAttributeValue) {
+                        if ($this->user_info[$_tmpAttributeName]==$_tmpAttributeValue) {
+                            $hasPermission = true;
+                            break;
+                        }
+                    }
+
+                    if ((!$_menuInfo2['permission']&&!$_menuInfo2['user_attribute']) || $hasPermission)  {
 
                         $_children[] = $_menuInfo2;
                     }
@@ -343,6 +354,13 @@ class SinhoBaseController extends BaseController
                   && (!property_exists($hostConfig, 'sinho_permission')
                     || !isset($hostConfig->sinho_permission[$_tmpPermissionName])
                     || $hostConfig->sinho_permission[$_tmpPermissionName])) {
+                    $hasPermission = true;
+                    break;
+                }
+            }
+            empty($_menuInfo['user_attribute']) OR settype($_menuInfo['user_attribute'], 'array');
+            foreach ($_menuInfo['user_attribute'] as $_tmpAttributeName=>$_tmpAttributeValue) {
+                if ($this->user_info[$_tmpAttributeName]==$_tmpAttributeValue) {
                     $hasPermission = true;
                     break;
                 }

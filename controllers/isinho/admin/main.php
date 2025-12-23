@@ -232,7 +232,12 @@ class main extends SinhoBaseController
         View::import_css('js/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css');
         View::assign('menu_list', $this->filterAdminMenu($this->model('admin')->fetch_menu_list('admin/index', 'sinho_admin_menu') ) );
 
-        View::output('admin/index');
+        if ($this->user_info['sinho_is_parttime']) {
+        // 兼职页面信息量少
+            View::output('admin/index/index_parttime');
+        } else {
+            View::output('admin/index');
+        }
 
     }
 
@@ -242,7 +247,6 @@ class main extends SinhoBaseController
     public function fill_list_action ()
     {
         $this->checkPermission(self::IS_SINHO_FILL_WORKLOAD);
-
 
         // 1. 根据书稿关键信息， 获取到对应的书稿id;
         $where = array();
@@ -447,6 +451,26 @@ class main extends SinhoBaseController
         }
         $this->assign('belongMonth', substr($belongMonth,0,4).'-'.sprintf('%02d', substr($belongMonth,4)) );
         $this->assign('endBelongMonth', substr($endBelongMonth,0,4).'-'.sprintf('%02d', substr($endBelongMonth,4)) );
+
+
+        $userAttributes = array();
+        $itemList = array();
+        if ($userIds) {
+            $itemList = $this->model()->fetch_all('users_attribute', 'uid IN ('.join(',', $userIds).')');
+        }
+        foreach ($itemList as $_itemInfo) {
+            isset($userAttributes[$_itemInfo['uid']]) OR $userAttributes[$_itemInfo['uid']] = array();
+            if ($_itemInfo['decode_method'] && function_exists($_itemInfo['decode_method'])) {
+                if ($_itemInfo['decode_method']=='json_decode') {
+                    $_itemInfo['attr_value'] = json_decode($_itemInfo['attr_value'], true);
+                } else {
+                    $_itemInfo['attr_value'] = $_itemInfo['decode_method'] ($_itemInfo['attr_value']);
+                }
+            }
+            $userAttributes[$_itemInfo['uid']][$_itemInfo['attr_key']] = $_itemInfo['attr_value'];
+        }
+
+        View::assign('userAttributes', $userAttributes);
 
         View::assign('userList', $userList);
         View::assign('itemsList', $bookList);

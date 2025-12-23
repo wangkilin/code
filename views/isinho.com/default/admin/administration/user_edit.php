@@ -103,6 +103,26 @@
                                     <span class=" help-block"><?php _e('管理对应学科下的图书，及分配对应学科下的工作量'); ?></span>
                                 </div>
                             </div>
+                            <div class="row">
+                                <!-- 是否兼职 -->
+                                <div class="col-sm-2">
+                                    <label class="icb-label"><?php _e('兼职'); ?>:</label>
+                                    <input type="hidden" name="remark[sinho_is_parttime]" value="是否为兼职"/>
+                                </div>
+                                <div class="col-sm-4 icb-item-title">
+								  <div class="btn-group mod-btn col-sm-4 nopadding">
+									<label type="button" class="btn mod-btn-color js-input-radio">
+										<input type="radio" value="1" name="attributes[sinho_is_parttime]"<?php if ($this->userAttributes['sinho_is_parttime']) { ?> checked="checked"<?php } ?>> <?php _e('是'); ?>
+									</label>
+
+                                    </div>
+                                    <div class="btn-group mod-btn  col-sm-offset-4 col-sm-4 nopadding">
+									<label type="button" class="btn mod-btn-color js-input-radio">
+										<input type="radio" value="0" name="attributes[sinho_is_parttime]"<?php if (! $this->userAttributes['sinho_is_parttime']) { ?> checked="checked"<?php } ?>> <?php _e('否'); ?>
+									</label>
+								  </div>
+                                </div>
+                            </div>
 
                             <?php if ($this->hostConfig && $this->hostConfig->sinho_feature_list['enable_annual_leave']) {?>
                             <div class="row">

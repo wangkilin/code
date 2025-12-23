@@ -160,7 +160,9 @@ $config[] = array(
             'title'     => _t('休假&加班'),
             'cname'     => 'order',
             'url'       => 'admin/administration/my_ask_leave/',
-            'permission'=> '',
+            'permission'=> array(),
+            // 非兼职检查。只对全职开放页面
+            'user_attribute' => array('sinho_is_parttime' => 0)
         ),
     )
 );

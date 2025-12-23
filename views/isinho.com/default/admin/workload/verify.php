@@ -1,6 +1,10 @@
 <?php View::output('admin/global/header.php'); ?>
 <?php View::output('admin/global/nav_menu.php'); ?>
-
+<style>
+.text-warning a {
+    color:#8a6d3b;
+}
+</style>
 <!-- Theme switcher -->
 <div class="theme-switch">
     <div class="icon inOut"><i class="rotate icon-setting"></i></div>
@@ -118,7 +122,10 @@
                                         <?php if (isset($this->workloadList[$itemInfo['id']])) { $_indexWorkload = 1; ?>
 
                                             <?php foreach ($this->workloadList[$itemInfo['id']] as $workloadInfo) { $totalChars += $workloadInfo['total_chars'] ;?>
-                                                <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php echo $workloadInfo['status'] == 1 ? ' verified-line' : ($workloadInfo['status'] == 3 ? ' recording-line':' verifying-line'); ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
+                                                <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id']; ?>" class="workload-line<?php
+                                                    echo $workloadInfo['status'] == 1 ? ' verified-line' : ($workloadInfo['status'] == 3 ? ' recording-line':' verifying-line');
+                                                    if ($this->userAttributes[$workloadInfo['user_id']]['sinho_is_parttime']) echo ' text-warning';
+                                                    ?>" data-verify-remark='<?php echo $workloadInfo['verify_remark']; ?>'>
                                                     <td class="js-category"><?php echo $itemInfo['category']; ?></td>
                                                     <td><?php echo $_index,'.',$_indexWorkload++;?></td>
                                                     <td class="text-left">

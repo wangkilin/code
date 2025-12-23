@@ -41,11 +41,12 @@
                         </thead>
                         <tbody>
                             <?php  foreach ($this->itemsList AS $itemInfo) { ?>
-                            <tr class="<?php if ($itemInfo['forbidden']){ echo 'text-danger';} ?>">
+                            <tr class="<?php if ($itemInfo['forbidden']){ echo 'text-danger';}
+                                             if ($this->userAttributes[$itemInfo['uid']]['sinho_is_parttime']) echo 'text-warning'; ?>">
                                 <td><!--<input type="checkbox" name="ids[]" value="<?php echo $itemInfo['uid']; ?>">--></td>
                                 <td class="text-left">
 
-                                    <a class="md-tip <?php if ($itemInfo['forbidden']){ echo 'text-danger';} ?>"  title="" data-toggle="tooltip"><?php echo $itemInfo['user_name']; ?></a>
+                                    <a class="md-tip <?php if ($itemInfo['forbidden']){ echo 'text-danger';} elseif ($this->userAttributes[$itemInfo['uid']]['sinho_is_parttime']) echo 'text-warning'; ?>"  title="" data-toggle="tooltip"><?php echo $itemInfo['user_name']; ?></a>
                                 </td>
                                 <td><?php echo $this->groupList[$itemInfo['group_id']]['group_name']; ?></td>
                                 <td><?php if($this->userAttributes[$itemInfo['uid']]['sinho_permission_team_leader']) echo '是'; else echo '-'; ?></td>
