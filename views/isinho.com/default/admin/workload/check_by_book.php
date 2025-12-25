@@ -113,7 +113,7 @@
 
                                 <?php foreach ($this->workloadList[$itemInfo['id']] AS $workloadInfo) { ?>
                             <tr data-db-id="<?php echo $workloadInfo['id']; ?>" data-book-id="<?php echo $itemInfo['id'];?>" class="workload-line<?php echo $workloadInfo['status']==1 ? ' verified-line': ($workloadInfo['status']==3 ? ' recording-line' : ' verifying-line');
-                              if(in_array($workloadInfo['user_id'], $this->parttimeUserIds)) echo " text-warning";?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
+                              if($workloadInfo['is_parttime']==1) echo " text-warning";?>" data-verify-remark='<?php echo $workloadInfo['verify_remark'];?>'>
                                 <td class="js-workload-ref text-left">
                                     <input type="hidden" name="id[]" value="<?php echo $workloadInfo['id']; ?>"/>
                                     <?php

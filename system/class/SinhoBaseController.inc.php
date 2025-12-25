@@ -386,6 +386,7 @@ class SinhoBaseController extends BaseController
      */
     public function assignBookToEditor ($bookId, $userIds=array())
     {
+        // 将已分配的数据移除；
         $assigned = (array) $this->model('sinhoWorkload')->fetch_all(sinhoWorkloadModel::WORKLOAD_TABLE, 'book_id = ' . intval($bookId) .' AND status <> ' . sinhoWorkloadModel::STATUS_DELETE );
         $assignedUserIds = array_column($assigned, 'user_id');
         $toBeRemoved = array();
@@ -393,7 +394,7 @@ class SinhoBaseController extends BaseController
             if (in_array($_itemInfo['user_id'], $userIds)) {
                 continue;
             }
-
+            // 已经有工作量填充的记录， 不能移除。
             if ($_itemInfo['content_table_pages']!=0 || $_itemInfo['text_pages']!=0 || $_itemInfo['answer_pages']!=0
               || $_itemInfo['test_pages']!=0 || $_itemInfo['test_answer_pages']!=0 || $_itemInfo['exercise_pages']!=0
               || $_itemInfo['function_book']!=0 || $_itemInfo['function_answer']!=0  ) {
@@ -411,14 +412,22 @@ class SinhoBaseController extends BaseController
             //         );
             $this->model('sinhoWorkload')->deleteByIds ($toBeRemoved, sinhoWorkloadModel::WORKLOAD_TABLE);
         }
+        // 获取兼职用户id列表
+        $parttimeUsers = array();
+        if($userIds) {
+            $parttimeUsers = $this->model()->fetch_all('users_attribute', 'attr_key = "sinho_is_parttime" AND attr_value="1"');
+            $parttimeUsers = array_combine(array_column($parttimeUsers,'uid'), array_column($parttimeUsers,'attr_value'));
+        }
 
         foreach ($userIds as $_userId) {
             if (! in_array($_userId, $assignedUserIds)) {
                 $set = array(
-                    'book_id'   => $bookId,
-                    'user_id'   => $_userId,
-                    'status'    => sinhoWorkloadModel::STATUS_RECORDING,
-                    'add_time'  => time(),
+                    'book_id'       => $bookId,
+                    'user_id'       => $_userId,
+                    'status'        => sinhoWorkloadModel::STATUS_RECORDING,
+                    'add_time'      => time(),
+                    // 将兼职用户的工作量，标记
+                    'is_parttime'   => intval($parttimeUsers[$_userId])
                 );
                 $this->model('sinhoWorkload')->insert(sinhoWorkloadModel::WORKLOAD_TABLE, $set);
             }
