@@ -1433,10 +1433,8 @@ class ajax extends SinhoBaseController
 
     public function edit_page_action()
     {
-        if (!$this->user_info['permission']['is_administortar'])
-        {
-            H::ajax_json_output(Application::RSM(null, -1, Application::lang()->_t('你没有访问权限, 请重新登录')));
-        }
+        // 检查管理员 或者 页面管理 权限
+        $this->checkPermission(AdminController::IS_ROLE_ADMIN | self::IS_SINHO_PAGE_ADMIN);
 
         if (!$page_info = $this->model('page')->getPageById($_POST['page_id']))
         {
