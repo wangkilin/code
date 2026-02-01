@@ -24,6 +24,8 @@
                 •
                 <a href="//www.icodebang.cn">大牛教程</a>
                 •
+                <a href="http://www.devboy.cn/WeChat.html">微信聊天模拟器</a>
+                •
                 <a href="mailto:大牛教程<icodebang@126.com>?subject=交换链接">交换链接</a>
             </div>
             <div class="margin10">
